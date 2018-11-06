@@ -1,4 +1,4 @@
 # Feedbacker-Forum
 
-Testing branch protection
+A tool for asking and receiving feedback.
 
