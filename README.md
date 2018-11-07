@@ -16,5 +16,5 @@ npm install
 npm start
 ```
 
-Now you can for example open `misc/test.html` to see the API in action.
+Now you can for example open http://localhost:8080/test.html to see the API in action.
 
