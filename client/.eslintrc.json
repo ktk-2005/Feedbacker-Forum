@@ -8,7 +8,10 @@
     "no-console": "off",
     "comma-dangle": "off",
     "import/no-extraneous-dependencies": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "no-unused-vars": "warn",
+    "no-multi-spaces": "off"
   },
 
   "env": {
@@ -16,4 +19,3 @@
     "node": true
   }
 }
-
