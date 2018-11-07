@@ -3,6 +3,10 @@ language: node_js
 node_js:
   - "10.3.0"
 
+install:
+  npm --prefix client install
+  npm --prefix server install
+
 script:
   - npm --prefix client run lint
   - npm --prefix client run build:dev
