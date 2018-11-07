@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "babel-node src/main.js",
-    "test:api": "mocha --require @babel/register src/api-tests"
+    "test:api": "mocha --require @babel/register --timeout 20000 src/api-tests"
   },
   "author": "",
   "license": "MIT",
