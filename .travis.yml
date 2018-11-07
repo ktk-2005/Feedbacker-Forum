@@ -1,0 +1,11 @@
+dist: trusty
+language: node_js
+node_js:
+  - "10.3.0"
+
+script:
+  - npm --prefix client run lint
+  - npm --prefix client run build:dev
+  - npm --prefix client run build
+  - npm --prefix server run lint
+
