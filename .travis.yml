@@ -4,8 +4,8 @@ node_js:
   - "10.3.0"
 
 install:
-  - npm --prefix client install
-  - npm --prefix server install
+  - cd client && npm install && cd ..
+  - cd server && npm install && cd ..
 
 script:
   - npm --prefix client run lint
