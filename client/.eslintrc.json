@@ -1,0 +1,21 @@
+{
+  "extends": "airbnb",
+
+  "rules": {
+    "linebreak-style": "off",
+    "no-multiple-empty-lines": "off",
+    "semi": ["error", "never"],
+    "no-console": "off",
+    "comma-dangle": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "no-unused-vars": "warn",
+    "no-multi-spaces": "off"
+  },
+
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}
