@@ -9,9 +9,11 @@ install:
 
 script:
   - npm --prefix client run lint
+  - npm --prefix client run lint:ci
   - npm --prefix client run build:dev
   - npm --prefix client run build
   - npm --prefix server run lint
+  - npm --prefix server run lint:ci
   - npm --prefix server start &
   - npm --prefix server run test:api
 
