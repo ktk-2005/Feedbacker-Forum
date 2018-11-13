@@ -6,4 +6,4 @@ COPY . /
 
 RUN /docker/development/docker-build.sh
 
-CMD ["npm", "start"]
+CMD npm start
