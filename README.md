@@ -23,7 +23,7 @@ npm start
 cd docker/development
 
 docker-compose up --build
-
+```
 
 Now you can for example open http://localhost:8080/test.html to see the API in action.
 
