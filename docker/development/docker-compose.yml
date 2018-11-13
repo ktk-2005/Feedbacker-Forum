@@ -12,17 +12,3 @@ services:
     ports:
       - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
     command: npm start
-  
-  # client:
-  #   build: ./client
-  #   environment:
-  #     - REACT_APP_PORT=${REACT_APP_PORT}
-  #   expose:
-  #     - ${REACT_APP_PORT}
-  #   ports:
-  #     - ${REACT_APP_PORT}:${REACT_APP_PORT}
-  #   links:
-  #     - server
-  #   command: npm run build:dev
-
-    
