@@ -2,8 +2,8 @@ version: '3'
 services:
   server:
     build: 
-      context: ./
-      dockerfile: ./server/Dockerfile
+      context: ../../
+      dockerfile: docker/development/Dockerfile
     expose:
       - ${APP_SERVER_PORT}
     environment:

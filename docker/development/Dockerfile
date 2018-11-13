@@ -2,12 +2,8 @@ FROM node:10.13
 
 WORKDIR /server
 
-#COPY server/package*.json /server/
-
 COPY . /
 
-RUN npm install
-
-#COPY . /
+RUN /docker/development/docker-build.sh
 
 CMD ["npm", "start"]
