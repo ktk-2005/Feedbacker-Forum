@@ -25,7 +25,7 @@ export default function apiRequest(path, extraOpts) {
   const opts = {
     uri: `http://localhost:8080${path}`,
     json: true,
-    ...extraOpts
+    ...extraOpts,
   }
 
   return tryRequest(opts, 3)

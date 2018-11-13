@@ -11,7 +11,7 @@ module.exports = {
 
   // Output to ./build/ directory
   output: {
-    path: path.resolve(__dirname, 'build')
+    path: path.resolve(__dirname, 'build'),
   },
 
   module: {
@@ -23,10 +23,10 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-        }
-      }
+        },
+      },
 
-    ]
+    ],
   },
 
 }
