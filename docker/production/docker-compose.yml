@@ -1,7 +1,19 @@
 version: '3'
 services:
+  node-api:
+    build:
+      context: ../../
+      dockerfile: docker/production/node-api/Dockerfile
+    expose:
+      - ${APP_SERVER_PORT}
+    environment:
+      API_HOST: ${API_HOST}
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    command: npm start
+
   nginx:
     build: ./nginx
-
-  node-api:
-    build: ./node-api
+    links:
+      - node-api
