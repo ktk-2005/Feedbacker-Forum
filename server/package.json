@@ -2,11 +2,11 @@
   "name": "feedbacker-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "setup.js",
   "scripts": {
     "lint": "eslint .",
     "lint:ci": "eslint . --rule \"{ \\\"linebreak-style\\\": [2, \\\"unix\\\"] }\"",
-    "start": "babel-node src/main.js",
+    "start": "babel-node src/setup.js",
     "test:api": "mocha --require @babel/register --timeout 20000 src/api-tests"
   },
   "author": "",
