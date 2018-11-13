@@ -1,11 +1,10 @@
 FROM node:10.13
 
+COPY .git/ /.git
+COPY server /server
+
 WORKDIR /server
 
-COPY .git/ /.git
+RUN npm install
 
-COPY server/ /server
-
-RUN /docker/production/node-api/docker-build.sh
-
-CMD ["npm", "start"]
+CMD npm start

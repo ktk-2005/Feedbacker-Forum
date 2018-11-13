@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "build": "webpack -p --mode production --config webpack.production.config.js",
+    "build": "sh build.sh",
     "build:dev": "webpack --mode development --config webpack.development.config.js"
   },
   "author": "",
