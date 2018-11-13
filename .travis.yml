@@ -3,6 +3,9 @@ language: node_js
 node_js:
   - "10.3.0"
 
+before_install:
+  - npm install -g npm@6.4.1
+
 install:
   - cd client && npm install && cd ..
   - cd server && npm install && cd ..
