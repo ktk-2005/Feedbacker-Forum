@@ -6,10 +6,16 @@
     "no-multiple-empty-lines": "off",
     "semi": ["error", "never"],
     "no-console": "off",
-    "comma-dangle": "off",
     "import/no-extraneous-dependencies": "off",
     "no-unused-vars": "warn",
-    "no-multi-spaces": "off"
+    "no-multi-spaces": "off",
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "ignore",
+      "exports": "ignore",
+      "functions": "ignore"
+    }]
   },
 
   "env": {
