@@ -1,9 +1,9 @@
 FROM node:10.13
 
-WORKDIR /server
+COPY . /app/
 
-COPY . /
+WORKDIR /app/server
 
-RUN /docker/development/docker-build.sh
+RUN /app/docker/development/docker-build.sh
 
 CMD npm start
