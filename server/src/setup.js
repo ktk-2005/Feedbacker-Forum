@@ -33,6 +33,15 @@ async function parseConfig(file) {
   }
 }
 
+function overrideConfigFromEnv() {
+  if (process.env.APP_SERVER_PORT !== undefined) {
+    const port = parseInt(process.env.APP_SERVER_PORT, 10)
+    if (!isNaN(port)) {
+      config.port = port
+    }
+  }
+}
+
 export async function startup() {
   parseArguments()
 
@@ -50,6 +59,8 @@ export async function startup() {
 
   configToSet = await parseConfig('default-config.json', defaultConfigFile)
   Object.assign(config, configToSet)
+
+  overrideConfigFromEnv()
 
   startServer()
 }
