@@ -2,7 +2,7 @@ import express from 'express'
 import childProcess from 'child_process'
 import process from 'process'
 
-console.log("WORKING AT: " + process.cwd())
+console.log(`WORKING AT: ${process.cwd()}`)
 
 const app = express()
 
@@ -33,4 +33,3 @@ const port = 8080
 app.listen(port, () => {
   console.log(`Running on port ${port}`)
 })
-
