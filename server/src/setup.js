@@ -35,7 +35,7 @@ async function parseConfig(file) {
 
 function overrideConfigFromEnv() {
   const envPort = process.env.APP_SERVER_PORT
-  if (envPort !== undefined) {
+  if (envPort) {
     const port = parseInt(envPort, 10)
     if (!Number.isNaN(port) && port >= 1 && port <= 65535) {
       config.port = port
