@@ -22,7 +22,7 @@ module.exports = {
     // TODO: Remove this when we have actual static content
     new CopyWebpackPlugin([
       { from: 'static/', to: outputPath },
-    ], {})
+    ], {}),
   ],
 
   module: {
@@ -34,11 +34,10 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-        }
-      }
+        },
+      },
 
-    ]
+    ],
   },
 
 }
-

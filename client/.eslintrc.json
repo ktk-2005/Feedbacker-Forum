@@ -6,12 +6,19 @@
     "no-multiple-empty-lines": "off",
     "semi": ["error", "never"],
     "no-console": "off",
-    "comma-dangle": "off",
     "import/no-extraneous-dependencies": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-one-expression-per-line": "off",
     "no-unused-vars": "warn",
-    "no-multi-spaces": "off"
+    "no-multi-spaces": "off",
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "ignore",
+      "exports": "ignore",
+      "functions": "ignore"
+    }],
+    "import/prefer-default-export": "off"
   },
 
   "env": {

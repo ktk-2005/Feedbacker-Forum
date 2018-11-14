@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "start": "babel-node src/main.js",
+    "lint:ci": "eslint . --rule \"{ \\\"linebreak-style\\\": [2, \\\"unix\\\"] }\"",
+    "start": "babel-node src/setup.js",
     "test:api": "mocha --require @babel/register --timeout 20000 src/api-tests"
   },
   "author": "",

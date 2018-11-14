@@ -3,15 +3,20 @@ language: node_js
 node_js:
   - "10.3.0"
 
+before_install:
+  - npm install -g npm@6.4.1
+
 install:
   - cd client && npm install && cd ..
   - cd server && npm install && cd ..
 
 script:
   - npm --prefix client run lint
+  - npm --prefix client run lint:ci
   - npm --prefix client run build:dev
   - npm --prefix client run build
   - npm --prefix server run lint
+  - npm --prefix server run lint:ci
   - npm --prefix server start &
   - npm --prefix server run test:api
 
