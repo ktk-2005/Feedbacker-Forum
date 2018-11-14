@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "build": "cross-env NODE_ENV=production webpack -p --mode production --config webpack-config/webpack.production.config.js",
     "build:dev": "cross-env NODE_ENV=development webpack --mode development --config webpack-config/webpack.development.config.js",
+    "watch": "cross-env NODE_ENV=development webpack --mode development --config webpack-config/webpack.development.config.js --watch",
     "lint:ci": "eslint . --rule \"{ \\\"linebreak-style\\\": [2, \\\"unix\\\"] }\""
   },
   "author": "ktk-2005",

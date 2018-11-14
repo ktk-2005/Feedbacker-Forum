@@ -1,5 +1,6 @@
 import { promisify } from 'util'
 import fs from 'fs'
+import childProcess from 'child_process'
 
 import { ArgumentParser } from 'argparse'
 import { startServer } from './server'
@@ -14,6 +15,13 @@ function parseArguments() {
   parser.addArgument(
     ['-c', '--config'], {
       help: 'Specify configuration .json file',
+    }
+  )
+
+  parser.addArgument(
+    ['-w', '--watch'], {
+      help: 'Watch for changes in the client directory',
+      action: 'storeTrue',
     }
   )
 
@@ -60,10 +68,21 @@ export async function startup() {
     }
   }
 
-  configToSet = await parseConfig('default-config.json', defaultConfigFile)
+  if (configToSet === null)
+    configToSet = await parseConfig('default-config.json', defaultConfigFile)
+
   Object.assign(config, configToSet)
 
   overrideConfigFromEnv()
+
+  if (args.watch) {
+    console.log('Starting Webpack in watch mode')
+    const npmExecutable = /^win/.test(process.platform) ? 'npm.cmd' : 'npm'
+    childProcess.spawn(npmExecutable, ['run', 'watch'], {
+      cwd: '../client/',
+      stdio: 'inherit',
+    })
+  }
 
   startServer()
 }
