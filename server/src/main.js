@@ -2,8 +2,6 @@ import express from 'express'
 import childProcess from 'child_process'
 import process from 'process'
 
-console.log(`WORKING AT: ${process.cwd()}`)
-
 const app = express()
 
 // Run a process `command` and asynchronously return standard outputs.
