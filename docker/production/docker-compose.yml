@@ -1,25 +1,13 @@
 version: '3'
 services:
-  node-api:
+  api:
     build:
       context: ../../
-      dockerfile: docker/production/node-api/Dockerfile
+      dockerfile: docker/production/api/Dockerfile
 
-  node-client:
-    build:
-      context: ../../client
-      dockerfile: ../docker/production/node-client/Dockerfile
-    volumes:
-      - static-files:/app/build
-  
   nginx:
-    build: ./nginx
-    links:
-      - node-api
+    build:
+      context: ../../
+      dockerfile: docker/production/nginx/Dockerfile
     ports:
-      - ${APP_SERVER_PORT}:80
-    volumes:
-      - static-files:/app
-
-volumes:
-  static-files:
+      - ${LOCAL_PORT}:80

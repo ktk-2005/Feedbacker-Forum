@@ -1,9 +1,10 @@
 FROM node:10.13
 
-COPY . /app
-
 WORKDIR /app
+
+COPY .git/ /.git
+COPY server/ .
 
 RUN npm install
 
-CMD npm run build
+CMD npm start

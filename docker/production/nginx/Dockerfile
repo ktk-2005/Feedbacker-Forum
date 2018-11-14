@@ -1,5 +1,14 @@
-FROM nginx:alpine
+FROM node:10.13
 
 WORKDIR /app
+COPY client/ .
 
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN npm install
+RUN npm run build
+
+###
+
+FROM nginx:alpine
+
+COPY --from=0 /app /app
+COPY docker/production/nginx/nginx.conf /etc/nginx/nginx.conf
