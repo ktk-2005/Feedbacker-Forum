@@ -33,6 +33,18 @@ async function parseConfig(file) {
   }
 }
 
+function overrideConfigFromEnv() {
+  const envPort = process.env.APP_SERVER_PORT
+  if (envPort) {
+    const port = parseInt(envPort, 10)
+    if (!Number.isNaN(port) && port >= 1 && port <= 65535) {
+      config.port = port
+    } else {
+      console.error(`Invalid port value specified in APP_SERVER_PORT: ${envPort}`)
+    }
+  }
+}
+
 export async function startup() {
   parseArguments()
 
@@ -50,6 +62,8 @@ export async function startup() {
 
   configToSet = await parseConfig('default-config.json', defaultConfigFile)
   Object.assign(config, configToSet)
+
+  overrideConfigFromEnv()
 
   startServer()
 }
