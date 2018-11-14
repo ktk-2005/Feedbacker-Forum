@@ -1,16 +1,11 @@
 import { promisify } from 'util'
 import fs from 'fs'
+
 import { ArgumentParser } from 'argparse'
-import { checkInt } from './check'
 import { startServer } from './server'
+import { args, config } from './globals'
 
 const readFile = promisify(fs.readFile)
-
-// Command line arguments
-export let args = { }
-
-// Configuration .json file contents
-export let config = { }
 
 function parseArguments() {
   const parser = new ArgumentParser({
@@ -22,7 +17,8 @@ function parseArguments() {
     }
   )
 
-  args = parser.parseArgs()
+  const argsToSet = parser.parseArgs()
+  Object.assign(args, argsToSet)
 }
 
 async function parseConfig(file) {
@@ -42,15 +38,19 @@ export async function startup() {
 
   const defaultConfigFile = 'default-config.json'
 
+  let configToSet = null
+
   if (args.config) {
     try {
-      config = await parseConfig(args.config)
+      configToSet = await parseConfig(args.config)
     } catch (e) {
       console.log('Falling back to default configuration file', defaultConfigFile)
     }
   }
 
-  config = await parseConfig('default-config.json', defaultConfigFile)
+  configToSet = await parseConfig('default-config.json', defaultConfigFile)
+  Object.assign(config, configToSet)
+
   startServer()
 }
 

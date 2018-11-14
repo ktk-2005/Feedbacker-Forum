@@ -1,11 +1,10 @@
 import express from 'express'
-import { checkInt, checkBool } from './check'
-import { config } from './setup'
 
+import { checkInt, checkBool } from './check'
+import { config } from './globals'
 import apiVersion from './api/version'
 
 export function startServer() {
-
   const app = express()
 
   if (checkBool('dev', config.dev)) {

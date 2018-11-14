@@ -4,7 +4,7 @@ export function checkInt(name, value) {
   if (value === undefined) {
     throw new Error(`Expected an integer for ${name}, got nothing`)
   } else {
-    throw new Error(`Expected an integer for ${name}, got ${typeof(value)} ${value}`)
+    throw new Error(`Expected an integer for ${name}, got ${typeof value} ${value}`)
   }
 }
 
@@ -13,7 +13,7 @@ export function checkBool(name, value) {
   if (value === undefined) {
     throw new Error(`Expected a boolean for ${name}, got nothing`)
   } else {
-    throw new Error(`Expected a boolean for ${name}, got ${typeof(value)} ${value}`)
+    throw new Error(`Expected a boolean for ${name}, got ${typeof value} ${value}`)
   }
 }
 
