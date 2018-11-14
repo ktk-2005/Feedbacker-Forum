@@ -1,8 +1,9 @@
 {
   "name": "feedbacker-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "setup.js",
+  "description": "Read README.md",
+  "repository": "https://github.com/ktk-2005/Feedbacker-Forum",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "lint:ci": "eslint . --rule \"{ \\\"linebreak-style\\\": [2, \\\"unix\\\"] }\"",

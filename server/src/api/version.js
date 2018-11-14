@@ -23,4 +23,3 @@ app.get('/api/version', async (req, res) => {
     gitBranch: branch.trim(),
   })
 })
-

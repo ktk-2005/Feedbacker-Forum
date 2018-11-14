@@ -1,0 +1,13 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: docker/production/api/Dockerfile
+
+  nginx:
+    build:
+      context: ../../
+      dockerfile: docker/production/nginx/Dockerfile
+    ports:
+      - ${LOCAL_PORT}:80
