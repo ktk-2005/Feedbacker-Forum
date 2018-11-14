@@ -37,7 +37,7 @@ function overrideConfigFromEnv() {
   const envPort = process.env.APP_SERVER_PORT
   if (envPort !== undefined) {
     const port = parseInt(envPort, 10)
-    if (!isNaN(port) && port >= 1 && port <= 65535) {
+    if (!Number.isNaN(port) && port >= 1 && port <= 65535) {
       config.port = port
     } else {
       console.error(`Invalid port value specified in APP_SERVER_PORT: ${envPort}`)
