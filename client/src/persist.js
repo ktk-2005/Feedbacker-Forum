@@ -60,9 +60,13 @@ function saveLocalState(json) {
 
 function saveGlobalState(json) {
   if (!persistWindow) return
-  persistWindow.postMessage({
-    type: 'save', data: json,
-  }, '*')
+  try {
+    persistWindow.postMessage({
+      type: 'save', data: json,
+    }, '*')
+  } catch (e) {
+    console.error('Unexpected <iframe> communication error', e)
+  }
 }
 
 function savePersist(state) {
