@@ -85,6 +85,8 @@ export function setupPersist(loadPersist) {
   const state = loadLocalState()
   loadPersist(state)
 
+  previousState = state
+
   const iframe = document.createElement('iframe')
 
   iframe.style.width = 0
@@ -107,7 +109,7 @@ export function setupPersist(loadPersist) {
     if (msg.type !== 'load') return
     if (typeof msg.data !== 'object') return
 
-    const state = { ...msg.data, ...previousState }
+    const state = { ...previousState, ...msg.data }
     loadPersist(state)
 
     const json = JSON.stringify(state)
