@@ -1,4 +1,5 @@
 const shared = require('./webpack.shared.config.js')
+const webpack = require('webpack')
 
 // Webpack configuration used in development builds
 module.exports = {
@@ -7,6 +8,14 @@ module.exports = {
   // Use development mode and faster buildtool
   mode: 'development',
   devtool: 'cheap-module-eval-source-map',
+
+  plugins: [
+    ...shared.plugins,
+
+    new webpack.DefinePlugin({
+      DEV: 'true',
+    }),
+  ],
 
 }
 

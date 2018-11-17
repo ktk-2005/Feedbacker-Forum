@@ -54,6 +54,7 @@ function saveLocalState(json) {
 }
 
 function saveGlobalState(json) {
+  if (!persistWindow) return
   persistWindow.postMessage({
     type: 'save', data: json,
   }, '*')
