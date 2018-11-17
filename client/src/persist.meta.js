@@ -6,5 +6,6 @@ const storageKey = `FeedbackerForum_${storageName}`
 const storageCookieRegex = `${storageKey}\\s*=(\\s*[A-Za-z0-9-_.!~*'()]+)`
 
 module.exports = meta.code(`{
+  storageKey: '${storageKey}',
   storageCookieRegex: /${storageCookieRegex}/,
 }`)
