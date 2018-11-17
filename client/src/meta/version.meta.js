@@ -1,4 +1,5 @@
 const childProcess = require('child_process')
+const metaUtil = require('./meta-util')
 
 function execProcess(command) {
   return childProcess.execSync(command).toString().trim()
@@ -7,8 +8,5 @@ function execProcess(command) {
 const gitHash = execProcess('git rev-parse HEAD')
 const gitBranch = execProcess('git rev-parse --abbrev-ref HEAD')
 
-const result = { gitHash, gitBranch }
-module.exports = () => ({
-  code: `module.exports = ${JSON.stringify(result)}`,
-})
+module.exports = metaUtil.json({ gitHash, gitBranch })
 

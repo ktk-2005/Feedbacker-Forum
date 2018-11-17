@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 
 import { setupPersist } from './persist'
-import clientVersion from './version.meta'
+import clientVersion from './meta/version.meta'
 
 if (DEV) {
   (async () => {

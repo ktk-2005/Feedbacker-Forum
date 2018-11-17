@@ -1,6 +1,4 @@
-// TODO
-const staticUrl = 'localhost:8080'
-const storageName = 'localhost'
+import { staticUrl, storageName } from './meta/env.meta'
 
 const storageKey = `FeedbackerForum_${storageName}`
 
