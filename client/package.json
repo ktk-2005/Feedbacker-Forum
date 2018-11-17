@@ -29,6 +29,7 @@
     "eslint-plugin-react": "^7.11.0",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
+    "react-redux": "^5.1.1",
     "redux": "^4.0.1",
     "val-loader": "^1.1.1",
     "webpack": "^4.25.1",

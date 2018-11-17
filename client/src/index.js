@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
+import { connect, Provider } from 'react-redux'
 
 import { setupPersist } from './persist'
 import clientVersion from './meta/version.meta'
@@ -40,21 +41,61 @@ const savePersist = setupPersist((state) => {
 })
 store.subscribe(() => {
   savePersist(store.getState().persist || { })
-
-  console.log((store.getState().persist || {}).name)
 })
-
-function click() {
-  store.dispatch({
-    type: 'SET_PERSIST',
-    data: { name: `Hello! ${new Date().toString()}` },
-  })
-}
 
 function versionString(version) {
   const shortHash = version.gitHash.substring(0, 8)
   return `${shortHash} (${version.gitBranch})`
 }
+
+class NameInput extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { name: null }
+
+    this.save = this.save.bind(this)
+    this.change = this.change.bind(this)
+  }
+
+  change(e) {
+    this.setState({ name: e.target.value })
+  }
+
+  save() {
+    const name = this.state.name !== null ? this.state.name : this.props.name
+    this.props.onSave(name)
+  }
+
+  render() {
+    const { name: stateName } = this.state
+    const { name: propName } = this.props
+    const name = stateName !== null ? stateName : propName
+    return <>
+      <input type="text" value={name} onChange={this.change} />
+      <button type="button" onClick={this.save}>Save</button>
+    </>
+  }
+}
+
+const PersistNameInput = connect(
+  state => ({ name: state.persist.name || '' }),
+  dispatch => ({
+    onSave: (name) => {
+      dispatch({
+        type: 'SET_PERSIST',
+        data: { name },
+      })
+    },
+  }),
+)(NameInput)
+
+function NameDisplay({ name, prefix }) {
+  return <>{prefix}{name}</>
+}
+
+const PersistNameDisplay = connect(
+  state => ({ name: state.persist.name || '' }),
+)(NameDisplay)
 
 class ApiVersionInfo extends React.Component {
   constructor(props) {
@@ -83,11 +124,20 @@ function ClientVersionInfo({ version }) {
 }
 
 ReactDOM.render(
-  <div>
-    <ApiVersionInfo />
-    <ClientVersionInfo version={clientVersion} />
-    <button type="button" onClick={click}>Update!</button>
-  </div>,
+  <Provider store={store}>
+    <>
+      <div>
+        <ApiVersionInfo />
+        <ClientVersionInfo version={clientVersion} />
+      </div>
+      <div>
+        <PersistNameInput />
+      </div>
+      <div>
+        <PersistNameDisplay prefix="Persisted name: " />
+      </div>
+    </>
+  </Provider>,
   document.getElementById('root')
 )
 
