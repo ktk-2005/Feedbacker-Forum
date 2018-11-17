@@ -3,6 +3,18 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 
 import { setupPersist } from './persist'
+import clientVersion from './version.meta.js'
+
+if (DEV) {
+  (async () => {
+    const response = await fetch('/api/version')
+    const apiVersion = await response.json()
+     if (clientVersion.gitBranch !== apiVersion.gitBranch
+       || clientVersion.gitHash !== apiVersion.gitHash) {
+       console.warn('Client and API versions don\'t match', clientVersion, apiVersion)
+     }
+  })()
+}
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -39,31 +51,42 @@ function click() {
   })
 }
 
-class VersionInfo extends React.Component {
-  constructor() {
-    super()
-    this.state = { versionString: '...' }
+function versionString(version) {
+  const shortHash = version.gitHash.substring(0, 8)
+  const versionString = `${shortHash} (${version.gitBranch})`
+  return versionString
+}
+
+class ApiVersionInfo extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = { }
   }
 
   async componentDidMount() {
     const response = await fetch('/api/version')
     const version = await response.json()
-    const shortHash = version.gitHash.substring(0, 8)
-    const versionString = `${shortHash} (${version.gitBranch})`
-    this.setState({ versionString })
+    this.setState(version)
   }
 
   render() {
-    const { versionString } = this.state
     return (
-      <div>Version: {versionString}</div>
+      <div>API Version: {this.state.gitHash ? versionString(this.state) : null}</div>
     )
   }
 }
 
+function ClientVersionInfo({ version }) {
+  return (
+    <div>Client Version: {versionString(version)}</div>
+  )
+}
+
 ReactDOM.render(
   <div>
-    <VersionInfo />
+    <ApiVersionInfo />
+    <ClientVersionInfo version={clientVersion} />
     <button onClick={click}>Update!</button>
   </div>,
   document.getElementById('root')
