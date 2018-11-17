@@ -12,8 +12,8 @@
  *   savePersist(state): Update the persistent state to be `state`.
  */
 
-import { staticUrl, storageKey } from './meta/env.meta'
-import { storageCookieRegex } from './persist.meta'
+import { staticUrl } from './meta/env.meta'
+import { storageKey, storageCookieRegex } from './persist.meta'
 
 const cookieRegex = new RegExp(storageCookieRegex)
 
