@@ -5,6 +5,6 @@ module.exports = {
     return () => ({
       code: `module.exports = ${json}`,
     })
-  }
+  },
 }
 
