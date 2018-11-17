@@ -11,6 +11,7 @@
 <script>
 
 var storageKey = 'storage'
+var cookieRegex = /persist\s*=(\s*[A-Za-z0-9-_.!~*'()]+)/
 
 function saveLocalState(json) {
   window.localStorage.setItem(storageKey, json)
@@ -31,7 +32,6 @@ function loadLocalState() {
     }
   }
 
-  var cookieRegex = new RegExp('persist\\s*=(\\s*[A-Za-z0-9-_.!~*\'()]+)')
   var match = document.cookie.match(cookieRegex)
   var cookieVal = Array.isArray(match) ? match[1] : null
   if (typeof cookieVal === 'string') {

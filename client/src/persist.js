@@ -1,12 +1,30 @@
-import { staticUrl, storageName } from './meta/env.meta'
+/*
+ * This module implements cross-domain persistent storage: The application can save
+ * data on eg. `user-domain.org` and load it back on `another-domain.org`. This is
+ * done by transferring the data through an <iframe> which is under our own domain.
+ * The state is also duplicated under the current domain. The states are merged
+ * preferring the values inside the local domain.
+ *
+ * API: setupPersist(loadPersist) -> savePersist
+ *   loadPersist(state): This function is called when the persistent data is loaded.
+ *                       Once immediately at startup and potentially a second time
+ *                       after the <iframe> finishes loading.
+ *   savePersist(state): Update the persistent state to be `state`.
+ */
 
-const storageKey = `FeedbackerForum_${storageName}`
+import { staticUrl, storageKey } from './meta/env.meta'
+import { storageCookieRegex } from './persist.meta'
 
+const cookieRegex = new RegExp(storageCookieRegex)
+
+// The state that is currently persistently saved
 let previousState = null
 let previousJson = ''
 
+// Window handle of the <iframe>
 let persistWindow = null
 
+// Load the state from the current domain
 function loadLocalState() {
   const result = { }
 
@@ -19,7 +37,6 @@ function loadLocalState() {
     }
   }
 
-  const cookieRegex = new RegExp(`${storageKey}\\s*=(\\s*[A-Za-z0-9-_.!~*'()]+)`)
   const match = document.cookie.match(cookieRegex)
   const cookieVal = Array.isArray(match) ? match[1] : null
   if (typeof cookieVal === 'string') {
@@ -33,6 +50,7 @@ function loadLocalState() {
   return result
 }
 
+// Save the state into the current domain
 function saveLocalState(json) {
   window.localStorage.setItem(storageKey, json)
 
