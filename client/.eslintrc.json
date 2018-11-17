@@ -9,8 +9,10 @@
     "import/no-extraneous-dependencies": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-one-expression-per-line": "off",
+    "react/prop-types": "off",
     "no-unused-vars": "warn",
     "no-multi-spaces": "off",
+    "no-shadow": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
@@ -19,6 +21,10 @@
       "functions": "ignore"
     }],
     "import/prefer-default-export": "off"
+  },
+
+  "globals": {
+    "DEV": false
   },
 
   "env": {

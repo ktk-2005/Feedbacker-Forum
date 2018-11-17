@@ -9,6 +9,6 @@ const gitBranch = execProcess('git rev-parse --abbrev-ref HEAD')
 
 const result = { gitHash, gitBranch }
 module.exports = () => ({
-  code: `module.exports = ${JSON.stringify(result)}`
+  code: `module.exports = ${JSON.stringify(result)}`,
 })
 
