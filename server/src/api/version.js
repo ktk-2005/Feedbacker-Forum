@@ -1,8 +1,8 @@
 import express from 'express'
 import childProcess from 'child_process'
+const router = express.Router()
 
-const app = express()
-export default app
+export default router
 
 // Run a process `command` and asynchronously return standard outputs.
 function execProcess(command) {
@@ -21,7 +21,7 @@ function execProcess(command) {
 //   "gitHash": "331d54dc84a46d12e15bdc9e7b16aacf2f2741a9",
 //   "gitBranch": "develop"
 // }
-app.get('/api/version', async (req, res) => {
+router.get('/', async (req, res) => {
   const { stdout: hash } = await execProcess('git rev-parse HEAD')
   const { stdout: branch } = await execProcess('git rev-parse --abbrev-ref HEAD')
 
@@ -30,3 +30,5 @@ app.get('/api/version', async (req, res) => {
     gitBranch: branch.trim(),
   })
 })
+
+router.post('/', (req, res) => { })

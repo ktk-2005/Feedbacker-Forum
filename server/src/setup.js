@@ -17,6 +17,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--listEndpoints'], {
+      help: 'Write all endpoints into a JSON file',
+      metavar: 'endpoints.json',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }
