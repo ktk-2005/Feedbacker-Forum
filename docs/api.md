@@ -11,7 +11,7 @@ Retrieve version information about the running server.
 Example response
 ```json
 {
-  "gitHash": "53d77b31f13d0e597da07a9a25aada5bc866118f",
+  "gitHash": "331d54dc84a46d12e15bdc9e7b16aacf2f2741a9",
   "gitBranch": "develop"
 }
 ```
