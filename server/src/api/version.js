@@ -14,6 +14,13 @@ function execProcess(command) {
   })
 }
 
+// @api GET /api/version
+// Retrieve version information about the running server.
+//
+// Example response @json {
+//   "gitHash": "53d77b31f13d0e597da07a9a25aada5bc866118f",
+//   "gitBranch": "develop"
+// }
 app.get('/api/version', async (req, res) => {
   const { stdout: hash } = await execProcess('git rev-parse HEAD')
   const { stdout: branch } = await execProcess('git rev-parse --abbrev-ref HEAD')
