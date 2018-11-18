@@ -4,3 +4,15 @@
 
 ## Version
 
+### [GET /api/version](../server/src/api/version.js#L24)
+
+Retrieve version information about the running server.
+
+Example response
+```json
+{
+  "gitHash": "331d54dc84a46d12e15bdc9e7b16aacf2f2741a9",
+  "gitBranch": "develop"
+}
+```
+

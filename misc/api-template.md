@@ -1,3 +1,5 @@
 
 ## Version
 
+@api /api/version
+
