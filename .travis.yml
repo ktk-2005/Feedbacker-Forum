@@ -19,4 +19,7 @@ script:
   - npm --prefix server run lint:ci
   - npm --prefix server start &
   - npm --prefix server run test:api
+  - mkdir -p build && mv docs/api.md build/api.md
+  - npm --prefix server run doc
+  - diff build/api.md docs/api.md
 
