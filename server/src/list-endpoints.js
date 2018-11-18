@@ -4,7 +4,22 @@
 //
 // This will probably break with newer Express versions...
 export default (app) => {
-  let results = []
+  const results = []
+
+  function split(thing) {
+    if (typeof thing === 'string') {
+      return thing.split('/')
+    } if (thing.fast_slash) {
+      return ''
+    }
+    const match = thing.toString()
+      .replace('\\/?', '')
+      .replace('(?=\\/|$)', '$')
+      .match(/^\/\^((?:\\[.*+?^${}()|[\]\\/]|[^.*+?^${}()|[\]\\/])*)\$\//)
+    return match
+      ? match[1].replace(/\\(.)/g, '$1').split('/')
+      : `<complex:${thing.toString()}>`
+  }
 
   function print(path, layer) {
     if (layer.route) {
@@ -14,27 +29,12 @@ export default (app) => {
     } else if (layer.method) {
       const method = layer.method.toUpperCase()
       let apiPath = path.concat(split(layer.regexp)).filter(Boolean).join('/')
-      if (!apiPath.startsWith('/')) apiPath = '/' + apiPath
+      if (!apiPath.startsWith('/')) apiPath = `/${apiPath}`
       results.push({ method, path: apiPath })
     }
   }
 
-  function split(thing) {
-    if (typeof thing === 'string') {
-      return thing.split('/')
-    } else if (thing.fast_slash) {
-      return ''
-    } else {
-      var match = thing.toString()
-        .replace('\\/?', '')
-        .replace('(?=\\/|$)', '$')
-        .match(/^\/\^((?:\\[.*+?^${}()|[\]\\\/]|[^.*+?^${}()|[\]\\\/])*)\$\//)
-      return match
-        ? match[1].replace(/\\(.)/g, '$1').split('/')
-        : '<complex:' + thing.toString() + '>'
-    }
-  }
-
+  // eslint-disable-next-line no-underscore-dangle
   app._router.stack.forEach(print.bind(null, []))
 
   return results
