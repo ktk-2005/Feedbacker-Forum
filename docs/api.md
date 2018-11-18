@@ -4,7 +4,7 @@
 
 ## Version
 
-### [GET /api/version](../server/src/api/version.js#L24)
+### [GET /api/version](../server/src/api/version.js#L25)
 
 Retrieve version information about the running server.
 
