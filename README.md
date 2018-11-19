@@ -16,7 +16,7 @@ npm install
 npm start
 ```
 
-## Alternatively setting up docker container for dev environment
+### Alternatively setting up docker container for dev environment
 
 ```bash
 
@@ -26,4 +26,8 @@ docker-compose up --build
 ```
 
 Now you can for example open http://localhost:8080/test.html to see the API in action.
+
+## Getting started
+
+To get an overview of the repository see [docs/getting-started.md](docs/getting-started.md).
 
