@@ -2,6 +2,8 @@
 
 ## Setting up
 
+The project is built using [Node.js][node], currently actively tested with version 10.13.
+
 ```bash
 # Install the client and build the development bundle
 cd client
@@ -29,5 +31,7 @@ Now you can for example open http://localhost:8080/test.html to see the API in a
 
 ## Getting started
 
-To get an overview of the repository see [docs/getting-started.md](docs/getting-started.md).
+For further documentation see [docs/getting-started.md](docs/getting-started.md).
+
+[node]: https://nodejs.org/en/
 
