@@ -75,10 +75,27 @@ Rarely manually needed NPM scripts for server:
 
 ## Docker
 
+The *docker/* directory contains subdirectories for both development and production Docker setups.
+They can be built using `docker-compose`.
+
+### Deveolpment
+
+The development setup has only one container running the dev server that can be run locally with `npm start`.
+It could be used for development if you want to install Node, but currently the source directories
+are not mapped to the host as it seems quite buggy (at least with Windows).
+
+### Production
+
+The production setup has three containers: `api` running the Node server in production mode,
+`nginx` running [Nginx][nginx] as reverse proxy and serving static content, and `database`
+running [PostgreSQL][postgres].
+
 [travis]: https://travis-ci.org/
 [babel]: https://babeljs.io/
 [eslint]: https://eslint.org/
 [gh-airbnb]: https://github.com/airbnb/javascript
 [editorconfig]: https://editorconfig.org/
 [webpack]: https://webpack.js.org/
+[postgres]: https://www.postgresql.org/
+[nginx]: https://www.nginx.com/
 
