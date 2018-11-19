@@ -6,6 +6,9 @@ the build environment and pre-running initialization code from the bundled scrip
 Webpack is configured to load `.meta.js` files using the [val-loader][gh/val-loader].
 `meta/meta-util.js` makes metaprogramming a little more clean.
 
+**Note:** The metaprograms are run with plain Node without Babel, so some features
+(most notably ES6 `import`/`export`) are not available in `.meta.js` files.
+
 ### Example metaprogram
 
 ```js
