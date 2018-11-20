@@ -1,10 +1,17 @@
+sudo: required
+
 dist: trusty
 language: node_js
 node_js:
   - "10.3.0"
 
+services:
+  - docker
+
 before_install:
   - npm install -g npm@6.4.1
+  - docker pull node:10.13
+  - docker pull nginx:alpine
 
 install:
   - cd client && npm install && cd ..
@@ -19,4 +26,6 @@ script:
   - npm --prefix server run lint:ci
   - npm --prefix server start &
   - npm --prefix server run test:api
+  - pushd docker/development; docker-compose build; popd
+  - pushd docker/production; docker-compose build; popd
 
