@@ -1,16 +1,15 @@
 @import '../../scss/atoms/button';
 
 .panel {
-  width: 15%;
-  height: 600px;
-  margin-left: 0;
+  width: 20%;
+  height: 80vh;
+  position: fixed;
   padding: 5px;
   background-color: grey;
-  float: left;
 }
 
 .panelButton {
-  @include button(20px, 20px)
+  @extend button
 }
 
 .hidden {
