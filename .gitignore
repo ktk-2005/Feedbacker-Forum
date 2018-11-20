@@ -11,3 +11,5 @@ build/
 # Automatic OS generated files
 .DS_Store
 
+# DB testing file
+commentdb.db
