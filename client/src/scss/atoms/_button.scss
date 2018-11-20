@@ -1,4 +1,4 @@
-@mixin button($width, $height) {
-  width: $width;
-  height: $height;
+button {
+  border-radius: 3px;
+  border: 0 none;
 }
