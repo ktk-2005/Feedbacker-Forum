@@ -36,6 +36,8 @@ class MainView extends React.Component {
 }
 
 ReactDOM.render(
-  <MainView />,
+  <div class="feedback-app-main-container">
+    <MainView />
+  </div>,
   document.getElementById('root')
 )
