@@ -1,13 +1,16 @@
 {
   "name": "feedbacker-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Read README.md",
+  "repository": "https://github.com/ktk-2005/Feedbacker-Forum",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "lint:ci": "eslint . --rule \"{ \\\"linebreak-style\\\": [2, \\\"unix\\\"] }\"",
-    "start": "babel-node src/main.js",
-    "test:api": "mocha --require @babel/register --timeout 20000 src/api-tests"
+    "start": "babel-node src/setup.js",
+    "test:api": "mocha --require @babel/register --timeout 20000 src/api-tests",
+    "doc": "light-api-doc -t ../misc/api-template.md -o ../docs/api.md src",
+    "watch": "babel-node src/setup.js --watch"
   },
   "author": "",
   "license": "MIT",
@@ -19,6 +22,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-mocha": "^5.2.0",
     "eslint-plugin-react": "^7.11.0",
+    "light-api-doc": "^0.2.3",
     "mocha": "^5.2.0"
   },
   "dependencies": {
