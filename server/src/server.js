@@ -1,6 +1,7 @@
 import express from 'express'
 import fs from 'fs'
 import { promisify } from 'util'
+import childProcess from 'child_process'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -27,9 +28,31 @@ export function startServer() {
     return
   }
 
-  const port = checkInt('port', config.port)
-  app.listen(port, () => {
-    console.log(`Running on port ${port}`)
-  })
+  if (args.testApi) {
+    // Start a server to a random OS chosen port and run tests
+    const server = app.listen(0, () => {
+      const { port } = server.address()
+
+      const npmExecutable = /^win/.test(process.platform) ? 'npm.cmd' : 'npm'
+      const proc = childProcess.spawn(npmExecutable, ['run', 'test:remoteapi'], {
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          APP_SERVER_PORT: port.toString(),
+        },
+      })
+
+      proc.on('exit', (code) => {
+        process.exitCode = code
+        server.close()
+      })
+    })
+  } else {
+    // Actual server start
+    const port = checkInt('port', config.port)
+    app.listen(port, () => {
+      console.log(`Running on port ${port}`)
+    })
+  }
 }
 
