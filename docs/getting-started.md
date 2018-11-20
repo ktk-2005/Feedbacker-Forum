@@ -33,7 +33,7 @@ Rarely manually needed NPM scripts for server and client:
 | --- | --- |
 | `lint:ci` | Lint like the CI does, checking the line ending format. This will likely fail on Windows as Git likes to check out `\r\n` line endings. |
 
-## Client
+### Client
 
 The frontend code and assets are bundled with [Webpack][webpack].
 You can find separated development and production configuration files
@@ -54,7 +54,7 @@ Rarely manually needed NPM scripts for client:
 | --- | --- |
 | `build` | Build the production version of the frontend. |
 
-## Server
+### Server
 
 The server is run with `babel-node` starting at `setup.js`.
 You can supply configuration `.json` file using the `-c` or `--config` command line flag.
@@ -78,7 +78,7 @@ Rarely manually needed NPM scripts for server:
 The *docker/* directory contains subdirectories for both development and production Docker setups.
 They can be built using `docker-compose`.
 
-### Deveolpment
+### Development
 
 The development setup has only one container running the dev server that can be run locally with `npm start`.
 It could be used for development if you want to install Node, but currently the source directories
