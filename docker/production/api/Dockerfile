@@ -1,5 +1,7 @@
 FROM node:10.13-alpine
 
+WORKDIR /app
+
 COPY .git/ /.git
 COPY ./misc /misc
 COPY server/ .
