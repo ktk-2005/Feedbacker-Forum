@@ -30,6 +30,12 @@ script:
   - APP_SERVER_PORT=9001 npm --prefix server run start &
   - APP_SERVER_PORT=9001 bash misc/test-server.sh
 
+  # Test documentation
+  - mkdir -p build && mv docs/api.md build/api.md
+  - npm --prefix server run start -- --listEndpoints ../build/endpoints.json
+  - npm --prefix server run doc -- --endpoints ../build/endpoints.json
+  - diff build/api.md docs/api.md
+
   # Test development Docker
   - pushd docker/development
   - docker-compose up --build -d
@@ -47,4 +53,6 @@ script:
   - pushd docker/production
   - docker-compose down
   - popd
+
+
 

@@ -3,8 +3,9 @@ import childProcess from 'child_process'
 import fs from 'fs'
 import { promisify } from 'util'
 
-const app = express()
-export default app
+const router = express.Router()
+
+export default router
 
 const readFile = promisify(fs.readFile)
 
@@ -40,7 +41,15 @@ async function getVersion() {
   return version
 }
 
-app.get('/api/version', async (req, res) => {
+// @api GET /api/version
+// Retrieve version information about the running server.
+//
+// Example response @json {
+//   "gitHash": "331d54dc84a46d12e15bdc9e7b16aacf2f2741a9",
+//   "gitBranch": "develop"
+// }
+router.get('/', async (req, res) => {
   const result = await getVersion()
   res.send(result)
 })
+
