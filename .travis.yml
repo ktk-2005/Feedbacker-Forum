@@ -27,15 +27,24 @@ script:
   - npm --prefix client run build
 
   # Test local development
+  - APP_SERVER_PORT=9001 npm --prefix server run start &
   - APP_SERVER_PORT=9001 bash misc/test-server.sh
 
   # Test development Docker
-  - pushd docker/development; docker-compose up -d; popd
+  - pushd docker/development
+  - docker-compose --build up -d
+  - popd
   - APP_SERVER_PORT=8080 bash misc/test-server.sh
-  - pushd docker/development; docker-compose down; popd
+  - pushd docker/development
+  - docker-compose down
+  - popd
 
   # Test production Docker
-  - pushd docker/production; docker-compose up -d; popd
+  - pushd docker/production
+  - docker-compose --build up -d
+  - popd
   - APP_SERVER_PORT=8080 bash misc/test-server.sh
-  - pushd docker/production; docker-compose down; popd
+  - pushd docker/production
+  - docker-compose down
+  - popd
 
