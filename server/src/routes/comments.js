@@ -6,12 +6,6 @@ const db = new sqlite3.Database(path.join(__dirname, '../database/commentdb.db')
 
 const router = express.Router()
 
-// Uncomment for emoji uuid
-// const randomEmoji = require('random-unicode-emoji');
-// function emojiUuid(length = 8) {
-//   return randomEmoji.random({count: 7}).join("")
-// }
-
 //Generate unique random id
 function uuid(length = 8) {
   return uuidv4().split('-').join("").slice(0, length)
@@ -49,6 +43,16 @@ router.get('/comments', (req, res) => {
 
 router.get('/questions', (req, res) => {
   db.all("SELECT * FROM questions", (err, rows) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send(rows)
+    }
+  })
+})
+
+router.get('/reactions', (req, res) => {
+  db.all("SELECT * FROM reactions", (err, rows) => {
     if (err) {
       console.log(err)
     } else {
