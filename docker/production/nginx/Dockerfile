@@ -2,6 +2,7 @@ FROM node:10.13-alpine
 
 WORKDIR /app
 
+COPY .git /.git
 COPY client/ .
 COPY misc/ /misc
 
