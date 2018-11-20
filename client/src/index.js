@@ -51,25 +51,26 @@ function versionString(version) {
 class NameInput extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { name: null }
+    this.state = { name: '', nameChanged: false }
 
     this.save = this.save.bind(this)
     this.change = this.change.bind(this)
   }
 
   change(e) {
-    this.setState({ name: e.target.value })
+    this.setState({ name: e.target.value, nameChanged: true })
+  }
+
+  getName() {
+    return this.state.nameChanged ? this.state.name : this.props.name
   }
 
   save() {
-    const name = this.state.name !== null ? this.state.name : this.props.name
-    this.props.onSave(name)
+    this.props.onSave(this.getName())
   }
 
   render() {
-    const { name: stateName } = this.state
-    const { name: propName } = this.props
-    const name = stateName !== null ? stateName : propName
+    const name = this.getName()
     return <>
       <input type="text" value={name} onChange={this.change} />
       <button type="button" onClick={this.save}>Save</button>
