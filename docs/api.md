@@ -2,6 +2,8 @@
      If you wish to edit the contents update the documentation
      comments or the template file: misc/api-template.md -->
 
+# API
+
 ## Version
 
 ### [GET /api/version](../server/src/api/version.js#L25)
