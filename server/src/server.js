@@ -28,11 +28,11 @@ export function startServer() {
     return
   }
 
-  const port = checkInt('port', config.port)
-  const server = app.listen(port, () => {
-    console.log(`Running on port ${port}`)
+  if (args.testApi) {
+    // Start a server to a random OS chosen port and run tests
+    const server = app.listen(0, () => {
+      const port = server.address().port
 
-    if (args.testApi) {
       const npmExecutable = /^win/.test(process.platform) ? 'npm.cmd' : 'npm'
       const proc = childProcess.spawn(npmExecutable, ['run', 'test:remoteapi'], {
         stdio: 'inherit',
@@ -46,7 +46,13 @@ export function startServer() {
         process.exitCode = code
         server.close()
       })
-    }
-  })
+    })
+  } else {
+    // Actual server start
+    const port = checkInt('port', config.port)
+    const server = app.listen(port, () => {
+      console.log(`Running on port ${port}`)
+    })
+  }
 }
 
