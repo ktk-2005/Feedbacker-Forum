@@ -41,6 +41,9 @@ jobs:
 
     - name: Docker
       script:
+        # Server needs to be installed for tests
+        - cd server && npm install && cd ..
+
         # Test development Docker
         - pushd docker/development
         - docker-compose up --build -d
