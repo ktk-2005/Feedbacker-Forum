@@ -1,14 +1,11 @@
 import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
-
 import { checkInt, checkBool } from './check'
 import { config } from './globals'
 import apiVersion from './routes/version'
-
 import commentRoute from './routes/comments'
 import versionRoute from './routes/version'
-
 
 export function startServer() {
   const app = express()
