@@ -1,31 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import styles from './index.css'
-import classNames from 'classnames/bind'
-
-const css = classNames.bind(styles)
-
-class VersionInfo extends React.Component {
-  constructor() {
-    super()
-    this.state = { versionString: '...' }
-  }
-
-  async componentDidMount() {
-    const response = await fetch('/api/version')
-    const version = await response.json()
-    const shortHash = version.gitHash.substring(0, 8)
-    const versionString = `${shortHash} (${version.gitBranch})`
-    this.setState({ versionString })
-  }
-
-  render() {
-    const { versionString } = this.state
-    return (
-      <div>Version: {versionString}</div>
-    )
-  }
-}
+import Button from './components/open-panel-button'
+import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 
 class MainView extends React.Component {
   constructor(props) {
@@ -47,6 +23,7 @@ class MainView extends React.Component {
   render() {
     return(
       <div className="test">
+        <h1>Feedbacker Forum</h1>
             <Button visible={this.state.buttonIsVisible}
               onClick={this.handleClick.bind(this)}
             />
@@ -57,27 +34,6 @@ class MainView extends React.Component {
     )
   }
 }
-
-const Button = ({visible, onClick}) => {
-  return (
-    <button
-      className={visible ? css('button') : css('hidden')}
-      onClick={onClick}
-    >+</button>
-  )
-}
-
-const FloatingPanel = ({visible, onClick}) => {
-    return (
-      <div className={visible ? css('panel') : css('hidden')}>
-        <button
-          className={css('panelButton')}
-          onClick={onClick}
-        >x</button>
-      </div>
-    )
-}
-
 
 ReactDOM.render(
   <MainView />,
