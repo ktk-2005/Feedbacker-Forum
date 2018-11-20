@@ -1,12 +1,12 @@
 import React from 'react'
 import classNames from 'classnames/bind'
-import styles from '../../scss/atoms/_button.scss'
+import styles from './open-panel-button.scss'
 const css = classNames.bind(styles)
 
-const Button = ({visible, onClick}) => {
+const Button = ({hidden, onClick}) => {
   return (
     <button
-      className={visible ? css('button') : css('hidden')}
+      className={hidden ? css('button', 'hidden') : css('button')}
       onClick={onClick}
     >+</button>
   )

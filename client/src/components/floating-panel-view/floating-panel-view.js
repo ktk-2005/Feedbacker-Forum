@@ -4,9 +4,9 @@ import styles from './floating-panel-view.scss'
 
 const css = classNames.bind(styles)
 
-const FloatingPanel = ({visible, onClick}) => {
+const FloatingPanel = ({hidden, onClick}) => {
     return (
-      <div className={visible ? css('panel') : css('hidden')}>
+      <div className={hidden ? css('panel', 'hidden') : css('panel')}>
         <button
           className={css('panel-button')}
           onClick={onClick}

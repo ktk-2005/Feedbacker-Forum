@@ -1,4 +1,4 @@
-button {
+@mixin button() {
   border-radius: 3px;
   border: 0 none;
 }

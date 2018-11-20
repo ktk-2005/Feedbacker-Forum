@@ -1,0 +1,8 @@
+@import '../../scss/atoms/button';
+
+.button {
+  @include button();
+  &.hidden {
+    display: none;
+  }
+}

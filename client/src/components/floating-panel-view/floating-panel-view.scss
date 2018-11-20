@@ -6,12 +6,12 @@
   position: fixed;
   padding: 5px;
   background-color: grey;
+  &.hidden {
+    //@include hide-and-animate($animation-duration-default);
+    display: none;
+  }
 }
 
-.panelButton {
-  @extend button
-}
-
-.hidden {
-  display: none;
+.panel-button {
+  @include button;
 }

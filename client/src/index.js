@@ -3,20 +3,25 @@ import ReactDOM from 'react-dom'
 import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 
+import classNames from 'classnames/bind'
+import styles from './scss/_base.scss'
+
+const css = classNames.bind(styles)
+
 class MainView extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      panelIsVisible: false,
-      buttonIsVisible: true,
+      panelIsHidden: true,
+      buttonIsHidden: false,
     }
   }
 
   handleClick() {
     this.setState({
-      buttonIsVisible: !this.state.buttonIsVisible,
-      panelIsVisible: !this.state.panelIsVisible,
+      buttonIsHidden: !this.state.buttonIsHidden,
+      panelIsHidden: !this.state.panelIsHidden,
     })
   }
 
@@ -24,10 +29,10 @@ class MainView extends React.Component {
     return(
       <div className="test">
         <h1>Feedbacker Forum</h1>
-            <Button visible={this.state.buttonIsVisible}
+            <Button hidden={this.state.buttonIsHidden}
               onClick={this.handleClick.bind(this)}
             />
-            <FloatingPanel visible={this.state.panelIsVisible}
+            <FloatingPanel hidden={this.state.panelIsHidden}
               onClick={this.handleClick.bind(this)}
             />
       </div>
@@ -36,7 +41,7 @@ class MainView extends React.Component {
 }
 
 ReactDOM.render(
-  <div class="feedback-app-main-container">
+  <div className={css('feedback-app-main-container')}>
     <MainView />
   </div>,
   document.getElementById('root')
