@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import classNames from 'classnames/bind'
 import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 
-import classNames from 'classnames/bind'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
@@ -26,15 +26,17 @@ class MainView extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div className="test">
         <h1>Feedbacker Forum</h1>
-            <Button hidden={this.state.buttonIsHidden}
-              onClick={this.handleClick.bind(this)}
-            />
-            <FloatingPanel hidden={this.state.panelIsHidden}
-              onClick={this.handleClick.bind(this)}
-            />
+        <Button
+          hidden={this.state.buttonIsHidden}
+          onClick={this.handleClick.bind(this)}
+        />
+        <FloatingPanel
+          hidden={this.state.panelIsHidden}
+          onClick={this.handleClick.bind(this)}
+        />
       </div>
     )
   }
