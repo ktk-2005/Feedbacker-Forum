@@ -26,7 +26,7 @@ function getReactionsByComment(comment_id) {
     if (err) {
       console.log(err)
     } else {
-      console.log(rows)
+      return rows
     }
   })
 }
@@ -36,7 +36,7 @@ router.get('/comments', (req, res) => {
     if (err) {
       console.log(err)
     } else {
-      res.send(rows)
+      return rows
     }
   })
 })
