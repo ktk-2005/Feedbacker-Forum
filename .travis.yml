@@ -36,6 +36,7 @@ jobs:
         - diff build/api.md docs/api.md
 
         # Test local development
+        - npm run test:api
         - APP_SERVER_PORT=9001 npm --prefix server run start &
         - APP_SERVER_PORT=9001 bash misc/test-server.sh
 

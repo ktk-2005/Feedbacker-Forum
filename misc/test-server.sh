@@ -5,7 +5,7 @@ set -e
 set -u
 
 # Test server endpoints
-npm --prefix server run test:api
+npm --prefix server run test:remoteapi
 
 # Download main bundle file and print size
 mkdir -p build
