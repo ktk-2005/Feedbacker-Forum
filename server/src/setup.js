@@ -60,9 +60,10 @@ export async function startup() {
     }
   }
 
-  if (configToSet === null)
+  if (configToSet === null) {
     configToSet = await parseConfig('default-config.json', defaultConfigFile)
-  
+  }
+
   Object.assign(config, configToSet)
 
   overrideConfigFromEnv()
