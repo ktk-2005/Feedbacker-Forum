@@ -3,10 +3,8 @@ FROM node:10.13-alpine
 COPY .git/ /.git
 COPY ./misc /misc
 COPY server/ .
-COPY docker/production/api/config.json .
-RUN npm install
-RUN mkdir -p build
-RUN node ../misc/dump-version.js > ./build/version.json
+COPY docker/production/api /prod
+RUN /prod/docker-build.sh
 
 ###
 

@@ -27,18 +27,20 @@ async function getVersion() {
     const file = await readFile('build/version.json')
     version = JSON.parse(file)
     return version
-  } catch (e) { }
+  } catch (e) { /* ignore */ }
 
   try {
     const { stdout } = await execProcess('node ../misc/dump-version.js')
     version = JSON.parse(stdout)
     return version
-  } catch (e) { }
+  } catch (e) { /* ignore */ }
 
-  return { }
+  console.error('Failed to fetch current version')
+  version = { }
+  return version
 }
 
 app.get('/api/version', async (req, res) => {
-  const version = await getVersion()
-  res.send(version)
+  const result = await getVersion()
+  res.send(result)
 })
