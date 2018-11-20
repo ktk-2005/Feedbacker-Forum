@@ -5,3 +5,9 @@ node_modules/
 # Webpack output files
 build/
 
+# NPM cache directory
+.npm
+
+# Automatic OS generated files
+.DS_Store
+
