@@ -39,7 +39,7 @@ jobs:
         - APP_SERVER_PORT=9001 npm --prefix server run start &
         - APP_SERVER_PORT=9001 bash misc/test-server.sh
 
-    - name: Docker
+    - name: Docker development
       script:
         # Server needs to be installed for tests
         - cd server && npm install && cd ..
@@ -52,6 +52,11 @@ jobs:
         - pushd docker/development
         - docker-compose down
         - popd
+
+    - name: Docker production
+      script:
+        # Server needs to be installed for tests
+        - cd server && npm install && cd ..
 
         # Test production Docker
         - pushd docker/production
