@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import SQLiteDatabase from './database/database-sqlite'
 
 const db = new SQLiteDatabase()
@@ -11,14 +12,17 @@ export async function addComment(values = []) { return db.run('INSERT INTO comme
 import sqlite3 from 'sqlite3'
 import path from 'path'
 import fs from 'fs'
+=======
+import SQLiteDatabase from './database/database-sqlite'
+>>>>>>> Structured basic sqlite functionality
 
-// import config from './default-config'
+const db = new SQLiteDatabase()
 
-const sqlite = sqlite3.verbose()
+export async function getAllComments() { return db.query('SELECT time, text, user, url FROM comments') }
 
-export async function startDatabase(dbFile) {
-  const databaseFile = path.resolve(__dirname, dbFile || '../data/dev_db.sqlite')
+export async function addComment(values = []) { return db.run('INSERT INTO comments VALUES ((?), (?), (?), (?), (?), (?))', values) }
 
+<<<<<<< HEAD
   if (fs.existsSync(databaseFile)) {
     return new sqlite.Database(databaseFile)
   }
@@ -62,3 +66,5 @@ export function getAllComments(db) { query(db, 'SELECT commentText, name FROM co
 
 export function addComment(db, values = []) { run(db, 'INSERT INTO comments VALUES ((?), (?), (?))', values) }
 >>>>>>> Added basic function for database communication
+=======
+>>>>>>> Structured basic sqlite functionality
