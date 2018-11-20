@@ -3,6 +3,7 @@ FROM node:10.13-alpine
 WORKDIR /app
 COPY client/ .
 
+RUN apk add --no-cache git
 RUN npm install
 RUN npm run build
 
