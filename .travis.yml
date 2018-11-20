@@ -10,7 +10,7 @@ services:
 
 before_install:
   - npm install -g npm@6.4.1
-  - docker pull node:10.13
+  - docker pull node:10.13-alpine
   - docker pull nginx:alpine
 
 install:
