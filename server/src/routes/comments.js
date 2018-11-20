@@ -1,9 +1,10 @@
-const path = require('path')
-const express = require('express')
-const router = express.Router()
-const uuidv4 = require('uuid/v4')
-const sqlite3 = require('sqlite3').verbose()
+import path from 'path'
+import express from 'express'
+import uuidv4 from 'uuid/v4'
+import sqlite3 from 'sqlite3'
 const db = new sqlite3.Database(path.join(__dirname, '../database/commentdb.db'))
+
+const router = express.Router()
 
 // Uncomment for emoji uuid
 // const randomEmoji = require('random-unicode-emoji');
