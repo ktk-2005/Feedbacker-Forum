@@ -11,17 +11,6 @@ function uuid(length = 8) {
   return uuidv4().split('-').join("").slice(0, length)
 }
 
-// function getReactionsByComment(comment_id) {
-//   db.all("SELECT * FROM reactions WHERE comment_id=?", comment_id, async (err, rows) => {
-//     if (err) {
-//       console.log(err)
-//     } else {
-//       const res = await rows
-//       return res
-//     }
-//   })
-// }
-
 router.get('/comments', (req, res) => {
   db.all("SELECT * FROM comments", (err, rows) => {
     if (err) {
@@ -43,17 +32,6 @@ router.get('/comments/:thread_id', (req, res) => {
   })
 })
 
-router.get('/reactions/:comment_id', (req, res) => {
-  const { comment_id } = req.params
-  db.all("SELECT * FROM reactions WHERE comment_id=?", comment_id, (err, rows) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.send(rows)
-    }
-  })
-})
-
 router.get('/questions', (req, res) => {
   db.all("SELECT * FROM questions", (err, rows) => {
     if (err) {
@@ -66,6 +44,17 @@ router.get('/questions', (req, res) => {
 
 router.get('/reactions', (req, res) => {
   db.all("SELECT * FROM reactions", (err, rows) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send(rows)
+    }
+  })
+})
+
+router.get('/reactions/:comment_id', (req, res) => {
+  const { comment_id } = req.params
+  db.all("SELECT * FROM reactions WHERE comment_id=?", comment_id, (err, rows) => {
     if (err) {
       console.log(err)
     } else {
