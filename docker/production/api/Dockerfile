@@ -4,7 +4,7 @@ COPY .git/ /.git
 COPY ./misc /misc
 COPY server/ .
 COPY docker/production/api /prod
-RUN /prod/docker-build.sh
+RUN sh /prod/docker-build.sh
 
 ###
 
