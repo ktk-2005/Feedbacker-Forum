@@ -1,7 +1,7 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const outputPath = path.resolve(__dirname, 'build')
+const outputPath = path.resolve(__dirname, '../build')
 
 // Webpack configuration shared between development and production builds
 module.exports = {
