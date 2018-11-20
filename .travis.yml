@@ -18,21 +18,24 @@ install:
   - cd server && npm install && cd ..
 
 script:
-  - npm --prefix client run lint
+  # Lint server and client
   - npm --prefix client run lint:ci
+  - npm --prefix server run lint:ci
+
+  # Build client development and production
   - npm --prefix client run build:dev
   - npm --prefix client run build
-  - npm --prefix server run lint
-  - npm --prefix server run lint:ci
-  - APP_SERVER_PORT=9001 npm --prefix server start &
-  - APP_SERVER_PORT=9001 npm --prefix server run test:api
-  - curl -s localhost:9001/test.html > /dev/null
-  - pushd docker/development; docker-compose up; popd
-  - APP_SERVER_PORT=8080 npm --prefix server run test:api
-  - curl -s localhost:8080/test.html > /dev/null
+
+  # Test local development
+  - APP_SERVER_PORT=9001 ./misc/test-server.sh
+
+  # Test development Docker
+  - pushd docker/development; docker-compose up -d; popd
+  - APP_SERVER_PORT=8080 ./misc/test-server.sh
   - pushd docker/development; docker-compose down; popd
-  - pushd docker/production; docker-compose up; popd
-  - APP_SERVER_PORT=8080 npm --prefix server run test:api
-  - curl -s localhost:8080/test.html > /dev/null
+
+  # Test production Docker
+  - pushd docker/production; docker-compose up -d; popd
+  - APP_SERVER_PORT=8080 ./misc/test-server.sh
   - pushd docker/production; docker-compose down; popd
 
