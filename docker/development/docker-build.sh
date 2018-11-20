@@ -1,9 +1,11 @@
 set -e
 set -u
 
+apk add --no-cache git
+
 cd ../client
 
-npm install 
+npm install
 npm run build:dev
 
 cd ../server
