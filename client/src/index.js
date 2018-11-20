@@ -57,12 +57,12 @@ class NameInput extends React.Component {
     this.change = this.change.bind(this)
   }
 
-  change(e) {
-    this.setState({ name: e.target.value, nameChanged: true })
-  }
-
   getName() {
     return this.state.nameChanged ? this.state.name : this.props.name
+  }
+
+  change(e) {
+    this.setState({ name: e.target.value, nameChanged: true })
   }
 
   save() {
