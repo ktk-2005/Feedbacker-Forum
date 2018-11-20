@@ -5,6 +5,11 @@ language: node_js
 node_js:
   - "10.3.0"
 
+cache:
+  directories:
+    - client/node_modules
+    - server/node_modules
+
 services:
   - docker
 
@@ -17,40 +22,52 @@ install:
   - cd client && npm install && cd ..
   - cd server && npm install && cd ..
 
-script:
-  # Lint server and client
-  - npm --prefix client run lint:ci
-  - npm --prefix server run lint:ci
+jobs:
+  include:
+    # Lint server and client
+    - name: Lint
+      script:
+        - npm --prefix client run lint:ci
+        - npm --prefix server run lint:ci
 
-  # Build client development and production
-  - npm --prefix client run build:dev
-  - npm --prefix client run build
-
-  # Test local development
-  - APP_SERVER_PORT=9001 npm --prefix server run start &
-  - APP_SERVER_PORT=9001 bash misc/test-server.sh
-
+    # Build client development and production
+    - name: Build client
+      script:
+        - npm --prefix client run build:dev
+        - npm --prefix client run build
   # Test documentation
-  - mkdir -p build && mv docs/api.md build/api.md
-  - npm --prefix server run start -- --listEndpoints ../build/endpoints.json
-  - npm --prefix server run doc -- --endpoints ../build/endpoints.json
-  - diff build/api.md docs/api.md
+    - name: Documentation
+      script:
+        - mkdir -p build && mv docs/api.md build/api.md
+        - npm --prefix server run start -- --listEndpoints ../build/endpoints.json
+        - npm --prefix server run doc -- --endpoints ../build/endpoints.json
+        - diff build/api.md docs/api.md
 
-  # Test development Docker
-  - pushd docker/development
-  - docker-compose up --build -d
-  - popd
-  - APP_SERVER_PORT=8080 bash misc/test-server.sh
-  - pushd docker/development
-  - docker-compose down
-  - popd
+    # Test local development
+    - name: Local API
+      script:
+        - APP_SERVER_PORT=9001 npm --prefix server run start &
+        - APP_SERVER_PORT=9001 bash misc/test-server.sh
 
-  # Test production Docker
-  - pushd docker/production
-  - docker-compose up --build -d
-  - popd
-  - APP_SERVER_PORT=8080 bash misc/test-server.sh
-  - pushd docker/production
-  - docker-compose down
-  - popd
+    # Test development Docker
+    - name: Development API
+      script:
+        - pushd docker/development
+        - docker-compose up --build -d
+        - popd
+        - APP_SERVER_PORT=8080 bash misc/test-server.sh
+        - pushd docker/development
+        - docker-compose down
+        - popd
+
+    # Test production Docker
+    - name: Production API
+      script:
+        - pushd docker/production
+        - docker-compose up --build -d
+        - popd
+        - APP_SERVER_PORT=8080 bash misc/test-server.sh
+        - pushd docker/production
+        - docker-compose down
+        - popd
 
