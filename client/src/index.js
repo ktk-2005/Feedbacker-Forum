@@ -104,19 +104,18 @@ const PersistNameDisplay = connect(
 class ApiVersionInfo extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { }
+    this.state = { loaded: false, version: null }
   }
 
   async componentDidMount() {
-    const response = await fetch('/api/version')
-    const version = await response.json()
-    this.setState(version)
+    const version = await fetch('/api/version').then(body => body.json())
+    this.setState({ loaded: true, version })
   }
 
   render() {
-    const { gitHash }  = this.state
+    const { loaded, version }  = this.state
     return (
-      <div>API Version: {gitHash ? versionString(this.state) : null}</div>
+      <div>API Version: {loaded ? versionString(version) : null}</div>
     )
   }
 }
