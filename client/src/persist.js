@@ -94,8 +94,8 @@ export function setupPersist(loadPersist) {
   iframe.style.border = 'none'
   iframe.style.position = 'absolute'
   iframe.style.visibility = 'hidden'
-  iframe.style.top = '0px'
-  iframe.style.left = '0px'
+  iframe.style.top = '0'
+  iframe.style.left = '0'
 
   iframe.src = `//${staticUrl}/persist.html`
   document.body.appendChild(iframe)
