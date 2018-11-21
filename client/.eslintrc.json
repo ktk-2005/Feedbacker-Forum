@@ -9,6 +9,7 @@
     "import/no-extraneous-dependencies": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-one-expression-per-line": "off",
+    "react/prop-types": "off",
     "no-unused-vars": "warn",
     "no-multi-spaces": "off",
     "comma-dangle": ["error", {

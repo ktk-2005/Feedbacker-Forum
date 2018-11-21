@@ -1,0 +1,12 @@
+@import '../../scss/atoms/button';
+@import '../../scss/mixins';
+@import '../../scss/variables';
+
+.button {
+  position: fixed;
+  @include button();
+  @include display-and-animate();
+  &.hidden {
+    @include hide-and-animate();
+  }
+}

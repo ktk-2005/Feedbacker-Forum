@@ -1,0 +1,11 @@
+@mixin hide-and-animate($duration: $default-animation-duration) {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility $duration linear 200ms, opacity 200ms;
+}
+
+@mixin display-and-animate($duration: $default-animation-duration) {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility $duration linear 200ms, opacity 200ms;
+}

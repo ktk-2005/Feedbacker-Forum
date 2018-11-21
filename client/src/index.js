@@ -1,41 +1,54 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Button from './components/open-panel-button'
+import classNames from 'classnames/bind'
+import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
+
+import styles from './scss/_base.scss'
+
+const css = classNames.bind(styles)
 
 class MainView extends React.Component {
   constructor(props) {
     super(props)
 
+    this.handleClick = this.handleClick.bind(this)
+
     this.state = {
-      panelIsVisible: false,
-      buttonIsVisible: true,
+      panelIsHidden: true,
+      buttonIsHidden: false,
     }
   }
 
   handleClick() {
-    this.setState({
-      buttonIsVisible: !this.state.buttonIsVisible,
-      panelIsVisible: !this.state.panelIsVisible,
-    })
+    this.setState(state => ({
+      buttonIsHidden: !state.buttonIsHidden,
+      panelIsHidden: !state.panelIsHidden,
+    }))
   }
 
   render() {
-    return(
+    const { buttonIsHidden, panelIsHidden } = this.state
+
+    return (
       <div className="test">
         <h1>Feedbacker Forum</h1>
-            <Button visible={this.state.buttonIsVisible}
-              onClick={this.handleClick.bind(this)}
-            />
-            <FloatingPanel visible={this.state.panelIsVisible}
-              onClick={this.handleClick.bind(this)}
-            />
+        <Button
+          hidden={buttonIsHidden}
+          onClick={this.handleClick}
+        />
+        <FloatingPanel
+          hidden={panelIsHidden}
+          onClick={this.handleClick}
+        />
       </div>
     )
   }
 }
 
 ReactDOM.render(
-  <MainView />,
+  <div className={css('feedback-app-main-container')}>
+    <MainView />
+  </div>,
   document.getElementById('root')
 )
