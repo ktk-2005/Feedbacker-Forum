@@ -1,17 +1,12 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import uuidv4 from 'uuid/v4'
 import {
-  getComments, getQuestions, getReactions, getTHreadComments,
+  getComments, getQuestions, getReactions, getThreadComments,
   getCommentReactions, addReaction, addQuestion, addComment
 } from '../database'
+import { uuid } from './helpers'
 
 const router = express.Router()
-
-// Generate unique random id
-function uuid(length = 8) {
-  return uuidv4().split('-').join('').slice(0, length)
-}
 
 router.get('/comments', (req, res) => {
   getComments().then((rows) => {
@@ -21,9 +16,9 @@ router.get('/comments', (req, res) => {
   })
 })
 
-router.get('/comments/:thread_id', (req, res) => {
-  const { thread_id } = req.params
-  getTHreadComments(thread_id).then((rows) => {
+router.get('/comments/:threadId', (req, res) => {
+  const { threadId } = req.params
+  getThreadComments(threadId).then((rows) => {
     res.send(rows)
   }, (err) => {
     console.error(err)
@@ -46,9 +41,9 @@ router.get('/reactions', (req, res) => {
   })
 })
 
-router.get('/reactions/:comment_id', (req, res) => {
-  const { comment_id } = req.params
-  getCommentReactions('reactions', comment_id).then((rows) => {
+router.get('/reactions/:commentId', (req, res) => {
+  const { commentId } = req.params
+  getCommentReactions(commentId).then((rows) => {
     res.send(rows)
   }, (err) => {
     console.error(err)
@@ -56,9 +51,9 @@ router.get('/reactions/:comment_id', (req, res) => {
 })
 
 router.post('/reaction', (req, res) => {
-  const { emoji, user, comment_id } = req.body
+  const { emoji, user, commentId } = req.body
   const id = uuid()
-  addReaction([id, emoji, user, comment_id]).catch((err) => {
+  addReaction([id, emoji, user, commentId]).catch((err) => {
     console.error(err)
   })
   res.send('👌')
@@ -67,8 +62,8 @@ router.post('/reaction', (req, res) => {
 router.post('/question', (req, res) => {
   const { text, user } = req.body
   const id = uuid()
-  const thread_id = req.body.thread_id || uuid()
-  addQuestion([id, text, user, thread_id], 'question').catch((err) => {
+  const threadId = req.body.threadId || uuid()
+  addQuestion([id, text, user, threadId], 'question').catch((err) => {
     console.error(err)
   })
   res.send('👌')
@@ -77,8 +72,8 @@ router.post('/question', (req, res) => {
 router.post('/comment', (req, res) => {
   const { text, user } = req.body
   const id = uuid()
-  const thread_id = req.body.thread_id || uuid()
-  addComment([id, text, user, thread_id], 'question').catch((err) => {
+  const threadId = req.body.threadId || uuid()
+  addComment([id, text, user, threadId], 'question').catch((err) => {
     console.error(err)
   })
   res.send('👌')

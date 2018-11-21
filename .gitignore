@@ -12,4 +12,4 @@ build/
 .DS_Store
 
 # DB testing file
-commentdb.db
+server/src/database/dev_db.sqlite
