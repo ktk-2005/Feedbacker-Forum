@@ -8,27 +8,7 @@ class SQLiteDatabase {
   constructor(dbFile) {
     this.databaseFile = path.resolve(__dirname, dbFile || './dev_db.sqlite')
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     this.db = new sqlite.Database(this.databaseFile)
-<<<<<<< HEAD
-=======
-    /* if (fs.existsSync(this.databaseFile)) {
-      this.db = new sqlite.Database(this.databaseFile)
-    } else {
-      fs.closeSync(fs.openSync(this.databaseFile, 'w'))
-      this.db = new sqlite.Database(this.databaseFile)
-    } */
-    // console.log(this.databaseFile)
-    this.db = new sqlite.Database(this.databaseFile)
-    // console.log(this.db)
-    // console.log(this.db.all('SELECT * FROM comments'))
->>>>>>> Structured basic sqlite functionality
-=======
-    this.db = new sqlite.Database(this.databaseFile)
->>>>>>> Cleanup
-    const migrationFile = path.resolve(__dirname, '../../data/migration.sql')
-=======
     const newestMigrationId = this.query('SELECT id FROM migrations')
     newestMigrationId.then((ids) => {
       const newestId = Math.max(ids.map(x => x.id))
@@ -53,7 +33,6 @@ class SQLiteDatabase {
       console.log(`Could not load migrations: ${err}`)
     })
     /* const migrationFile = path.resolve(__dirname, './migrations/migration-setup.sql')
->>>>>>> auto loading new migrations
     const migration = fs.readFileSync(migrationFile).toString()
     this.db.run(migration, (err) =>  {
       if (err) {
