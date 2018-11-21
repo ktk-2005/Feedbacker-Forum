@@ -22,8 +22,9 @@ function tryRequest(opts, retriesLeft) {
 // Perform a request to API endpoint `path`, `extraOpts` are passed as-is
 // to the `request` package.
 export default function apiRequest(path, extraOpts) {
+  const port = process.env.APP_SERVER_PORT || '8080'
   const opts = {
-    uri: `http://localhost:8080${path}`,
+    uri: `http://localhost:${port}${path}`,
     json: true,
     ...extraOpts,
   }
