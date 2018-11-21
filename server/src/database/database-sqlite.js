@@ -9,45 +9,45 @@ class SQLiteDatabase {
     this.databaseFile = path.resolve(__dirname, dbFile || './dev_db.sqlite')
 
     this.db = new sqlite.Database(this.databaseFile)
-    const newestMigrationId = this.query('SELECT id FROM migrations')
+    const newestMigrationId = this.query('SELECT ROWID FROM migrations')
     newestMigrationId.then((ids) => {
+      console.log(ids)
       const newestId = Math.max(ids.map(x => x.id))
-      const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
-      migrations.forEach((file) => {
-        const migrNr = parseInt(file.slice(0, 2), 10)
-        if (migrNr > newestId) {
-          console.log(`Running migration ${file}`)
-          const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`)).toString()
-          this.run(sqlCommand).then(() => {
-            this.run('INSERT INTO migrations VALUES ((?), (?))', [migrNr, file]).catch(() => {
-              console.error(`Failed to add ${file} to migrations table`)
-            })
-          }, (err) => {
-            if (err) {
-              console.error(`Failed to run migration ${file}`, err)
-            }
-          })
-        }
-      })
-    }).catch((err) => {
-      console.log(`Could not load migrations: ${err}`)
+      this.runMigrations(newestId)
+    }).catch(() => {
+      console.log('Could not load migrations, trying to add first migration')
+      this.runMigrations(0)
     })
-    /* const migrationFile = path.resolve(__dirname, './migrations/migration-setup.sql')
-    const migration = fs.readFileSync(migrationFile).toString()
-    this.db.run(migration, (err) =>  {
-      if (err) {
-        console.log(`migration failed ${err}`)
+  }
+
+  runMigrations(newestId) {
+    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
+    migrations.forEach((file) => {
+      const migrNr = parseInt(file.slice(0, 2), 10)
+      if (migrNr > newestId) {
+        console.log(`Running migration ${file}`)
+        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`)).toString()
+        this.exec(sqlCommand).then(() => {
+          this.run('INSERT INTO migrations VALUES ((?))', [file]).catch((err) => {
+            console.error(`Failed to add ${file} to migrations table: ${err}`)
+          })
+        }, (err) => {
+          if (err) {
+            console.error(`Failed to run migration ${file}`, err)
+          }
+        })
       }
-    }) */
+    })
   }
 
   async run(...args) {
     return new Promise((resolve, reject) => {
-      this.db.run(...args, (err, res) => {
+      this.db.run(...args, (err) => {
         if (err) {
+          console.error(`RUNERROR: ${err}`)
           reject(err)
         } else {
-          resolve(res)
+          resolve()
         }
       })
     })
@@ -57,9 +57,23 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
+          console.error(`QUERYERROR: ${err}`)
           reject(err)
         } else {
           resolve(res)
+        }
+      })
+    })
+  }
+
+  async exec(...args) {
+    return new Promise((resolve, reject) => {
+      this.db.exec(...args, (err) => {
+        if (err) {
+          console.error(`EXECERROR: ${err}`)
+          reject(err)
+        } else {
+          resolve()
         }
       })
     })

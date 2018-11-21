@@ -48,8 +48,7 @@ INSERT INTO threads (id, container_id) VALUES (2, 2);
 INSERT INTO threads (id, container_id) VALUES (3, 2);
 
 -- Table: Migrations
-CREATE TABLE migrations (id INTEGER PRIMARY KEY, file STRING UNIQUE);
-INSERT INTO migrations (id, file) VALUES (1, 'migration-setup.sql');
+CREATE TABLE migrations (file STRING UNIQUE);
 
 
 COMMIT TRANSACTION;
