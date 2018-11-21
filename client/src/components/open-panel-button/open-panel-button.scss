@@ -4,6 +4,8 @@
 
 .button {
   position: fixed;
+  bottom: 5%;
+  right: 5%;
   @include button();
   @include display-and-animate();
   &.hidden {

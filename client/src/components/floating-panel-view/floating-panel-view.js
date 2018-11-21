@@ -8,9 +8,9 @@ const css = classNames.bind(styles)
 const FloatingPanel = ({ hidden, onClick }) => (
   <div className={hidden ? css('panel-container', 'hidden') : css('panel-container')}>
     <Draggable
-        position={null}
-        handle='[data-dragarea]'
-        >
+      position={null}
+      handle="[data-dragarea]"
+    >
       <div className={css('panel')}>
         <div
           data-dragarea="true"
