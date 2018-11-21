@@ -64,8 +64,8 @@ class NameInput extends React.Component {
     return this.state.nameChanged ? this.state.name : this.props.name
   }
 
-  change(e) {
-    this.setState({ name: e.target.value, nameChanged: true })
+  change(event) {
+    this.setState({ name: event.target.value, nameChanged: true })
   }
 
   save() {

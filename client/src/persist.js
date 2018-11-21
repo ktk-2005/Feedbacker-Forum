@@ -32,8 +32,8 @@ function loadLocalState() {
   if (typeof storageVal === 'string') {
     try {
       Object.assign(result, JSON.parse(storageVal))
-    } catch (e) {
-      console.error('Failed to recover local storage persist', e)
+    } catch (error) {
+      console.error('Failed to recover local storage persist', error)
     }
   }
 
@@ -42,8 +42,8 @@ function loadLocalState() {
   if (typeof cookieVal === 'string') {
     try {
       Object.assign(result, JSON.parse(decodeURIComponent(cookieVal)))
-    } catch (e) {
-      console.error('Failed to recover cookie persist', e)
+    } catch (error) {
+      console.error('Failed to recover cookie persist', error)
     }
   }
 
@@ -64,8 +64,8 @@ function saveGlobalState(json) {
     persistWindow.postMessage({
       type: 'save', data: json,
     }, '*')
-  } catch (e) {
-    console.error('Unexpected <iframe> communication error', e)
+  } catch (error) {
+    console.error('Unexpected <iframe> communication error', error)
   }
 }
 
@@ -102,9 +102,9 @@ export function setupPersist(loadPersist) {
 
   persistWindow = iframe.contentWindow || iframe.contentDocument.window
 
-  window.addEventListener('message', (e) => {
-    if (e.source !== persistWindow) return
-    const msg = e.data
+  window.addEventListener('message', (event) => {
+    if (event.source !== persistWindow) return
+    const msg = event.data
     if (typeof msg !== 'object') return
     if (msg.type !== 'load') return
     if (typeof msg.data !== 'object') return
