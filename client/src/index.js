@@ -1,30 +1,146 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { createStore, combineReducers } from 'redux'
+import { connect, Provider } from 'react-redux'
 
-class VersionInfo extends React.Component {
-  constructor() {
-    super()
-    this.state = { versionString: '...' }
+import { setupPersist } from './persist'
+import clientVersion from './meta/version.meta'
+
+if (DEV) {
+  (async () => {
+    const response = await fetch('/api/version')
+    const apiVersion = await response.json()
+    if (clientVersion.gitBranch !== apiVersion.gitBranch
+      || clientVersion.gitHash !== apiVersion.gitHash) {
+      console.warn('Client and API versions don\'t match', clientVersion, apiVersion)
+    }
+  })()
+}
+
+const LOAD_PERSIST = 'LOAD_PERSIST'
+const SET_PERSIST = 'SET_PERSIST'
+
+function persistReducer(state = { }, action) {
+  switch (action.type) {
+    case LOAD_PERSIST:
+      return action.state
+
+    case SET_PERSIST:
+      return { ...state, ...action.data }
+
+    default:
+      return state
+  }
+}
+
+const reducer = combineReducers({
+  persist: persistReducer,
+})
+
+const store = createStore(reducer)
+
+const savePersist = setupPersist((state) => {
+  store.dispatch({ type: LOAD_PERSIST, state })
+})
+store.subscribe(() => {
+  savePersist(store.getState().persist || { })
+})
+
+function versionString(version) {
+  const shortHash = version.gitHash.substring(0, 8)
+  return `${shortHash} (${version.gitBranch})`
+}
+
+class NameInput extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { name: '', nameChanged: false }
+
+    this.save = this.save.bind(this)
+    this.change = this.change.bind(this)
   }
 
-  async componentDidMount() {
-    const response = await fetch('/api/version')
-    const version = await response.json()
-    const shortHash = version.gitHash.substring(0, 8)
-    const versionString = `${shortHash} (${version.gitBranch})`
-    this.setState({ versionString })
+  getName() {
+    return this.state.nameChanged ? this.state.name : this.props.name
+  }
+
+  change(event) {
+    this.setState({ name: event.target.value, nameChanged: true })
+  }
+
+  save() {
+    this.props.onSave(this.getName())
   }
 
   render() {
-    const { versionString } = this.state
+    const name = this.getName()
+    return <>
+      <input type="text" value={name} onChange={this.change} />
+      <button type="button" onClick={this.save}>Save</button>
+    </>
+  }
+}
+
+const PersistNameInput = connect(
+  state => ({ name: state.persist.name || '' }),
+  dispatch => ({
+    onSave: (name) => {
+      dispatch({
+        type: SET_PERSIST,
+        data: { name },
+      })
+    },
+  }),
+)(NameInput)
+
+function NameDisplay({ name, prefix }) {
+  return <>{prefix}{name}</>
+}
+
+const PersistNameDisplay = connect(
+  state => ({ name: state.persist.name || '' }),
+)(NameDisplay)
+
+class ApiVersionInfo extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { loaded: false, version: null }
+  }
+
+  async componentDidMount() {
+    const version = await fetch('/api/version').then(body => body.json())
+    this.setState({ loaded: true, version })
+  }
+
+  render() {
+    const { loaded, version }  = this.state
     return (
-      <div>Version: {versionString}</div>
+      <div>API Version: {loaded ? versionString(version) : null}</div>
     )
   }
 }
 
+function ClientVersionInfo({ version }) {
+  return (
+    <div>Client Version: {versionString(version)}</div>
+  )
+}
+
 ReactDOM.render(
-  <VersionInfo />,
+  <Provider store={store}>
+    <>
+      <div>
+        <ApiVersionInfo />
+        <ClientVersionInfo version={clientVersion} />
+      </div>
+      <div>
+        <PersistNameInput />
+      </div>
+      <div>
+        <PersistNameDisplay prefix="Persisted name: " />
+      </div>
+    </>
+  </Provider>,
   document.getElementById('root')
 )
 
