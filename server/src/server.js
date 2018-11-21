@@ -4,8 +4,7 @@ import bodyParser from 'body-parser'
 import { checkInt, checkBool } from './check'
 import { config } from './globals'
 import apiVersion from './routes/version'
-import commentRoute from './routes/comments'
-import versionRoute from './routes/version'
+import apiRoute from './routes/routes'
 
 export function startServer() {
   const app = express()
@@ -18,8 +17,7 @@ export function startServer() {
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
 
-  app.use('/api/version', versionRoute)
-  app.use('/api', commentRoute)
+  app.use('/api', apiRoute)
 
   app.use(apiVersion)
 
