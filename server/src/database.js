@@ -17,3 +17,7 @@ export async function addQuestion(values = []) { return db.run('INSERT INTO ques
 export async function getThreadComments(values = []) { return db.query('SELECT * FROM comments WHERE thread_id=?', values) }
 
 export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
+
+export async function getUsers(values = []) { return db.query('SELECT * FROM users', values) }
+
+export async function addUser(values = []) { return db.run('INSERT INTO users(id, name, keys) VALUES (?, ?, ?)', values) }

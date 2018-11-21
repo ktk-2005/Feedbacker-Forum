@@ -6,6 +6,15 @@
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
+-- Table: users
+CREATE TABLE users (
+    id         STRING UNIQUE,
+    time       DATETIME DEFAULT (CURRENT_TIMESTAMP),
+    name       STRING,
+    keys       STRING,
+    blob       STRING
+);
+
 -- Table: comments
 CREATE TABLE comments (
     id        STRING   UNIQUE,

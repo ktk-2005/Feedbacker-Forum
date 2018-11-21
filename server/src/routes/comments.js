@@ -63,7 +63,7 @@ router.post('/question', (req, res) => {
   const { text, user } = req.body
   const id = uuid()
   const threadId = req.body.threadId || uuid()
-  addQuestion([id, text, user, threadId], 'question').catch((err) => {
+  addQuestion([id, text, user, threadId]).catch((err) => {
     console.error(err)
   })
   res.send('👌')
@@ -73,7 +73,7 @@ router.post('/comment', (req, res) => {
   const { text, user } = req.body
   const id = uuid()
   const threadId = req.body.threadId || uuid()
-  addComment([id, text, user, threadId], 'question').catch((err) => {
+  addComment([id, text, user, threadId]).catch((err) => {
     console.error(err)
   })
   res.send('👌')
