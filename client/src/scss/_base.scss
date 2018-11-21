@@ -1,3 +1,14 @@
+// Normalize encapsulated
 .feedback-app-main-container {
   @import '../../node_modules/node.normalize.scss/normalize';
+}
+
+// Ensure that feedbacker tool is always on top
+.feedback-app-main-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 100000;
 }
