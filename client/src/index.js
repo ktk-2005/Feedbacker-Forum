@@ -114,9 +114,9 @@ class ApiVersionInfo extends React.Component {
   }
 
   render() {
-    const { ...state } = this.state
+    const { gitHash }  = this.state
     return (
-      <div>API Version: {state.gitHash ? versionString(state) : null}</div>
+      <div>API Version: {gitHash ? versionString(this.state) : null}</div>
     )
   }
 }
