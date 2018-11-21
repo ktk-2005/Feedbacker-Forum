@@ -17,12 +17,15 @@ if (DEV) {
   })()
 }
 
+const LOAD_PERSIST = 'LOAD_PERSIST'
+const SET_PERSIST = 'SET_PERSIST'
+
 function persistReducer(state = { }, action) {
   switch (action.type) {
-    case 'LOAD_PERSIST':
+    case LOAD_PERSIST:
       return action.state
 
-    case 'SET_PERSIST':
+    case SET_PERSIST:
       return { ...state, ...action.data }
 
     default:
@@ -37,7 +40,7 @@ const reducer = combineReducers({
 const store = createStore(reducer)
 
 const savePersist = setupPersist((state) => {
-  store.dispatch({ type: 'LOAD_PERSIST', state })
+  store.dispatch({ type: LOAD_PERSIST, state })
 })
 store.subscribe(() => {
   savePersist(store.getState().persist || { })
@@ -83,7 +86,7 @@ const PersistNameInput = connect(
   dispatch => ({
     onSave: (name) => {
       dispatch({
-        type: 'SET_PERSIST',
+        type: SET_PERSIST,
         data: { name },
       })
     },
