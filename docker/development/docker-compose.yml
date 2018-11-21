@@ -1,0 +1,13 @@
+version: '3'
+services:
+  server:
+    build: 
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    expose:
+      - ${APP_SERVER_PORT}
+    environment:
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    command: npm start
