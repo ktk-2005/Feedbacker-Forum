@@ -32,6 +32,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--testApi'], {
+      help: 'Run API tests an exit',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }
