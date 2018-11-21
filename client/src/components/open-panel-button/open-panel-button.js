@@ -6,6 +6,7 @@ const css = classNames.bind(styles)
 
 const Button = ({ hidden, onClick }) => (
   <button
+    type="button"
     className={hidden ? css('button', 'hidden') : css('button')}
     onClick={onClick}
   >+

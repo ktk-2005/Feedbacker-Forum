@@ -6,11 +6,14 @@ const css = classNames.bind(styles)
 
 const FloatingPanel = ({ hidden, onClick }) => (
   <div className={hidden ? css('panel', 'hidden') : css('panel')}>
-    <button
-      className={css('panel-button')}
-      onClick={onClick}
-    >x
-    </button>
+    <div className={css('panel-header')}>
+      <button
+        type="button"
+        className={css('header-button')}
+        onClick={onClick}
+      >x
+      </button>
+    </div>
   </div>
 )
 

@@ -12,6 +12,8 @@ class MainView extends React.Component {
   constructor(props) {
     super(props)
 
+    this.handleClick = this.handleClick.bind(this)
+
     this.state = {
       panelIsHidden: true,
       buttonIsHidden: false,
@@ -19,23 +21,25 @@ class MainView extends React.Component {
   }
 
   handleClick() {
-    this.setState({
-      buttonIsHidden: !this.state.buttonIsHidden,
-      panelIsHidden: !this.state.panelIsHidden,
-    })
+    this.setState(state => ({
+      buttonIsHidden: !state.buttonIsHidden,
+      panelIsHidden: !state.panelIsHidden,
+    }))
   }
 
   render() {
+    const { buttonIsHidden, panelIsHidden } = this.state
+
     return (
       <div className="test">
         <h1>Feedbacker Forum</h1>
         <Button
-          hidden={this.state.buttonIsHidden}
-          onClick={this.handleClick.bind(this)}
+          hidden={buttonIsHidden}
+          onClick={this.handleClick}
         />
         <FloatingPanel
-          hidden={this.state.panelIsHidden}
-          onClick={this.handleClick.bind(this)}
+          hidden={panelIsHidden}
+          onClick={this.handleClick}
         />
       </div>
     )

@@ -1,17 +1,29 @@
 @import '../../scss/atoms/button';
+@import '../../scss/mixins';
+@import '../../scss/variables';
 
 .panel {
   width: 20%;
   height: 80vh;
   position: fixed;
+  display: flex;
+
   padding: 5px;
   background-color: grey;
+  @include display-and-animate($default-animation-duration);
   &.hidden {
-    //@include hide-and-animate($animation-duration-default);
-    display: none;
+    @include hide-and-animate($default-animation-duration);
   }
 }
 
-.panel-button {
+.panel-header {
+  display: flex;
+  justify-content: flex-end;
+  height: 4%;
+  width: 100%;
+}
+
+.panel-header button {
   @include button;
+
 }
