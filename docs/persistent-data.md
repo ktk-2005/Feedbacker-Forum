@@ -13,7 +13,7 @@ feedback tool in `another-domain.com` the name should already be populated.
 ## Implementation
 
 The classic way to store persistent data is to use [cookies][mdn-cookie]. A newer
-altenative is to use [localStorage][mnd-localStorage], which is basically an persistent
+altenative is to use [localStorage][mdn-localStorage], which is basically an persistent
 associative array. We use both techniques simulataneously as we want to store
 data into the user's context. For example the user code could call `localStorage.clear()`
 and accidentally delete our persistent storage as well.
