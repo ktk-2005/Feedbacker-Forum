@@ -2,7 +2,19 @@ import SQLiteDatabase from './database/database-sqlite'
 
 const db = new SQLiteDatabase()
 
-export async function getAllComments() { return db.query('SELECT time, text, user, url FROM comments') }
+export async function getComments() { return db.query('SELECT * FROM comments') }
 
-export async function addComment(values = []) { return db.run('INSERT INTO comments VALUES ((?), (?), (?), (?), (?), (?))', values) }
+export async function getQuestions() { return db.query('SELECT * FROM questions') }
+
+export async function getReactions() { return db.query('SELECT * FROM reactions') }
+
+export async function addReaction(values = []) { return db.run('INSERT INTO reactions(id, emoji, user, comment_id) VALUES (?, ?, ?, ?)', values) }
+
+export async function addComment(values = []) { return db.run('INSERT INTO comments(id, text, user, thread_id) VALUES (?, ?, ?, ?)', values) }
+
+export async function addQuestion(values = []) { return db.run('INSERT INTO questions(id, text, user, thread_id) VALUES (?, ?, ?, ?)', values) }
+
+export async function getTHreadComments(values = []) { return db.query('SELECT * FROM comments WHERE thread_id=?', values) }
+
+export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE thread_id=?', values) }
 

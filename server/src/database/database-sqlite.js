@@ -11,7 +11,6 @@ class SQLiteDatabase {
     this.db = new sqlite.Database(this.databaseFile)
     const newestMigrationId = this.query('SELECT ROWID FROM migrations')
     newestMigrationId.then((ids) => {
-      console.log(ids)
       const newestId = Math.max(ids.map(x => x.id))
       this.runMigrations(newestId)
     }).catch(() => {
@@ -54,6 +53,7 @@ class SQLiteDatabase {
   }
 
   async query(...args) {
+    console.log(args)
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
