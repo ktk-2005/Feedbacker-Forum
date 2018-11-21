@@ -8,6 +8,16 @@ import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
 
+const feedbackAppRoot = () => {
+  const feedbackAppRoot = document.createElement('div')
+  document.addEventListener('DOMContentLoaded', () => {
+    feedbackAppRoot.setAttribute('data-feedback-app-root', true)
+    console.info('document', document)
+    document.querySelector("body").appendChild(feedbackAppRoot)
+  }, false)
+  return feedbackAppRoot
+}
+
 class MainView extends React.Component {
   constructor(props) {
     super(props)
@@ -50,5 +60,5 @@ ReactDOM.render(
   <div className={css('feedback-app-main-container')}>
     <MainView />
   </div>,
-  document.getElementById('root')
+  feedbackAppRoot()
 )

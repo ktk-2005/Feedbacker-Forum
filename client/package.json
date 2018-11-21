@@ -21,15 +21,9 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
     "classnames": "^2.2.6",
-<<<<<<< HEAD
     "css-loader": "^1.0.1",
     "copy-webpack-plugin": "^4.6.0",
     "cross-env": "^5.2.0",
-=======
-    "copy-webpack-plugin": "^4.6.0",
-    "cross-env": "^5.2.0",
-    "css-loader": "^1.0.1",
->>>>>>> d6e8a1468180db5d4d20407cfe2596928afa06d6
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
