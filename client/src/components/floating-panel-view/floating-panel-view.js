@@ -6,24 +6,26 @@ import styles from './floating-panel-view.scss'
 const css = classNames.bind(styles)
 
 const FloatingPanel = ({ hidden, onClick }) => (
-  <Draggable
-    position={null}
-    handle='[data-dragarea]'
-    >
-    <div className={hidden ? css('panel', 'hidden') : css('panel')}>
-      <div
-        data-dragarea="true"
-        className={css('panel-header')}
-      >
-        <button
-          type="button"
-          className={css('header-button')}
-          onClick={onClick}
-        >x
-        </button>
+  <div className={hidden ? css('panel-container', 'hidden') : css('panel-container')}>
+    <Draggable
+        position={null}
+        handle='[data-dragarea]'
+        >
+      <div className={css('panel')}>
+        <div
+          data-dragarea="true"
+          className={css('panel-header')}
+        >
+          <button
+            type="button"
+            className={css('header-button')}
+            onClick={onClick}
+          >x
+          </button>
+        </div>
       </div>
-    </div>
-  </Draggable>
+    </Draggable>
+  </div>
 )
 
 export default FloatingPanel
