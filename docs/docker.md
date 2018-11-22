@@ -8,7 +8,7 @@ The production configuration runs a separate nginx container that acts as a reve
 
 ## Usage
 
-There are two different configurations set up with the Docker Compose tool to orchestrate multiple containers. Here's a summary of useful commands to know. The commands should be executed inside the folder in which the `docker-compose.yml` configuration file resides.
+There are two different configurations set up with the Docker Compose tool to orchestrate multiple containers. Here's a summary of useful commands to know. The commands should be executed inside the folder in which the `docker-compose.yml` configuration file resides, ie. *docker/development/* or *docker/production/*.
 
 * Rebuilding and starting the containers: `docker-compose up --build`
 * Running in the background (daemon mode): `docker-compose up -d --build`
