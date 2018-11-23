@@ -30,8 +30,10 @@
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "express": "^4.16.4",
+    "morgan": "^1.9.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
+    "save": "^2.3.2",
     "sqlite3": "^4.0.4"
   }
 }
