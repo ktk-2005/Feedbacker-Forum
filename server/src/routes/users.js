@@ -9,8 +9,8 @@ router.post('/', (req, res) => {
   const id = uuid()
   // Will be stored as JSON in production, as string in sqlite
   const keys = {
-    'key' : uuid(30),
-    'secret' : uuid(30)
+    key: uuid(30),
+    secret: uuid(30),
   }
   const keyString = JSON.stringify(keys)
   addUser([id, name, keyString]).catch((err) => {
