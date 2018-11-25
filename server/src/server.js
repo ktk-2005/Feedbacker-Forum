@@ -23,10 +23,9 @@ export function startServer() {
 
   app.use('/api', apiRoute)
 
-  // if route not found
   app.use(notFound)
-
   app.use(devErr)
+  //app.use(prodErr)
 
   const port = checkInt('port', config.port)
   app.listen(port, () => {
