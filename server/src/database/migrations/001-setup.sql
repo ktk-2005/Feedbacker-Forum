@@ -18,7 +18,9 @@ CREATE TABLE comments (
     text      TEXT NOT NULL,
     user_id   CHAR(8) NOT NULL,
     thread_id CHAR(8) NOT NULL,
-    blob      TEXT
+    blob      TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (thread_id) REFERENCES threads(id)
 );
 
 -- Table: questions
@@ -28,7 +30,9 @@ CREATE TABLE questions (
     text      TEXT NOT NULL,
     user_id   CHAR(8) NOT NULL,
     thread_id VARCHAR(8) NOT NULL,
-    blob      TEXT
+    blob      TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (thread_id) REFERENCES threads(id)
 );
 
 -- Table: reactions
@@ -37,7 +41,9 @@ CREATE TABLE reactions (
     time       VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
     emoji      VARCHAR(32) NOT NULL,
     user_id    CHAR(8) NOT NULL,
-    comment_id CHAR(8) NOT NULL
+    comment_id CHAR(8) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (comment_id) REFERENCES comments(id)
 );
 
 -- Table: threads
