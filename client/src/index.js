@@ -45,12 +45,6 @@ class MainView extends React.Component {
   }
 }
 
-function ClientVersionInfo({ version }) {
-  return (
-    <div>Client Version: {versionString(version)}</div>
-  )
-}
-
 ReactDOM.render(
   <div className={css('feedback-app-main-container')}>
     <MainView />
