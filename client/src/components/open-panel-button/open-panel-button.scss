@@ -1,14 +1,28 @@
 @import '../../scss/atoms/button';
 @import '../../scss/mixins';
 @import '../../scss/variables';
+@import '../../scss/colors';
 
 .button {
+  @include button(30px);
+  @include display-and-animate();
   position: fixed;
+  width: 30px;
+  height: 30px;
   bottom: 5%;
   left: 3%;
-  @include button();
-  @include display-and-animate();
+  background: $palette-accent;
+  box-shadow: 2px 2px 5px $palette-dark;
   &.hidden {
     @include hide-and-animate();
+  }
+  i {
+    display: block;
+    height: $icon-dimension-default;
+    width: $icon-dimension-default;
+    fill: $palette-light;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
   }
 }

@@ -1,6 +1,7 @@
 @import '../../scss/atoms/button';
 @import '../../scss/mixins';
 @import '../../scss/variables';
+@import '../../scss/colors';
 
 .panel-container {
   @include display-and-animate($default-animation-duration);
@@ -10,22 +11,32 @@
 }
 
 .panel {
-  width: 20%;
-  height: 80vh;
+  width: 40vh;
+  height: 90vh;
   position: fixed;
   display: flex;
-  padding: 5px;
-  background-color: grey;
+  background-color: $palette-light;
+  border: solid $palette-medium 1px;
+  box-shadow: 2px 2px 5px $palette-medium;
 }
 
 .panel-header {
   display: flex;
   justify-content: flex-end;
-  height: 4%;
+  height: 5%;
   width: 100%;
+  background-color: $palette-medium;
+  border-bottom: solid $palette-medium 1px;
 }
 
 .panel-header button {
   @include button;
-
+  height: 70%;
+  background: transparent;
+  i {
+    display: block;
+    width: $icon-dimension-default;
+    height: $icon-dimension-default;
+    fill: $palette-dark;
+  }
 }
