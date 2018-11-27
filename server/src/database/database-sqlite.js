@@ -5,6 +5,9 @@ import fs from 'fs'
 const sqlite = sqlite3.verbose()
 
 class SQLiteDatabase {
+  /*
+  Connects to database and tries to run new migrations
+   */
   constructor(dbFile) {
     this.databaseFile = path.resolve(__dirname, dbFile || './dev_db.sqlite')
 
@@ -18,6 +21,10 @@ class SQLiteDatabase {
       this.runMigrations(0)
     })
   }
+  /*
+  Gets all migrations from the folder ./migrations and runs all migrations
+  that are newer than the parameter newestID, then add them to migrations table in database
+   */
 
   runMigrations(newestId) {
     const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
@@ -38,6 +45,13 @@ class SQLiteDatabase {
       }
     })
   }
+  /*
+  Runs an SQL query in the database. Does not return any value from the database,
+  only use for updating or inserting data
+
+  This only runs the first SQL query in the parameter string, to run many queries in the same
+  call , use exec instead
+   */
 
   async run(...args) {
     return new Promise((resolve, reject) => {
@@ -51,9 +65,12 @@ class SQLiteDatabase {
       })
     })
   }
+  /*
+  Runs an SQL query in the database and returns the result as a promise.
+  Use for querying from the database.
+   */
 
   async query(...args) {
-    console.log(args)
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
@@ -65,6 +82,10 @@ class SQLiteDatabase {
       })
     })
   }
+  /*
+  Runs all SQL queries in the parameter string. Can be used for running migrations
+  from a file or other grouped statements in the same string
+   */
 
   async exec(...args) {
     return new Promise((resolve, reject) => {
