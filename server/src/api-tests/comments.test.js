@@ -3,7 +3,7 @@ import apiRequest from './api-request'
 
 describe('/api/comments', () => {
   it('should return OK for posting a commment', async () => {
-    const answer = await apiRequest('/api/comments', {
+    const response = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
         text: 'testing',
@@ -12,7 +12,7 @@ describe('/api/comments', () => {
         container: '107',
       },
     })
-    assert.equal(answer, 'OK')
+    assert.equal(typeof response.id, 'string')
   })
 })
 
@@ -25,7 +25,7 @@ describe('/api/comments', () => {
 
 describe('/api/comments', () => {
   it('every comment text should be string', async () => {
-    const comments = await apiRequest('/api/comments', {
+    const response = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
         text: 1,
@@ -34,13 +34,13 @@ describe('/api/comments', () => {
         container: '107',
       },
     })
-    assert.equal(typeof comments, 'string')
+    assert.equal(typeof response.id, 'string')
   })
 })
 
 describe('/api/questions', () => {
   it('should return OK', async () => {
-    const answer = await apiRequest('/api/questions', {
+    const response = await apiRequest('/api/questions', {
       method: 'POST',
       body: {
         text: 'Pääpäivä?',
@@ -49,7 +49,7 @@ describe('/api/questions', () => {
         threadId: 'THR-1234',
       },
     })
-    assert.equal(answer, 'OK')
+    assert.equal(typeof response.id, 'string')
   })
 })
 
@@ -63,7 +63,7 @@ describe('/api/questions', () => {
 
 describe('/api/reactions', () => {
   it('should return OK', async () => {
-    const answer = await apiRequest('/api/reactions', {
+    const response = await apiRequest('/api/reactions', {
       method: 'POST',
       body: {
         emoji: '🍑',
@@ -71,7 +71,7 @@ describe('/api/reactions', () => {
         commentId: '1bd8052b',
       },
     })
-    assert.equal(answer, 'OK')
+    assert.equal(typeof response.id, 'string')
   })
 })
 

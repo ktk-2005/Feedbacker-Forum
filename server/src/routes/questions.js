@@ -31,7 +31,7 @@ router.post('/', catchErrors(async (req, res) => {
   await addQuestion({
     id, text, userId, threadId, blob,
   })
-  res.send('OK')
+  res.json({ id })
 }))
 
 module.exports = router

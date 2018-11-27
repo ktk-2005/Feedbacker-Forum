@@ -41,14 +41,8 @@ router.post('/', catchErrors(async (req, res) => {
     await addReaction({
       id, emoji, userId, commentId,
     })
-    res.json({
-      id,
-      emoji,
-      userId,
-      commentId,
-    })
+    res.json({ id })
   })
-  res.send('OK')
 }))
 
 module.exports = router

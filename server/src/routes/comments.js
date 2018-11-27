@@ -50,9 +50,8 @@ router.post('/', catchErrors(async (req, res) => {
     await addComment({
       id, text, userId, threadId, blob,
     })
-    res.send('OK')
+    res.json({ id })
   })
-  res.send('OK')
 }))
 
 // @api GET /api/comments/:threadId
