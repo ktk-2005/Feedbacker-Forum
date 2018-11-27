@@ -22,7 +22,7 @@ router.post('/', catchErrors(async (req, res) => {
   const id = uuid()
   // Will be stored as JSON in production, as string in sqlite
   const secret = uuid(30)
-  await addUser([id, name, secret])
+  await addUser({ id, name, secret })
   res.json({
     id,
     secret,
