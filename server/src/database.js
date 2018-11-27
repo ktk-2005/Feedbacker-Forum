@@ -5,7 +5,7 @@ let db = null
 
 export async function initializeDatabase() {
   db = new SQLiteDatabase(config.sqliteFilename)
-  await db.initialize(config.dev)
+  await db.initialize(config.useTestData)
 }
 
 export async function getComments() { return db.query('SELECT * FROM comments') }

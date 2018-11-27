@@ -11,9 +11,7 @@ const router = express.Router()
 //
 // returns JSON array of all questions in database
 router.get('/', catchErrors(async (req, res) => {
-  await getQuestions().then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getQuestions())
 }))
 
 // @api POST /api/questions

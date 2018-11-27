@@ -13,18 +13,22 @@ const router = express.Router()
 //
 // returns JSON array of all comments in database
 router.get('/', catchErrors(async (req, res) => {
-  await getComments().then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getComments())
 }))
 
 // @api POST /api/comments
 // Adds comment to database.
 //
-// Example body @json {
+// Example body for a root comment @json {
 //   "text": "minttua",
 //   "user": "salaattipoika",
 //   "container": "abcdef",
+//   "blob": "{\"path\": \"/path/to/element\"}"
+// }
+// comments can be linked to a thread with @json {
+//   "text": "minttua",
+//   "user": "salaattipoika",
+//   "threadId": "1234",
 //   "blob": "{\"path\": \"/path/to/element\"}"
 // }
 //
@@ -57,9 +61,7 @@ router.post('/', catchErrors(async (req, res) => {
 // returns JSON array of all comments in thread
 router.get('/:threadId', catchErrors(async (req, res) => {
   const { threadId } = req.params
-  await getThreadComments(threadId).then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getThreadComments(threadId))
 }))
 
 module.exports = router

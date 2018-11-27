@@ -11,9 +11,7 @@ const router = express.Router()
 //
 // returns JSON array of all reactions in database
 router.get('/', catchErrors(async (req, res) => {
-  await getReactions().then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getReactions())
 }))
 
 // @api GET /api/reactions/:commentId
@@ -22,9 +20,7 @@ router.get('/', catchErrors(async (req, res) => {
 // returns JSON array of all reactions to comment
 router.get('/:commentId', catchErrors(async (req, res) => {
   const { commentId } = req.params
-  await getCommentReactions(commentId).then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getCommentReactions(commentId))
 }))
 
 // @api POST /api/reactions
