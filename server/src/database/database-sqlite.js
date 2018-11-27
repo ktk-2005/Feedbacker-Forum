@@ -14,6 +14,10 @@ class SQLiteDatabase {
   }
 
   async initialize(dev) {
+
+    // Foreign keys are by default off...
+    this.db.exec('PRAGMA foreign_keys = ON')
+
     try {
       const newestMigrationId = await this.query('SELECT id FROM migrations ORDER BY id DESC LIMIT 1')
       const newestId = newestMigrationId[0].id
@@ -26,7 +30,11 @@ class SQLiteDatabase {
       if (dev) {
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
         console.log('Loading test data from test-data.sql')
-        await this.exec(sqlCommand)
+        try {
+          await this.exec(sqlCommand)
+        } catch (error) {
+          console.error('Failed to load test data', error)
+        }
       }
     }
   }
