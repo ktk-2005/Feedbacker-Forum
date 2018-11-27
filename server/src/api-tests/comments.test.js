@@ -6,25 +6,14 @@ describe('/api/comment', () => {
     const emoji = await apiRequest('/api/comment', {
       method: 'POST',
       body: {
-	"text": "testing",
-	"user": "oseppala",
-	"blob": "{\"path\": \"/path/to/element\"}"
-}
+        text: 'testing',
+        user: 'oseppala',
+        blob: '{"path": "/path/to/element"}',
+      },
     })
     //
     assert.equal(emoji, '👌')
     //
-    })
-})
-
-describe('/api/comments', () => {
-  it('should return all comments', async () => {
-    const comments = await apiRequest('/api/comments', {
-      method: 'GET',
-    })
-    //
-    assert.equal(commnts[0].text, 'skrattia')
-    //
-      assert(version.gitHash.match(/[a-f0-9]*/))
   })
 })
+
