@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8">
+</head>
+
+<body>
+
+<script>
+
+// Note: This script is not compiled, so make sure everything here is able to
+// run in IE11!
+
+// MDN polyfill: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Polyfill
+
+if (typeof Object.assign != 'function') {
+  // Must be writable: true, enumerable: false, configurable: true
+  Object.defineProperty(Object, "assign", {
+    value: function assign(target, varArgs) { // .length of function is 2
+      'use strict';
+      if (target == null) { // TypeError if undefined or null
+        throw new TypeError('Cannot convert undefined or null to object');
+      }
+
+      var to = Object(target);
+
+      for (var index = 1; index < arguments.length; index++) {
+        var nextSource = arguments[index];
+
+        if (nextSource != null) { // Skip over if undefined or null
+          for (var nextKey in nextSource) {
+            // Avoid bugs when hasOwnProperty is shadowed
+            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+              to[nextKey] = nextSource[nextKey];
+            }
+          }
+        }
+      }
+      return to;
+    },
+    writable: true,
+    configurable: true
+  });
+}
+
+var storageKey = 'storage'
+var cookieRegex = /persist\s*=(\s*[A-Za-z0-9-_.!~*'()]+)/
+
+function saveLocalState(json) {
+  window.localStorage.setItem(storageKey, json)
+
+  var safe = encodeURIComponent(json)
+  document.cookie = storageKey + '=' + safe + ';path=/;max-age=315360000'
+}
+
+function loadLocalState() {
+  var result = { }
+
+  var storageVal = window.localStorage.getItem(storageKey)
+  if (typeof storageVal === 'string') {
+    try {
+      Object.assign(result, JSON.parse(storageVal))
+    } catch (e) {
+      console.error('Failed to recover local storage persist', e)
+    }
+  }
+
+  var match = document.cookie.match(cookieRegex)
+  var cookieVal = Array.isArray(match) ? match[1] : null
+  if (typeof cookieVal === 'string') {
+    try {
+      Object.assign(result, JSON.parse(decodeURIComponent(cookieVal)))
+    } catch (e) {
+      console.error('Failed to recover cookie persist', e)
+    }
+  }
+
+  return result
+}
+
+window.addEventListener('message', function (e) {
+  if (e.source != window.parent) return
+  var msg = e.data
+  if (typeof msg !== 'object') return
+  if (msg.type !== 'save') return
+  if (typeof msg.data !== 'string') return
+
+  saveLocalState(msg.data)
+})
+
+var state = loadLocalState()
+window.parent.postMessage({
+  type: 'load',
+  data: state,
+}, '*')
+
+</script>
+
+</body>
+
+</html>
+
