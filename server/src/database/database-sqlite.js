@@ -44,7 +44,7 @@ class SQLiteDatabase {
         console.log(`Running migration ${file}`)
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`)).toString()
         await this.exec(sqlCommand).then(() => {
-          this.run('INSERT INTO migrations VALUES ((?))', [file]).catch((err) => {
+          this.run('INSERT INTO migrations(id, file) VALUES ((?), (?))', [migrNr, file]).catch((err) => {
             console.error(`Failed to add ${file} to migrations table: ${err}`)
           })
         }, (err) => {
