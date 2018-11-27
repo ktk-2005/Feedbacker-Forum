@@ -1,6 +1,6 @@
 import express from 'express'
 import { uuid } from './helpers'
-import { addUser, getUsers } from '../database'
+import { addUser } from '../database'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()

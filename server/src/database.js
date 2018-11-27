@@ -24,6 +24,4 @@ export async function getThreadComments(values = []) { return db.query('SELECT *
 
 export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
 
-export async function getUsers(values = []) { return db.query('SELECT * FROM users', values) }
-
 export async function addUser(values = []) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', values) }
