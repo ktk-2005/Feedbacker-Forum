@@ -53,7 +53,6 @@ class SQLiteDatabase {
   }
 
   async query(...args) {
-    console.log(args)
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
