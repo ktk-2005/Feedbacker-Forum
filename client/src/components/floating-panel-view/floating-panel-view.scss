@@ -4,38 +4,44 @@
 @import '../../scss/atoms/button';
 
 .panel-container {
-  @include display-and-animate($default-animation-duration);
+  @include display-and-animate();
   &.hidden {
-    @include hide-and-animate($default-animation-duration);
+    @include hide-and-animate();
   }
 }
 
 .panel {
-  width: 40vh;
-  height: 90vh;
   position: fixed;
   display: flex;
-  background-color: $palette-light;
+  flex-flow: column;
+  width: 30vw;
+  min-width: 200px;
+  height: 90vh;
   border: solid $palette-medium 1px;
+  border-radius: $border-radius-default;
   box-shadow: 0 2px 10px $palette-shadow-default;
+  background-color: $palette-light;
 }
 
 .panel-header {
   display: flex;
   justify-content: flex-end;
-  height: 5%;
   width: 100%;
-  background-color: $palette-medium;
+  border-bottom: 1px solid $palette-medium;
+  border-top-right-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
+  background-color: $palette-light;
+  cursor: move; // IE11
   cursor: grab;
-}
 
-.panel-header button {
-  @include button();
-  background: transparent;
-  i {
-    display: block;
-    width: $icon-dimension-default;
-    height: $icon-dimension-default;
-    fill: $palette-dark;
+  button {
+    @include button();
+    background: transparent;
+    i {
+      display: block;
+      width: $icon-dimension-default;
+      height: $icon-dimension-default;
+      fill: $palette-dark;
+    }
   }
 }
