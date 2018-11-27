@@ -1,24 +1,16 @@
 import express from 'express'
-<<<<<<< HEAD
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
-import { checkInt, checkBool } from './check'
-import { config } from './globals'
-import apiVersion from './routes/version'
-import apiRoute from './routes/routes'
-import { notFound, devErr } from './handlers'
-=======
 import fs from 'fs'
 import { promisify } from 'util'
-import childProcess from 'child_process'
-
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
-import apiVersion from './api/version'
+import apiRoute from './routes/routes'
+import { notFound, devErr } from './handlers'
+import childProcess from 'child_process'
 import listEndpoints from './list-endpoints'
 
 const writeFile = promisify(fs.writeFile)
->>>>>>> develop
 
 export function startServer() {
   const app = express()
@@ -28,11 +20,9 @@ export function startServer() {
     app.use(express.static('../client/build'))
   }
 
-<<<<<<< HEAD
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
   app.use(morgan('dev'))
-  app.use(apiVersion)
 
   app.use('/api', apiRoute)
 
