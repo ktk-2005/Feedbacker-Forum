@@ -29,15 +29,5 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
-// @api GET /api/users
-// Retrieve all users.
-//
-// returns JSON array of all users in database
-router.get('/', catchErrors(async (req, res) => {
-  await getUsers().then((rows) => {
-    res.send(rows)
-  })
-}))
-
 
 module.exports = router
