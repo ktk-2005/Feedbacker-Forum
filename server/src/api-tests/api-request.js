@@ -12,7 +12,7 @@ function tryRequest(opts, retriesLeft) {
 
   if (retriesLeft > 1) {
     promise = promise.catch((error) => {
-      if (!error.cause || !(error.cause.code === 'ECONNREFUSED' || error.cause.code === 'ECONNRESET') {
+      if (!error.cause || !(error.cause.code === 'ECONNREFUSED' || error.cause.code === 'ECONNRESET')) {
         return Promise.reject(error)
       }
 
