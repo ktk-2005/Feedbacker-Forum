@@ -21,7 +21,7 @@ module.exports.notFound = (req, res, next) => {
   const err = new Error('Not Found')
   err.status = 404
   next(err)
-};
+}
 
 /*
   Development Error Hanlder
@@ -32,7 +32,7 @@ module.exports.devErr = (err, req, res, next) => {
   const errorDetails = {
     message: err.message,
     status: err.status,
-    stack: err.stack
+    stack: err.stack,
   }
   res.status(err.status || 500)
   res.send(errorDetails)
@@ -46,6 +46,6 @@ module.exports.prodErr = (err, req, res, next) => {
   res.status(err.status || 500)
   res.json({'errors': {
     message: err.message,
-    error: {}
+    error: {},
   }})
 }
