@@ -49,7 +49,7 @@ CREATE TABLE reactions (
 -- Table: threads
 CREATE TABLE threads (
   id            CHAR(8) UNIQUE NOT NULL,
-  container_id  INTEGER NOT NULL,
+  container_id  CHAR(8) NOT NULL,
   blob          TEXT
 );
 
