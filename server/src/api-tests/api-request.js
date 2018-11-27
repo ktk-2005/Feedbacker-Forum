@@ -13,7 +13,8 @@ function tryRequest(opts, retriesLeft) {
 
   if (retriesLeft > 1) {
     promise = promise.catch((error) => {
-      if (!(error instanceof errors.RequestError)) {
+      if (!(error instanceof errors.RequestError ||
+        (error instanceof errors.StatusCodeError && error.statusCode == 502))) {
         return Promise.reject(error)
       }
 
