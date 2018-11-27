@@ -5,7 +5,7 @@ function makeUuid(length = 8) {
   return uuidv4().split('-').join('').slice(0, length)
 }
 
-let prevDebugUuid = { }
+const prevDebugUuid = { }
 function debugUuid(length = 8) {
   const prev = prevDebugUuid[length]
   if (prev && prev.times > 0) {

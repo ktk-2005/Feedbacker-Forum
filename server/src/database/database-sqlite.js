@@ -6,6 +6,12 @@ import { args } from '../globals'
 
 const sqlite = sqlite3.verbose()
 
+function verboseError(...msg) {
+  if (args.verbose) {
+    console.error(...msg)
+  }
+}
+
 class SQLiteDatabase {
   /*
   Connects to database and tries to run new migrations
@@ -79,8 +85,7 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.run(...args, (err) => {
         if (err) {
-          if (args.verbose)
-            console.error(`RUNERROR: ${err}`)
+          verboseError(`RUNERROR: ${err}`)
           reject(err)
         } else {
           resolve()
@@ -97,8 +102,7 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
-          if (args.verbose)
-            console.error(`QUERYERROR: ${err}`)
+          verboseError(`QUERYERROR: ${err}`)
           reject(err)
         } else {
           resolve(res)
@@ -115,8 +119,7 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.exec(...args, (err) => {
         if (err) {
-          if (args.verbose)
-            console.error(`EXECERROR: ${err}`)
+          verboseError(`EXECERROR: ${err}`)
           reject(err)
         } else {
           resolve()
