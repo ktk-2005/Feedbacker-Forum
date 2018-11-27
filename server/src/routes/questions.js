@@ -11,9 +11,7 @@ const router = express.Router()
 //
 // returns JSON array of all questions in database
 router.get('/', catchErrors(async (req, res) => {
-  await getQuestions().then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getQuestions())
 }))
 
 // @api POST /api/questions
@@ -28,7 +26,6 @@ router.get('/', catchErrors(async (req, res) => {
 // Returns 'OK' if question is succesfully added
 router.post('/', catchErrors(async (req, res) => {
   const { text, user, blob } = req.body
-
   await attempt(async () => {
     const id = uuid()
     const threadId = req.body.threadId || uuid()
