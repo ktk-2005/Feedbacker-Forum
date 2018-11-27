@@ -1,11 +1,11 @@
-@mixin hide-and-animate($duration: $default-animation-duration) {
+@mixin hide-and-animate($duration: $animation-duration-default) {
   visibility: hidden;
   opacity: 0;
   // visibility waits for opcity's transition to complete
   transition: visibility 0 linear $duration, opacity $duration;
 }
 
-@mixin display-and-animate($duration: $default-animation-duration) {
+@mixin display-and-animate($duration: $animation-duration-default) {
   visibility: visible;
   opacity: 1;
   transition: opacity $duration linear;
