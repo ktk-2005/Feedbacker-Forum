@@ -32,7 +32,7 @@ router.get('/:commentId', catchErrors(async (req, res) => {
 //   "comment_id": "1bd8052b"
 // }
 //
-// returns 'OK' if reaction is succesfully added
+// returns reaction data if reaction is succesfully added
 router.post('/', catchErrors(async (req, res) => {
   const { emoji, user, commentId } = req.body
 
@@ -41,7 +41,12 @@ router.post('/', catchErrors(async (req, res) => {
     await addReaction({
       id, emoji, user, commentId,
     })
-    res.send('OK')
+    res.json({
+      id,
+      emoji,
+      user,
+      commentId,
+    })
   })
 }))
 
