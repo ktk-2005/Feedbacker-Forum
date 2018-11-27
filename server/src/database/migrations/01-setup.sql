@@ -8,7 +8,7 @@ CREATE TABLE users (
     id         STRING UNIQUE,
     time       DATETIME DEFAULT (CURRENT_TIMESTAMP),
     name       STRING,
-    keys       STRING,
+    secret     VARCHAR(30),
     blob       STRING
 );
 
@@ -16,7 +16,7 @@ CREATE TABLE users (
 CREATE TABLE comments (
     id        STRING   UNIQUE,
     time      DATETIME DEFAULT (CURRENT_TIMESTAMP),
-    text      STRING,
+    text      STRING NOT NULL,
     user      STRING,
     url       STRING,
     thread_id STRING,
