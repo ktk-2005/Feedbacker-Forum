@@ -33,11 +33,12 @@ describe('/api/comments', () => {
 
   it('should work with newly created user', async () => {
     const { id: userId } = await apiRequest('/api/users', { method: 'POST' })
-    const { id: threadId } = await apiRequest('/api/comments', {
+    const response = await apiRequest('/api/comments', {
       method: 'POST',
       body: { userId, text: 'First', container: '107' },
     })
 
+    assert.equal(typeof response.id, 'string')
   })
 
   it('should support threading', async () => {
