@@ -41,6 +41,8 @@ class MainView extends React.Component {
           onClick={this.handleClick}
         />
       </div>
+    )
+  }
 }
 
 function ClientVersionInfo({ version }) {
