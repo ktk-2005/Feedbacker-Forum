@@ -29,7 +29,7 @@ returns JSON array of all comments in database
 
 Adds comment to database.
 
-@params
+Example body
 ```json
 {
   "text": "minttua",
@@ -39,7 +39,7 @@ Adds comment to database.
 }
 ```
 
-@returns 'OK' if comment is succesfully added
+returns 'OK' if comment is succesfully added
 
 ### [GET /api/comments/:threadId](../server/src/routes/comments.js#L46)
 
@@ -58,7 +58,7 @@ returns JSON array of all questions in database
 
 adds question to database.
 
-@params
+Example body
 ```json
 {
   "text": "What?",
@@ -68,7 +68,7 @@ adds question to database.
 }
 ```
 
-@returns 'OK' if question is succesfully added
+returns 'OK' if question is succesfully added
 
 ## Reactions
 
@@ -81,16 +81,14 @@ returns JSON array of all reactions in database
 
 add reaction to the database.
 
-@params
-```json
-{
+Example body {
   "emoji": "🍑",
   "user": "jaba",
   "comment_id": "1bd8052b"
 }
 ```
 
-@returns 'OK' if reaction is succesfully added
+returns 'OK' if reaction is succesfully added
 
 ### [GET /api/reactions/:commentId](../server/src/routes/comments.js#L97)
 
@@ -105,7 +103,7 @@ returns JSON array of all reactions to comment
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
 
-@params
+Example body
 ```json
 {
   "name": "salaattipoika"
