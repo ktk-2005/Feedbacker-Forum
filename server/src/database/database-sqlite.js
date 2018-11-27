@@ -14,7 +14,6 @@ class SQLiteDatabase {
   }
 
   async initialize(useTestData) {
-
     // Foreign keys are by default off...
     this.db.exec('PRAGMA foreign_keys = ON')
 

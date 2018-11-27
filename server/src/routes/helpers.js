@@ -6,7 +6,6 @@ export function uuid(length = 8) {
 
 // Retry a function multiple times until it succeeds
 export async function attempt(fn, maxTries = 10) {
-
   // Do N attempts
   for (let i = 0; i < maxTries - 1; i++) {
     try {
@@ -18,5 +17,5 @@ export async function attempt(fn, maxTries = 10) {
   }
 
   // Do last try without try-catch
-  return await fn()
+  return fn()
 }

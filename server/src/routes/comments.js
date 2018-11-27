@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getComments, getThreadComments, addComment, addThread } from '../database'
+import {
+  getComments, getThreadComments, addComment, addThread
+} from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
