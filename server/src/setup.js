@@ -69,7 +69,7 @@ function overrideConfigFromEnv() {
 
   const useTestData = process.env.USE_TEST_DATA
   if (useTestData) {
-    config.useTestData = useTestData != '0'
+    config.useTestData = useTestData !== '0'
   }
 }
 

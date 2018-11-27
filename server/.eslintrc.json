@@ -10,6 +10,7 @@
     "no-unused-vars": "warn",
     "no-multi-spaces": "off",
     "no-shadow": "off",
+    "no-plusplus": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
