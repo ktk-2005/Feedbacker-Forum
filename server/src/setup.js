@@ -47,6 +47,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--debugUuid'], {
+      help: 'Generate duplicate UUID values for debugging',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }

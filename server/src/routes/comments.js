@@ -50,7 +50,7 @@ router.post('/', catchErrors(async (req, res) => {
     await addComment({
       id, text, userId, threadId, blob,
     })
-    res.json({ id })
+    res.json({ id, threadId })
   })
 }))
 

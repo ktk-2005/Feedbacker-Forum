@@ -10,10 +10,10 @@ describe('/api/users', () => {
   })
 
   it('should return key and secret as strings', async () => {
-    const stuff = await apiRequest('/api/users', {
+    const response = await apiRequest('/api/users', {
       method: 'POST',
     })
-    assert.equal(typeof stuff.id, 'string')
-    assert.equal(typeof stuff.secret, 'string')
+    assert.equal(typeof response.id, 'string')
+    assert.equal(typeof response.secret, 'string')
   })
 })

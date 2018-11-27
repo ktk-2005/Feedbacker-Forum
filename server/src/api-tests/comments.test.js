@@ -31,6 +31,29 @@ describe('/api/comments', () => {
     await apiRequest('/api/comments', { method: 'POST', body })
   })
 
+  it('should work with newly created user', async () => {
+    const { id: userId } = await apiRequest('/api/users', { method: 'POST' })
+    const { id: threadId } = await apiRequest('/api/comments', {
+      method: 'POST',
+      body: { userId, text: 'First', container: '107' },
+    })
+
+  })
+
+  it('should support threading', async () => {
+    const userId = 'da776df3'
+    const { threadId } = await apiRequest('/api/comments', {
+      method: 'POST',
+      body: { userId, text: 'First', container: '107' },
+    })
+
+    const response = await apiRequest('/api/comments', {
+      method: 'POST',
+      body: { userId, threadId, text: 'Second' },
+    })
+    assert.equal(typeof response.id, 'string')
+  })
+
   it('every comment text should be string', async () => {
     const response = await apiRequest('/api/comments', {
       method: 'POST',

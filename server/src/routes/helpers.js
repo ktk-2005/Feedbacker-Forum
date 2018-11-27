@@ -1,5 +1,5 @@
 import uuidv4 from 'uuid/v4'
-import { config } from '../globals'
+import { args } from '../globals'
 
 function makeUuid(length = 8) {
   return uuidv4().split('-').join('').slice(0, length)
@@ -19,7 +19,7 @@ function debugUuid(length = 8) {
 }
 
 export function uuid(length) {
-  return config.dev ? debugUuid(length) : makeUuid(length)
+  return args.debugUuid ? debugUuid(length) : makeUuid(length)
 }
 
 // Retry a function multiple times until it succeeds
