@@ -8,7 +8,7 @@ import childProcess from 'child_process'
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
 import apiRoute from './routes/routes'
-import { notFound, devErr } from './handlers'
+import { notFound, devErr, prodErr } from './handlers'
 import listEndpoints from './list-endpoints'
 
 const writeFile = promisify(fs.writeFile)
@@ -28,8 +28,12 @@ export function startServer() {
   app.use('/api', apiRoute)
 
   app.use(notFound)
-  app.use(devErr)
-  // app.use(prodErr)
+
+  if (checkBool('dev', config.dev)) {
+    app.use(devErr)
+  } else {
+    app.use(prodErr)
+  }
 
   if (args.listEndpoints) {
     const endpoints = listEndpoints(app).map(e => `${e.method} ${e.path}`)
