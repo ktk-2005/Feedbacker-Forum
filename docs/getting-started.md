@@ -66,12 +66,13 @@ NPM scripts for development for server:
 | --- | --- |
 | `start` | Start the server in development mode with default configuration. Hosts the API and static content at `localhost:8080` |
 | `watch` | Like `start`, but also builds the **client** automatically when the code changes. |
+| `test:api` | Run API tests. |
 
 Rarely manually needed NPM scripts for server:
 
 | Command | Description |
 | --- | --- |
-| `test:api` | Run automated API tests, requires having the server running at `localhost:8080`. |
+| `test:remoteapi` | Run automated API tests for an already running server at port 8080 or env `APP_SERVER_PORT`. |
 
 ## Docker
 

@@ -9,4 +9,3 @@ describe('/api/version', () => {
     assert(version.gitHash.match(/[a-f0-9]*/))
   })
 })
-
