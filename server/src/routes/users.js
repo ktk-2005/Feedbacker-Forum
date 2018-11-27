@@ -1,10 +1,11 @@
 import express from 'express'
 import { uuid } from './helpers'
 import { addUser, getUsers } from '../database'
+import { catchErrors } from '../handlers'
 
 const router = express.Router()
 
-router.post('/', async (req, res) => {
+router.post('/', catchErrors(async (req, res, next) => {
   const { name } = req.body
   const id = uuid()
   // Will be stored as JSON in production, as string in sqlite
@@ -14,14 +15,14 @@ router.post('/', async (req, res) => {
     id: id,
     secret: secret
   })
-})
+}))
 
 
-router.get('/', async (req, res) => {
+router.get('/', catchErrors(async (req, res, next) => {
   await getUsers().then((rows) => {
     res.send(rows)
   })
-})
+}))
 
 
 module.exports = router

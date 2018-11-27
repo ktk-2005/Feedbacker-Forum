@@ -3,15 +3,13 @@
   With async/await, you need some way to catch errors
   Instead of using try{} catch(e) {} in each controller, we wrap the function in
   catchErrors(), catch and errors they throw, and pass it along to our express middleware with next()
-
-  Not in use yet
-  exports.catchErrors = (f) => {
-    return function(req, res, next) {
-      return f(req, res, next).catch(next)
-    }
-  }
-
 */
+
+module.exports.catchErrors = (fn) => {
+  return (req, res, next) => {
+    Promise.resolve(fn(req, res, next)).catch(next)
+  }
+}
 
 /*
   Not Found Error Handler
