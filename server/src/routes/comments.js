@@ -17,10 +17,16 @@ router.get('/', catchErrors(async (req, res) => {
 // @api POST /api/comments
 // Adds comment to database.
 //
-// Example body @json {
+// Example body for a root comment @json {
 //   "text": "minttua",
 //   "user": "salaattipoika",
 //   "container": "abcdef",
+//   "blob": "{\"path\": \"/path/to/element\"}"
+// }
+// comments can be linked to a thread with @json {
+//   "text": "minttua",
+//   "user": "salaattipoika",
+//   "threadId": "1234",
 //   "blob": "{\"path\": \"/path/to/element\"}"
 // }
 //

@@ -6,6 +6,7 @@ services:
       dockerfile: docker/production/api/Dockerfile
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+      USE_TEST_DATA: ${USE_TEST_DATA}
     depends_on:
       - postgres
 

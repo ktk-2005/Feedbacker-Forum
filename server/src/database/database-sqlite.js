@@ -13,7 +13,7 @@ class SQLiteDatabase {
     this.db = new sqlite.Database(this.databaseFile)
   }
 
-  async initialize(dev) {
+  async initialize(useTestData) {
 
     // Foreign keys are by default off...
     this.db.exec('PRAGMA foreign_keys = ON')
@@ -27,7 +27,7 @@ class SQLiteDatabase {
       console.log('Could not load migrations, trying to add first migration')
       await this.runMigrations(0)
 
-      if (dev) {
+      if (useTestData) {
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
         console.log('Loading test data from test-data.sql')
         try {
