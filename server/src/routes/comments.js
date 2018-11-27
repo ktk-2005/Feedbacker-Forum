@@ -34,7 +34,7 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns 'OK' if comment is succesfully added
 router.post('/', catchErrors(async (req, res) => {
-  const { text, user, blob } = req.body
+  const { text, userId, blob } = req.body
 
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
@@ -48,10 +48,11 @@ router.post('/', catchErrors(async (req, res) => {
   await attempt(async () => {
     const id = uuid()
     await addComment({
-      id, text, user, threadId, blob,
+      id, text, userId, threadId, blob,
     })
     res.send('OK')
   })
+  res.send('OK')
 }))
 
 // @api GET /api/comments/:threadId

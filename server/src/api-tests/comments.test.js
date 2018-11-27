@@ -7,8 +7,9 @@ describe('/api/comments', () => {
       method: 'POST',
       body: {
         text: 'testing',
-        user_id: 'oseppala',
+        userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
+        container: '107',
       },
     })
     assert.equal(answer, 'OK')
@@ -27,9 +28,10 @@ describe('/api/comments', () => {
     const comments = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
-        texti: 1,
-        user_id: 'oseppala',
+        text: 1,
+        userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
+        container: '107',
       },
     })
     assert.equal(typeof comments, 'string')
@@ -42,8 +44,9 @@ describe('/api/questions', () => {
       method: 'POST',
       body: {
         text: 'Pääpäivä?',
-        user_id: 'uus jaba',
+        userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
+        threadId: 'THR-1234',
       },
     })
     assert.equal(answer, 'OK')
@@ -64,8 +67,8 @@ describe('/api/reactions', () => {
       method: 'POST',
       body: {
         emoji: '🍑',
-        user_id: 'jaba',
-        comment_id: '1bd8052b',
+        userId: 'da776df3',
+        commentId: '1bd8052b',
       },
     })
     assert.equal(answer, 'OK')
