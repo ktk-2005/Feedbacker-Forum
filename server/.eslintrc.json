@@ -16,7 +16,9 @@
       "exports": "ignore",
       "functions": "ignore"
     }],
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-restricted-syntax": "off",
+    "no-await-in-loop": "off"
   },
 
   "env": {
