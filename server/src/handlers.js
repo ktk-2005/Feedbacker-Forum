@@ -14,7 +14,9 @@ module.exports.catchErrors = (fn) => {
 
 /*
   Not Found Error Handler
-  If we hit a route that is not found, we mark it as 404 and pass it along to the next error handler to display
+  If we hit a route that is not found,
+   we mark it as 404 and pass it along to
+   the next error handler to display
 */
 module.exports.notFound = (req, res, next) => {
   const err = new Error('Not Found')
@@ -43,8 +45,10 @@ module.exports.devErr = (err, req, res, next) => {
 */
 module.exports.prodErr = (err, req, res, next) => {
   res.status(err.status || 500)
-  res.json({'errors': {
-    message: err.message,
-    error: {},
-  }})
+  res.json({
+    errors: {
+      message: err.message,
+      error: { },
+    }
+  })
 }
