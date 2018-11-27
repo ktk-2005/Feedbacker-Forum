@@ -11,9 +11,7 @@ const router = express.Router()
 //
 // returns JSON array of all comments in database
 router.get('/', catchErrors(async (req, res) => {
-  await getComments().then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getComments())
 }))
 
 // @api POST /api/comments
@@ -60,9 +58,7 @@ router.post('/', catchErrors(async (req, res) => {
 // returns JSON array of all comments in thread
 router.get('/:threadId', catchErrors(async (req, res) => {
   const { threadId } = req.params
-  await getThreadComments(threadId).then((rows) => {
-    res.send(rows)
-  })
+  res.send(await getThreadComments(threadId))
 }))
 
 module.exports = router
