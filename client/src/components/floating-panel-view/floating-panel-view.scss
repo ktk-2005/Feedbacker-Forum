@@ -2,18 +2,20 @@
 @import '../../scss/mixins';
 @import '../../scss/variables';
 
+.panel-container {
+  @include display-and-animate($default-animation-duration);
+  &.hidden {
+    @include hide-and-animate($default-animation-duration);
+  }
+}
+
 .panel {
   width: 20%;
   height: 80vh;
   position: fixed;
   display: flex;
-
   padding: 5px;
   background-color: grey;
-  @include display-and-animate($default-animation-duration);
-  &.hidden {
-    @include hide-and-animate($default-animation-duration);
-  }
 }
 
 .panel-header {

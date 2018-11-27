@@ -104,8 +104,7 @@ class MainView extends React.Component {
     const { buttonIsHidden, panelIsHidden } = this.state
 
     return (
-      <div className="test">
-        <h1>Feedbacker Forum</h1>
+      <div>
         <Button
           hidden={buttonIsHidden}
           onClick={this.handleClick}
