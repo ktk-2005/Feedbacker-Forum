@@ -10,7 +10,7 @@ describe('/api/users', () => {
         secret: '8a38d7dd343843fcbf4d136063ea6d',
       },
     })
-    assert.equal(typeof stuff.key, 'string')
+    assert.equal(typeof stuff.id, 'string')
     assert.equal(typeof stuff.secret, 'string')
   })
 })

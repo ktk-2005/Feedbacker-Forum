@@ -26,7 +26,7 @@ describe('/api/comments', () => {
 
 describe('/api/comments', () => {
   it('every comment text should be string', async () => {
-    const comments = await apiRequest('/api/comments', {
+    const comments = await apiRequest('/api/comment', {
       method: 'POST',
       body: {
         texti: 1,
