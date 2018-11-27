@@ -1,26 +1,70 @@
+sudo: required
+
 dist: trusty
 language: node_js
 node_js:
   - "10.3.0"
 
-before_install:
-  - npm install -g npm@6.4.1
+cache:
+  directories:
+    - client/node_modules
+    - server/node_modules
 
-install:
-  - cd client && npm install && cd ..
-  - cd server && npm install && cd ..
+services:
+  - docker
 
-script:
-  - npm --prefix client run lint
-  - npm --prefix client run lint:ci
-  - npm --prefix client run build:dev
-  - npm --prefix client run build
-  - npm --prefix server run lint
-  - npm --prefix server run lint:ci
-  - npm --prefix server start &
-  - npm --prefix server run test:api
-  - mkdir -p build && mv docs/api.md build/api.md
-  - npm --prefix server run start -- --listEndpoints ../build/endpoints.json
-  - npm --prefix server run doc -- --endpoints ../build/endpoints.json
-  - diff build/api.md docs/api.md
+jobs:
+  include:
+    - name: Node
+      script:
+        # Install packages
+        - cd client && npm install && cd ..
+        - cd server && npm install && cd ..
+
+        # Lint server and client
+        - npm --prefix client run lint:ci
+        - npm --prefix server run lint:ci
+
+        # Build client development and production
+        - npm --prefix client run build:dev
+        - npm --prefix client run build
+
+        # Test documentation
+        - mkdir -p build && mv docs/api.md build/api.md
+        - npm --prefix server run start -- --listEndpoints ../build/endpoints.json
+        - npm --prefix server run doc -- --endpoints ../build/endpoints.json
+        - diff build/api.md docs/api.md
+
+        # Test local development
+        - npm --prefix server run test:api
+        - APP_SERVER_PORT=9001 npm --prefix server run start &
+        - APP_SERVER_PORT=9001 bash misc/test-server.sh
+
+    - name: Docker development
+      script:
+        # Server needs to be installed for tests
+        - cd server && npm install && cd ..
+
+        # Test development Docker
+        - pushd docker/development
+        - docker-compose up --build -d
+        - popd
+        - APP_SERVER_PORT=8080 bash misc/test-server.sh
+        - pushd docker/development
+        - docker-compose down
+        - popd
+
+    - name: Docker production
+      script:
+        # Server needs to be installed for tests
+        - cd server && npm install && cd ..
+
+        # Test production Docker
+        - pushd docker/production
+        - docker-compose up --build -d
+        - popd
+        - APP_SERVER_PORT=8080 bash misc/test-server.sh
+        - pushd docker/production
+        - docker-compose down
+        - popd
 

@@ -30,8 +30,17 @@ module.exports = {
 
       // Build *.js source files with Babel
       {
-        test: /\.js$/,
+        test: /\.meta.js$/,
         exclude: /node_modules/,
+        use: [
+          { loader: 'val-loader' },
+        ],
+      },
+
+      // Build *.js source files with Babel
+      {
+        test: /\.js$/,
+        exclude: /node_modules|\.meta\.js/,
         use: {
           loader: 'babel-loader',
         },

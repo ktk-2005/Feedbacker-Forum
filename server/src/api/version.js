@@ -1,9 +1,13 @@
 import express from 'express'
 import childProcess from 'child_process'
+import fs from 'fs'
+import { promisify } from 'util'
 
 const router = express.Router()
 
 export default router
+
+const readFile = promisify(fs.readFile)
 
 // Run a process `command` and asynchronously return standard outputs.
 function execProcess(command) {
@@ -15,6 +19,28 @@ function execProcess(command) {
   })
 }
 
+let version = null
+
+async function getVersion() {
+  if (version) return version
+
+  try {
+    const file = await readFile('build/version.json')
+    version = JSON.parse(file)
+    return version
+  } catch (e) { /* ignore */ }
+
+  try {
+    const { stdout } = await execProcess('node ../misc/dump-version.js')
+    version = JSON.parse(stdout)
+    return version
+  } catch (e) { /* ignore */ }
+
+  console.error('Failed to fetch current version')
+  version = { }
+  return version
+}
+
 // @api GET /api/version
 // Retrieve version information about the running server.
 //
@@ -23,12 +49,7 @@ function execProcess(command) {
 //   "gitBranch": "develop"
 // }
 router.get('/', async (req, res) => {
-  const { stdout: hash } = await execProcess('git rev-parse HEAD')
-  const { stdout: branch } = await execProcess('git rev-parse --abbrev-ref HEAD')
-
-  res.send({
-    gitHash: hash.trim(),
-    gitBranch: branch.trim(),
-  })
+  const result = await getVersion()
+  res.send(result)
 })
 

@@ -66,17 +66,18 @@ NPM scripts for development for server:
 | --- | --- |
 | `start` | Start the server in development mode with default configuration. Hosts the API and static content at `localhost:8080` |
 | `watch` | Like `start`, but also builds the **client** automatically when the code changes. |
+| `test:api` | Run API tests. |
 
 Rarely manually needed NPM scripts for server:
 
 | Command | Description |
 | --- | --- |
-| `test:api` | Run automated API tests, requires having the server running at `localhost:8080`. |
+| `test:remoteapi` | Run automated API tests for an already running server at port 8080 or env `APP_SERVER_PORT`. |
 
 ## Docker
 
 The *docker/* directory contains subdirectories for both development and production Docker setups.
-They can be built using `docker-compose`.
+They can be built using `docker-compose`. See [docs/docker.md](docker.md) for more details regarding the docker configuration.
 
 ### Development
 
@@ -98,4 +99,3 @@ running [PostgreSQL][postgres].
 [webpack]: https://webpack.js.org/
 [postgres]: https://www.postgresql.org/
 [nginx]: https://www.nginx.com/
-
