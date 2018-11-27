@@ -1,4 +1,6 @@
 $palette-light: #FDFDFD;
-$palette-medium: #E7E7E7;
-$palette-dark: #C3C4C6;
+$palette-medium: #D8D8D8;
+$palette-dark: #B7B8BA;
 $palette-accent: #00BFC9;
+
+$palette-shadow-default: lighten($palette-medium, 9);
