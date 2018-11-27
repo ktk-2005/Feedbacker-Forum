@@ -33,7 +33,9 @@ router.post('/comments', catchErrors(async (req, res) => {
   const { text, user, blob } = req.body
   const id = uuid()
   const threadId = req.body.threadId || uuid()
-  await addComment([id, text, user, threadId, blob])
+  await addComment({
+    id, text, user, threadId, blob,
+  })
   res.send('OK')
 }))
 
@@ -72,7 +74,9 @@ router.post('/questions', catchErrors(async (req, res) => {
   const { text, user, blob } = req.body
   const id = uuid()
   const threadId = req.body.threadId || uuid()
-  await addQuestion([id, text, user, threadId, blob])
+  await addQuestion({
+    id, text, user, threadId, blob,
+  })
   res.send('OK')
 }))
 
@@ -110,7 +114,9 @@ router.get('/reactions/:commentId', catchErrors(async (req, res) => {
 router.post('/reactions', catchErrors(async (req, res) => {
   const { emoji, user, commentId } = req.body
   const id = uuid()
-  await addReaction([id, emoji, user, commentId])
+  await addReaction({
+    id, emoji, user, commentId,
+  })
   res.send('OK')
 }))
 
