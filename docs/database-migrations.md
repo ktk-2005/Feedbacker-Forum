@@ -2,7 +2,7 @@
 
 ## Migrations
 
-Migrations for the database are stored in [src/database/migrations](../server/src/database).
+Migrations for the database are stored in [src/database/migrations](../server/src/database/migrations).
 The migrations are .sql files with their migration number as the first two charachter of the file name.
 
 | Migration |
