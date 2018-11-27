@@ -22,7 +22,8 @@ CREATE TABLE comments (
     text      STRING,
     user      STRING,
     url       STRING,
-    thread_id STRING
+    thread_id STRING,
+    blob      STRING
 );
 INSERT INTO comments (id, time, text, user, url, thread_id) VALUES ('1bd8052b', '2018-11-14 16:35:27', 'skrattia', 'jaba', NULL, '55c132a6');
 INSERT INTO comments (id, time, text, user, url, thread_id) VALUES ('cb38e8f6', '2018-11-14 17:10:42', 'tröttistä', 'jaba', NULL, '8ed4ee5d');
@@ -34,7 +35,8 @@ CREATE TABLE questions (
     text      STRING,
     user      STRING,
     url       STRING,
-    thread_id STRING
+    thread_id STRING,
+    blob      STRING
 );
 INSERT INTO questions (id, time, text, user, url, thread_id) VALUES ('eb1de3fc', '2018-11-14 17:40:09', 'Mitä tänään syötäisiin?', 'jaba', NULL, 'b07ed81a');
 
@@ -51,7 +53,11 @@ INSERT INTO reactions (id, time, emoji, user, comment_id) VALUES ('fb05d1a5', '2
 INSERT INTO reactions (id, time, emoji, user, comment_id) VALUES ('cba06aee', '2018-11-14 23:20:11', '🅱️', 'jaba', '1bd8052b');
 
 -- Table: threads
-CREATE TABLE threads (id STRING UNIQUE, container_id INTEGER);
+CREATE TABLE threads (
+  id            STRING UNIQUE,
+  container_id  INTEGER,
+  blob          STRING
+);
 INSERT INTO threads (id, container_id) VALUES (1, 2);
 INSERT INTO threads (id, container_id) VALUES (2, 2);
 INSERT INTO threads (id, container_id) VALUES (3, 2);
