@@ -14,12 +14,3 @@ describe('/api/users', () => {
     assert.equal(typeof stuff.secret, 'string')
   })
 })
-
-describe('/api/users', () => {
-  it('should return the name of first user', async () => {
-    const users = await apiRequest('/api/users', {
-      method: 'GET',
-    })
-    assert.equal(users[0].name, 'salaattipoika')
-  })
-})
