@@ -1,59 +1,55 @@
 -- Text encoding used: UTF-8
 --
-PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
 -- Table: users
 CREATE TABLE users (
-    id         STRING UNIQUE,
-    time       DATETIME DEFAULT (CURRENT_TIMESTAMP),
-    name       STRING,
-    secret     VARCHAR(30),
-    blob       STRING
+    id         CHAR(8) UNIQUE,
+    time       VARCHAR(24) DEFAULT (CURRENT_TIMESTAMP),
+    name       VARCHAR(255),
+    secret     CHAR(30),
+    blob       TEXT
 );
 
 -- Table: comments
 CREATE TABLE comments (
-    id        STRING   UNIQUE,
-    time      DATETIME DEFAULT (CURRENT_TIMESTAMP),
-    text      STRING NOT NULL,
-    user      STRING,
-    url       STRING,
-    thread_id STRING,
-    blob      STRING
+    id        CHAR(8)   UNIQUE,
+    time      VARCHAR(24) DEFAULT (CURRENT_TIMESTAMP),
+    text      TEXT,
+    user_id   CHAR(8),
+    thread_id CHAR(8),
+    blob      TEXT
 );
 
 -- Table: questions
 CREATE TABLE questions (
-    id        STRING   UNIQUE,
-    time      DATETIME DEFAULT (CURRENT_TIMESTAMP),
-    text      STRING,
-    user      STRING,
-    url       STRING,
-    thread_id STRING,
-    blob      STRING
+    id        CHAR(8) UNIQUE,
+    time      VARCHAR(24) DEFAULT (CURRENT_TIMESTAMP),
+    text      TEXT,
+    user_id   CHAR(8),
+    thread_id VARCHAR(8),
+    blob      TEXT
 );
 
 -- Table: reactions
 CREATE TABLE reactions (
-    id         STRING UNIQUE,
-    time       DATETIME DEFAULT (CURRENT_TIMESTAMP),
+    id         CHAR(8) UNIQUE,
+    time       VARCHAR(24) DEFAULT (CURRENT_TIMESTAMP),
     emoji      CHAR,
-    user       STRING,
-    comment_id STRING
+    user_id    CHAR(8),
+    comment_id CHAR(8)
 );
 
 -- Table: threads
 CREATE TABLE threads (
-  id            STRING UNIQUE,
+  id            CHAR(8) UNIQUE,
   container_id  INTEGER,
-  blob          STRING
+  blob          TEXT
 );
 
 
 -- Table: Migrations
-CREATE TABLE migrations (file STRING UNIQUE);
+CREATE TABLE migrations (id INTEGER PRIMARY KEY, file VARCHAR(255) UNIQUE);
 
 
 COMMIT TRANSACTION;
-PRAGMA foreign_keys = on;
