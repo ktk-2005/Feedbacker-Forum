@@ -9,6 +9,7 @@
     "import/no-extraneous-dependencies": "off",
     "no-unused-vars": "warn",
     "no-multi-spaces": "off",
+    "no-shadow": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",

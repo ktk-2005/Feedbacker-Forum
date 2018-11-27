@@ -26,6 +26,20 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--listEndpoints'], {
+      help: 'Write all endpoints into a JSON file',
+      metavar: 'endpoints.json',
+    }
+  )
+
+  parser.addArgument(
+    ['--testApi'], {
+      help: 'Run API tests an exit',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }
