@@ -3,11 +3,12 @@ import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import fs from 'fs'
 import { promisify } from 'util'
+import childProcess from 'child_process'
+
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
 import apiRoute from './routes/routes'
 import { notFound, devErr } from './handlers'
-import childProcess from 'child_process'
 import listEndpoints from './list-endpoints'
 
 const writeFile = promisify(fs.writeFile)
