@@ -19,7 +19,7 @@ router.get('/comments', catchErrors(async (req, res) => {
   })
 }))
 
-// @api POST /api/comment
+// @api POST /api/comments
 // Adds comment to database.
 //
 // @params @json {
@@ -29,7 +29,7 @@ router.get('/comments', catchErrors(async (req, res) => {
 // }
 //
 // @returns 'OK' if comment is succesfully added
-router.post('/comment', catchErrors(async (req, res) => {
+router.post('/comments', catchErrors(async (req, res) => {
   const { text, user, blob } = req.body
   const id = uuid()
   const threadId = req.body.threadId || uuid()
@@ -68,7 +68,7 @@ router.get('/questions', catchErrors(async (req, res) => {
 // }
 //
 // @returns 'OK' if question is succesfully added
-router.post('/question', catchErrors(async (req, res) => {
+router.post('/questions', catchErrors(async (req, res) => {
   const { text, user, blob } = req.body
   const id = uuid()
   const threadId = req.body.threadId || uuid()
@@ -97,7 +97,7 @@ router.get('/reactions/:commentId', catchErrors(async (req, res) => {
   })
 }))
 
-// @api POST /api/reaction
+// @api POST /api/reactions
 // add reaction to the database.
 //
 // @params @json {
@@ -107,7 +107,7 @@ router.get('/reactions/:commentId', catchErrors(async (req, res) => {
 // }
 //
 // @returns 'OK' if reaction is succesfully added
-router.post('/reaction', catchErrors(async (req, res) => {
+router.post('/reactions', catchErrors(async (req, res) => {
   const { emoji, user, commentId } = req.body
   const id = uuid()
   await addReaction([id, emoji, user, commentId])

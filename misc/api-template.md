@@ -5,3 +5,6 @@
 
 @api /api/version
 
+## Comments
+
+@api /api/comments
