@@ -9,7 +9,7 @@ class SQLiteDatabase {
   Connects to database and tries to run new migrations
    */
   constructor(dbFile) {
-    this.databaseFile = './dev_db.sqlite'
+    this.databaseFile = dbFile || './dev_db.sqlite'
     this.db = new sqlite.Database(this.databaseFile)
   }
 
@@ -19,7 +19,7 @@ class SQLiteDatabase {
       const newestId = newestMigrationId[0].rowid
       console.log('Connected to SQLite database at migration', newestId)
       await this.runMigrations(newestId)
-    } catch {
+    } catch (err) {
       console.log('Could not load migrations, trying to add first migration')
       await this.runMigrations(0)
 
@@ -111,7 +111,5 @@ class SQLiteDatabase {
       })
     })
   }
-
 }
-
 export default SQLiteDatabase
