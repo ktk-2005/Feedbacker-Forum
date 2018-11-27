@@ -14,11 +14,11 @@ export async function getQuestions() { return db.query('SELECT * FROM questions'
 
 export async function getReactions() { return db.query('SELECT * FROM reactions') }
 
-export async function addReaction(values = []) { return db.run('INSERT INTO reactions(id, emoji, user, comment_id) VALUES (?, ?, ?, ?)', values) }
+export async function addReaction(values = []) { return db.run('INSERT INTO reactions(id, emoji, user_id, comment_id) VALUES (?, ?, ?, ?)', values) }
 
-export async function addComment(values = []) { return db.run('INSERT INTO comments(id, text, user, thread_id, blob) VALUES (?, ?, ?, ?, ?)', values) }
+export async function addComment(values = []) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', values) }
 
-export async function addQuestion(values = []) { return db.run('INSERT INTO questions(id, text, user, thread_id, blob) VALUES (?, ?, ?, ?, ?)', values) }
+export async function addQuestion(values = []) { return db.run('INSERT INTO questions(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', values) }
 
 export async function getThreadComments(values = []) { return db.query('SELECT * FROM comments WHERE thread_id=?', values) }
 
