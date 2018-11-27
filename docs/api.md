@@ -48,7 +48,7 @@ comments can be linked to a thread with
 }
 ```
 
-Returns 'OK' if comment is succesfully added
+Returns `{ id, threadId }` of the new comment
 
 ### [GET /api/comments/:threadId](../server/src/routes/comments.js#L61)
 
@@ -76,7 +76,7 @@ Example body
 }
 ```
 
-Returns 'OK' if question is succesfully added
+Returns `{ id }` of the created question
 
 ## Reactions
 
@@ -98,7 +98,7 @@ Example body
 }
 ```
 
-returns reaction data if reaction is succesfully added
+Returns `{ id }` of the reaction
 
 ### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L21)
 

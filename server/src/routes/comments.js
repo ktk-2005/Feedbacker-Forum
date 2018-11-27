@@ -32,7 +32,7 @@ router.get('/', catchErrors(async (req, res) => {
 //   "blob": "{\"path\": \"/path/to/element\"}"
 // }
 //
-// Returns 'OK' if comment is succesfully added
+// Returns `{ id, threadId }` of the new comment
 router.post('/', catchErrors(async (req, res) => {
   const { text, userId, blob } = req.body
 
