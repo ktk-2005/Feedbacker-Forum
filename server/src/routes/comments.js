@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import { getComments, getThreadComments, addComment } from '../database'
-import { uuid, attempt } from './helpers'
+import { uuid } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -27,16 +27,13 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns 'OK' if comment is succesfully added
 router.post('/', catchErrors(async (req, res) => {
-  const { text, user, blob } = req.body
-
-  await attempt(async () => {
-    const id = uuid()
-    const threadId = req.body.threadId || uuid()
-    await addComment({
-      id, text, user, threadId, blob,
-    })
-    res.send('OK')
+  const { text, userId, blob } = req.body
+  const id = uuid()
+  const threadId = req.body.threadId || uuid()
+  await addComment({
+    id, text, userId, threadId, blob,
   })
+  res.send('OK')
 }))
 
 // @api GET /api/comments/:threadId

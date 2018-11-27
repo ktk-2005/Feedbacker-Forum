@@ -15,8 +15,8 @@ export async function getQuestions() { return db.query('SELECT * FROM questions'
 export async function getReactions() { return db.query('SELECT * FROM reactions') }
 
 export async function addReaction({
-  id, emoji, user, commentId,
-}) { return db.run('INSERT INTO reactions(id, emoji, user_id, comment_id) VALUES (?, ?, ?, ?)', [id, emoji, user, commentId]) }
+  id, emoji, userId, commentId,
+}) { return db.run('INSERT INTO reactions(id, emoji, user_id, comment_id) VALUES (?, ?, ?, ?)', [id, emoji, userId, commentId]) }
 
 export async function addComment({
   id, text, userId, threadId,
