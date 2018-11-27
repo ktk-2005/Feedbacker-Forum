@@ -8,9 +8,10 @@ const router = express.Router()
 // @api POST /api/users
 // Add user to database.
 // Returns JSON that contains generated id and secret of added user.
-//
-// Example body @json {
-//   "name": "salaattipoika" // Optional
+// The body can be empty to create a new anonymous user which is the default
+// mode of interaction in the frontend.
+// Alternatively you can specify properties for the new user, eg. @json {
+//   "name": "salaattipoika"
 // }
 //
 // Example response @json {
