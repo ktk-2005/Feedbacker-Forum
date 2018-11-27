@@ -12,12 +12,14 @@ function tryRequest(opts, retriesLeft) {
 
   if (retriesLeft > 1) {
     promise = promise.catch((error) => {
-      if (!error.cause || error.cause.code !== 'ECONNREFUSED')
+      if (!error.cause || error.cause.code !== 'ECONNREFUSED') {
         return Promise.reject(error)
+      }
 
       totalFailedRequests += 1
-      if (totalFailedRequests > 100)
+      if (totalFailedRequests > 100) {
         return Promise.reject(error)
+      }
 
       return setTimeoutPromise(200)
         .then(() => tryRequest(opts, retriesLeft - 1))
