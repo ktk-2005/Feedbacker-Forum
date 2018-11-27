@@ -1,9 +1,9 @@
 import { promisify } from 'util'
 import fs from 'fs'
 import childProcess from 'child_process'
+import { ArgumentParser } from 'argparse'
 import { initializeDatabase } from './database'
 
-import { ArgumentParser } from 'argparse'
 import { startServer } from './server'
 import { args, config } from './globals'
 
