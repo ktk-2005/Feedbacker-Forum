@@ -14,15 +14,13 @@ router.post('/', async (req, res) => {
   }
   const keyString = JSON.stringify(keys)
   await addUser([id, name, keyString])
-  res.send('👌')
+  res.send(keys)
 })
 
 
-router.get('/', (req, res) => {
-  getUsers().then((rows) => {
+router.get('/', async (req, res) => {
+  await getUsers().then((rows) => {
     res.send(rows)
-  }, (err) => {
-    console.error(err)
   })
 })
 
