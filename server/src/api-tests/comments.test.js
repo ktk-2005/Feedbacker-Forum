@@ -17,9 +17,7 @@ describe('/api/comments', () => {
 
 describe('/api/comments', () => {
   it('first comment s text should be skrattia', async () => {
-    const comments = await apiRequest('/api/comments', {
-      method: 'GET',
-    })
+    const comments = await apiRequest('/api/comments')
     assert.equal(comments[0].text, 'skrattia')
   })
 })
@@ -54,9 +52,7 @@ describe('/api/questions', () => {
 
 describe('/api/questions', () => {
   it('should return the last question', async () => {
-    const questions = await apiRequest('/api/questions', {
-      method: 'GET',
-    })
+    const questions = await apiRequest('/api/questions')
     assert.equal(questions[questions.length - 1].text, 'Pääpäivä?')
   })
 })
@@ -78,9 +74,7 @@ describe('/api/reactions', () => {
 
 describe('/api/reactions', () => {
   it('should return the last question', async () => {
-    const reactions = await apiRequest('/api/reactions', {
-      method: 'GET',
-    })
+    const reactions = await apiRequest('/api/reactions')
     assert.equal(reactions[reactions.length - 1].emoji, '🍑')
   })
 })
