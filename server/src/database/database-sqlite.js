@@ -9,31 +9,41 @@ class SQLiteDatabase {
   Connects to database and tries to run new migrations
    */
   constructor(dbFile) {
-    this.databaseFile = path.resolve(__dirname, dbFile || './dev_db.sqlite')
-
+    this.databaseFile = './dev_db.sqlite'
     this.db = new sqlite.Database(this.databaseFile)
-    const newestMigrationId = this.query('SELECT ROWID FROM migrations')
-    newestMigrationId.then((ids) => {
-      const newestId = Math.max(ids.map(x => x.id))
-      this.runMigrations(newestId)
-    }).catch(() => {
-      console.log('Could not load migrations, trying to add first migration')
-      this.runMigrations(0)
-    })
   }
+
+  async initialize(dev) {
+    try {
+      const newestMigrationId = await this.query('SELECT ROWID FROM migrations ORDER BY ROWID DESC LIMIT 1')
+      const newestId = newestMigrationId[0].rowid
+      console.log('Connected to SQLite database at migration', newestId)
+      await this.runMigrations(newestId)
+    } catch {
+      console.log('Could not load migrations, trying to add first migration')
+      await this.runMigrations(0)
+
+      if (dev) {
+        const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
+        await this.exec(sqlCommand)
+      }
+    }
+  }
+
   /*
   Gets all migrations from the folder ./migrations and runs all migrations
-  that are newer than the parameter newestID, then add them to migrations table in database
+  that are newer than the parameter newestId, then add them to migrations table in database
    */
 
-  runMigrations(newestId) {
+  async runMigrations(newestId) {
     const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
-    migrations.forEach((file) => {
-      const migrNr = parseInt(file.slice(0, 2), 10)
+    migrations.sort()
+    for (const file of migrations) {
+      const migrNr = parseInt(file.slice(0, 3), 10)
       if (migrNr > newestId) {
         console.log(`Running migration ${file}`)
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`)).toString()
-        this.exec(sqlCommand).then(() => {
+        await this.exec(sqlCommand).then(() => {
           this.run('INSERT INTO migrations VALUES ((?))', [file]).catch((err) => {
             console.error(`Failed to add ${file} to migrations table: ${err}`)
           })
@@ -43,8 +53,10 @@ class SQLiteDatabase {
           }
         })
       }
-    })
+    }
   }
+
+
   /*
   Runs an SQL query in the database. Does not return any value from the database,
   only use for updating or inserting data
@@ -99,6 +111,7 @@ class SQLiteDatabase {
       })
     })
   }
+
 }
 
 export default SQLiteDatabase
