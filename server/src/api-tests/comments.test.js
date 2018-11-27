@@ -6,10 +6,10 @@ describe('/api/comment', () => {
     const answer = await apiRequest('/api/comment', {
       method: 'POST',
       body: {
-        "text": "testing",
-	      "user_id": "oseppala",
-	      "blob": "{\"path\": \"/path/to/element\"}"
-      }
+        text: 'testing',
+        user_id: 'oseppala',
+        blob: '{"path": "/path/to/element"}',
+      },
     })
     assert.equal(answer, 'OK')
   })
@@ -29,10 +29,10 @@ describe('/api/comments', () => {
     const comments = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
-	      "texti": 1,
-	      "user_id": "oseppala",
-	      "blob": "{\"path\": \"/path/to/element\"}"
-      }
+        texti: 1,
+        user_id: 'oseppala',
+        blob: '{"path": "/path/to/element"}',
+      },
     })
     assert.equal(typeof comments, 'string')
   })
@@ -43,10 +43,10 @@ describe('/api/question', () => {
     const answer = await apiRequest('/api/question', {
       method: 'POST',
       body: {
-	      "text": "Pääpäivä?",
-	      "user_id": "uus jaba",
-      	"blob": "{\"path\": \"/path/to/element\"}"
-      }
+        text: 'Pääpäivä?',
+        user_id: 'uus jaba',
+        blob: '{"path": "/path/to/element"}',
+      },
     })
     assert.equal(answer, 'OK')
   })
@@ -57,7 +57,7 @@ describe('/api/questions', () => {
     const questions = await apiRequest('/api/questions', {
       method: 'GET',
     })
-    assert.equal(comments[comments.length-1].text, "Pääpäivä?")
+    assert.equal(questions[questions.length - 1].text, 'Pääpäivä?')
   })
 })
 
@@ -67,10 +67,10 @@ describe('/api/reaction', () => {
     const answer = await apiRequest('/api/reaction', {
       method: 'POST',
       body: {
-	       "emoji": '🍑',
-	       "user_id": "jaba",
-	       "comment_id": "1bd8052b"
-      }
+        emoji: '🍑',
+        user_id: 'jaba',
+        comment_id: '1bd8052b',
+      },
     })
     assert.equal(answer, 'OK')
   })
@@ -81,6 +81,6 @@ describe('/api/reactions', () => {
     const reactions = await apiRequest('/api/reactions', {
       method: 'GET',
     })
-    assert.equal(reactions[reactions.length-1].emoji, '🍑')
+    assert.equal(reactions[reactions.length - 1].emoji, '🍑')
   })
 })
