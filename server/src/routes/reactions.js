@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import { getReactions, getCommentReactions, addReaction } from '../database'
-import { uuid } from './helpers'
+import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
