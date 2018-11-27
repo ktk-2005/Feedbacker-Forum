@@ -1,8 +1,13 @@
 /* transitions */
-$default-animation-duration: 0.2ms;
+$default-animation-duration: 0.2s;
 
 /* buttons */
 $default-border-radius: 5px;
 
-
 $icon-dimension-default: 24px;
+
+$z-index-levels: (
+  1: 100000,
+  2: 200000,
+  3: 300000,
+);

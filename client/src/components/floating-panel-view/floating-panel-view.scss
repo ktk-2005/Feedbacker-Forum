@@ -17,7 +17,7 @@
   display: flex;
   background-color: $palette-light;
   border: solid $palette-medium 1px;
-  box-shadow: 0px 2px 10px $palette-shadow-default;
+  box-shadow: 0 2px 10px $palette-shadow-default;
 }
 
 .panel-header {
@@ -30,8 +30,7 @@
 }
 
 .panel-header button {
-  @include button;
-  height: 70%;
+  @include button();
   background: transparent;
   i {
     display: block;
