@@ -20,27 +20,37 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L16)
+### [GET /api/comments](../server/src/routes/comments.js#L13)
 
 Retrieve all comments.
 
 returns JSON array of all comments in database
-### [POST /api/comments](../server/src/routes/comments.js#L32)
+### [POST /api/comments](../server/src/routes/comments.js#L36)
 
 Adds comment to database.
 
-Example body
+Example body for a root comment
 ```json
 {
   "text": "minttua",
   "user": "salaattipoika",
+  "container": "abcdef",
+  "blob": "{\"path\": \"/path/to/element\"}"
+}
+```
+comments can be linked to a thread with
+```json
+{
+  "text": "minttua",
+  "user": "salaattipoika",
+  "threadId": "1234",
   "blob": "{\"path\": \"/path/to/element\"}"
 }
 ```
 
 Returns 'OK' if comment is succesfully added
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L46)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L61)
 
 Get comments by threadId
 
@@ -48,12 +58,12 @@ returns JSON array of all comments in thread
 
 ## Questions
 
-### [GET /api/questions](../server/src/routes/comments.js#L57)
+### [GET /api/questions](../server/src/routes/questions.js#L13)
 
 Retrieve all questions.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/comments.js#L73)
+### [POST /api/questions](../server/src/routes/questions.js#L29)
 
 adds question to database.
 
@@ -70,12 +80,12 @@ Returns 'OK' if question is succesfully added
 
 ## Reactions
 
-### [GET /api/reactions](../server/src/routes/comments.js#L87)
+### [GET /api/reactions](../server/src/routes/reactions.js#L13)
 
 Retrieve all reactions.
 
 returns JSON array of all reactions in database
-### [POST /api/reactions](../server/src/routes/comments.js#L114)
+### [POST /api/reactions](../server/src/routes/reactions.js#L40)
 
 add reaction to the database.
 
@@ -90,7 +100,7 @@ Example body
 
 returns 'OK' if reaction is succesfully added
 
-### [GET /api/reactions/:commentId](../server/src/routes/comments.js#L97)
+### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L23)
 
 Retrieve all reactions by commentId.
 

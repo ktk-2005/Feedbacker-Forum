@@ -66,6 +66,11 @@ function overrideConfigFromEnv() {
       console.error(`Invalid port value specified in APP_SERVER_PORT: ${envPort}`)
     }
   }
+
+  const useTestData = process.env.USE_TEST_DATA
+  if (useTestData) {
+    config.useTestData = useTestData != '0'
+  }
 }
 
 export async function startup() {
