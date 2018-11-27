@@ -22,7 +22,7 @@ router.get('/comments', catchErrors(async (req, res) => {
 // @api POST /api/comments
 // Adds comment to database.
 //
-// Body @json {
+// Example body @json {
 //   "text": "minttua",
 //   "user": "salaattipoika",
 //   "blob": "{\"path\": \"/path/to/element\"}"
@@ -63,7 +63,7 @@ router.get('/questions', catchErrors(async (req, res) => {
 // @api POST /api/questions
 // adds question to database.
 //
-// Body @json {
+// Example body @json {
 //   "text": "What?",
 //   "user": "salaattipoika",
 //   "blob": "{\"path\": \"/path/to/element\"}"
@@ -104,13 +104,13 @@ router.get('/reactions/:commentId', catchErrors(async (req, res) => {
 // @api POST /api/reactions
 // add reaction to the database.
 //
-// Body @json {
+// Example body @json {
 //   "emoji": "🍑",
 //   "user": "jaba",
 //   "comment_id": "1bd8052b"
 // }
 //
-// @returns 'OK' if reaction is succesfully added
+// returns 'OK' if reaction is succesfully added
 router.post('/reactions', catchErrors(async (req, res) => {
   const { emoji, user, commentId } = req.body
   const id = uuid()

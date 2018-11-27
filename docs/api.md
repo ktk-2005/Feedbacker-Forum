@@ -29,7 +29,7 @@ returns JSON array of all comments in database
 
 Adds comment to database.
 
-Body
+Example body
 ```json
 {
   "text": "minttua",
@@ -57,7 +57,7 @@ returns JSON array of all questions in database
 
 adds question to database.
 
-Body
+Example body
 ```json
 {
   "text": "What?",
@@ -79,7 +79,7 @@ returns JSON array of all reactions in database
 
 add reaction to the database.
 
-Body
+Example body
 ```json
 {
   "emoji": "🍑",
@@ -88,7 +88,7 @@ Body
 }
 ```
 
-@returns 'OK' if reaction is succesfully added
+returns 'OK' if reaction is succesfully added
 
 ### [GET /api/reactions/:commentId](../server/src/routes/comments.js#L97)
 
@@ -103,7 +103,7 @@ returns JSON array of all reactions to comment
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
 
-Params
+Example body
 ```json
 {
   "name": "salaattipoika"

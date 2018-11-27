@@ -9,7 +9,7 @@ const router = express.Router()
 // Add user to database.
 // Returns JSON that contains generated id and secret of added user.
 //
-// Params @json {
+// Example body @json {
 //   "name": "salaattipoika"
 // }
 //

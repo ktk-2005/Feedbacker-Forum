@@ -1,9 +1,9 @@
 import assert from 'assert'
 import apiRequest from './api-request'
 
-describe('/api/comment', () => {
+describe('/api/comments', () => {
   it('should return OK for posting a commment', async () => {
-    const answer = await apiRequest('/api/comment', {
+    const answer = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
         text: 'testing',
@@ -26,7 +26,7 @@ describe('/api/comments', () => {
 
 describe('/api/comments', () => {
   it('every comment text should be string', async () => {
-    const comments = await apiRequest('/api/comment', {
+    const comments = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
         texti: 1,
@@ -38,9 +38,9 @@ describe('/api/comments', () => {
   })
 })
 
-describe('/api/question', () => {
+describe('/api/questions', () => {
   it('should return OK', async () => {
-    const answer = await apiRequest('/api/question', {
+    const answer = await apiRequest('/api/questions', {
       method: 'POST',
       body: {
         text: 'Pääpäivä?',
@@ -62,9 +62,9 @@ describe('/api/questions', () => {
 })
 
 
-describe('/api/reaction', () => {
+describe('/api/reactions', () => {
   it('should return OK', async () => {
-    const answer = await apiRequest('/api/reaction', {
+    const answer = await apiRequest('/api/reactions', {
       method: 'POST',
       body: {
         emoji: '🍑',
