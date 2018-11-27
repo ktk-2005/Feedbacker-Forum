@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getQuestions, addQuestion } from '../database'
+import { getQuestions, addQuestion, addThread } from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
@@ -26,12 +26,23 @@ router.get('/', catchErrors(async (req, res) => {
 // Returns 'OK' if question is succesfully added
 router.post('/', catchErrors(async (req, res) => {
   const { text, userId, blob } = req.body
-  const id = uuid()
-  const threadId = req.body.threadId || uuid()
-  await addQuestion({
-    id, text, userId, threadId, blob,
+
+  const threadId = req.body.threadId || await attempt(async () => {
+    const threadId = uuid()
+    await addThread({
+      id: threadId,
+      container: req.body.container,
+    })
+    return threadId
   })
-  res.json({ id })
+
+  await attempt(async () => {
+    const id = uuid()
+    await addQuestion({
+      id, text, userId, threadId, blob,
+    })
+    res.json({ id })
+  })
 }))
 
 module.exports = router
