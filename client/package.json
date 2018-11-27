@@ -30,6 +30,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.0",
+    "node-sass": "^4.10.0",
     "node.normalize.scss": "^3.0.3",
     "postcss-loader": "^3.0.0",
     "react": "^16.6.1",
