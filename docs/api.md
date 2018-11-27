@@ -20,7 +20,7 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L13)
+### [GET /api/comments](../server/src/routes/comments.js#L15)
 
 Retrieve all comments.
 
@@ -63,7 +63,7 @@ returns JSON array of all comments in thread
 Retrieve all questions.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L29)
+### [POST /api/questions](../server/src/routes/questions.js#L27)
 
 adds question to database.
 
@@ -85,7 +85,7 @@ Returns 'OK' if question is succesfully added
 Retrieve all reactions.
 
 returns JSON array of all reactions in database
-### [POST /api/reactions](../server/src/routes/reactions.js#L40)
+### [POST /api/reactions](../server/src/routes/reactions.js#L36)
 
 add reaction to the database.
 
@@ -98,9 +98,9 @@ Example body
 }
 ```
 
-returns 'OK' if reaction is succesfully added
+returns reaction data if reaction is succesfully added
 
-### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L23)
+### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L21)
 
 Retrieve all reactions by commentId.
 
@@ -116,7 +116,7 @@ Returns JSON that contains generated id and secret of added user.
 Example body
 ```json
 {
-  "name": "salaattipoika"
+  "name": "salaattipoika" // Optional
 }
 ```
 
