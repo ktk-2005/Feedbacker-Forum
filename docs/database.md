@@ -59,13 +59,17 @@
 ## Migrations
 
 Migrations for the database are stored in [src/database/migrations](../server/src/database/migrations).
-The migrations are .sql files with their migration number as the first two charachter of the file name.
+The migrations are .sql files with their migration number as the first three charachter of the file name.
 
 | Migration |
 | :---: |
-| 01-setup.sql |
-| 02-added-example-table.sql |
+| 001-setup.sql |
+| 002-added-example-table.sql |
 
 When the server is started it checks for new migrations in the folder and will run all new migrations in order and add them to a table in the database to remember them.
 
 When no database is found the server will create a new database and run all available migrations.
+
+### Test data
+
+Test data for development can be added to the file [test_data.sql](../server/src/database/test-data.sql), which is run as a migration everytime the database initialization is run.
