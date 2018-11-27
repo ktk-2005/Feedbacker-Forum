@@ -8,13 +8,12 @@ router.post('/', async (req, res) => {
   const { name } = req.body
   const id = uuid()
   // Will be stored as JSON in production, as string in sqlite
-  const keys = {
-    key: uuid(8),
-    secret: uuid(30),
-  }
-  const keyString = JSON.stringify(keys)
-  await addUser([id, name, keyString])
-  res.send(keys)
+  const secret = uuid(30)
+  await addUser([id, name, secret])
+  res.json({
+    id: id,
+    secret: secret
+  })
 })
 
 
