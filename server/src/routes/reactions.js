@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import { getReactions, getCommentReactions, addReaction } from '../database'
-import { uuid } from './helpers'
+import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -39,11 +39,14 @@ router.get('/:commentId', catchErrors(async (req, res) => {
 // returns 'OK' if reaction is succesfully added
 router.post('/', catchErrors(async (req, res) => {
   const { emoji, user, commentId } = req.body
-  const id = uuid()
-  await addReaction({
-    id, emoji, user, commentId,
+
+  await attempt(async () => {
+    const id = uuid()
+    await addReaction({
+      id, emoji, user, commentId,
+    })
+    res.send('OK')
   })
-  res.send('OK')
 }))
 
 module.exports = router

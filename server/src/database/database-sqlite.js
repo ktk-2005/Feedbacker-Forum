@@ -15,8 +15,8 @@ class SQLiteDatabase {
 
   async initialize(dev) {
     try {
-      const newestMigrationId = await this.query('SELECT ROWID FROM migrations ORDER BY ROWID DESC LIMIT 1')
-      const newestId = newestMigrationId[0].rowid
+      const newestMigrationId = await this.query('SELECT id FROM migrations ORDER BY id DESC LIMIT 1')
+      const newestId = newestMigrationId[0].id
       console.log('Connected to SQLite database at migration', newestId)
       await this.runMigrations(newestId)
     } catch (err) {
@@ -25,6 +25,7 @@ class SQLiteDatabase {
 
       if (dev) {
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
+        console.log('Loading test data from test-data.sql')
         await this.exec(sqlCommand)
       }
     }

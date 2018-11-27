@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import { getQuestions, addQuestion } from '../database'
-import { uuid } from './helpers'
+import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -28,12 +28,15 @@ router.get('/', catchErrors(async (req, res) => {
 // Returns 'OK' if question is succesfully added
 router.post('/', catchErrors(async (req, res) => {
   const { text, user, blob } = req.body
-  const id = uuid()
-  const threadId = req.body.threadId || uuid()
-  await addQuestion({
-    id, text, user, threadId, blob,
+
+  await attempt(async () => {
+    const id = uuid()
+    const threadId = req.body.threadId || uuid()
+    await addQuestion({
+      id, text, user, threadId, blob,
+    })
+    res.send('OK')
   })
-  res.send('OK')
 }))
 
 module.exports = router
