@@ -1,5 +1,6 @@
 import request from 'request-promise-native'
 import util from 'util'
+import errors from 'request-promise-native/errors'
 
 const setTimeoutPromise = util.promisify(setTimeout)
 
@@ -12,7 +13,7 @@ function tryRequest(opts, retriesLeft) {
 
   if (retriesLeft > 1) {
     promise = promise.catch((error) => {
-      if (!error.cause || !(error.cause.code === 'ECONNREFUSED' || error.cause.code === 'ECONNRESET')) {
+      if (!(error instanceof errors.RequestError)) {
         return Promise.reject(error)
       }
 
