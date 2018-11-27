@@ -1,6 +1,7 @@
 import { promisify } from 'util'
 import fs from 'fs'
 import childProcess from 'child_process'
+import { initializeDatabase } from './database'
 
 import { ArgumentParser } from 'argparse'
 import { startServer } from './server'
@@ -75,6 +76,8 @@ export async function startup() {
   Object.assign(config, configToSet)
 
   overrideConfigFromEnv()
+
+  await initializeDatabase()
 
   if (args.watch) {
     console.log('Starting Webpack in watch mode')

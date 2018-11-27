@@ -1,6 +1,12 @@
 import SQLiteDatabase from './database/database-sqlite'
+import { config } from './globals'
 
-const db = new SQLiteDatabase()
+let db = null
+
+export async function initializeDatabase() {
+  db = new SQLiteDatabase(config.sqliteFilename)
+  await db.initialize(config.dev)
+}
 
 export async function getComments() { return db.query('SELECT * FROM comments') }
 

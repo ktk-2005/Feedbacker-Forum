@@ -10,3 +10,4 @@ INSERT INTO reactions (id, time, emoji, user, comment_id) VALUES ('fb05d1a5', '2
 INSERT INTO reactions (id, time, emoji, user, comment_id) VALUES ('cba06aee', '2018-11-14 23:20:11', '🅱️', 'jaba', '1bd8052b');
 
 INSERT INTO comments (id, text, user, thread_id) VALUES ('13adr8sa', 'jaahaa', 'jaba', 'a688ad4f');
+
