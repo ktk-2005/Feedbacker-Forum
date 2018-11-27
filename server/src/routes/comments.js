@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getComments, getThreadComments, addComment } from '../database'
-import { uuid } from './helpers'
+import {
+  getComments, getThreadComments, addComment, addThread
+} from '../database'
+import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -22,16 +24,29 @@ router.get('/', catchErrors(async (req, res) => {
 // Example body @json {
 //   "text": "minttua",
 //   "user": "salaattipoika",
+//   "container": "abcdef",
 //   "blob": "{\"path\": \"/path/to/element\"}"
 // }
 //
 // Returns 'OK' if comment is succesfully added
 router.post('/', catchErrors(async (req, res) => {
   const { text, userId, blob } = req.body
-  const id = uuid()
-  const threadId = req.body.threadId || uuid()
-  await addComment({
-    id, text, userId, threadId, blob,
+
+  const threadId = req.body.threadId || await attempt(async () => {
+    const threadId = uuid()
+    await addThread({
+      id: threadId,
+      container: req.body.container,
+    })
+    return threadId
+  })
+
+  await attempt(async () => {
+    const id = uuid()
+    await addComment({
+      id, text, userId, threadId, blob,
+    })
+    res.send('OK')
   })
   res.send('OK')
 }))

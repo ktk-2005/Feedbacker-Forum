@@ -14,7 +14,6 @@ class SQLiteDatabase {
   }
 
   async initialize(dev) {
-
     // Foreign keys are by default off...
     this.db.exec('PRAGMA foreign_keys = ON')
 
@@ -75,7 +74,6 @@ class SQLiteDatabase {
    */
 
   async run(...args) {
-    console.log(...args)
     return new Promise((resolve, reject) => {
       this.db.run(...args, (err) => {
         if (err) {

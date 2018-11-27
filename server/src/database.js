@@ -26,6 +26,10 @@ export async function addQuestion({
   id, text, userId, threadId,
 }) { return db.run('INSERT INTO questions(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId]) }
 
+export async function addThread({
+  id, container, blob,
+}) { return db.run('INSERT INTO threads(id, container_id, blob) VALUES (?, ?, ?)', [id, container, blob]) }
+
 export async function getThreadComments(values = []) { return db.query('SELECT * FROM comments WHERE thread_id=?', values) }
 
 export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }

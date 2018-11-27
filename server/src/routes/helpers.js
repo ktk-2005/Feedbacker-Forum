@@ -10,12 +10,13 @@ export async function attempt(fn, maxTries = 10) {
   // Do N attempts
   for (let i = 0; i < maxTries - 1; i++) {
     try {
-      await fn()
+      const result = await fn()
+      return result
     } catch (error) {
-      lastError = error
+      // Nop
     }
   }
 
   // Do last try without try-catch
-  await fn()
+  return await fn()
 }

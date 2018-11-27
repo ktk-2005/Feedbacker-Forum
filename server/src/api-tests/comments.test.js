@@ -9,6 +9,7 @@ describe('/api/comments', () => {
         text: 'testing',
         userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
+        container: '107',
       },
     })
     assert.equal(answer, 'OK')
@@ -32,6 +33,7 @@ describe('/api/comments', () => {
         text: 1,
         userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
+        container: '107',
       },
     })
     assert.equal(typeof comments, 'string')
@@ -46,6 +48,7 @@ describe('/api/questions', () => {
         text: 'Pääpäivä?',
         userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
+        threadId: 'THR-1234',
       },
     })
     assert.equal(answer, 'OK')
