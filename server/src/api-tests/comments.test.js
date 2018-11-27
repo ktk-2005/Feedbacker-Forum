@@ -24,11 +24,18 @@ describe('/api/comments', () => {
 })
 
 describe('/api/comments', () => {
+  it('should handle multiple posts', async () => {
+    const body = { text: 'Test', userId: 'da776df3', container: '107' }
+    await apiRequest('/api/comments', { method: 'POST', body })
+    await apiRequest('/api/comments', { method: 'POST', body })
+    await apiRequest('/api/comments', { method: 'POST', body })
+  })
+
   it('every comment text should be string', async () => {
     const response = await apiRequest('/api/comments', {
       method: 'POST',
       body: {
-        text: 1,
+        text: 'This is a comment',
         userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
         container: '107',
@@ -39,6 +46,13 @@ describe('/api/comments', () => {
 })
 
 describe('/api/questions', () => {
+  it('should handle multiple posts', async () => {
+    const body = { text: 'Test', userId: 'da776df3', container: '107' }
+    await apiRequest('/api/questions', { method: 'POST', body })
+    await apiRequest('/api/questions', { method: 'POST', body })
+    await apiRequest('/api/questions', { method: 'POST', body })
+  })
+
   it('should return OK', async () => {
     const response = await apiRequest('/api/questions', {
       method: 'POST',
@@ -62,6 +76,13 @@ describe('/api/questions', () => {
 
 
 describe('/api/reactions', () => {
+  it('should handle multiple posts', async () => {
+    const body = { emoji: '🍑', userId: 'da776df3', commentId: '1bd8052b' }
+    await apiRequest('/api/reactions', { method: 'POST', body })
+    await apiRequest('/api/reactions', { method: 'POST', body })
+    await apiRequest('/api/reactions', { method: 'POST', body })
+  })
+
   it('should return OK', async () => {
     const response = await apiRequest('/api/reactions', {
       method: 'POST',

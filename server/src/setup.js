@@ -40,6 +40,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--verbose'], {
+      help: 'Print extra information',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }

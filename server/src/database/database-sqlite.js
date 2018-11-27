@@ -2,6 +2,8 @@ import sqlite3 from 'sqlite3'
 import path from 'path'
 import fs from 'fs'
 
+import { args } from '../globals'
+
 const sqlite = sqlite3.verbose()
 
 class SQLiteDatabase {
@@ -77,7 +79,8 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.run(...args, (err) => {
         if (err) {
-          console.error(`RUNERROR: ${err}`)
+          if (args.verbose)
+            console.error(`RUNERROR: ${err}`)
           reject(err)
         } else {
           resolve()
@@ -94,7 +97,8 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
-          console.error(`QUERYERROR: ${err}`)
+          if (args.verbose)
+            console.error(`QUERYERROR: ${err}`)
           reject(err)
         } else {
           resolve(res)
@@ -111,7 +115,8 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.exec(...args, (err) => {
         if (err) {
-          console.error(`EXECERROR: ${err}`)
+          if (args.verbose)
+            console.error(`EXECERROR: ${err}`)
           reject(err)
         } else {
           resolve()
