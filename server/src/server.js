@@ -1,11 +1,10 @@
 import express from 'express'
-import path from 'path'
 import bodyParser from 'body-parser'
+import morgan from 'morgan'
 import { checkInt, checkBool } from './check'
 import { config } from './globals'
 import apiVersion from './routes/version'
 import apiRoute from './routes/routes'
-import morgan from 'morgan'
 import { notFound, devErr } from './handlers'
 
 export function startServer() {
@@ -25,7 +24,7 @@ export function startServer() {
 
   app.use(notFound)
   app.use(devErr)
-  //app.use(prodErr)
+  // app.use(prodErr)
 
   const port = checkInt('port', config.port)
   app.listen(port, () => {

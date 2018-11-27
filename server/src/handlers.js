@@ -6,10 +6,8 @@
   and pass it along to our express middleware with next()
 */
 
-module.exports.catchErrors = (fn) => {
-  return (req, res, next) => {
-    Promise.resolve(fn(req, res, next)).catch(next)
-  }
+module.exports.catchErrors = fn => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next)
 }
 
 /*
@@ -28,7 +26,7 @@ module.exports.notFound = (req, res, next) => {
   Development Error Hanlder
   log error stack trace
 */
-module.exports.devErr = (err, req, res, next) => {
+module.exports.devErr = (err, req, res) => {
   console.log(err.stack)
   const errorDetails = {
     message: err.message,
@@ -43,12 +41,12 @@ module.exports.devErr = (err, req, res, next) => {
   Production Error Hanlder
   No stacktraces are leaked to user
 */
-module.exports.prodErr = (err, req, res, next) => {
+module.exports.prodErr = (err, req, res) => {
   res.status(err.status || 500)
   res.json({
     errors: {
       message: err.message,
       error: { },
-    }
+    },
   })
 }
