@@ -60,7 +60,7 @@ router.get('/questions', catchErrors(async (req, res) => {
   })
 }))
 
-// @api POST /api/question
+// @api POST /api/questions
 // adds question to database.
 //
 // @params @json {

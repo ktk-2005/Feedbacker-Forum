@@ -18,3 +18,104 @@ Example response
 }
 ```
 
+## Comments
+
+### [GET /api/comments](../server/src/routes/comments.js#L16)
+
+Retrieve all comments.
+
+returns JSON array of all comments in database
+### [POST /api/comments](../server/src/routes/comments.js#L32)
+
+Adds comment to database.
+
+@params
+```json
+{
+  "text": "minttua",
+  "user": "salaattipoika",
+}
+```
+}
+```
+
+@returns 'OK' if comment is succesfully added
+
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L46)
+
+Get comments by threadId
+
+returns JSON array of all comments in thread
+
+## Questions
+
+### [GET /api/questions](../server/src/routes/comments.js#L57)
+
+Retrieve all questions.
+
+returns JSON array of all questions in database
+### [POST /api/questions](../server/src/routes/comments.js#L73)
+
+adds question to database.
+
+@params
+```json
+{
+  "text": "What?",
+  "user": "salaattipoika",
+}
+```
+}
+```
+
+@returns 'OK' if question is succesfully added
+
+## Reactions
+
+### [GET /api/reactions](../server/src/routes/comments.js#L87)
+
+Retrieve all reactions.
+
+returns JSON array of all reactions in database
+### [POST /api/reactions](../server/src/routes/comments.js#L114)
+
+add reaction to the database.
+
+@params
+```json
+{
+  "emoji": "🍑",
+  "user": "jaba",
+  "comment_id": "1bd8052b"
+}
+```
+
+@returns 'OK' if reaction is succesfully added
+
+### [GET /api/reactions/:commentId](../server/src/routes/comments.js#L97)
+
+Retrieve all reactions by commentId.
+
+returns JSON array of all reactions to comment
+
+## Users
+
+### [POST /api/users](../server/src/routes/users.js#L20)
+
+Add user to database.
+Returns JSON that contains generated id and secret of added user.
+
+@params
+```json
+{
+  "name": "salaattipoika"
+}
+```
+
+Example response
+```json
+{
+    "id": "d6ac55e9",
+    "secret": "ea2ca2565f484906bfd5096126816a"
+}
+```
