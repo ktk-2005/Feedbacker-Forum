@@ -10,7 +10,7 @@ const router = express.Router()
 // Returns JSON that contains generated id and secret of added user.
 //
 // Example body @json {
-//   "name": "salaattipoika"
+//   "name": "salaattipoika" // Optional
 // }
 //
 // Example response @json {
