@@ -82,7 +82,6 @@ class MainView extends React.Component {
 let isInitialized = false
 
 const initialize = () => {
-  console.log('init', document.body)
   if (isInitialized || !document.body) {
     return
   }
@@ -129,4 +128,3 @@ const initialize = () => {
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
 window.addEventListener('load', initialize)
-console.log('moist')
