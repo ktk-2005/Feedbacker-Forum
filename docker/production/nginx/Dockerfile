@@ -7,8 +7,10 @@ COPY client/ .
 COPY misc/ /misc
 
 RUN apk add --no-cache git
+
+RUN rm -rf node_modules/
+
 RUN npm install
-RUN npm uninstall node-sass && npm install node-sass --sass-binary-name=linux_musl-x64-64
 RUN npm run build
 
 ###
