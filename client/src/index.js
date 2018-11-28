@@ -37,7 +37,6 @@ const store = createStore(reducer)
 const feedbackAppRoot = () => {
   const feedbackAppRoot = document.createElement('div')
   feedbackAppRoot.setAttribute('data-feedback-app-root', true)
-  console.info('document', document)
   document.body.appendChild(feedbackAppRoot)
   return feedbackAppRoot
 }
