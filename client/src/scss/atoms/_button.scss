@@ -1,4 +1,6 @@
-@mixin button() {
-  border-radius: 3px;
-  border: 0 none;
+@mixin button($border-radius: $border-radius-default) {
+  /*reset*/
+  border: none;
+  border-radius: $border-radius;
+  outline: none;
 }

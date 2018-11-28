@@ -5,8 +5,6 @@ import { promisify } from 'util'
 
 const router = express.Router()
 
-export default router
-
 const readFile = promisify(fs.readFile)
 
 // Run a process `command` and asynchronously return standard outputs.
@@ -52,4 +50,6 @@ router.get('/', async (req, res) => {
   const result = await getVersion()
   res.send(result)
 })
+
+module.exports = router
 

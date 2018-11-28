@@ -1,8 +1,9 @@
 import { promisify } from 'util'
 import fs from 'fs'
 import childProcess from 'child_process'
-
 import { ArgumentParser } from 'argparse'
+import { initializeDatabase } from './database'
+
 import { startServer } from './server'
 import { args, config } from './globals'
 
@@ -39,6 +40,20 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--verbose'], {
+      help: 'Print extra information',
+      action: 'storeTrue',
+    }
+  )
+
+  parser.addArgument(
+    ['--debugUuid'], {
+      help: 'Generate duplicate UUID values for debugging',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }
@@ -65,6 +80,11 @@ function overrideConfigFromEnv() {
       console.error(`Invalid port value specified in APP_SERVER_PORT: ${envPort}`)
     }
   }
+
+  const useTestData = process.env.USE_TEST_DATA
+  if (useTestData) {
+    config.useTestData = useTestData !== '0'
+  }
 }
 
 export async function startup() {
@@ -89,6 +109,8 @@ export async function startup() {
   Object.assign(config, configToSet)
 
   overrideConfigFromEnv()
+
+  await initializeDatabase()
 
   if (args.watch) {
     console.log('Starting Webpack in watch mode')

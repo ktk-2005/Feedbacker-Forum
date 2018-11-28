@@ -9,7 +9,7 @@
     "lint:ci": "eslint . --rule \"{ \\\"linebreak-style\\\": [2, \\\"unix\\\"] }\"",
     "start": "babel-node src/setup.js",
     "test:remoteapi": "mocha --require @babel/register --timeout 20000 src/api-tests",
-    "test:api": "cross-env APP_SERVER_PORT=8086 babel-node src/setup.js --testApi",
+    "test:api": "cross-env APP_SERVER_PORT=8086 babel-node src/setup.js --testApi && cross-env APP_SERVER_PORT=8086 babel-node src/setup.js --testApi --debugUuid",
     "doc": "light-api-doc -t ../misc/api-template.md -o ../docs/api.md src",
     "watch": "babel-node src/setup.js --watch"
   },
@@ -17,6 +17,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/register": "^7.0.0",
+    "@types/express": "^4.16.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -24,15 +25,18 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-mocha": "^5.2.0",
     "eslint-plugin-react": "^7.11.0",
-    "light-api-doc": "^0.2.3",
-    "mocha": "^5.2.0"
+    "light-api-doc": "^0.2.5",
+    "mocha": "^5.2.0",
+    "sqlite3": "^4.0.4"
   },
   "dependencies": {
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "express": "^4.16.4",
+    "morgan": "^1.9.1",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "sqlite3": "^4.0.4"
   }
 }

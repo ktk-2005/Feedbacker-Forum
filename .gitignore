@@ -11,3 +11,9 @@ build/
 # Automatic OS generated files
 .DS_Store
 
+# DB testing file
+dev_db.sqlite
+
+# IDE
+.idea/
+
