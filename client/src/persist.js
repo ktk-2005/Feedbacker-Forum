@@ -99,6 +99,9 @@ export function setupPersist(loadPersist) {
   iframe.style.left = '0'
 
   iframe.src = `//${staticUrl}/persist.html`
+  console.log(document)
+  console.log(document.body)
+  console.log(document.querySelector('body'))
   document.body.appendChild(iframe)
 
   persistWindow = iframe.contentWindow || (iframe.contentDocument && iframe.contentDocument.window)

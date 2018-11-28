@@ -35,43 +35,11 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
-const loadPersist = async (state, allDataLoaded) => {
-  store.dispatch({ type: LOAD_PERSIST, state })
-
-  if (allDataLoaded) {
-    if (!state.users || R.isEmpty(state.users)) {
-
-      // TODO: Get these from the API!
-      const { key, secret } = await fetch(`${apiUrl}/users`, {
-        method: "POST"
-      })
-
-      store.dispatch({
-        type: SET_PERSIST,
-        data: {
-          users: {
-            [key]: secret,
-          },
-        }
-      })
-    }
-  }
-}
-
-const savePersist = setupPersist(loadPersist)
-
-store.subscribe(() => {
-  console.log(store.getState())
-  savePersist(store.getState().persist || { })
-})
-
 const feedbackAppRoot = () => {
   const feedbackAppRoot = document.createElement('div')
-  document.addEventListener('DOMContentLoaded', () => {
-    feedbackAppRoot.setAttribute('data-feedback-app-root', true)
-    console.info('document', document)
-    document.querySelector("body").appendChild(feedbackAppRoot)
-  }, false)
+  feedbackAppRoot.setAttribute('data-feedback-app-root', true)
+  console.info('document', document)
+  document.body.appendChild(feedbackAppRoot)
   return feedbackAppRoot
 }
 
@@ -112,9 +80,55 @@ class MainView extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <div className={css('feedback-app-main-container')}>
-    <MainView />
-  </div>,
-  feedbackAppRoot()
-)
+let isInitialized = false
+
+const initialize = () => {
+  console.log("init", document.body)
+  if (isInitialized || !document.body) {
+    return
+  }
+
+  isInitialized = true
+
+  const loadPersist = async (state, allDataLoaded) => {
+    store.dispatch({ type: LOAD_PERSIST, state })
+
+    if (allDataLoaded) {
+      if (!state.users || R.isEmpty(state.users)) {
+
+        const response = await fetch(`${apiUrl}/users`, {
+          method: "POST"
+        })
+        const {id, secret} = await response.json()
+
+        store.dispatch({
+          type: SET_PERSIST,
+          data: {
+            users: {
+              [id]: secret,
+            },
+          }
+        })
+      }
+    }
+  }
+
+  const savePersist = setupPersist(loadPersist)
+
+  store.subscribe(() => {
+    console.log(store.getState())
+    savePersist(store.getState().persist || { })
+  })
+
+  ReactDOM.render(
+    <div className={css('feedback-app-main-container')}>
+      <MainView />
+    </div>,
+    feedbackAppRoot()
+  )
+}
+
+initialize()
+document.addEventListener('DOMContentLoaded', initialize)
+window.addEventListener('load', initialize)
+console.log("moist")
