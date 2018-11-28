@@ -7,6 +7,7 @@ import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 import { setupPersist } from './persist'
 import * as R from 'ramda'
+import {apiUrl} from './meta/env.meta'
 
 import styles from './scss/_base.scss'
 
@@ -34,15 +35,6 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
-function tempCreateUserToken(length) {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz"
-
-  let text = ''
-  for (let i = 0; i < length; i++)
-    text += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-  return text;
-}
-
 const loadPersist = async (state, allDataLoaded) => {
   store.dispatch({ type: LOAD_PERSIST, state })
 
@@ -50,14 +42,15 @@ const loadPersist = async (state, allDataLoaded) => {
     if (!state.users || R.isEmpty(state.users)) {
 
       // TODO: Get these from the API!
-      const userToken = tempCreateUserToken(8)
-      const userSecret = tempCreateUserToken(30)
+      const { key, secret } = await fetch(`${apiUrl}/users`, {
+        method: "POST"
+      })
 
       store.dispatch({
         type: SET_PERSIST,
         data: {
           users: {
-            [userToken]: userSecret,
+            [key]: secret,
           },
         }
       })
@@ -68,6 +61,7 @@ const loadPersist = async (state, allDataLoaded) => {
 const savePersist = setupPersist(loadPersist)
 
 store.subscribe(() => {
+  console.log(store.getState())
   savePersist(store.getState().persist || { })
 })
 
