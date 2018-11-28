@@ -10,6 +10,7 @@
     "no-unused-vars": "warn",
     "no-multi-spaces": "off",
     "no-shadow": "off",
+    "no-plusplus": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
@@ -17,7 +18,9 @@
       "exports": "ignore",
       "functions": "ignore"
     }],
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-restricted-syntax": "off",
+    "no-await-in-loop": "off"
   },
 
   "env": {

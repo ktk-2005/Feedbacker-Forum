@@ -1,4 +1,5 @@
 {
   "port": 8080,
-  "dev": false
+  "dev": false,
+  "useTestData": false
 }

@@ -1,11 +1,14 @@
 import express from 'express'
+import bodyParser from 'body-parser'
+import morgan from 'morgan'
 import fs from 'fs'
 import { promisify } from 'util'
 import childProcess from 'child_process'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
-import apiVersion from './api/version'
+import apiRoute from './routes/routes'
+import { notFound, devErr, prodErr } from './handlers'
 import listEndpoints from './list-endpoints'
 
 const writeFile = promisify(fs.writeFile)
@@ -16,10 +19,24 @@ export function startServer() {
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')
     app.use(express.static('../client/build'))
-    app.use(express.static('../misc'))
   }
 
-  app.use('/api/version', apiVersion)
+  app.use(bodyParser.json()) // support json encoded bodies
+  app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
+
+  if (!args.testApi) {
+    app.use(morgan('dev'))
+  }
+
+  app.use('/api', apiRoute)
+
+  app.use(notFound)
+
+  if (checkBool('dev', config.dev)) {
+    app.use(devErr)
+  } else {
+    app.use(prodErr)
+  }
 
   if (args.listEndpoints) {
     const endpoints = listEndpoints(app).map(e => `${e.method} ${e.path}`)
@@ -55,4 +72,3 @@ export function startServer() {
     })
   }
 }
-
