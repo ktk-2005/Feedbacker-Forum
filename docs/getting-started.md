@@ -77,7 +77,7 @@ Rarely manually needed NPM scripts for server:
 ## Docker
 
 The *docker/* directory contains subdirectories for both development and production Docker setups.
-They can be built using `docker-compose`.
+They can be built using `docker-compose`. See [docs/docker.md](docker.md) for more details regarding the docker configuration.
 
 ### Development
 
@@ -99,4 +99,3 @@ running [PostgreSQL][postgres].
 [webpack]: https://webpack.js.org/
 [postgres]: https://www.postgresql.org/
 [nginx]: https://www.nginx.com/
-

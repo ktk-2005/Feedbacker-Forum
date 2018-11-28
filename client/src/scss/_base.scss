@@ -1,0 +1,17 @@
+@import './variables';
+@import './mixins';
+
+// Normalize encapsulated
+.feedback-app-main-container {
+  @import '../../node_modules/node.normalize.scss/normalize';
+}
+
+// Ensure that feedbacker tool is always on top
+.feedback-app-main-container {
+  @include z-level(1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

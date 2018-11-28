@@ -1,0 +1,29 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+.button {
+  @include button(100%);
+  @include display-and-animate();
+  position: fixed;
+  bottom: 5%;
+  left: 3%;
+  $dimension: 30px;
+  width: $dimension;
+  height: $dimension;
+  padding: 2px;
+  box-shadow: 0 3px 5px $palette-medium;
+  background: $palette-accent;
+  &.hidden {
+    @include hide-and-animate();
+  }
+  i {
+    display: block;
+    width: $icon-dimension-default;
+    height: $icon-dimension-default;
+    fill: $palette-light;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

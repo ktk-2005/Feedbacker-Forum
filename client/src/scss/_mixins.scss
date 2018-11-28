@@ -1,0 +1,16 @@
+@mixin hide-and-animate($duration: $animation-duration-default) {
+  visibility: hidden;
+  opacity: 0;
+  // visibility waits for opcity's transition to complete
+  transition: visibility 0 linear $duration, opacity $duration;
+}
+
+@mixin display-and-animate($duration: $animation-duration-default) {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity $duration linear;
+}
+
+@mixin z-level($key) {
+  z-index: map-get($z-index-levels, $key);
+}
