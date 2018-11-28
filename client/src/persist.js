@@ -12,9 +12,9 @@
  *   savePersist(state): Update the persistent state to be `state`.
  */
 
+import * as R from 'ramda'
 import { staticUrl } from './meta/env.meta'
 import { storageKey, storageCookieRegex } from './persist.meta'
-import * as R from 'ramda'
 
 const cookieRegex = new RegExp(storageCookieRegex)
 
@@ -110,7 +110,7 @@ export function setupPersist(loadPersist) {
     loadPersist(state, true)
   }, 3000)
 
-  iframe.addEventListener('error', (event) => {
+  iframe.addEventListener('error', () => {
     loadPersist(state, true)
     window.clearTimeout(timeout)
   })

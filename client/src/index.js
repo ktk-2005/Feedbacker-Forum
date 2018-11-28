@@ -1,13 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
-import { connect, Provider } from 'react-redux'
 import classNames from 'classnames/bind'
+import * as R from 'ramda'
 import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 import { setupPersist } from './persist'
-import * as R from 'ramda'
-import {apiUrl} from './meta/env.meta'
+import { apiUrl } from './meta/env.meta'
 
 import styles from './scss/_base.scss'
 
@@ -83,7 +82,7 @@ class MainView extends React.Component {
 let isInitialized = false
 
 const initialize = () => {
-  console.log("init", document.body)
+  console.log('init', document.body)
   if (isInitialized || !document.body) {
     return
   }
@@ -95,11 +94,10 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-
         const response = await fetch(`${apiUrl}/users`, {
-          method: "POST"
+          method: 'POST',
         })
-        const {id, secret} = await response.json()
+        const { id, secret } = await response.json()
 
         store.dispatch({
           type: SET_PERSIST,
@@ -107,7 +105,7 @@ const initialize = () => {
             users: {
               [id]: secret,
             },
-          }
+          },
         })
       }
     }
@@ -131,4 +129,4 @@ const initialize = () => {
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
 window.addEventListener('load', initialize)
-console.log("moist")
+console.log('moist')

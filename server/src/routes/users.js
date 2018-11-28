@@ -26,8 +26,8 @@ router.post('/', catchErrors(async (req, res) => {
     const secret = uuid(30)
 
     await addUser({ id, name, secret })
-    console.log("id: "+id)
-    console.log("secret: "+secret)
+    console.log(`id: ${id}`)
+    console.log(`secret: ${secret}`)
     res.json({
       id,
       secret,
