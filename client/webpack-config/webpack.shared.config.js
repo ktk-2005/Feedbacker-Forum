@@ -46,6 +46,35 @@ module.exports = {
         },
       },
 
+      {
+        test: /\.s?css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[local]__[hash:base64:4]',
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              config: {
+                path: path.resolve(__dirname, '.'),
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+          },
+        ],
+      },
+
+      {
+        test: /\.svg$/,
+        use: 'svg-inline-loader',
+      },
     ],
   },
 

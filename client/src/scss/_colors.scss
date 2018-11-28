@@ -1,0 +1,7 @@
+$palette-light: #fdfdfd;
+$palette-medium: #d8d8d8;
+$palette-dark: #b7b8ba;
+$palette-accent: #00bfc9;
+
+$palette-shadow-default: lighten($palette-medium, 9);
+$close-button-color: darken($palette-dark, 10);

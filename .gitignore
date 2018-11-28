@@ -11,3 +11,5 @@ build/
 # Automatic OS generated files
 .DS_Store
 
+# IDE
+.idea/
