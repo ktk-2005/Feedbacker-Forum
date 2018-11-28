@@ -99,6 +99,8 @@ const initialize = () => {
         })
         const { id, secret } = await response.json()
 
+        console.log('Created new user from API', { [id]: secret })
+
         store.dispatch({
           type: SET_PERSIST,
           data: {
@@ -107,6 +109,8 @@ const initialize = () => {
             },
           },
         })
+      } else {
+        console.log('Loaded user from persistent storage', state.users)
       }
     }
   }
@@ -114,7 +118,6 @@ const initialize = () => {
   const savePersist = setupPersist(loadPersist)
 
   store.subscribe(() => {
-    console.log(store.getState())
     savePersist(store.getState().persist || { })
   })
 
