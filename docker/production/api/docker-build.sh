@@ -3,6 +3,7 @@ set -u
 
 apk add --no-cache git
 
+rm -rf node_modules/
 npm install
 
 npm uninstall node-sass && npm install node-sass --sass-binary-name=linux_musl-x64-64

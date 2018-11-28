@@ -10,12 +10,12 @@ cd ../client
 # MACHINE_HARDWARE=`uname -m`
 # linux_musl-${MACHINE_HARDWARE/86_/64-}
 
+rm -rf node_modules
 npm install
-
-npm uninstall node-sass && npm install node-sass --sass-binary-name=linux_musl-x64-64
 
 npm run build:dev
 
 cd ../server
 
+rm -rf node_modules
 npm install

@@ -12,6 +12,7 @@
  *   savePersist(state): Update the persistent state to be `state`.
  */
 
+import * as R from 'ramda'
 import { staticUrl } from './meta/env.meta'
 import { storageKey, storageCookieRegex } from './persist.meta'
 
@@ -83,7 +84,7 @@ function savePersist(state) {
 
 export function setupPersist(loadPersist) {
   const state = loadLocalState()
-  loadPersist(state)
+  loadPersist(state, false)
 
   previousState = state
 
@@ -97,10 +98,19 @@ export function setupPersist(loadPersist) {
   iframe.style.top = '0'
   iframe.style.left = '0'
 
-  iframe.src = `//${staticUrl}/persist.html`
+  iframe.src = `${staticUrl}/persist.html`
   document.body.appendChild(iframe)
 
-  persistWindow = iframe.contentWindow || iframe.contentDocument.window
+  persistWindow = iframe.contentWindow || (iframe.contentDocument && iframe.contentDocument.window)
+
+  const timeout = window.setTimeout(() => {
+    loadPersist(state, true)
+  }, 3000)
+
+  iframe.addEventListener('error', () => {
+    loadPersist(state, true)
+    window.clearTimeout(timeout)
+  })
 
   window.addEventListener('message', (event) => {
     if (event.source !== persistWindow) return
@@ -109,12 +119,14 @@ export function setupPersist(loadPersist) {
     if (msg.type !== 'load') return
     if (typeof msg.data !== 'object') return
 
-    const state = { ...previousState, ...msg.data }
-    loadPersist(state)
+    const state = R.mergeDeepRight(previousState, msg.data)
 
     const json = JSON.stringify(state)
     saveLocalState(json)
     saveGlobalState(json)
+
+    loadPersist(state, true)
+    window.clearTimeout(timeout)
   })
 
   return savePersist

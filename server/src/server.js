@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import fs from 'fs'
 import { promisify } from 'util'
 import childProcess from 'child_process'
+import cors from 'cors'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -20,6 +21,8 @@ export function startServer() {
     console.log('Running as development server')
     app.use(express.static('../client/build'))
   }
+
+  app.use(cors())
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
