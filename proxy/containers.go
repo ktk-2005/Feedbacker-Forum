@@ -1,7 +1,13 @@
+package main
+
 import (
-	"url"
+	"net/url"
 	"time"
 	"log"
+	"sync"
+	"database/sql"
+	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Container struct {
@@ -17,33 +23,40 @@ type resolveRequest struct {
 }
 
 var containerCache = make(map[string]*Container)
-var resolveRequests = make(chan[resolveRequest], 1024)
+var cacheMutex sync.RWMutex
 
-var databaseRequests = make(chan[resolveRequest])
+var resolveRequests = make(chan resolveRequest, 1024)
+
+var databaseRequests = make(chan resolveRequest)
 var db *sql.DB
 
 // Collect N outstanding resolve requests over time
-func collectRequests(maxRequests int, maxTime time.Duration) {
-	requests := make([]resolveRequest)
+func collectRequests(maxRequests int, maxTime time.Duration) []resolveRequest {
+	var requests []resolveRequest
 	timer := time.NewTimer(maxTime)
 
 	for i := 0; i < maxRequests; i++ {
 		select {
 		case req := <-resolveRequests:
 			requests = append(requests, req)
-		case _ := <-timer:
-			break
+		case _ = <-timer.C:
+			return requests
 		}
 	}
 
 	return requests
 }
 
-func createContainer(id string, row *db.Row) (*Container, error) {
+func createContainer(id string, row *sql.Row) (*Container, error) {
+	idString := ""
 	urlString := ""
-	err := row.Scan(&urlString)
+	err := row.Scan(&idString, &urlString)
 	if err != nil {
 		return nil, err
+	}
+
+	if idString != id {
+		return nil, fmt.Errorf("Database ID '%s' not match query '%s'", idString, id)
 	}
 
 	url, err := url.Parse(urlString)
@@ -62,12 +75,10 @@ func createContainer(id string, row *db.Row) (*Container, error) {
 }
 
 func databaseWorker() {
-	for req <- databaseRequests {
-		row, err := db.QueryRow("")
+	for req := range databaseRequests {
+		row := db.QueryRow("SELECT id, url FROM containers WHERE id = ?", req.id)
 		var container *Container = nil
-		if err == nil {
-			container, err = createContainer(req.id, row)
-		}
+		container, err := createContainer(req.id, row)
 		if err != nil {
 			container = &Container{
 				Error:  err,
@@ -82,42 +93,57 @@ func databaseWorker() {
 
 // Worker Goroutine that queries containers
 func resolveWorker() {
-	requests := collectRequests(1024, time.Second * 2)
-	requestsByContainer := make(map[string][]resolveRequest)
-	for req := range requests {
-		reqs, ok := requestsByContainer[req.id]
-		if !ok {
-			reqs = make([]resolveRequest)
+	for {
+		requests := collectRequests(1024, time.Second * 2)
+		if len(requests) <= 0 {
+			continue
 		}
-		requestsByContainer[req.id] = append(reqs, req)
-	}
 
-	for id, reqs := range requestsByContainer {
-		container, ok := containerCache[id]
-		if !(ok && time.Now() < container.Expiry) {
-			response := make(chan *Container)
-			databaseRequests <- resolveRequest {
-				id: id,
-				response: response,
+		log.Printf("Processing %d requests", len(requests))
+
+		requestsByContainer := make(map[string][]resolveRequest)
+		for _, req := range requests {
+			reqs := requestsByContainer[req.id]
+			requestsByContainer[req.id] = append(reqs, req)
+		}
+
+		for id, reqs := range requestsByContainer {
+
+			log.Printf("Resolving container '%v'", id)
+
+			cacheMutex.RLock()
+			container, ok := containerCache[id]
+			cacheMutex.RUnlock()
+
+			if !(ok && time.Now().Before(container.Expiry)) {
+				response := make(chan *Container)
+				databaseRequests <- resolveRequest {
+					id: id,
+					response: response,
+				}
+				container = <-response
 			}
-			container = <-response
-		}
 
-		if container.Error != nil {
-			log.Printf("Failed to resolve container %v: %v", id, container.Error)
-		} else {
-			log.Printf("Resolved container %v -> %v", id, container.Url.String())
-		}
+			if container.Error != nil {
+				log.Printf("Failed to resolve container '%v': %v", id, container.Error)
+			} else {
+				log.Printf("Resolved container '%v' -> %v", id, container.Url.String())
+			}
 
-		for req := range reqs {
-			req.response <- container
+			cacheMutex.Lock()
+			containerCache[id] = container
+			cacheMutex.Unlock()
+
+			for _, req := range reqs {
+				req.response <- container
+			}
 		}
 	}
 }
 
-func InitializeContainers(dbDriver string, connectString string) error {
+func InitializeContainers() error {
 	var err error
-	db, err = sql.Open(dbDriver, connectString)
+	db, err = sql.Open(Config.DbDriver, Config.DbConnectString)
 	if err != nil {
 		return err
 	}
@@ -133,21 +159,24 @@ func InitializeContainers(dbDriver string, connectString string) error {
 // Resolves a container for a given public ID. May result in a database lookup
 // and take a while to return. Returns `nil` if no matching container instance
 // is found.
-func ResolveContainer(id string) *Container {
+func ResolveContainer(id string) (*Container, error) {
+	cacheMutex.RLock()
 	container, ok := containerCache[id]
-	if ok && time.Now() < container.Expiry {
-		if container.Error == nil {
-			return container
-		} else {
-			return nil
-		}
-	} else {
+	cacheMutex.RUnlock()
+
+	if !(ok && time.Now().Before(container.Expiry)) {
 		response := make(chan *Container)
 		resolveRequests <- resolveRequest {
 			id: id,
 			response: response,
 		}
-		return <-response
+		container = <-response
 	}
+
+	if container.Error != nil {
+		return nil, container.Error
+	}
+
+	return container, nil
 }
 
