@@ -7,29 +7,56 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(styles)
 
-const FloatingPanel = ({ hidden, onClick }) => (
-  <div className={hidden ? css('panel-container', 'hidden') : css('panel-container')}>
-    <Draggable
-      defaultPosition={{ x: 10, y: 10 }}
-      position={null}
-      handle="[data-dragarea]"
-    >
-      <div className={css('panel')}>
-        <div
-          data-dragarea="true"
-          className={css('panel-header')}
+class FloatingPanel extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {comment: ''}
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSumbit = this.handleSubmit.bind(this)
+  }
+
+  handleChange(e) {
+    this.setState({comment: e.target.value})
+  }
+
+  handleSubmit(e) {
+    alert('jee' + this.state.comment)
+    e.preventDefault()
+  }
+
+  render() {
+    const { hidden, onClick } = this.props
+
+    return (
+      <div className={hidden ? css('panel-container', 'hidden') : css('panel-container')}>
+        <Draggable
+          defaultPosition={{ x: 10, y: 10 }}
+          position={null}
+          handle="[data-dragarea]"
         >
-          <button
-            type="button"
-            className={css('close-button')}
-            onClick={onClick}
-          >
-            <InlineSVG src={CloseIcon} />
-          </button>
-        </div>
+          <div className={css('panel')}>
+            <div
+              data-dragarea="true"
+              className={css('panel-header')}
+            >
+              <button
+                type="button"
+                className={css('close-button')}
+                onClick={onClick}
+              >
+                <InlineSVG src={CloseIcon} />
+              </button>
+            </div>
+            <form onSubmit={this.handleSubmit}>
+              <textarea value={this.state.comment} onChange={this.handleChange} />
+              <input type="submit" value="Comment" />
+            </form>
+          </div>
+        </Draggable>
       </div>
-    </Draggable>
-  </div>
-)
+    )
+  }
+}
 
 export default FloatingPanel
