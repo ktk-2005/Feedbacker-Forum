@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
+import { Provider } from 'react-redux'
 import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 import SidePanel from './components/side-panel/side-panel'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
-import { Provider } from 'react-redux'
 
 
 import styles from './scss/_base.scss'
@@ -76,7 +76,7 @@ class MainView extends React.Component {
           hidden={panelIsHidden}
           onClick={this.handleClick}
         />
-        <SidePanel/>
+        <SidePanel />
       </div>
     )
   }

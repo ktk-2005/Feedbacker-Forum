@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import styles from './side-panel.scss'
@@ -10,12 +10,12 @@ const css = classNames.bind(styles)
 const mapStateToProps = (state) => {
   const users = (state.persist || {}).users || {}
   const userKeys = Object.keys(users)
-  let publicKey = ""
+  let publicKey = ''
   if (userKeys.length >= 1) {
     publicKey = userKeys[0]
   }
   return {
-    "userPublic": publicKey,
+    userPublic: publicKey,
   }
 }
 
@@ -33,12 +33,12 @@ class SidePanel extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value})
+    this.setState({ value: event.target.value })
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    this.setState({value: ''})
+    this.setState({ value: '' })
     if (!this.props.userPublic) {
       console.error('User not found')
       return
@@ -47,15 +47,17 @@ class SidePanel extends React.Component {
     fetch('/api/comments', {
       method: 'post',
       body: ({
-        "text": this.state.value,
-        "userId": this.props.userPublic,
-        "container": "",
-      })
+        text: this.state.value,
+        userId: this.props.userPublic,
+        container: '',
+      }),
     })
   }
 
-  handleClick(event) {
-    this.setState({isHidden: !this.state.isHidden})
+  handleClick() {
+    this.setState(state => ({
+      isHidden: !state.isHidden,
+    }))
   }
 
   render() {

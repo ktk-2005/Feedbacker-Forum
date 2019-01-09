@@ -1,6 +1,5 @@
 import React from 'react'
 import Draggable from 'react-draggable'
-import {connect} from 'react-redux'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import styles from './floating-panel-view.scss'
@@ -8,6 +7,7 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(styles)
 
+// eslint-disable-next-line react/prefer-stateless-function
 class FloatingPanel extends React.Component {
   render() {
     const { hidden, onClick } = this.props
