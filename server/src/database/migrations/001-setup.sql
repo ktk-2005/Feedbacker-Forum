@@ -50,7 +50,9 @@ CREATE TABLE reactions (
 CREATE TABLE threads (
   id            CHAR(8) UNIQUE NOT NULL,
   container_id  CHAR(8) NOT NULL,
-  blob          TEXT
+  blob          TEXT,
+
+  FOREIGN KEY (container_id) REFERENCES containers(id)
 );
 
 
