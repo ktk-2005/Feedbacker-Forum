@@ -46,7 +46,8 @@ class SidePanel extends React.Component {
 
     fetch('/api/comments', {
       method: 'post',
-      body: ({
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
         text: this.state.value,
         userId: this.props.userPublic,
         container: '',
