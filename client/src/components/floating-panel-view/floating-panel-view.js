@@ -8,29 +8,8 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(styles)
 
-const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
-  const userKeys = Object.keys(users)
-  let publicKey = ""
-  let privateKey = ""
-  if (userKeys.length >= 1) {
-    publicKey = userKeys[0]
-    privateKey = users[publicKey]
-  }
-  return {
-    "userPublic": publicKey,
-    "userPrivate": privateKey
-  }
-}
-
 class FloatingPanel extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {value: ''}
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
 
   handleChange(event) {
     this.setState({value: event.target.value})
@@ -79,10 +58,6 @@ class FloatingPanel extends React.Component {
                 <InlineSVG src={CloseIcon} />
               </button>
             </div>
-            <form onSubmit={this.handleSubmit}>
-              <textarea value={this.state.value} onChange={this.handleChange} />
-              <input type="submit" value="Comment" />
-            </form>
           </div>
         </Draggable>
       </div>
@@ -90,4 +65,4 @@ class FloatingPanel extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(FloatingPanel)
+export default FloatingPanel

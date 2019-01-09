@@ -1,9 +1,12 @@
+@import '../typography';
+
 @mixin button($border-radius: $border-radius-default) {
   /*reset*/
   border: none;
   border-radius: $border-radius;
   outline: none;
-  padding: 0.5em;
-  font-family: sans-serif;
+  padding: 0.6em;
+  font-family: $font-default;
+  font-weight: 600;
   font-size: 12px;
 }
