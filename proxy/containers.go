@@ -76,7 +76,7 @@ func createContainer(id string, row *sql.Row) (*Container, error) {
 
 func databaseWorker() {
 	for req := range databaseRequests {
-		row := db.QueryRow("SELECT id, url FROM containers WHERE id = ?", req.id)
+		row := db.QueryRow("SELECT subdomain, url FROM containers WHERE subdomain = ?", req.id)
 		var container *Container = nil
 		container, err := createContainer(req.id, row)
 		if err != nil {

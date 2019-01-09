@@ -5,6 +5,7 @@ type ConfigStruct struct {
 	ErrorPort int
 	DbDriver string
 	DbConnectString string
+	InjectScript string
 }
 
 var Config ConfigStruct

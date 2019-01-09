@@ -16,4 +16,6 @@ INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('fb05d1a5',
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06aee', '2018-11-14 23:20:11', '🅱️', 'da776df3', '1bd8052b');
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06dw', '2018-11-14 23:20:11', '🅱️', 'da776df3', '1bd8052b');
 
+INSERT INTO containers (id, subdomain, url) VALUES ('APP-1111', 'one', 'http://localhost:10001');
+INSERT INTO containers (id, subdomain, url) VALUES ('APP-2222', 'two', 'http://localhost:10002');
 

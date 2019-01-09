@@ -17,6 +17,9 @@ var headRegex = regexp.MustCompile("(?i)<head>")
 // Server that returns error responses
 var errorUrl *url.URL
 
+var htmlInjectString string
+var htmlInjectLength int
+
 func redirectRequest(req *http.Request) {
 
 	// Retrieve container name from subdomain
@@ -40,18 +43,6 @@ func redirectRequest(req *http.Request) {
 	req.Host = errorUrl.Host
 }
 
-type ByteReader struct {
-	reader *bytes.Reader
-}
-
-func (br *ByteReader) Read(p []byte) (int, error) {
-	return br.reader.Read(p)
-}
-
-func (*ByteReader) Close() error {
-	return nil
-}
-
 func modifyResponse(res *http.Response) error {
 	contentTypes := res.Header["Content-Type"]
 	if len(contentTypes) == 0 {
@@ -63,24 +54,34 @@ func modifyResponse(res *http.Response) error {
 
 	bodyBytes, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
-	var result []byte
+
+	var result io.Reader
+	var length int
+
 	if err == nil {
 		body := string(bodyBytes)
+		length = len(bodyBytes)
 
 		match := headRegex.FindStringIndex(body)
 		if match != nil {
 			loc := match[1]
-			insert := "<style>body { background-color: salmon; }</style>"
-			body = body[:loc] + insert + body[loc:]
-		}
+			result = io.MultiReader(
+				bytes.NewReader([]byte(body[:loc])),
+				bytes.NewReader([]byte(htmlInjectString)),
+				bytes.NewReader([]byte(body[loc:])))
 
-		result = []byte(body)
+			length += htmlInjectLength
+		} else {
+			result = bytes.NewReader(bodyBytes)
+		}
 	} else {
-		result = []byte("Failed to read body")
+		bodyBytes := []byte("Failed to read body")
+		result = bytes.NewReader(bodyBytes)
+		length = len(bodyBytes)
 	}
 
-	res.Header.Set("Content-Length", fmt.Sprintf("%d", len(result)))
-	res.Body = &ByteReader{ bytes.NewReader(result) }
+	res.Header.Set("Content-Length", fmt.Sprintf("%d", length))
+	res.Body = ioutil.NopCloser(result)
 
 	return nil
 }
@@ -95,6 +96,9 @@ func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func StartProxy() error {
 	errPort := Config.ErrorPort
 	proxyPort := Config.ProxyPort
+
+	htmlInjectString = fmt.Sprintf("<script src=\"%s\"></script>", Config.InjectScript)
+	htmlInjectLength = len([]byte(htmlInjectString))
 
 	var err error
 	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d", errPort))
