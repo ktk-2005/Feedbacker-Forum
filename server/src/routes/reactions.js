@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getReactions, getCommentReactions, addReaction } from '../database'
+import { getReactions, getCommentReactions, addReaction, deleteReaction } from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
@@ -43,6 +43,18 @@ router.post('/', catchErrors(async (req, res) => {
     })
     res.json({ id })
   })
+}))
+
+//
+
+// @api DELETE /api/reactions/:commentId
+// Remove reaction from the database.
+//
+// Returns JSON indicating whether deletion was successful or not
+router.delete('/:commentId', catchErrors(async (req, res) => {
+  const { commentId } = req.params
+  const { emoji, userId } = req.body
+  res.json(await deleteReaction({commentId, emoji, userId}))
 }))
 
 module.exports = router

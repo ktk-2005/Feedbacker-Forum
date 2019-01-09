@@ -18,6 +18,10 @@ export async function addReaction({
   id, emoji, userId, commentId,
 }) { return db.run('INSERT INTO reactions(id, emoji, user_id, comment_id) VALUES (?, ?, ?, ?)', [id, emoji, userId, commentId]) }
 
+export async function deleteReaction({
+  emoji, userId, commentId,
+}) { return db.run('DELETE FROM reactions WHERE emoji=? AND userId=? AND commendId=?', [emoji, userId, commentId]) }
+
 export async function addComment({
   id, text, userId, threadId,
 }) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId]) }
