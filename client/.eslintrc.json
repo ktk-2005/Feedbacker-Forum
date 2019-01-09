@@ -2,6 +2,7 @@
   "extends": "airbnb",
 
   "rules": {
+    "consistent-return": "off",
     "linebreak-style": "off",
     "no-multiple-empty-lines": "off",
     "semi": ["error", "never"],
@@ -13,9 +14,11 @@
     "react/destructuring-assignment": "off",
     "prefer-destructuring": ["error", {"object": true, "array": false}],
     "react/no-multi-comp": "off",
-    "no-unused-vars": "warn",
     "no-multi-spaces": "off",
+    "no-unused-vars": "warn",
     "no-shadow": "off",
+    "no-plusplus": ["off"],
+    "no-param-reassign": ["error", { "props": false }],
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",

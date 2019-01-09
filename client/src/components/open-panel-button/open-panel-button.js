@@ -6,7 +6,7 @@ import OpenIcon from '../../assets/svg/baseline-add-24px.svg'
 
 const css = classNames.bind(styles)
 
-const Button = ({ hidden, onClick }) => (
+const OpenPanelButton = ({ hidden, onClick }) => (
   <button
     type="button"
     className={hidden ? css('button', 'hidden') : css('button')}
@@ -16,4 +16,4 @@ const Button = ({ hidden, onClick }) => (
   </button>
 )
 
-export default Button
+export default OpenPanelButton

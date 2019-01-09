@@ -4,19 +4,19 @@
 @import '../../scss/atoms/button';
 
 .button {
-  @include button(100%);
+  @include button(2px);
   @include display-and-animate();
   position: fixed;
-  bottom: 5%;
-  left: 3%;
+  top: 5%;
+  right: 3%;
   $dimension: 30px;
   width: $dimension;
   height: $dimension;
   padding: 2px;
   box-shadow: 0 3px 5px $palette-medium;
   background: $palette-accent;
-  &.hidden {
-    @include hide-and-animate();
+  &.active {
+    background: red;
   }
   i {
     display: block;
@@ -24,6 +24,7 @@
     height: $icon-dimension-default;
     margin-left: auto;
     margin-right: auto;
-    fill: $palette-light;
+    color: $palette-light;
+    font-style: normal;
   }
 }

@@ -4,12 +4,12 @@ import { createStore, combineReducers } from 'redux'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import { Provider } from 'react-redux'
-import Button from './components/open-panel-button/open-panel-button'
+import OpenPanelButton from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 import SidePanel from './components/side-panel/side-panel'
+import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
-
 
 import styles from './scss/_base.scss'
 
@@ -48,33 +48,45 @@ class MainView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.handleClick = this.handleClick.bind(this)
+    this.handleQuestionPanelClick = this.handleQuestionPanelClick.bind(this)
+    this.handleTagElementClick = this.handleTagElementClick.bind(this)
 
     this.state = {
-      panelIsHidden: true,
-      buttonIsHidden: false,
+      questionPanelIsHidden: true,
+      questionButtonIsHidden: false,
+      taggingModeActive: false,
     }
   }
 
-  handleClick() {
+  handleQuestionPanelClick() {
     this.setState(state => ({
-      buttonIsHidden: !state.buttonIsHidden,
-      panelIsHidden: !state.panelIsHidden,
+      questionButtonIsHidden: !state.questionButtonIsHidden,
+      questionPanelIsHidden: !state.questionPanelIsHidden,
+    }))
+  }
+
+  handleTagElementClick() {
+    this.setState(state => ({
+      taggingModeActive: !state.taggingModeActive,
     }))
   }
 
   render() {
-    const { buttonIsHidden, panelIsHidden } = this.state
+    const { questionButtonIsHidden, questionPanelIsHidden, taggingModeActive } = this.state
 
     return (
       <div>
-        <Button
-          hidden={buttonIsHidden}
-          onClick={this.handleClick}
+        <OpenPanelButton
+          hidden={questionButtonIsHidden}
+          onClick={this.handleQuestionPanelClick}
         />
         <FloatingPanel
-          hidden={panelIsHidden}
-          onClick={this.handleClick}
+          hidden={questionPanelIsHidden}
+          onClick={this.handleQuestionPanelClick}
+        />
+        <TagElementButton
+          active={taggingModeActive}
+          onClick={this.handleTagElementClick}
         />
         <SidePanel />
       </div>
@@ -131,6 +143,8 @@ const initialize = () => {
     </Provider>,
     feedbackAppRoot()
   )
+
+  // initializeDomTagging()
 }
 
 initialize()
