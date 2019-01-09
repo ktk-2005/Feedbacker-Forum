@@ -1,103 +1,34 @@
-package main
+package proxy
 
 import (
 	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"strings"
 	"net/url"
 	"net/http"
 	"net/http/httputil"
 	"regexp"
+	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
 )
 
-var headRegex = regexp.MustCompile("(?i)<head>")
+// -- Public API
 
-// Server that returns error responses
-var errorUrl *url.URL
-
-var htmlInjectString string
-var htmlInjectLength int
-
-func redirectRequest(req *http.Request) {
-
-	// Retrieve container name from subdomain
-	host := req.Host
-	tokenLen := strings.IndexByte(host, '.')
-	if (tokenLen > 0) {
-		token := host[0:tokenLen]
-
-		// Try to find and redirect request
-		container, err := ResolveContainer(token)
-		if err == nil {
-			target := container.Url
-			req.URL.Scheme = target.Scheme
-			req.URL.Host = target.Host
-			req.Host = target.Host
-			return
-		}
-	}
-
-	req.URL = errorUrl
-	req.Host = errorUrl.Host
+// Configuration
+type Config struct {
+	ProxyPort int       // < Port to bind the proxy to
+	ErrorPort int       // < Internal port to use as error proxy target
+	InjectScript string // < Script source to inject to html files
 }
 
-func modifyResponse(res *http.Response) error {
-	contentTypes := res.Header["Content-Type"]
-	if len(contentTypes) == 0 {
-		return nil
-	}
-	if contentTypes[0] != "text/html" {
-		return nil
-	}
+// Start serving the proxy
+func StartServing(config *Config) error {
+	errPort := config.ErrorPort
+	proxyPort := config.ProxyPort
 
-	bodyBytes, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
-
-	var result io.Reader
-	var length int
-
-	if err == nil {
-		body := string(bodyBytes)
-		length = len(bodyBytes)
-
-		match := headRegex.FindStringIndex(body)
-		if match != nil {
-			loc := match[1]
-			result = io.MultiReader(
-				bytes.NewReader([]byte(body[:loc])),
-				bytes.NewReader([]byte(htmlInjectString)),
-				bytes.NewReader([]byte(body[loc:])))
-
-			length += htmlInjectLength
-		} else {
-			result = bytes.NewReader(bodyBytes)
-		}
-	} else {
-		bodyBytes := []byte("Failed to read body")
-		result = bytes.NewReader(bodyBytes)
-		length = len(bodyBytes)
-	}
-
-	res.Header.Set("Content-Length", fmt.Sprintf("%d", length))
-	res.Body = ioutil.NopCloser(result)
-
-	return nil
-}
-
-type ErrorHandler struct { }
-
-func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(404)
-	io.WriteString(w, "Unknown container")
-}
-
-func StartProxy() error {
-	errPort := Config.ErrorPort
-	proxyPort := Config.ProxyPort
-
-	htmlInjectString = fmt.Sprintf("<script src=\"%s\"></script>", Config.InjectScript)
+	htmlInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
 	htmlInjectLength = len([]byte(htmlInjectString))
 
 	var err error
@@ -111,8 +42,102 @@ func StartProxy() error {
 		ModifyResponse: modifyResponse,
 	}
 
-	go http.ListenAndServe(fmt.Sprintf(":%d", errPort), &ErrorHandler{})
-	http.ListenAndServe(fmt.Sprintf(":%d", proxyPort), &proxy)
+	log.Printf("Serving proxy at %d", proxyPort)
+	go func() {
+		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", errPort), &ErrorHandler{}))
+	}()
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", proxyPort), &proxy))
 	return nil
+}
+
+// -- Implementation
+
+// `htmlInjectString` is injected after `headRegex`
+var headRegex = regexp.MustCompile("(?i)<head>")
+var htmlInjectString string
+var htmlInjectLength int
+
+// Server that returns error responses
+var errorUrl *url.URL
+
+func redirectRequest(req *http.Request) {
+
+	// Retrieve container name from subdomain
+	host := req.Host
+	tokenLen := strings.IndexByte(host, '.')
+
+	if (tokenLen > 0) {
+		token := host[0:tokenLen]
+
+		// Try to find and redirect request
+		container, err := resolver.Resolve(token)
+		if err == nil {
+			target := container.TargetUrl
+			req.URL.Scheme = target.Scheme
+			req.URL.Host = target.Host
+			req.Host = target.Host
+			return
+		}
+	}
+
+	req.URL = errorUrl
+	req.Host = errorUrl.Host
+}
+
+func modifyResponse(res *http.Response) error {
+
+	// Only modify responses with Content-Type: text/html
+	contentTypes := res.Header["Content-Type"]
+	if len(contentTypes) == 0 {
+		return nil
+	}
+	if contentTypes[0] != "text/html" {
+		return nil
+	}
+
+	// Read the whole body into memory
+	bodyBytes, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+
+	var result io.Reader
+	var length int
+
+	if err == nil {
+		body := string(bodyBytes)
+		length = len(bodyBytes)
+
+		// Insert the injected script after <head>
+		match := headRegex.FindStringIndex(body)
+		if match != nil {
+			loc := match[1]
+			result = io.MultiReader(
+				bytes.NewReader([]byte(body[:loc])),
+				bytes.NewReader([]byte(htmlInjectString)),
+				bytes.NewReader([]byte(body[loc:])))
+
+			length += htmlInjectLength
+		} else {
+			result = bytes.NewReader(bodyBytes)
+		}
+
+	} else {
+		bodyBytes := []byte("Failed to read body")
+		result = bytes.NewReader(bodyBytes)
+		length = len(bodyBytes)
+	}
+
+	res.Header.Set("Content-Length", fmt.Sprintf("%d", length))
+	res.Body = ioutil.NopCloser(result)
+
+	return nil
+}
+
+// -- Error Handler
+// HTTP server that failed container requests are redirected to
+
+type ErrorHandler struct { }
+func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(404)
+	io.WriteString(w, "Unknown container")
 }
 
