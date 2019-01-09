@@ -9,32 +9,6 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 const css = classNames.bind(styles)
 
 class FloatingPanel extends React.Component {
-
-
-  handleChange(event) {
-    this.setState({value: event.target.value})
-  }
-
-  handleSubmit(event) {
-    event.preventDefault()
-    this.setState({value: ''})
-    if (!this.props.userPublic) {
-      console.error('User not found')
-      return
-    }
-    fetch('/', {
-      method: 'post',
-      body: ({
-        "text": this.state.value,
-        "user": {
-          "public": this.props.userPublic,
-          "private": this.props.userPrivate
-        },
-        "container": "",
-      })
-    })
-  }
-
   render() {
     const { hidden, onClick } = this.props
 
