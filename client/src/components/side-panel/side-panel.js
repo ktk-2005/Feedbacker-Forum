@@ -11,14 +11,11 @@ const mapStateToProps = (state) => {
   const users = (state.persist || {}).users || {}
   const userKeys = Object.keys(users)
   let publicKey = ""
-  let privateKey = ""
   if (userKeys.length >= 1) {
     publicKey = userKeys[0]
-    privateKey = users[publicKey]
   }
   return {
     "userPublic": publicKey,
-    "userPrivate": privateKey
   }
 }
 
@@ -46,14 +43,12 @@ class SidePanel extends React.Component {
       console.error('User not found')
       return
     }
+
     fetch('/api/comments', {
       method: 'post',
       body: ({
         "text": this.state.value,
-        "user": {
-          "public": this.props.userPublic,
-          "private": this.props.userPrivate
-        },
+        "userId": this.props.userPublic,
         "container": "",
       })
     })
