@@ -1,5 +1,6 @@
 import React from 'react'
 import Draggable from 'react-draggable'
+import {connect} from 'react-redux'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import styles from './floating-panel-view.scss'
@@ -7,22 +8,52 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(styles)
 
+const mapStateToProps = (state) => {
+  const users = (state.persist || {}).users || {}
+  const userKeys = Object.keys(users)
+  let publicKey = ""
+  let privateKey = ""
+  if (userKeys.length >= 1) {
+    publicKey = userKeys[0]
+    privateKey = users[publicKey]
+  }
+  return {
+    "userPublic": publicKey,
+    "userPrivate": privateKey
+  }
+}
+
 class FloatingPanel extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {comment: ''}
+    this.state = {value: ''}
 
     this.handleChange = this.handleChange.bind(this)
-    this.handleSumbit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange(e) {
-    this.setState({comment: e.target.value})
+  handleChange(event) {
+    this.setState({value: event.target.value})
   }
 
-  handleSubmit(e) {
-    alert('jee' + this.state.comment)
-    e.preventDefault()
+  handleSubmit(event) {
+    event.preventDefault()
+    this.setState({value: ''})
+    if (!this.props.userPublic) {
+      console.error('User not found')
+      return
+    }
+    fetch('/', {
+      method: 'post',
+      body: ({
+        "text": this.state.value,
+        "user": {
+          "public": this.props.userPublic,
+          "private": this.props.userPrivate
+        },
+        "container": "",
+      })
+    })
   }
 
   render() {
@@ -49,7 +80,7 @@ class FloatingPanel extends React.Component {
               </button>
             </div>
             <form onSubmit={this.handleSubmit}>
-              <textarea value={this.state.comment} onChange={this.handleChange} />
+              <textarea value={this.state.value} onChange={this.handleChange} />
               <input type="submit" value="Comment" />
             </form>
           </div>
@@ -59,4 +90,4 @@ class FloatingPanel extends React.Component {
   }
 }
 
-export default FloatingPanel
+export default connect(mapStateToProps)(FloatingPanel)

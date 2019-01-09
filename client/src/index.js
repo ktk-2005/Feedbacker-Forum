@@ -7,6 +7,8 @@ import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
+import { Provider } from 'react-redux'
+
 
 import styles from './scss/_base.scss'
 
@@ -120,9 +122,11 @@ const initialize = () => {
   })
 
   ReactDOM.render(
-    <div className={css('feedback-app-main-container')}>
-      <MainView />
-    </div>,
+    <Provider store={store}>
+      <div className={css('feedback-app-main-container')}>
+        <MainView />
+      </div>
+    </Provider>,
     feedbackAppRoot()
   )
 }
