@@ -52,13 +52,13 @@ class SQLiteDatabase {
    */
 
   async runMigrations(newestId) {
-    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
+    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations/sqlite'))
     migrations.sort()
     for (const file of migrations) {
       const migrNr = parseInt(file.slice(0, 3), 10)
       if (migrNr > newestId) {
         console.log(`Running migration ${file}`)
-        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`)).toString()
+        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/sqlite/${file}`)).toString()
         await this.exec(sqlCommand).then(() => {
           this.run('INSERT INTO migrations(id, file) VALUES ((?), (?))', [migrNr, file]).catch((err) => {
             console.error(`Failed to add ${file} to migrations table: ${err}`)

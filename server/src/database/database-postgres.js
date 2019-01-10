@@ -42,13 +42,13 @@ class PostgresDatabase {
   }
 
   async runMigrations(newestId) {
-    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
+    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations/postgres'))
     migrations.sort()
     for (const file of migrations) {
       const migrNr = parseInt(file.slice(0, 3), 10)
       if (migrNr > newestId) {
         console.log(`Running migration ${file}`)
-        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`))
+        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/postgres/${file}`))
           .toString()
         await this.exec(sqlCommand)
           .then(() => {
