@@ -81,7 +81,7 @@ class CommentPanel extends React.Component {
     const { data } = this.state
 
     return (
-      <div className={this.state.isHidden ? css('side-panel', 'hidden') : css('side-panel')}>
+      <div className={this.state.isHidden ? css('comment-panel', 'hidden') : css('comment-panel')}>
         <div className={css('top')}>
           <button
             type="button"
