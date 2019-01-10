@@ -4,8 +4,8 @@ import fs from 'fs'
 
 const pgp = pgpromise({})
 
-function prepStatement(unprepped) {
-  let str = unprepped
+function prepStatement(unprepared) {
+  let str = unprepared
   let i = 1
   while (str.includes('?')) {
     str = str.replace('?', `$${i}`)
@@ -16,14 +16,14 @@ function prepStatement(unprepped) {
 
 class PostgresDatabase {
   constructor(connectionString) {
-    this.db = pgp(connectionString) // 'postgres://dev:password@postgres:5432/feedback')
+    this.db = pgp(connectionString)
   }
 
   async initialize() {
     try {
       const newestMigrationId = await this.query('SELECT id FROM migrations ORDER BY id DESC LIMIT 1')
       const newestId = newestMigrationId[0].id
-      console.log('Connected to postgres database at migration', newestId)
+      console.log('Connected to PostgreSQL database at migration', newestId)
       await this.runMigrations(newestId)
     } catch (err) {
       console.log('Could not load migrations, trying to add first migration')
@@ -56,21 +56,18 @@ class PostgresDatabase {
   }
 
   run(str, values) {
-    const sqlstr = prepStatement(str)
-    console.log(sqlstr)
-    return this.db.none(sqlstr, values)
+    const preparedString = prepStatement(str)
+    return this.db.none(preparedString, values)
   }
 
   query(str, values) {
-    const sqlstr = prepStatement(str)
-    console.log(sqlstr)
-    return this.db.any(str, values)
+    const preparedString = prepStatement(str)
+    return this.db.any(preparedString, values)
   }
 
   exec(str, values) {
-    const sqlstr = prepStatement(str)
-    console.log(sqlstr)
-    return this.db.multi(str, values)
+    const preparedString = prepStatement(str)
+    return this.db.multi(preparedString, values)
   }
 }
 

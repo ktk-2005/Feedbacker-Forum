@@ -4,12 +4,12 @@ import { config } from './globals'
 
 let db = null
 
-export async function initializeDatabase(dev = false) {
-  if (dev) {
+export async function initializeDatabase() {
+  if (config.databaseUrl === undefined) {
     db = new SQLiteDatabase(config.sqliteFilename)
     await db.initialize(config.useTestData)
   } else {
-    db = await new PostgresDatabase('postgresql://dev:password@localhost:5432/feedback')
+    db = await new PostgresDatabase(config.databaseUrl)
     await db.initialize()
   }
 }

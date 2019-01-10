@@ -85,6 +85,7 @@ function overrideConfigFromEnv() {
   if (useTestData) {
     config.useTestData = useTestData !== '0'
   }
+  config.databaseUrl = process.env.DATABASE_URL
 }
 
 export async function startup() {
