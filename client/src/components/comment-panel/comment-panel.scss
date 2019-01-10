@@ -4,7 +4,7 @@
 @import '../../scss/atoms/button';
 @import '../../scss/typography';
 
-.side-panel {
+.comment-panel {
   @include display-and-animate();
   &.hidden {
     @include hide-and-animate();
@@ -13,6 +13,7 @@
   position: fixed;
   display: flex;
   flex-flow: column;
+  justify-content: space-between;
   width: 30vw;
   min-width: 200px;
   height: 100vh;
@@ -22,46 +23,69 @@
   border-radius: $border-radius-default;
   box-shadow: 0 2px 10px $palette-shadow-default;
   background-color: $palette-light;
+}
 
-  .top {
-    display: flex;
-    justify-content: flex-end;
+.top {
+  display: flex;
+  justify-content: flex-end;
 
-    .close-button {
-      @include button();
-      background: transparent;
-      i {
-        display: block;
-        align-self: flex-end;
-        width: $icon-dimension-default;
-        height: $icon-dimension-default;
-        fill: $palette-dark;
-      }
-    }
-  }
-
-  .comment-container {
-    display: flex;
-    flex-flow: column;
-    border: solid 2px black;
-  }
-
-  .comment-form {
-    display: flex;
-    flex-flow: column;
-    align-self: flex-end;
-    justify-content: center;
-
-    textarea {
-      border: solid 1px $palette-medium;
-      font-family: $font-default;
-    }
-
-    input[type=submit] {
-      @include button();
-      background: $palette-accent;
-      color: $palette-light;
+  .close-button {
+    @include button();
+    background: transparent;
+    i {
+      display: block;
       align-self: flex-end;
+      width: $icon-dimension-default;
+      height: $icon-dimension-default;
+      fill: $palette-dark;
     }
+  }
+}
+
+.comment-container {
+  display: flex;
+  flex-flow: column;
+  padding: 1em;
+}
+
+.show-comments {
+  @include button();
+  align-self: center;
+  width: 50%;
+}
+
+.comment {
+  display: flex;
+  flex-flow: column;
+  border: solid 1px $palette-medium;
+  padding: 1em 1em 0 1em;
+
+  .comment-text {
+    font-family: $font-default;
+  }
+
+  .comment-time {
+    align-self: flex-end;
+    font-family: $font-default;
+  }
+}
+
+
+.comment-form {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  padding: 1em;
+
+  textarea {
+    border: solid 1px $palette-medium;
+    font-family: $font-default;
+  }
+
+  input[type=submit] {
+    @include button();
+    background: $palette-accent;
+    color: $palette-light;
+    align-self: flex-end;
   }
 }

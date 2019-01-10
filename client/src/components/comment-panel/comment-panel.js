@@ -81,7 +81,7 @@ class CommentPanel extends React.Component {
     const { data } = this.state
 
     return (
-      <div className={this.state.isHidden ? css('side-panel', 'hidden') : css('side-panel')}>
+      <div className={this.state.isHidden ? css('comment-panel', 'hidden') : css('comment-panel')}>
         <div className={css('top')}>
           <button
             type="button"
@@ -91,14 +91,12 @@ class CommentPanel extends React.Component {
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
-        <div>
-          <button
-            type="button"
-            className={css('show-comments')}
-            onClick={this.fetchComments}
-          > Show comments
-          </button>
-        </div>
+        <button
+          type="button"
+          className={css('show-comments')}
+          onClick={this.fetchComments}
+        > Show comments
+        </button>
         <div className={css('comment-container')}>
           {this.state.comments}
         </div>
