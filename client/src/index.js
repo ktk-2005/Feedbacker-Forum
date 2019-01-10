@@ -1,17 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+// Redux
 import { createStore, combineReducers } from 'redux'
-import classNames from 'classnames/bind'
-import * as R from 'ramda'
 import { Provider } from 'react-redux'
+// External libraries
+import * as R from 'ramda'
+import retargetEvents from 'react-shadow-dom-retarget-events'
+import classNames from 'classnames/bind'
+// Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel-view/survey-panel-view'
 import CommentPanel from './components/comment-panel/comment-panel'
 import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
+// Internal js
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
-
+// Styles
 import styles from './scss/_base.scss'
+
 
 const css = classNames.bind(styles)
 
@@ -36,13 +42,6 @@ const reducer = combineReducers({
 })
 
 const store = createStore(reducer)
-
-const feedbackAppRoot = () => {
-  const feedbackAppRoot = document.createElement('div')
-  feedbackAppRoot.setAttribute('data-feedback-app-root', true)
-  document.body.appendChild(feedbackAppRoot)
-  return feedbackAppRoot
-}
 
 class MainView extends React.Component {
   constructor(props) {
@@ -79,7 +78,7 @@ class MainView extends React.Component {
     } = this.state
 
     return (
-      <div>
+      <div className={css('feedback-app-container')}>
         <OpenSurveyPanelButton
           hidden={surveyButtonIsHidden}
           onClick={this.handleSurveyPanelClick}
@@ -139,13 +138,21 @@ const initialize = () => {
     savePersist(store.getState().persist || { })
   })
 
+  const prepareReactRoot = () => {
+    const shadow = document.querySelector('[data-feedback-shadow-root]').shadowRoot
+    // Events fail otherwise in shadow root
+    retargetEvents(shadow)
+    const reactRoot = document.createElement('div')
+    reactRoot.setAttribute('data-feedback-react-root', true)
+    shadow.appendChild(reactRoot)
+    return reactRoot
+  }
+
   ReactDOM.render(
     <Provider store={store}>
-      <div className={css('feedback-app-main-container')}>
-        <MainView />
-      </div>
+      <MainView />
     </Provider>,
-    feedbackAppRoot()
+    prepareReactRoot()
   )
 
   // initializeDomTagging()

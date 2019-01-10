@@ -49,7 +49,21 @@ module.exports = {
       {
         test: /\.s?css$/,
         use: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+            options: {
+              insertInto: () => {
+                let shadowRootElement = document.querySelector('[data-feedback-shadow-root]')
+                if (!shadowRootElement) {
+                  shadowRootElement = document.createElement('div')
+                  shadowRootElement.setAttribute('data-feedback-shadow-root', true)
+                  document.body.appendChild(shadowRootElement)
+                  shadowRootElement.attachShadow({ mode: 'open' })
+                }
+                return shadowRootElement.shadowRoot
+              },
+            },
+          },
           {
             loader: 'css-loader',
             options: {
