@@ -1,9 +1,17 @@
 import React from 'react'
+import classNames from 'classnames/bind'
+import styles from './scss/views/create.scss'
+
+const css = classNames.bind(styles)
 
 const Create = () => (
-  <div>
+  <div className={css('create-view')}>
     <h2>Create an instance my dude</h2>
-    <form action="/container" method="post">
+    <form
+      action="/container"
+      method="post"
+      className={css('create-form')}
+    >
       Git URL
       <input type="text" name="name" />
       Git hash
