@@ -19,7 +19,7 @@ class PostgresDatabase {
     this.db = pgp(connectionString)
   }
 
-  async initialize() {
+  async initialize(useTestData) {
     try {
       const newestMigrationId = await this.query('SELECT id FROM migrations ORDER BY id DESC LIMIT 1')
       const newestId = newestMigrationId[0].id
@@ -28,6 +28,16 @@ class PostgresDatabase {
     } catch (err) {
       console.log('Could not load migrations, trying to add first migration')
       await this.runMigrations(0)
+    }
+
+    if (useTestData) {
+      const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
+      console.log('Loading test data from test-data.sql')
+      try {
+        await this.exec(sqlCommand)
+      } catch (error) {
+        console.error('Failed to load test data', error)
+      }
     }
   }
 

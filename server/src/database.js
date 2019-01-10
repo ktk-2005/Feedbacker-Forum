@@ -10,7 +10,7 @@ export async function initializeDatabase() {
     await db.initialize(config.useTestData)
   } else {
     db = await new PostgresDatabase(config.databaseUrl)
-    await db.initialize()
+    await db.initialize(config.useTestData)
   }
 }
 
