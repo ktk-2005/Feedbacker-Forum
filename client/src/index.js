@@ -4,9 +4,9 @@ import { createStore, combineReducers } from 'redux'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import { Provider } from 'react-redux'
-import OpenPanelButton from './components/open-panel-button/open-panel-button'
-import FloatingPanel from './components/floating-panel-view/floating-panel-view'
-import SidePanel from './components/side-panel/side-panel'
+import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
+import SurveyPanel from './components/survey-panel-view/survey-panel-view'
+import CommentPanel from './components/comment-panel/comment-panel'
 import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
@@ -48,20 +48,20 @@ class MainView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.handleQuestionPanelClick = this.handleQuestionPanelClick.bind(this)
+    this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
     this.handleTagElementClick = this.handleTagElementClick.bind(this)
 
     this.state = {
-      questionPanelIsHidden: true,
-      questionButtonIsHidden: false,
+      surveyPanelIsHidden: true,
+      surveyButtonIsHidden: false,
       taggingModeActive: false,
     }
   }
 
-  handleQuestionPanelClick() {
+  handleSurveyPanelClick() {
     this.setState(state => ({
-      questionButtonIsHidden: !state.questionButtonIsHidden,
-      questionPanelIsHidden: !state.questionPanelIsHidden,
+      surveyPanelIsHidden: !state.surveyPanelIsHidden,
+      surveyButtonIsHidden: !state.surveyButtonIsHidden,
     }))
   }
 
@@ -72,23 +72,27 @@ class MainView extends React.Component {
   }
 
   render() {
-    const { questionButtonIsHidden, questionPanelIsHidden, taggingModeActive } = this.state
+    const {
+      surveyButtonIsHidden,
+      surveyPanelIsHidden,
+      taggingModeActive,
+    } = this.state
 
     return (
       <div>
-        <OpenPanelButton
-          hidden={questionButtonIsHidden}
-          onClick={this.handleQuestionPanelClick}
+        <OpenSurveyPanelButton
+          hidden={surveyButtonIsHidden}
+          onClick={this.handleSurveyPanelClick}
         />
-        <FloatingPanel
-          hidden={questionPanelIsHidden}
-          onClick={this.handleQuestionPanelClick}
+        <SurveyPanel
+          hidden={surveyPanelIsHidden}
+          onClick={this.handleSurveyPanelClick}
         />
         <TagElementButton
           active={taggingModeActive}
           onClick={this.handleTagElementClick}
         />
-        <SidePanel />
+        <CommentPanel />
       </div>
     )
   }

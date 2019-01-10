@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
-import styles from './side-panel.scss'
+import styles from './comment-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(styles)
@@ -19,13 +19,13 @@ const mapStateToProps = (state) => {
   }
 }
 
-class SidePanel extends React.Component {
+class CommentPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       value: '',
       isHidden: false,
-      comments: []
+      comments: [],
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -48,7 +48,7 @@ class SidePanel extends React.Component {
 
     fetch('/api/comments', {
       method: 'post',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         text: this.state.value,
         userId: this.props.userPublic,
@@ -66,21 +66,19 @@ class SidePanel extends React.Component {
   fetchComments() {
     fetch('/api/comments')
       .then(response => response.json())
-      .then(data => {
-        let comments = data.map((comment) => {
-          return(
-              <div className={css('comment')} key={comment.id}>
-                <div className={css('comment-text')}> {comment.text} </div>
-                <div className={css('comment-time')}> {comment.time} </div>
-              </div>
-          )
-        })
-        this.setState({ comments: comments })
+      .then((data) => {
+        const comments = data.map(comment => (
+          <div className={css('comment')} key={comment.id}>
+            <div className={css('comment-text')}> {comment.text} </div>
+            <div className={css('comment-time')}> {comment.time} </div>
+          </div>
+        ))
+        this.setState({ comments })
       })
   }
 
   render() {
-    const { data } = this.state;
+    const { data } = this.state
 
     return (
       <div className={this.state.isHidden ? css('side-panel', 'hidden') : css('side-panel')}>
@@ -102,7 +100,7 @@ class SidePanel extends React.Component {
           </button>
         </div>
         <div className={css('comment-container')}>
-            {this.state.comments}
+          {this.state.comments}
         </div>
         <form className={css('comment-form')} onSubmit={this.handleSubmit}>
           <textarea value={this.state.value} onChange={this.handleChange} />
@@ -113,4 +111,4 @@ class SidePanel extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(SidePanel)
+export default connect(mapStateToProps)(CommentPanel)
