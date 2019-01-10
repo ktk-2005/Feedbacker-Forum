@@ -1,0 +1,18 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/atoms/button';
+
+.top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2em;
+  border-bottom: solid 1px $palette-medium;
+
+}
+
+.create-button {
+  @include button();
+  background-color: $palette-accent;
+  color: $palette-light;
+  padding: 0.5em;
+}
