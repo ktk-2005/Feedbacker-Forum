@@ -5,10 +5,9 @@ import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
-import Create from './create.js'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
-
+import ReactRouter from './reactrouter'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
@@ -123,7 +122,7 @@ const initialize = () => {
 
   ReactDOM.render(
     <div className={css('feedback-app-main-container')}>
-      <MainView />
+      <ReactRouter />
     </div>,
     feedbackAppRoot()
   )
