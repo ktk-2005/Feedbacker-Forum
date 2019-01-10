@@ -9,7 +9,7 @@ describe('/api/comments', () => {
         text: 'testing',
         userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
-        container: '107',
+        container: 'APP-1111',
       },
     })
     assert.equal(typeof response.id, 'string')
@@ -25,7 +25,7 @@ describe('/api/comments', () => {
 
 describe('/api/comments', () => {
   it('should handle multiple posts', async () => {
-    const body = { text: 'Test', userId: 'da776df3', container: '107' }
+    const body = { text: 'Test', userId: 'da776df3', container: 'APP-1111' }
     await apiRequest('/api/comments', { method: 'POST', body })
     await apiRequest('/api/comments', { method: 'POST', body })
     await apiRequest('/api/comments', { method: 'POST', body })
@@ -35,7 +35,7 @@ describe('/api/comments', () => {
     const { id: userId } = await apiRequest('/api/users', { method: 'POST' })
     const response = await apiRequest('/api/comments', {
       method: 'POST',
-      body: { userId, text: 'First', container: '107' },
+      body: { userId, text: 'First', container: 'APP-1111' },
     })
 
     assert.equal(typeof response.id, 'string')
@@ -45,7 +45,7 @@ describe('/api/comments', () => {
     const userId = 'da776df3'
     const { threadId } = await apiRequest('/api/comments', {
       method: 'POST',
-      body: { userId, text: 'First', container: '107' },
+      body: { userId, text: 'First', container: 'APP-1111' },
     })
 
     const response = await apiRequest('/api/comments', {
@@ -62,7 +62,7 @@ describe('/api/comments', () => {
         text: 'This is a comment',
         userId: 'da776df3',
         blob: '{"path": "/path/to/element"}',
-        container: '107',
+        container: 'APP-1111',
       },
     })
     assert.equal(typeof response.id, 'string')
@@ -71,7 +71,7 @@ describe('/api/comments', () => {
 
 describe('/api/questions', () => {
   it('should handle multiple posts', async () => {
-    const body = { text: 'Test', userId: 'da776df3', container: '107' }
+    const body = { text: 'Test', userId: 'da776df3', container: 'APP-1111' }
     await apiRequest('/api/questions', { method: 'POST', body })
     await apiRequest('/api/questions', { method: 'POST', body })
     await apiRequest('/api/questions', { method: 'POST', body })
