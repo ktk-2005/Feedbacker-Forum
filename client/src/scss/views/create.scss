@@ -1,28 +1,40 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/atoms/button';
-//@import '../../scss/typography;'
 
 .create-view {
-  height: 50vh;
-  width: 50vh;
+  max-width: 50vh;
+  margin: 20vh auto;
   padding: 2em;
   border: solid black 1px;
+  border: solid $palette-medium 1px;
+  border-radius: $border-radius-default;
+  box-shadow: 0 2px 10px $palette-shadow-default;
+  background-color: $palette-light;
 }
 
-.create-form {
+.form-create {
   display: flex;
   flex-flow: column;
-}
+  line-height: 2;
 
-input[type="text"] {
+  h2 {
 
-}
+  }
 
-input[type="submit"] {
-  @include button();
-  color: $palette-light;
-  background-color: $palette-accent;
-  font-weight: 600;
-  align-self: flex-end;
+  input[type="text"] {
+    border: none;
+    background-color: $palette-shadow-default;
+    padding: 0.25em;
+  }
+
+  input[type="submit"] {
+    @include button();
+    color: $palette-light;
+    background-color: $palette-accent;
+    font-weight: 600;
+    padding: 0.5em;
+    margin-top: 1em;
+    align-self: center;
+  }
 }
