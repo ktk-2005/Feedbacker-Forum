@@ -55,7 +55,9 @@
     "webpack-cli": "^3.1.2",
     "whatwg-fetch": "^3.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-router-dom": "^4.3.1"
+  },
   "browserslist": [
     "last 2 versions",
     "IE 11",
