@@ -5,7 +5,8 @@ import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
-import Create from './create.js'
+// import Create from './create.js'
+// import Dashboard from './dashboard-view.js'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
 
@@ -74,7 +75,6 @@ class MainView extends React.Component {
           hidden={panelIsHidden}
           onClick={this.handleClick}
         />
-        <Create />
       </div>
     )
   }
