@@ -25,11 +25,13 @@ class SidePanel extends React.Component {
     this.state = {
       value: '',
       isHidden: false,
+      comments: []
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.fetchComments = this.fetchComments.bind(this)
   }
 
   handleChange(event) {
@@ -61,7 +63,25 @@ class SidePanel extends React.Component {
     }))
   }
 
+  fetchComments() {
+    fetch('/api/comments')
+      .then(response => response.json())
+      .then(data => {
+        let comments = data.map((comment) => {
+          return(
+              <div className={css('comment')} key={comment.id}>
+                <div className={css('comment-text')}> {comment.text} </div>
+                <div className={css('comment-time')}> {comment.time} </div>
+              </div>
+          )
+        })
+        this.setState({ comments: comments })
+      })
+  }
+
   render() {
+    const { data } = this.state;
+
     return (
       <div className={this.state.isHidden ? css('side-panel', 'hidden') : css('side-panel')}>
         <div className={css('top')}>
@@ -73,10 +93,21 @@ class SidePanel extends React.Component {
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
-          <form className={css('commment-form')} onSubmit={this.handleSubmit}>
-            <textarea value={this.state.value} onChange={this.handleChange} />
-            <input type="submit" value="Comment" />
-          </form>
+        <div>
+          <button
+            type="button"
+            className={css('show-comments')}
+            onClick={this.fetchComments}
+          > Show comments
+          </button>
+        </div>
+        <div className={css('comment-container')}>
+            {this.state.comments}
+        </div>
+        <form className={css('comment-form')} onSubmit={this.handleSubmit}>
+          <textarea value={this.state.value} onChange={this.handleChange} />
+          <input type="submit" value="Comment" />
+        </form>
       </div>
     )
   }

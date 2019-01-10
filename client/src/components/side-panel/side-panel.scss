@@ -39,19 +39,18 @@
       }
     }
   }
-/*
+
   .comment-container {
     display: flex;
     flex-flow: column;
-    justify-content: center;
     border: solid 2px black;
-    height: inherit;
   }
-*/
-  .commment-form {
+
+  .comment-form {
     display: flex;
     flex-flow: column;
     align-self: flex-end;
+    justify-content: center;
 
     textarea {
       border: solid 1px $palette-medium;
