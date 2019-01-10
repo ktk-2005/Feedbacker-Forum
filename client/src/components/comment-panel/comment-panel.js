@@ -91,12 +91,14 @@ class CommentPanel extends React.Component {
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
-        <button
-          type="button"
-          className={css('show-comments')}
-          onClick={this.fetchComments}
-        > Show comments
-        </button>
+        <div>
+          <button
+            type="button"
+            className={css('show-comments')}
+            onClick={this.fetchComments}
+          > Show comments
+          </button>
+        </div>
         <div className={css('comment-container')}>
           {this.state.comments}
         </div>
