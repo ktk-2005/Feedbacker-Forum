@@ -15,8 +15,9 @@
   flex-flow: column;
   width: 30vw;
   min-width: 200px;
-  height: 90vh;
+  height: 100vh;
   right: 0;
+  margin: 0;
   border: solid $palette-medium 1px;
   border-radius: $border-radius-default;
   box-shadow: 0 2px 10px $palette-shadow-default;
@@ -25,16 +26,35 @@
   .top {
     display: flex;
     justify-content: flex-end;
-  }
 
-  form {
-    margin: 10px;
+    .close-button {
+      @include button();
+      background: transparent;
+      i {
+        display: block;
+        align-self: flex-end;
+        width: $icon-dimension-default;
+        height: $icon-dimension-default;
+        fill: $palette-dark;
+      }
+    }
+  }
+/*
+  .comment-container {
     display: flex;
     flex-flow: column;
+    justify-content: center;
+    border: solid 2px black;
+    height: inherit;
+  }
+*/
+  .commment-form {
+    display: flex;
+    flex-flow: column;
+    align-self: flex-end;
 
     textarea {
       border: solid 1px $palette-medium;
-      margin-bottom: inherit;
       font-family: $font-default;
     }
 
@@ -43,18 +63,6 @@
       background: $palette-accent;
       color: $palette-light;
       align-self: flex-end;
-    }
-  }
-
-  .close-button {
-    @include button();
-    background: transparent;
-    i {
-      display: block;
-      align-self: flex-end;
-      width: $icon-dimension-default;
-      height: $icon-dimension-default;
-      fill: $palette-dark;
     }
   }
 }

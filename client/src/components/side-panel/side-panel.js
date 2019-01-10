@@ -73,10 +73,10 @@ class SidePanel extends React.Component {
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
-        <form onSubmit={this.handleSubmit}>
-          <textarea value={this.state.value} onChange={this.handleChange} />
-          <input type="submit" value="Comment" />
-        </form>
+          <form className={css('commment-form')} onSubmit={this.handleSubmit}>
+            <textarea value={this.state.value} onChange={this.handleChange} />
+            <input type="submit" value="Comment" />
+          </form>
       </div>
     )
   }
