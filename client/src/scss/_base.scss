@@ -7,6 +7,13 @@
   @import '../../node_modules/node.normalize.scss/normalize';
 }
 
+[data-feedback-app-root], .feedback-app-container {
+  box-sizing: border-box;
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+}
+
 // Ensure that feedbacker tool is always on top
 [data-feedback-app-root], .feedback-app-container {
   @include z-level(1);

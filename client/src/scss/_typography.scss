@@ -1,7 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600');
 
+@import 'colors';
+
 $font-default: 'Source Sans Pro', sans-serif;
 
 .feedback-app-container {
   font-family: $font-default;
+  font-size: $font-size-default;
+  color: $palette-darker;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $palette-dark;
+}
+
+*::placeholder {
+  color: $palette-medium;
 }

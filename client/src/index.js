@@ -9,7 +9,7 @@ import retargetEvents from 'react-shadow-dom-retarget-events'
 import classNames from 'classnames/bind'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
-import SurveyPanel from './components/survey-panel-view/survey-panel-view'
+import SurveyPanel from './components/survey-panel/survey-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
 import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
 // Internal js
@@ -79,6 +79,10 @@ class MainView extends React.Component {
 
     return (
       <div className={css('feedback-app-container')}>
+        <TagElementButton
+          active={taggingModeActive}
+          onClick={this.handleTagElementClick}
+        />
         <OpenSurveyPanelButton
           hidden={surveyButtonIsHidden}
           onClick={this.handleSurveyPanelClick}
@@ -86,10 +90,6 @@ class MainView extends React.Component {
         <SurveyPanel
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
-        />
-        <TagElementButton
-          active={taggingModeActive}
-          onClick={this.handleTagElementClick}
         />
         <CommentPanel />
       </div>

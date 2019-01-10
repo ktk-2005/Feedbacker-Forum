@@ -1,11 +1,33 @@
 @import '../typography';
+@import '../mixins';
 
-@mixin button($border-radius: $border-radius-default) {
-  /*reset*/
+@mixin button(
+  $border-radius: $border-radius-default,
+  $states: true,
+  $transition: true
+) {
   border: none;
   border-radius: $border-radius;
   outline: none;
-  padding: 0.6em;
-  font-weight: 600;
-  font-size: 12px;
+  padding: $baseline;
+  @if $transition {
+    transition: $transition-default;
+  }
+
+  @if $states {
+    &:hover {
+      transform: translateY(1px);
+      @if $transition {
+        transition: $transition-default;
+      }
+    }
+
+    &:focus {
+      @include shadow-outline($fade: $baseline);
+      outline: none;
+      @if $transition {
+        transition: $transition-default;
+      }
+    }
+  }
 }

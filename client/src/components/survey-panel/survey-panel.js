@@ -2,13 +2,13 @@ import React from 'react'
 import Draggable from 'react-draggable'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
-import styles from './survey-panel-view.scss'
+import styles from './survey-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(styles)
 
 // eslint-disable-next-line react/prefer-stateless-function
-class FloatingPanel extends React.Component {
+class SurveyPanel extends React.Component {
   render() {
     const { hidden, onClick } = this.props
 
@@ -24,6 +24,7 @@ class FloatingPanel extends React.Component {
               data-dragarea="true"
               className={css('panel-header')}
             >
+              <h5 className={css('heading')}>Survey Panel</h5>
               <button
                 type="button"
                 className={css('close-button')}
@@ -39,4 +40,4 @@ class FloatingPanel extends React.Component {
   }
 }
 
-export default FloatingPanel
+export default SurveyPanel

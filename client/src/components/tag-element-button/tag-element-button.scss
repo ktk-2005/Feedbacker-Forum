@@ -7,13 +7,13 @@
   @include button(2px);
   @include display-and-animate();
   position: fixed;
-  top: 5%;
-  right: 3%;
+  bottom: 15%;
+  left: 3%;
   $dimension: 30px;
   width: $dimension;
   height: $dimension;
   padding: 2px;
-  box-shadow: 0 3px 5px $palette-medium;
+  box-shadow: 0 3px 5px $palette-light;
   background: $palette-accent;
   &.active {
     background: red;
@@ -24,7 +24,7 @@
     height: $icon-dimension-default;
     margin-left: auto;
     margin-right: auto;
-    color: $palette-light;
+    color: $palette-lighter;
     font-style: normal;
   }
 }

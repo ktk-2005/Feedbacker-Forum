@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
-import styles from './comment-panel.scss'
+import commentPanelStyles from './comment-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
-const css = classNames.bind(styles)
+const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = (state) => {
   const users = (state.persist || {}).users || {}
@@ -78,11 +78,12 @@ class CommentPanel extends React.Component {
   }
 
   render() {
-    const { data } = this.state
+    // const { data } = this.state
 
     return (
-      <div className={this.state.isHidden ? css('comment-panel', 'hidden') : css('comment-panel')}>
-        <div className={css('top')}>
+      <div className={this.state.isHidden ? css('panel-container', 'comment-panel', 'hidden') : css('panel-container', 'comment-panel')}>
+        <div className={css('panel-header')}>
+          <h5 className={css('heading')}>Comments</h5>
           <button
             type="button"
             className={css('close-button')}
@@ -91,21 +92,27 @@ class CommentPanel extends React.Component {
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
-        <div>
-          <button
-            type="button"
-            className={css('show-comments')}
-            onClick={this.fetchComments}
-          > Show comments
-          </button>
+        <div className={css('panel-body')}>
+          <div>
+            <button
+              type="button"
+              className={css('show-comments')}
+              onClick={this.fetchComments}
+            > Show comments
+            </button>
+          </div>
+          <div className={css('comment-container')}>
+            {this.state.comments}
+          </div>
+          <form className={css('comment-form')} onSubmit={this.handleSubmit}>
+            <textarea
+              value={this.state.value}
+              onChange={this.handleChange}
+              placeholder="Write comment..."
+            />
+            <input className={css('submit-comment')} type="submit" value="Comment" />
+          </form>
         </div>
-        <div className={css('comment-container')}>
-          {this.state.comments}
-        </div>
-        <form className={css('comment-form')} onSubmit={this.handleSubmit}>
-          <textarea value={this.state.value} onChange={this.handleChange} />
-          <input type="submit" value="Comment" />
-        </form>
       </div>
     )
   }
