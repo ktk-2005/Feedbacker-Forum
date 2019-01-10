@@ -1,0 +1,28 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/atoms/button';
+//@import '../../scss/typography;'
+
+.create-view {
+  height: 50vh;
+  width: 50vh;
+  padding: 2em;
+  border: solid black 1px;
+}
+
+.create-form {
+  display: flex;
+  flex-flow: column;
+}
+
+input[type="text"] {
+
+}
+
+input[type="submit"] {
+  @include button();
+  color: $palette-light;
+  background-color: $palette-accent;
+  font-weight: 600;
+  align-self: flex-end;
+}
