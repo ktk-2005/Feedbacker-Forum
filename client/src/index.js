@@ -73,7 +73,6 @@ class MainView extends React.Component {
           hidden={panelIsHidden}
           onClick={this.handleClick}
         />
-        <Create />
       </div>
     )
   }
