@@ -52,8 +52,8 @@ func StartServing(config *Config) error {
 
 // -- Implementation
 
-// `htmlInjectString` is injected after `headRegex`
-var headRegex = regexp.MustCompile("(?i)<head>")
+// `htmlInjectString` is injected before `injectPositionRegex`
+var injectPositionRegex = regexp.MustCompile("(?i)</body>")
 var htmlInjectString string
 var htmlInjectLength int
 
@@ -107,9 +107,9 @@ func modifyResponse(res *http.Response) error {
 		length = len(bodyBytes)
 
 		// Insert the injected script after <head>
-		match := headRegex.FindStringIndex(body)
+		match := injectPositionRegex.FindStringIndex(body)
 		if match != nil {
-			loc := match[1]
+			loc := match[0]
 			result = io.MultiReader(
 				bytes.NewReader([]byte(body[:loc])),
 				bytes.NewReader([]byte(htmlInjectString)),
