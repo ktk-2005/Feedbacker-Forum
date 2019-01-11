@@ -4,6 +4,10 @@ import fs from 'fs'
 
 const pgp = pgpromise({})
 
+/*
+Changes query strings from using ?, ?, ? for parameters to using $1, $2, $3
+to be compatible with pg-promise's way of handling parameters
+ */
 function prepStatement(unprepared) {
   let str = unprepared
   let i = 1
@@ -15,6 +19,9 @@ function prepStatement(unprepared) {
 }
 
 class PostgresDatabase {
+  /*
+  Connects to database and tries to run new migrations
+   */
   constructor(connectionString) {
     this.db = pgp(connectionString)
   }
@@ -28,18 +35,25 @@ class PostgresDatabase {
     } catch (err) {
       console.log('Could not load migrations, trying to add first migration')
       await this.runMigrations(0)
-    }
-
-    if (useTestData) {
-      const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
-      console.log('Loading test data from test-data.sql')
-      try {
-        await this.exec(sqlCommand)
-      } catch (error) {
-        console.error('Failed to load test data', error)
+      /*
+      If useTestData is true, runs queries from test-data.sql to load data into the database
+       */
+      if (useTestData) {
+        const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
+        console.log('Loading test data from test-data.sql')
+        try {
+          await this.exec(sqlCommand)
+        } catch (error) {
+          console.error('Failed to load test data', error)
+        }
       }
     }
   }
+
+  /*
+  Gets all migrations from the directory ./migrations/postgres/ and runs all migrations
+  that are newer than the parameter newestId, then add them to migrations table in database
+   */
 
   async runMigrations(newestId) {
     const migrations = fs.readdirSync(path.resolve(__dirname, './migrations/postgres'))
@@ -65,15 +79,32 @@ class PostgresDatabase {
     }
   }
 
+
+  /*
+  Runs an SQL query in the database. Does not return any value from the database,
+  only use for updating or inserting data
+
+  This only runs the first SQL query in the parameter string, to run many queries in the same
+  call , use exec instead
+   */
+
   run(str, values) {
     const preparedString = prepStatement(str)
     return this.db.none(preparedString, values)
   }
+  /*
+  Runs an SQL query in the database and returns the result as a promise.
+  Use for querying from the database.
+   */
 
   query(str, values) {
     const preparedString = prepStatement(str)
     return this.db.any(preparedString, values)
   }
+  /*
+  Runs all SQL queries in the parameter string. Can be used for running migrations
+  from a file or other grouped statements in the same string
+   */
 
   exec(str, values) {
     const preparedString = prepStatement(str)
