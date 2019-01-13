@@ -71,11 +71,11 @@ jobs:
         - go build
         - ./proxy &
         - sleep 3
+        - popd
         - curl one.localhost:8086/test.html -o build/one.html
         - diff misc/one/test-injected.html build/one.html
         - curl two.localhost:8086/test.html -o build/two.html
         - diff misc/two/test-injected.html build/two.html
-        - popd
 
     - name: Docker development
       script:
