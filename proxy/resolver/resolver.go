@@ -38,6 +38,14 @@ func Initialize(config *Config) error {
 		return err
 	}
 
+	if config.DbDriver == "sqlite3" {
+		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = ?"
+	} else if config.DbDriver == "postgres" {
+		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = ?"
+	} else {
+		log.Fatalf("Unsupported database driver '%s'", config.DbDriver)
+	}
+
 	for i := 0; i < 10; i++ {
 		go databaseWorker()
 	}
@@ -102,13 +110,14 @@ func getCachedContainer(id string) *Container {
 // -- Database resolver
 
 var db *sql.DB
+var dbQueryString string
 
 // Pending requests to the database
 var databaseRequests = make(chan resolveRequest)
 
 // Query the database and create a container instance
 func fetchContainerFromDatabase(id string) (*Container, error) {
-	row := db.QueryRow("SELECT subdomain, url FROM containers WHERE subdomain = ?", id)
+	row := db.QueryRow(dbQueryString, id)
 	idString := ""
 	urlString := ""
 	err := row.Scan(&idString, &urlString)
