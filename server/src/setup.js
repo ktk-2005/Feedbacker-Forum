@@ -2,9 +2,9 @@ import { promisify } from 'util'
 import fs from 'fs'
 import childProcess from 'child_process'
 import { ArgumentParser } from 'argparse'
-import { initializeDatabase } from './database'
 import path from 'path'
 
+import { initializeDatabase } from './database'
 import { startServer } from './server'
 import { args, config } from './globals'
 
@@ -129,7 +129,6 @@ export async function startup() {
       cwd: proxyPath,
       stdio: 'inherit',
     })
-
   }
 
   if (args.watch) {

@@ -6,7 +6,6 @@ import { promisify } from 'util'
 import childProcess from 'child_process'
 import cors from 'cors'
 import proxy from 'express-http-proxy'
-import subdomain from 'express-subdomain'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -19,11 +18,10 @@ const writeFile = promisify(fs.writeFile)
 function anySubdomain(fn) {
   return (req, res, next) => {
     const host = process.env.APP_DOMAIN || 'localhost'
-    if (req.hostname != host) {
+    if (req.hostname !== host) {
       return fn(req, res, next)
-    } else {
-      next()
     }
+    return next()
   }
 }
 

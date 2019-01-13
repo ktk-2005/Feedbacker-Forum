@@ -26,7 +26,6 @@
     "eslint-plugin-mocha": "^5.2.0",
     "eslint-plugin-react": "^7.11.0",
     "express-http-proxy": "^1.5.0",
-    "express-subdomain": "^1.0.5",
     "light-api-doc": "^0.2.5",
     "mocha": "^5.2.0",
     "sqlite3": "^4.0.4"
