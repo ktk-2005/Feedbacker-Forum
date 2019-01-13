@@ -112,6 +112,6 @@ jobs:
         - curl dtwo.localhost:8080/test.html -o build/two.html
         - diff misc/two/test-injected.html build/two.html
         - pushd docker/production
-        - docker-compose -f docker-compose.yaml -f host-network.yaml down
+        - docker-compose -f docker-compose.yml -f host-network.yml down
         - popd
 
