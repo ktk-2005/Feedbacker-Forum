@@ -5,9 +5,10 @@
 .top {
   display: flex;
   justify-content: flex-end;
+
   padding: 2em;
   border-bottom: solid 1px $palette-medium;
-
+  box-shadow: 0 0 10px $palette-shadow-default;
 }
 
 .create-button {
@@ -15,4 +16,5 @@
   background-color: $palette-accent;
   color: $palette-light;
   padding: 0.5em;
+  box-shadow: 0 0 5px $palette-shadow-default;
 }
