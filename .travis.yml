@@ -82,11 +82,23 @@ jobs:
         # Server needs to be installed for tests
         - cd server && npm install && cd ..
 
+        # Start "container" servers
+        - pushd misc/one
+        - python -m SimpleHTTPServer 10001 &
+        - popd
+        - pushd misc/two
+        - python -m SimpleHTTPServer 10002 &
+        - popd
+
         # Test development Docker
         - pushd docker/development
         - docker-compose up --build -d
         - popd
         - APP_SERVER_PORT=8080 bash misc/test-server.sh
+        - curl done.localhost:8080/test.html -o build/one.html
+        - diff misc/one/test-injected.html build/one.html
+        - curl dtwo.localhost:8080/test.html -o build/two.html
+        - diff misc/two/test-injected.html build/two.html
         - pushd docker/development
         - docker-compose down
         - popd

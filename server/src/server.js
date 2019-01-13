@@ -5,6 +5,8 @@ import fs from 'fs'
 import { promisify } from 'util'
 import childProcess from 'child_process'
 import cors from 'cors'
+import proxy from 'express-http-proxy'
+import subdomain from 'express-subdomain'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -20,6 +22,7 @@ export function startServer() {
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')
     app.use(express.static('../client/build'))
+    app.use(subdomain('*', proxy('localhost:8086')))
   }
 
   app.use(cors())
