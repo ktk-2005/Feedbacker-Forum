@@ -20,5 +20,5 @@ FROM nginx:alpine
 COPY --from=0 /app /app
 
 COPY docker/production/nginx/nginx.conf /app/nginx.conf
-CMD envsubst '\$APP_URL' < /app/nginx.conf > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
+CMD envsubst '\$APP_DOMAIN' < /app/nginx.conf > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
 

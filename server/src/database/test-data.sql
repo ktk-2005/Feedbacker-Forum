@@ -4,6 +4,8 @@ INSERT INTO users (id, time, name, secret) VALUES ('da776df3', '2018-11-10 09:32
 
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-1111', 'one', 'http://localhost:10001', 'da776df3');
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-2222', 'two', 'http://localhost:10002', 'da776df3');
+INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APD-1111', 'done', 'http://dockerhost:10001', 'da776df3');
+INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APD-2222', 'dtwo', 'http://dockerhost:10002', 'da776df3');
 
 INSERT INTO threads (id, container_id) VALUES ('THR-1234', 'APP-1111');
 
