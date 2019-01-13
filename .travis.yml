@@ -29,8 +29,8 @@ jobs:
         - mkdir -p build
 
         # Install Go
-        - curl https://dl.google.com/go/go1.11.linux-amd64.tar.gz -o go.tar.gz
-        - tar -C build -xzf go.tar.gz
+        - curl https://dl.google.com/go/go1.11.linux-amd64.tar.gz -o build/go.tar.gz
+        - tar -C build -xzf build/go.tar.gz
         - export PATH=$TRAVIS_BUILD_DIR/build/go/bin:$PATH
 
         # Install packages
