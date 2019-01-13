@@ -65,7 +65,8 @@
 
 ## Migrations
 
-Migrations for the database are stored in [src/database/migrations](../server/src/database/migrations).
+Migrations for the database are stored in directories in  [src/database/migrations](../server/src/database/migrations), separate for SQLite and PostgreSQL.
+The migrations are separate because SQLite does not support adding constrains in migrations.
 The migrations are .sql files with their migration number as the first three charachter of the file name.
 
 | Migration |
@@ -79,4 +80,4 @@ When no database is found the server will create a new database and run all avai
 
 ### Test data
 
-Test data for development can be added to the file [test_data.sql](../server/src/database/test-data.sql), which is run as a migration everytime the database initialization is run.
+Test data for development can be added to the file [test_data.sql](../server/src/database/test-data.sql), which is run as a migration everytime the database initialization is run if the enviroment variable USE_TEST_DATA is set.

@@ -11,6 +11,13 @@ CREATE TABLE users (
     blob       TEXT
 );
 
+-- Table: threads
+CREATE TABLE threads (
+  id            CHAR(8) UNIQUE NOT NULL,
+  container_id  CHAR(8) NOT NULL,
+  blob          TEXT
+);
+
 -- Table: comments
 CREATE TABLE comments (
     id        CHAR(8) UNIQUE NOT NULL,
@@ -45,16 +52,6 @@ CREATE TABLE reactions (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (comment_id) REFERENCES comments(id)
 );
-
--- Table: threads
-CREATE TABLE threads (
-  id            CHAR(8) UNIQUE NOT NULL,
-  container_id  CHAR(8) NOT NULL,
-  blob          TEXT,
-
-  FOREIGN KEY (container_id) REFERENCES containers(id)
-);
-
 
 -- Table: Migrations
 CREATE TABLE migrations (id INTEGER PRIMARY KEY, file VARCHAR(255) UNIQUE);
