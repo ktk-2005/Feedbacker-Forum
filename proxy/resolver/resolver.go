@@ -41,7 +41,7 @@ func Initialize(config *Config) error {
 	if config.DbDriver == "sqlite3" {
 		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = ?"
 	} else if config.DbDriver == "postgres" {
-		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = ?"
+		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = $1"
 	} else {
 		log.Fatalf("Unsupported database driver '%s'", config.DbDriver)
 	}
