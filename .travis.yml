@@ -31,7 +31,8 @@ jobs:
         # Install Go
         - curl https://dl.google.com/go/go1.11.linux-amd64.tar.gz -o build/go.tar.gz
         - tar -C build -xzf build/go.tar.gz
-        - export PATH=$TRAVIS_BUILD_DIR/build/go/bin:$PATH
+        - export GOROOT=$TRAVIS_BUILD_DIR/build/go
+        - export PATH=$GOROOT/bin:$PATH
 
         # Install packages
         - cd client && npm install && cd ..
