@@ -12,8 +12,6 @@ tar -C build -xzf build/go.tar.gz
 export GOROOT=/app/build/go
 export PATH=/app/build/go/bin:$PATH
 
-ls -lah /app/build/go/bin
-
 cd /app
 
 cd proxy
