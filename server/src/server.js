@@ -16,13 +16,27 @@ import listEndpoints from './list-endpoints'
 
 const writeFile = promisify(fs.writeFile)
 
+function anySubdomain(fn) {
+  return (req, res, next) => {
+    const host = process.env.APP_DOMAIN || 'localhost'
+    if (req.hostname != host) {
+      return fn(req, res, next)
+    } else {
+      next()
+    }
+  }
+}
+
 export function startServer() {
   const app = express()
 
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')
+    app.use(anySubdomain(proxy('localhost:8086', {
+      preserveHostHdr: true,
+      skipToNextHandlerFilter: () => false,
+    })))
     app.use(express.static('../client/build'))
-    app.use(subdomain('*', proxy('localhost:8086')))
   }
 
   app.use(cors())

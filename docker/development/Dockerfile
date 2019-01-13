@@ -6,4 +6,4 @@ WORKDIR /app/server
 
 RUN sh /app/docker/development/docker-build.sh
 
-CMD sh /app/docker/development/docker-start.sh
+CMD npm start -- -startProxy

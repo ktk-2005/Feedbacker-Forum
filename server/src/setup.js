@@ -3,6 +3,7 @@ import fs from 'fs'
 import childProcess from 'child_process'
 import { ArgumentParser } from 'argparse'
 import { initializeDatabase } from './database'
+import path from 'path'
 
 import { startServer } from './server'
 import { args, config } from './globals'
@@ -43,6 +44,13 @@ function parseArguments() {
   parser.addArgument(
     ['--verbose'], {
       help: 'Print extra information',
+      action: 'storeTrue',
+    }
+  )
+
+  parser.addArgument(
+    ['--startProxy'], {
+      help: 'Start the proxy executable as well',
       action: 'storeTrue',
     }
   )
@@ -112,6 +120,17 @@ export async function startup() {
   overrideConfigFromEnv()
 
   await initializeDatabase()
+
+  if (args.startProxy) {
+    console.log('Starting proxy')
+    const proxyExecutable = /^win/.test(process.platform) ? 'proxy.exe' : 'proxy'
+    const proxyPath = path.resolve(__dirname, '../../proxy')
+    childProcess.spawn(path.resolve(proxyPath, proxyExecutable), [], {
+      cwd: proxyPath,
+      stdio: 'inherit',
+    })
+
+  }
 
   if (args.watch) {
     console.log('Starting Webpack in watch mode')
