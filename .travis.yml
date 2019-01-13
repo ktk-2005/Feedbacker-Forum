@@ -69,15 +69,15 @@ jobs:
 
         # Start "container" servers
         - pushd misc/one
-        - python -m http.server 10001 &
+        - python -m SimpleHTTPServer 10001 &
         - popd
         - pushd misc/two
-        - python -m http.server 10002 &
+        - python -m SimpleHTTPServer 10002 &
         - popd
 
         # Test production Docker
         - pushd docker/production
-        - USE_TEST_DATA=1 docker-compose -f docker-compose.yaml -f host-network.yaml up --build -d
+        - USE_TEST_DATA=1 docker-compose -f docker-compose.yml -f host-network.yml up --build -d
         - popd
         - APP_SERVER_PORT=8080 bash misc/test-server.sh
         - curl done.localhost:8080/test.html -o build/one.html
