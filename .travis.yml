@@ -66,6 +66,7 @@ jobs:
 
         # Test container proxy
         - pushd proxy
+        - go version
         - go build
         - ./proxy &
         - sleep 3
