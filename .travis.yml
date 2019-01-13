@@ -31,6 +31,7 @@ jobs:
         # Install Go
         - curl https://dl.google.com/go/go1.11.linux-amd64.tar.gz -o go.tar.gz
         - tar -C build -xzf go.tar.gz
+        - export PATH=$TRAVIS_BUILD_DIR/build/go/bin:$PATH
 
         # Install packages
         - cd client && npm install && cd ..
@@ -65,7 +66,7 @@ jobs:
 
         # Test container proxy
         - pushd proxy
-        - ../build/go/bin/go build
+        - go build
         - ./proxy &
         - sleep 3
         - curl one.localhost:8086/test.html -o build/one.html
