@@ -51,9 +51,8 @@ router.post('/', catchErrors(async (req, res) => {
 // Remove reaction from the database.
 //
 // Returns JSON indicating whether deletion was successful or not
-router.delete('/:commentId', catchErrors(async (req, res) => {
-  const { commentId } = req.params
-  const { emoji, userId } = req.body
+router.delete('/', catchErrors(async (req, res) => {
+  const { emoji, userId, commentId } = req.body
   res.json(await deleteReaction({commentId, emoji, userId}))
 }))
 

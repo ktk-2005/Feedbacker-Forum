@@ -13,7 +13,20 @@ const router = express.Router()
 //
 // returns JSON array of all comments in database
 router.get('/', catchErrors(async (req, res) => {
-  res.send(await getComments())
+  const groupedComments = {}
+  const comments = await getComments()
+  for (const comment of comments) {
+    let result = groupedComments[comment.comment_id]
+    if (!result) {
+      result = {id: comment.comment_id, user_id: comment.comment_user, reactions: []}
+      groupedComments[comment.comment_id] = result
+    }
+    if (comment.reaction_id !== null) {
+      let reaction = {id: comment.reaction_id, user_id: comment.reaction_user, emoji: comment.emoji}
+      result.reactions.push(reaction)
+    }
+  }
+  res.send(groupedComments)
 }))
 
 // @api POST /api/comments

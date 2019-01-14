@@ -8,7 +8,15 @@ export async function initializeDatabase() {
   await db.initialize(config.useTestData)
 }
 
-export async function getComments() { return db.query('SELECT * FROM comments') }
+export async function getComments() { return db.query(`
+SELECT comments.id AS comment_id,
+reactions.id AS reaction_id,
+reactions.emoji,
+reactions.user_id AS reaction_user,
+comments.user_id AS comment_user
+FROM comments
+LEFT JOIN reactions
+ON comments.id = reactions.comment_id`) }
 
 export async function getQuestions() { return db.query('SELECT * FROM questions') }
 
@@ -20,7 +28,7 @@ export async function addReaction({
 
 export async function deleteReaction({
   emoji, userId, commentId,
-}) { return db.run('DELETE FROM reactions WHERE emoji=? AND userId=? AND commendId=?', [emoji, userId, commentId]) }
+}) { return db.run('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
 
 export async function addComment({
   id, text, userId, threadId,
