@@ -17,3 +17,6 @@ dev_db.sqlite
 # IDE
 .idea/
 
+# Executable files
+*.exe
+

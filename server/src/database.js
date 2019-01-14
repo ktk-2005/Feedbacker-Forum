@@ -1,11 +1,17 @@
 import SQLiteDatabase from './database/database-sqlite'
+import PostgresDatabase from './database/database-postgres'
 import { config } from './globals'
 
 let db = null
 
 export async function initializeDatabase() {
-  db = new SQLiteDatabase(config.sqliteFilename)
-  await db.initialize(config.useTestData)
+  if (config.databaseUrl === undefined) {
+    db = new SQLiteDatabase(config.sqliteFilename)
+    await db.initialize(config.useTestData)
+  } else {
+    db = await new PostgresDatabase(config.databaseUrl)
+    await db.initialize(config.useTestData)
+  }
 }
 
 export async function getComments() { return db.query(`
@@ -38,12 +44,12 @@ export async function deleteReaction({
 }) { return db.run('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
 
 export async function addComment({
-  id, text, userId, threadId,
-}) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId]) }
+  id, text, userId, threadId, blob,
+}) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId, blob]) }
 
 export async function addQuestion({
-  id, text, userId, threadId,
-}) { return db.run('INSERT INTO questions(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId]) }
+  id, text, userId, threadId, blob,
+}) { return db.run('INSERT INTO questions(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId, blob]) }
 
 export async function addThread({
   id, container, blob,

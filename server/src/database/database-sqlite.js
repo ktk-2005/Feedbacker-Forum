@@ -33,7 +33,9 @@ class SQLiteDatabase {
     } catch (err) {
       console.log('Could not load migrations, trying to add first migration')
       await this.runMigrations(0)
-
+      /*
+      If useTestData is true, runs queries from test-data.sql to load data into the database
+       */
       if (useTestData) {
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, './test-data.sql')).toString()
         console.log('Loading test data from test-data.sql')
@@ -47,18 +49,18 @@ class SQLiteDatabase {
   }
 
   /*
-  Gets all migrations from the folder ./migrations and runs all migrations
+  Gets all migrations from the directory ./migrations/sqlite/ and runs all migrations
   that are newer than the parameter newestId, then add them to migrations table in database
    */
 
   async runMigrations(newestId) {
-    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations'))
+    const migrations = fs.readdirSync(path.resolve(__dirname, './migrations/sqlite'))
     migrations.sort()
     for (const file of migrations) {
       const migrNr = parseInt(file.slice(0, 3), 10)
       if (migrNr > newestId) {
         console.log(`Running migration ${file}`)
-        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/${file}`)).toString()
+        const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/sqlite/${file}`)).toString()
         await this.exec(sqlCommand).then(() => {
           this.run('INSERT INTO migrations(id, file) VALUES ((?), (?))', [migrNr, file]).catch((err) => {
             console.error(`Failed to add ${file} to migrations table: ${err}`)

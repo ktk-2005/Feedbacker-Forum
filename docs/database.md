@@ -17,8 +17,8 @@
 | id | Short random id for comment |
 | time | Timestamp from when comment was created |
 | text | Text content of comment |
-| user_id | Id of user who left the comment |
-| thread_id | Id of comment thread which this comment is part of |
+| user\_id | Id of user who left the comment |
+| thread\_id | Id of comment thread which this comment is part of |
 | blob | JSON blob for other data added to comment e.g. DOM tagging information |
 
 ### Questions
@@ -27,8 +27,8 @@
 | id | Short random id for question |
 | time | Timestamp from when question was created |
 | text | The text of the actual question |
-| user_id | Id of user who created the question |
-| thread_id | Id of thread which this question is part of |
+| user\_id | Id of user who created the question |
+| thread\_id | Id of thread which this question is part of |
 | blob | JSON blob for other data attached to question e.g. DOM tagging information |
 
 ### Reactions
@@ -37,15 +37,24 @@
 | id | Short random id for reaction |
 | time | Timestamp from when reaction was created |
 | emoji | The reaction emoji |
-| user_id | Id of user who left the reaction |
-| comment_id | Id of comment the reaction was left on |
+| user\_id | Id of user who left the reaction |
+| comment\_id | Id of comment the reaction was left on |
 
 ### Threads
 | Column | Usage |
 | --- | --- |
 | id | Short random id for thread |
-| container_id | Id of the container this thread is related to, where the comment should be shown |
+| container\_id | Id of the container this thread is related to, where the comment should be shown |
 | blob | JSON blob for other data related to thread |
+
+### Containers
+| Column | Usage |
+| --- | --- |
+| id | Short random id for the container |
+| subdomain | User friendly subdomain where the container is found under |
+| url | Internal target URL of the running container instance |
+| user\_id | User that has created or owns the container |
+| blob | Misc blob data |
 
 ### Migrations
 | Column | Usage |
@@ -54,11 +63,10 @@
 | file | The name of the file from where the migration was run |
 
 
-
-
 ## Migrations
 
-Migrations for the database are stored in [src/database/migrations](../server/src/database/migrations).
+Migrations for the database are stored in directories in  [src/database/migrations](../server/src/database/migrations), separate for SQLite and PostgreSQL.
+The migrations are separate because SQLite does not support adding constrains in migrations.
 The migrations are .sql files with their migration number as the first three charachter of the file name.
 
 | Migration |
@@ -72,4 +80,4 @@ When no database is found the server will create a new database and run all avai
 
 ### Test data
 
-Test data for development can be added to the file [test_data.sql](../server/src/database/test-data.sql), which is run as a migration everytime the database initialization is run.
+Test data for development can be added to the file [test_data.sql](../server/src/database/test-data.sql), which is run as a migration everytime the database initialization is run if the enviroment variable USE_TEST_DATA is set.

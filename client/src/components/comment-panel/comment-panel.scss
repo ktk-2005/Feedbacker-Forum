@@ -7,7 +7,7 @@
 @import '../survey-panel/survey-panel.scss';
 
 .comment-panel {
-  width: 35vw;
+  min-width: 300px;
   height: 100%;
 
   position: fixed;
@@ -38,7 +38,6 @@
 .comment-container {
   display: flex;
   flex-flow: column;
-  overflow-y: auto;
 }
 
 .show-comments, .submit-comment {
@@ -61,7 +60,7 @@
   @include shadow-outline(1px);
 
   .comment-text {
-    resize: none;
+    resize: none; // TODO: what?
   }
 
   .comment-time {
@@ -95,6 +94,5 @@
     align-self: flex-end;
     background: $palette-accent;
     color: $palette-lighter;
-    position: absolute;
   }
 }

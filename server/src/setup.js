@@ -2,8 +2,9 @@ import { promisify } from 'util'
 import fs from 'fs'
 import childProcess from 'child_process'
 import { ArgumentParser } from 'argparse'
-import { initializeDatabase } from './database'
+import path from 'path'
 
+import { initializeDatabase } from './database'
 import { startServer } from './server'
 import { args, config } from './globals'
 
@@ -48,6 +49,13 @@ function parseArguments() {
   )
 
   parser.addArgument(
+    ['--startProxy'], {
+      help: 'Start the proxy executable as well',
+      action: 'storeTrue',
+    }
+  )
+
+  parser.addArgument(
     ['--debugUuid'], {
       help: 'Generate duplicate UUID values for debugging',
       action: 'storeTrue',
@@ -85,6 +93,7 @@ function overrideConfigFromEnv() {
   if (useTestData) {
     config.useTestData = useTestData !== '0'
   }
+  config.databaseUrl = process.env.DATABASE_URL
 }
 
 export async function startup() {
@@ -111,6 +120,16 @@ export async function startup() {
   overrideConfigFromEnv()
 
   await initializeDatabase()
+
+  if (args.startProxy) {
+    console.log('Starting proxy')
+    const proxyExecutable = /^win/.test(process.platform) ? 'proxy.exe' : 'proxy'
+    const proxyPath = path.resolve(__dirname, '../../proxy')
+    childProcess.spawn(path.resolve(proxyPath, proxyExecutable), [], {
+      cwd: proxyPath,
+      stdio: 'inherit',
+    })
+  }
 
   if (args.watch) {
     console.log('Starting Webpack in watch mode')
