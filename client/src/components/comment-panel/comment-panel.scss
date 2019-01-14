@@ -75,7 +75,7 @@ $panel-min-width: 300px;
   display: flex;
   flex-flow: column;
   justify-content: center;
-  margin-top: $spacer * 2;
+  margin-top: $spacer;
 
   textarea {
     @extend .comment;
