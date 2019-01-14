@@ -1,12 +1,12 @@
 import React from 'react'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
-import styles from './open-panel-button.scss'
+import styles from './open-survey-panel-button.scss'
 import OpenIcon from '../../assets/svg/baseline-add-24px.svg'
 
 const css = classNames.bind(styles)
 
-const OpenPanelButton = ({ hidden, onClick }) => (
+const OpenSurveyPanelButton = ({ hidden, onClick }) => (
   <button
     type="button"
     className={hidden ? css('button', 'hidden') : css('button')}
@@ -16,4 +16,4 @@ const OpenPanelButton = ({ hidden, onClick }) => (
   </button>
 )
 
-export default OpenPanelButton
+export default OpenSurveyPanelButton

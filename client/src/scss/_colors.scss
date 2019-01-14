@@ -1,7 +1,11 @@
-$palette-light: #fdfdfd;
-$palette-medium: #d8d8d8;
-$palette-dark: #b7b8ba;
+$palette-white: white;
+$palette-lighter: #fdfdfd;
+$palette-light: #d8d8d8;
+$palette-medium: #b7b8ba;
+$palette-dark: #444444;
+$palette-darker: #222222;
+$palette-black: black;
 $palette-accent: #00bfc9;
 
-$palette-shadow-default: lighten($palette-medium, 9);
-$close-button-color: darken($palette-dark, 10);
+$palette-shadow-default: rgba($palette-medium, 0.8);
+$palette-shadow-light: rgba($palette-light, 9);

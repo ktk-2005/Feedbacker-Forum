@@ -1,7 +1,14 @@
 /* transitions */
 $animation-duration-default: 0.2s;
+$transition-default:  all $animation-duration-default ease-in-out;
 
-/* buttons */
+// Sizing
+
+$baseline: 7px;
+$spacer: $baseline * 2;
+$font-size-default: $baseline * 2;
+
+// buttons
 $border-radius-default: 3px;
 
 $icon-dimension-default: 24px;

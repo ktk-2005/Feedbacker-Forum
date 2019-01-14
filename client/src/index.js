@@ -1,17 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+// Redux
 import { createStore, combineReducers } from 'redux'
-import classNames from 'classnames/bind'
-import * as R from 'ramda'
 import { Provider } from 'react-redux'
-import OpenPanelButton from './components/open-panel-button/open-panel-button'
-import FloatingPanel from './components/floating-panel-view/floating-panel-view'
-import SidePanel from './components/side-panel/side-panel'
+// External libraries
+import * as R from 'ramda'
+import retargetEvents from 'react-shadow-dom-retarget-events'
+import classNames from 'classnames/bind'
+// Components
+import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
+import SurveyPanel from './components/survey-panel/survey-panel'
+import CommentPanel from './components/comment-panel/comment-panel'
 import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
+// Internal js
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
-
+// Styles
 import styles from './scss/_base.scss'
+
 
 const css = classNames.bind(styles)
 
@@ -37,31 +43,24 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
-const feedbackAppRoot = () => {
-  const feedbackAppRoot = document.createElement('div')
-  feedbackAppRoot.setAttribute('data-feedback-app-root', true)
-  document.body.appendChild(feedbackAppRoot)
-  return feedbackAppRoot
-}
-
 class MainView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.handleQuestionPanelClick = this.handleQuestionPanelClick.bind(this)
+    this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
     this.handleTagElementClick = this.handleTagElementClick.bind(this)
 
     this.state = {
-      questionPanelIsHidden: true,
-      questionButtonIsHidden: false,
+      surveyPanelIsHidden: true,
+      surveyButtonIsHidden: false,
       taggingModeActive: false,
     }
   }
 
-  handleQuestionPanelClick() {
+  handleSurveyPanelClick() {
     this.setState(state => ({
-      questionButtonIsHidden: !state.questionButtonIsHidden,
-      questionPanelIsHidden: !state.questionPanelIsHidden,
+      surveyPanelIsHidden: !state.surveyPanelIsHidden,
+      surveyButtonIsHidden: !state.surveyButtonIsHidden,
     }))
   }
 
@@ -72,23 +71,27 @@ class MainView extends React.Component {
   }
 
   render() {
-    const { questionButtonIsHidden, questionPanelIsHidden, taggingModeActive } = this.state
+    const {
+      surveyButtonIsHidden,
+      surveyPanelIsHidden,
+      taggingModeActive,
+    } = this.state
 
     return (
-      <div>
-        <OpenPanelButton
-          hidden={questionButtonIsHidden}
-          onClick={this.handleQuestionPanelClick}
-        />
-        <FloatingPanel
-          hidden={questionPanelIsHidden}
-          onClick={this.handleQuestionPanelClick}
-        />
+      <div className={css('feedback-app-container')}>
         <TagElementButton
           active={taggingModeActive}
           onClick={this.handleTagElementClick}
         />
-        <SidePanel />
+        <OpenSurveyPanelButton
+          hidden={surveyButtonIsHidden}
+          onClick={this.handleSurveyPanelClick}
+        />
+        <SurveyPanel
+          hidden={surveyPanelIsHidden}
+          onClick={this.handleSurveyPanelClick}
+        />
+        <CommentPanel />
       </div>
     )
   }
@@ -135,13 +138,21 @@ const initialize = () => {
     savePersist(store.getState().persist || { })
   })
 
+  const prepareReactRoot = () => {
+    const shadow = document.querySelector('[data-feedback-shadow-root]').shadowRoot
+    // Events fail otherwise in shadow root
+    retargetEvents(shadow)
+    const reactRoot = document.createElement('div')
+    reactRoot.setAttribute('data-feedback-react-root', true)
+    shadow.appendChild(reactRoot)
+    return reactRoot
+  }
+
   ReactDOM.render(
     <Provider store={store}>
-      <div className={css('feedback-app-main-container')}>
-        <MainView />
-      </div>
+      <MainView />
     </Provider>,
-    feedbackAppRoot()
+    prepareReactRoot()
   )
 
   // initializeDomTagging()
