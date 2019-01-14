@@ -4,6 +4,7 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import styles from './side-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+import ReactDOM from 'react-dom'
 
 const css = classNames.bind(styles)
 
@@ -25,20 +26,21 @@ class SidePanel extends React.Component {
     this.state = {
       value: '',
       isHidden: false,
-      comments: []
+      comments: [],
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
   handleChange(event) {
     this.setState({ value: event.target.value })
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
     this.setState({ value: '' })
     if (!this.props.userPublic) {
@@ -46,7 +48,7 @@ class SidePanel extends React.Component {
       return
     }
 
-    fetch('/api/comments', {
+    await fetch('/api/comments', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -55,6 +57,8 @@ class SidePanel extends React.Component {
         container: '',
       }),
     })
+
+    await this.fetchComments()
   }
 
   handleClick() {
@@ -73,7 +77,15 @@ class SidePanel extends React.Component {
           )
         })
         this.setState({ comments: comments })
+        this.scrollToBottom()
       })
+  }
+
+  scrollToBottom() {
+    //this.messageEnd.scrollIntoView()
+    //document.getElementByClassName("comment-container").scrollIntoView({block: "end"})
+    const el = document.getElementById("comment-container")
+    el.scrollTop = el.scrollHeight
   }
 
   render() {
@@ -98,10 +110,10 @@ class SidePanel extends React.Component {
           > Show comments
           </button>
         </div>
-        <div className={css('comment-container')}>
+        <div className={css('comment-container')} id="comment-container">
             {this.state.comments}
         </div>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} ref={(el) => { this.messageEnd = el }}>
           <textarea value={this.state.value} onChange={this.handleChange} />
           <input type="submit" value="Comment" />
         </form>
