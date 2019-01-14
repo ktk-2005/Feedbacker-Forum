@@ -113,7 +113,7 @@ class SidePanel extends React.Component {
         <div className={css('comment-container')} id="comment-container">
             {this.state.comments}
         </div>
-        <form onSubmit={this.handleSubmit} ref={(el) => { this.messageEnd = el }}>
+        <form onSubmit={this.handleSubmit} >
           <textarea value={this.state.value} onChange={this.handleChange} />
           <input type="submit" value="Comment" />
         </form>
