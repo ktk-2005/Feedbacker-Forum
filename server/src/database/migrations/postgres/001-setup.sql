@@ -53,7 +53,6 @@ CREATE TABLE reactions (
     FOREIGN KEY (comment_id) REFERENCES comments(id)
 );
 
-
 -- Table: Migrations
 CREATE TABLE migrations (id INTEGER PRIMARY KEY, file VARCHAR(255) UNIQUE);
 

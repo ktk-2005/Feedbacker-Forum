@@ -18,6 +18,12 @@ function prepStatement(unprepared) {
   return str
 }
 
+function timeout(timeMs) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeMs)
+  })
+}
+
 class PostgresDatabase {
   /*
   Connects to database and tries to run new migrations
@@ -64,17 +70,28 @@ class PostgresDatabase {
         console.log(`Running migration ${file}`)
         const sqlCommand = fs.readFileSync(path.resolve(__dirname, `./migrations/postgres/${file}`))
           .toString()
-        await this.exec(sqlCommand)
-          .then(() => {
-            this.run('INSERT INTO migrations(id, file) VALUES ($1, $2)', [migrNr, file])
-              .catch((err) => {
-                console.error(`Failed to add ${file} to migrations table: ${err}`)
-              })
-          }, (err) => {
-            if (err) {
+
+        const runMigration = async () => {
+          for (let attempt = 0; attempt < 5; attempt++) {
+            try {
+              if (attempt > 0) console.log(`Retrying migration ${file}`)
+              await this.exec(sqlCommand)
+              return true
+            } catch (err) {
               console.error(`Failed to run migration ${file}`, err)
+              await timeout(2000)
             }
-          })
+          }
+          return false
+        }
+
+        if (await runMigration()) {
+          try {
+            await this.run('INSERT INTO migrations(id, file) VALUES ($1, $2)', [migrNr, file])
+          } catch (err) {
+            console.error(`Failed to add ${file} to migrations table: ${err}`)
+          }
+        }
       }
     }
   }

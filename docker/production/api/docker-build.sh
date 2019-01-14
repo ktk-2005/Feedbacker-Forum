@@ -1,6 +1,8 @@
 set -e
 set -u
 
+cp /prod/config.json /app/config.json
+
 apk add --no-cache git
 
 rm -rf node_modules/

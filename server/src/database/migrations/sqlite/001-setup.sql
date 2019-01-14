@@ -11,11 +11,22 @@ CREATE TABLE users (
     blob       TEXT
 );
 
+-- Table: containers
+CREATE TABLE containers (
+  id            CHAR(8) UNIQUE NOT NULL,
+  subdomain     VARCHAR(32) UNIQUE NOT NULL,
+  url           VARCHAR(255) NOT NULL,
+  user_id       CHAR(8) NOT NULL,
+  blob          TEXT,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 -- Table: threads
 CREATE TABLE threads (
   id            CHAR(8) UNIQUE NOT NULL,
   container_id  CHAR(8) NOT NULL,
-  blob          TEXT
+  blob          TEXT,
+  FOREIGN KEY (container_id) REFERENCES containers(id)
 );
 
 -- Table: comments
