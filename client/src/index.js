@@ -97,14 +97,14 @@ class MainView extends React.Component {
   }
 }
 
-let isInitialized = false
+const initializedKey = '!!feedbacker_forum_initialized!!'
 
 const initialize = () => {
-  if (isInitialized || !document.body) {
+  if (window[initializedKey] || !document.body) {
     return
   }
 
-  isInitialized = true
+  window[initializedKey] = true
 
   const loadPersist = async (state, allDataLoaded) => {
     store.dispatch({ type: LOAD_PERSIST, state })

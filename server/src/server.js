@@ -5,6 +5,7 @@ import fs from 'fs'
 import { promisify } from 'util'
 import childProcess from 'child_process'
 import cors from 'cors'
+import proxy from 'express-http-proxy'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -14,11 +15,25 @@ import listEndpoints from './list-endpoints'
 
 const writeFile = promisify(fs.writeFile)
 
+function anySubdomain(fn) {
+  return (req, res, next) => {
+    const host = process.env.APP_DOMAIN || 'localhost'
+    if (req.hostname !== host) {
+      return fn(req, res, next)
+    }
+    return next()
+  }
+}
+
 export function startServer() {
   const app = express()
 
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')
+    app.use(anySubdomain(proxy('localhost:8086', {
+      preserveHostHdr: true,
+      skipToNextHandlerFilter: () => false,
+    })))
     app.use(express.static('../client/build'))
   }
 
