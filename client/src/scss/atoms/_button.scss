@@ -16,7 +16,6 @@
 
   @if $states {
     &:hover {
-      transform: translateY(1px);
       @if $transition {
         transition: $transition-default;
       }

@@ -1,46 +1,44 @@
-@import '../../scss/mixins';
+@import '../../scss/variables';
 @import '../../scss/colors';
+@import '../../scss/mixins';
 
 .reactions {
   border-collapse: collapse;
 }
 
-.reaction{
+.reaction { // TODO: whole order
   @include reset-button;
-  outline: none;
-
-  border: solid 1px;
+  width: 90px; // TODO: no hardcoded
+  height: 30px; // TODO: ^
   margin: 0;
+  margin-bottom: 5px; // TODO: demo separation
   padding: 0;
-  width: auto;
+  border: 1px solid $palette-light;
+  outline: none;
+  background: $palette-white;
   overflow: visible;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  line-height: normal;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
-  -webkit-appearance: none;
-  background: white;
-  width: 90px;
-  height: 30px;
 }
 
 .emoji {
   height: 1em;
   width: 2ch;
   display: inline-block;
+  background-color: transparent;
   background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .reaction:first-of-type {
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px
+  border-right: none;
+  border-bottom-left-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
 }
 
 .reaction:last-of-type {
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px
+  border-left: none;
+  border-bottom-right-radius: $border-radius-default;
+  border-top-right-radius: $border-radius-default;
 }
 
 .counter {
@@ -49,15 +47,15 @@
 }
 
 .fire {
-  background-image: url("/emojis/fire.png");
+  background-image: url('/emojis/fire.png');
 }
 
 .up {
-  background-image: url("/emojis/thumbs-up.png");
+  background-image: url('/emojis/thumbs-up.png');
 }
 
 .down {
-  background-image: url("/emojis/thumbs-down.png");
+  background-image: url('/emojis/thumbs-down.png');
 }
 
 .toggled {

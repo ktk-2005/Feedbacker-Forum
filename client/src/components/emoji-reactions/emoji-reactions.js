@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import styles from './emoji-reactions.scss'
 import classNames from 'classnames/bind'
+// Styles
+import styles from './emoji-reactions.scss'
 
 const css = classNames.bind(styles)
 
@@ -18,26 +19,25 @@ class Reactions extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      //reactions: ["up", "down", "fire"],
-      reactions: ["up", "down", "fire"],
-      toggleReactions: {}
+      reactions: ['up', 'down', 'fire'],
+      toggleReactions: {},
     }
   }
 
   handleClick(emoji, toggled) {
     if (this.state.toggleReactions === {}) {
-      this.setState({toggleReactions: toggled})
+      this.setState({ toggleReactions: toggled })
     }
     const toggle = () => {
-      let newToggled = this.state.toggleReactions
+      const newToggled = this.state.toggleReactions
       newToggled[emoji] = !newToggled[emoji]
       this.setState(state => ({
         ...state,
-        toggleReactions: newToggled
+        toggleReactions: newToggled,
       }))
     }
     console.log(emoji)
-    console.log("set it",this.state)
+    console.log('set it', this.state)
     if (this.state.toggleReactions[emoji]) {
       this.deleteReaction(emoji)
       toggle()
@@ -49,9 +49,9 @@ class Reactions extends Component {
 
   reactionButton(emoji, toggled, counts) {
     return (
-      <button key={emoji} className={css("reaction", toggled[emoji] ? "toggled" : "")} onClick={() => this.handleClick(emoji, toggled)}>
-        <div className={css("emoji", emoji)}></div>
-        <div className={css("counter")}>{counts[emoji]}</div>
+      <button key={emoji} className={css('reaction', toggled[emoji] ? 'toggled' : '')} onClick={() => this.handleClick(emoji, toggled)}>
+        <div className={css('emoji', emoji)} />
+        <div className={css('counter')}>{counts[emoji]}</div>
       </button>
     )
   }
@@ -59,9 +59,7 @@ class Reactions extends Component {
   commentReactions(toggled, counts) {
     return (
       <div className="reactions">
-        {this.state.reactions.map(reaction =>
-          this.reactionButton(reaction, toggled, counts)
-        )}
+        {this.state.reactions.map(reaction => this.reactionButton(reaction, toggled, counts))}
       </div>
     )
   }
@@ -69,59 +67,55 @@ class Reactions extends Component {
   async postReaction(emoji) {
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
-    if (userHash.length === 0) return "No user"
-    const body = JSON.stringify({emoji, userId: userHash[0], commentId: comment_id})
-    console.log("body: ", body)
-    await fetch(`/api/reactions`, {
+    if (userHash.length === 0) return 'No user'
+    const body = JSON.stringify({ emoji, userId: userHash[0], commentId: comment_id })
+    console.log('body: ', body)
+    await fetch('/api/reactions', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body
+      body,
     })
     fetch('/api/comments')
       .then(x => x.json())
-      .then(comments => {
-        this.props.dispatch({type: 'LOAD_ALL', comments})
+      .then((comments) => {
+        this.props.dispatch({ type: 'LOAD_ALL', comments })
       })
   }
 
   async deleteReaction(emoji) {
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
-    if (userHash.length === 0) return "No user"
+    if (userHash.length === 0) return 'No user'
     for (const i of userHash) {
-      const body = JSON.stringify({emoji, userId: i, commentId: comment_id})
-      console.log("body: ", body)
-      await fetch(`/api/reactions`, {
+      const body = JSON.stringify({ emoji, userId: i, commentId: comment_id })
+      console.log('body: ', body)
+      await fetch('/api/reactions', {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body
+        body,
       })
     }
     fetch('/api/comments')
       .then(x => x.json())
-      .then(comments => {
-        this.props.dispatch({type: 'LOAD_ALL', comments})
+      .then((comments) => {
+        this.props.dispatch({ type: 'LOAD_ALL', comments })
       })
   }
 
   render() {
     const { users, reactions } = this.props
-    console.log("reactions: ",reactions)
-    let toggled = {}
-    let incrementedCounts = {}
-    for (const reaction of reactions) {
+    console.log('reactions: ', reactions)
+    const toggled = {}
+    const incrementedCounts = {}
+    for (const reaction of reactions) { // TODO: refactor whole loop and contents
       incrementedCounts[reaction.emoji] = incrementedCounts[reaction.emoji] === undefined ? 1 : incrementedCounts[reaction.emoji] + 1
       toggled[reaction.emoji] = users.hasOwnProperty(reaction.user_id)
     }
-    return (
-      <div>
-        {this.commentReactions(toggled, incrementedCounts)}
-      </div>
-    )
+    return this.commentReactions(toggled, incrementedCounts)
   }
 }
 

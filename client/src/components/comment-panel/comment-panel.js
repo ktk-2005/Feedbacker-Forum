@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+// Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
+import { shadowDocument } from '../../shadowDomHelper'
+// Styles
 import commentPanelStyles from './comment-panel.scss'
+// Assets
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
-import ReactDOM from 'react-dom'
-import MainView from '../../index.js'
 
 const css = classNames.bind(commentPanelStyles)
 
@@ -35,7 +37,6 @@ class CommentPanel extends React.Component {
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
-    this.shadowDocument = this.shadowDocument.bind(this)
   }
 
   handleChange(event) {
@@ -71,28 +72,24 @@ class CommentPanel extends React.Component {
 
   fetchComments() {
     fetch('/api/comments')
-    .then(response => response.json())
-
-    .then((data) => {
-      const comments = data.map(comment => (
-        <div className={css('comment')} key={comment.id}>
-          <div className={css('comment-text')}> {comment.text} </div>
-          <div className={css('comment-time')}> {comment.time} </div>
-        </div>
-      ))
-      this.setState({ comments })
-      this.scrollToBottom()
-    })
-  }
-
-  shadowDocument() {
-    return document.querySelector('[data-feedback-shadow-root]').shadowRoot
+      .then(response => response.json())
+      .then((data) => {
+        const commentsData = []
+        // Temp solution to get comments to map
+        for (const key in data) if (data.hasOwnProperty(key)) commentsData.push(data[key])
+        const comments = commentsData.map(comment => (
+          <div className={css('comment')} key={comment.id}>
+            <div className={css('comment-text')}> {comment.text} </div>
+            <div className={css('comment-time')}> {comment.time} </div>
+          </div>
+        ))
+        this.setState({ comments })
+        this.scrollToBottom()
+      })
   }
 
   scrollToBottom() {
-    //this.messageEnd.scrollIntoView()
-    //document.getElementByClassName("comment-container").scrollIntoView({block: "end"})
-    const el = this.shadowDocument().getElementById("comment-container")
+    const el = shadowDocument().getElementById('comment-container')
     console.log(el)
     if (el !== null) el.scrollTop = el.scrollHeight
   }
@@ -122,17 +119,16 @@ class CommentPanel extends React.Component {
           <div className={css('comment-container')} id="comment-container">
             {this.state.comments}
           </div>
-            <form className={css('comment-form')} onSubmit={this.handleSubmit}>
-              <textarea
-                value={this.state.value}
-                onChange={this.handleChange}
-                placeholder="Write comment..."
-              />
-              <input className={css('submit-comment')} type="submit" value="Comment" />
-            </form>
-          </div>
+          <form className={css('comment-form')} onSubmit={this.handleSubmit}>
+            <textarea
+              value={this.state.value}
+              onChange={this.handleChange}
+              placeholder="Write comment..."
+            />
+            <input className={css('submit-comment')} type="submit" value="Comment" />
+          </form>
         </div>
-      //</div>
+      </div>
     )
   }
 }

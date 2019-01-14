@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 // Redux
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
+import { connect, Provider } from 'react-redux'
 // External libraries
 import * as R from 'ramda'
 import retargetEvents from 'react-shadow-dom-retarget-events'
@@ -12,14 +12,12 @@ import OpenSurveyPanelButton from './components/open-survey-panel-button/open-su
 import SurveyPanel from './components/survey-panel/survey-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
 import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
+import Reactions from './components/emoji-reactions/emoji-reactions'
 // Internal js
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
 // Styles
-import Reactions from './components/emoji-reactions/emoji-reactions'
-
 import styles from './scss/_base.scss'
-import { connect, Provider } from 'react-redux';
 
 
 const css = classNames.bind(styles)
@@ -59,24 +57,16 @@ function commentsReducer(state = {}, action) {
 
 const reducer = combineReducers({
   persist: persistReducer,
-  comments: commentsReducer
+  comments: commentsReducer,
 })
 
 const store = createStore(reducer)
 
-const feedbackAppRoot = () => {
-  const feedbackAppRoot = document.createElement('div')
-  feedbackAppRoot.setAttribute('data-feedback-app-root', true)
-  document.body.appendChild(feedbackAppRoot)
-  return feedbackAppRoot
-}
-
-const mapStateToProps = (state) => {
-  return { comments: state.comments }
-}
+const mapStateToProps = state => ({ comments: state.comments })
 
 function Comments(props) {
-  return R.map(([id, comment]) => <Reactions reactions={comment.reactions} comment_id={id} />, R.toPairs(props.comments))
+  return R.map(([id, comment]) => <Reactions reactions={comment.reactions} comment_id={id} />,
+    R.toPairs(props.comments))
 }
 
 const ConnectedComments = connect(mapStateToProps)(Comments)
@@ -107,9 +97,10 @@ class MainView extends React.Component {
       taggingModeActive: !state.taggingModeActive,
       panelIsHidden: true,
       buttonIsHidden: false,
-      reactions: []
+      reactions: [],
     }))
   }
+
   /*
   async componentDidMount() {
     let a = await fetch('/api/reactions/cb38e8f6')
@@ -192,8 +183,8 @@ const initialize = () => {
 
   fetch('/api/comments')
     .then(x => x.json())
-    .then(comments => {
-      store.dispatch({type: LOAD_ALL, comments})
+    .then((comments) => {
+      store.dispatch({ type: LOAD_ALL, comments })
     })
 
   store.subscribe(() => {
