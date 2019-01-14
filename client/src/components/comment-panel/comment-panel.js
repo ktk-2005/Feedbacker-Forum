@@ -76,7 +76,10 @@ class CommentPanel extends React.Component {
       .then((data) => {
         const commentsData = []
         // Temp solution to get comments to map
-        for (const key in data) if (data.hasOwnProperty(key)) commentsData.push(data[key])
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) commentsData.push(data[key])
+        }
+        // TODO: comments should be isolated to component
         const comments = commentsData.map(comment => (
           <div className={css('comment')} key={comment.id}>
             <div className={css('comment-text')}> {comment.text} </div>
@@ -91,7 +94,7 @@ class CommentPanel extends React.Component {
   scrollToBottom() {
     const el = shadowDocument().getElementById('comment-container')
     console.log(el)
-    if (el !== null) el.scrollTop = el.scrollHeight
+    if (el) el.scrollTop = el.scrollHeight
   }
 
   render() {
