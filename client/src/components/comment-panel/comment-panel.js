@@ -114,8 +114,8 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('comment-container')} id="comment-container">
-            {this.state.comments}
-          </div>
+          {this.state.comments}
+        </div>
           <form className={css('comment-form')} onSubmit={this.handleSubmit}>
             <textarea
               value={this.state.value}
@@ -125,11 +125,7 @@ class CommentPanel extends React.Component {
             <input className={css('submit-comment')} type="submit" value="Comment" />
           </form>
         </div>
-        <form onSubmit={this.handleSubmit}>
-          <textarea value={this.state.value} onChange={this.handleChange} />
-          <input type="submit" value="Comment" />
-        </form>
-      </div>
+      //</div>
     )
   }
 }

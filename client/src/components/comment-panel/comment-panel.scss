@@ -38,6 +38,7 @@
 .comment-container {
   display: flex;
   flex-flow: column;
+  overflow-y: auto;
 }
 
 .show-comments, .submit-comment {
