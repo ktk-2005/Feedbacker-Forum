@@ -86,8 +86,9 @@ class CommentPanel extends React.Component {
   scrollToBottom() {
     //this.messageEnd.scrollIntoView()
     //document.getElementByClassName("comment-container").scrollIntoView({block: "end"})
-    const el = document.getElementById("comment-container")
-    el.scrollTop = el.scrollHeight
+    const el = document.getElementById("ab72fc22d-comment-container")
+    console.log(el)
+    if (el !== null) el.scrollTop = el.scrollHeight
   }
 
   render() {
@@ -105,7 +106,7 @@ class CommentPanel extends React.Component {
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
-        <div>
+        <div className={css('panel-body')}>
           <button
             type="button"
             className={css('show-comments')}
@@ -113,7 +114,7 @@ class CommentPanel extends React.Component {
           > Show comments
           </button>
         </div>
-        <div className={css('comment-container')} id="comment-container">
+        <div className={css('comment-container')} id="ab72fc22d-comment-container">
           {this.state.comments}
         </div>
           <form className={css('comment-form')} onSubmit={this.handleSubmit}>

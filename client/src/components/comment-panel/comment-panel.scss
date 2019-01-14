@@ -61,6 +61,7 @@
   @include shadow-outline(1px);
 
   .comment-text {
+    resize: none;
   }
 
   .comment-time {
