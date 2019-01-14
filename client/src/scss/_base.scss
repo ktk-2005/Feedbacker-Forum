@@ -1,10 +1,10 @@
 // Break cascade from outside css
-[data-feedback-react-root] {
+[data-feedback-react-root], .feedback-app-container {
   all: initial;
 }
 
 // Normalize encapsulated
-[data-feedback-react-root] {
+[data-feedback-react-root], .feedback-app-container {
   @import '../../node_modules/node.normalize.scss/normalize';
 }
 

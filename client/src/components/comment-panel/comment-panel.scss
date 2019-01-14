@@ -6,8 +6,11 @@
 
 @import '../survey-panel/survey-panel.scss';
 
+$panel-min-width: 300px;
+
 .comment-panel {
-  min-width: 300px;
+  min-width: $panel-min-width;
+  max-width: 50%;
   height: 100%;
 
   position: fixed;
@@ -78,7 +81,7 @@
     @extend .comment;
     display: block;
     max-width: 100%;
-    min-width: 100%;
+    min-width: $panel-min-width;
     min-height: 3em;
     border: none;
 
