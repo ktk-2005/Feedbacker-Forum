@@ -1,56 +1,54 @@
+import { shadowRoot, shadowDocument } from './shadowDomHelper'
+
 // Event logging
 
-export function domTagging() {
-  const eventLog = {}
-  const trackedEvents = ['click']
+const eventLog = {}
+const trackedEvents = ['click']
 
-  const lastEventToHistory = (eventName, log) => {
-    log.eventHistory = log.eventHistory || []
-    log.eventHistory.push({
-      eventName,
-      index: log[eventName].length - 1,
-    })
+const lastEventToHistory = (eventName, log) => {
+  log.eventHistory = log.eventHistory || []
+  log.eventHistory.push({
+    eventName,
+    index: log[eventName].length - 1,
+  })
+}
+
+// Initialise log with wanted event listener hooks
+
+const initialiseEventLog = (eventName) => {
+  if (trackedEvents.includes(eventName)) {
+    eventLog[eventName] = eventLog[eventName] || []
+    lastEventToHistory(eventName, eventLog)
   }
+}
 
-  // Helper
+// Log an event in right event type array
 
-  const isMarkable = el => !el.classList.contains('safezone') && !['html', 'body'].includes(el.tagName)
-
-  // Initialise log with wanted event listener hooks
-
-  const initialiseEventLog = (eventName) => {
-    if (trackedEvents.includes(eventName)) {
-      eventLog[eventName] = eventLog[eventName] || []
-      lastEventToHistory(eventName, eventLog)
-    }
+const logEvent = (eventName, event) => {
+  if (trackedEvents.includes(eventName)) {
+    eventLog[eventName].push(event)
+    lastEventToHistory(eventName, eventLog)
+    console.info('Tracked event logged', eventName, eventLog)
   }
+}
 
-  // Log an event in right event type array
+// Log all dom modifying events in chronological order to each
+// other (can be in different event type arrays)
 
-  const logEvent = (eventName, event) => {
-    if (trackedEvents.includes(eventName)) {
-      eventLog[eventName].push(event)
-      lastEventToHistory(eventName, eventLog)
-      console.info('Tracked event logged', eventName, eventLog)
-    }
-  }
+const logDomModifyingEvents = () => {
+  eventLog.domModifyingEvents = eventLog.domModifyingEvents || []
+  eventLog.domModifyingEvents.push({
+    historyIndex: eventLog.eventHistory.length,
+    // index + 1, next item is the right event reference
+  })
+}
 
-  // Log all dom modifying events in chronological order to each
-  // other (can be in different event type arrays)
+// Hijack all addEventListeners in window
 
-  const logDomModifyingEvents = () => {
-    eventLog.domModifyingEvents = eventLog.domModifyingEvents || []
-    eventLog.domModifyingEvents.push({
-      historyIndex: eventLog.eventHistory.length,
-      // index + 1, next item is the right event reference
-    })
-  }
+// Override for adding event listeners
+const oldAddEventListener = EventTarget.prototype.addEventListener
 
-  // Hijack all addEventListeners in window
-
-  // Override for adding event listeners
-  const oldAddEventListener = EventTarget.prototype.addEventListener
-
+const hijackEventListeners = () => {
   EventTarget.prototype.addEventListener = (eventName, eventHandler) => {
     initialiseEventLog(eventName)
 
@@ -61,88 +59,90 @@ export function domTagging() {
       }
     )
   }
+}
 
-  // X path generation
+// X path generation
 
-  const getXPath = (element) => {
-    if (element.id !== '') return `id("${element.id}")`
-    if (element === document.body) return element.tagName
+const getXPath = (element) => {
+  if (element.id !== '') return `id("${element.id}")`
+  if (element === document.body) return element.tagName
 
-    let ix = 0
-    const siblings = element.parentNode.childNodes
-    siblings.forEach((sibling) => {
-      if (sibling === element) return `${getXPath(element.parentNode)}/${element.tagName}[${ix + 1}]`
-      if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++
-    })
+  let ix = 0
+  const siblings = element.parentNode.childNodes
+  siblings.forEach((sibling) => {
+    if (sibling === element) return `${getXPath(element.parentNode)}/${element.tagName}[${ix + 1}]`
+    if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++
+  })
+}
+
+const getElementByXPath = path => document.evaluate(
+  path,
+  document.documentElement,
+  null,
+  XPathResult.FIRST_ORDERED_NODE_TYPE,
+  null
+).singleNodeValue
+
+// Events
+
+
+// Polyfill
+function eventPathFallback(event) {
+  let el = event.target
+  if (el == null) return []
+  const pathArr = [el]
+  while (el.parentElement != null) {
+    el = el.parentElement
+    // Prepend element
+    pathArr.unshift(el)
   }
 
-  const getElementByXPath = path => document.evaluate(
-    path,
-    document.documentElement,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue
+  return pathArr.reverse()
+}
 
-  // Events
-
-
-  // Polyfill
-  function eventPathFallback(event) {
-    let el = event.target
-    if (el == null) return []
-    const pathArr = [el]
-    while (el.parentElement != null) {
-      el = el.parentElement
-      // Prepend element
-      pathArr.unshift(el)
+const getEventTrace = () => {
+  const l = eventLog
+  if (!l.domModifyingEvents) return null
+  const events = l.domModifyingEvents.map(
+    (dme) => {
+      const historyObject = l.eventHistory[dme.historyIndex]
+      // Get what key to find correct event type array
+      const eventLogKey = historyObject.eventName
+      // Get index in that array for correct event object
+      const eventLogArrayIndex = historyObject.index
+      const event = l[eventLogKey][eventLogArrayIndex]
+      let { path } = event
+      if (!path) path = eventPathFallback(event)
+      console.log('getTrace', 'event.path:', event.path, 'eventPathFallback', eventPathFallback(event))
+      return getXPath(path[0])
     }
+  )
+  return events
+}
 
-    return pathArr.reverse()
-  }
+// Tagging
 
-  const getEventTrace = () => {
-    const l = eventLog
-    if (!l.domModifyingEvents) return null
-    const events = l.domModifyingEvents.map(
-      (dme) => {
-        const historyObject = l.eventHistory[dme.historyIndex]
-        // Get what key to find correct event type array
-        const eventLogKey = historyObject.eventName
-        // Get index in that array for correct event object
-        const eventLogArrayIndex = historyObject.index
-        const event = l[eventLogKey][eventLogArrayIndex]
-        let { path } = event
-        if (!path) path = eventPathFallback(event)
-        console.log('getTrace', 'event.path:', event.path, 'eventPathFallback', eventPathFallback(event))
-        return getXPath(path[0])
+const localStorageKey = 'swp1-tagging-concept'
+
+const getCommentsArray = () => JSON.parse(localStorage.getItem(localStorageKey)) || []
+
+const attributeName = 'data-comment-count'
+
+// Loading comments
+
+const simulateEvents = (trace) => {
+  if (trace) {
+    console.log('📲', 'Simulate events from trace', trace)
+    trace.forEach(
+      (step) => {
+        getElementByXPath(step).click()
       }
     )
-    return events
   }
+}
 
-  // Tagging
-
-  const localStorageKey = 'swp1-tagging-concept'
-
-  const getCommentsArray = () => JSON.parse(localStorage.getItem(localStorageKey)) || []
-
-  const attributeName = 'data-comment-count'
-
-  // Loading comments
-
-  const simulateEvents = (trace) => {
-    if (trace) {
-      console.log('📲', 'Simulate events from trace', trace)
-      trace.forEach(
-        (step) => {
-          getElementByXPath(step).click()
-        }
-      )
-    }
-  }
-
-  const loadTags = () => {
+const loadTags = () => {
+  /*
     const items = getCommentsArray()
     console.log('💾', 'getCommentsArray in loadTags =>  items', items)
     items.forEach((item) => {
@@ -161,18 +161,22 @@ export function domTagging() {
         el.setAttribute('title', title + item.comment)
       }
     })
-  }
+    */
+}
 
-  const refreshTags = () => {
+const refreshTags = () => {
+  /*
     ['title', attributeName].forEach((a) => {
       document.querySelectorAll(`[${a}]`).forEach(el => el.removeAttribute(a))
     })
     loadTags()
-  }
+    */
+}
 
-  // Save comment:
+// Save comment:
 
-  const saveTag = (el) => {
+const saveTag = (el) => {
+  /*
     const path = getXPath(el)
     const comment = prompt('Add comment')
     const trace = getEventTrace()
@@ -191,81 +195,114 @@ export function domTagging() {
     )
     // Refresh view
     refreshTags()
+    */
+}
+
+// Clicks
+
+// State
+let markingMode = false // TODO: how to handle states correctly
+
+// Helper
+
+const isMarkable = el => (
+  !['html', 'body'].includes(el.tagName)
+    && el !== shadowRoot()
+    && !shadowDocument().contains(el)
+    && !el.classList.contains('safezone')
+)
+
+// Hover
+
+const markableToggle = (el) => {
+  if (isMarkable(el)) {
+    if (markingMode) el.classList.toggle('highlighted')
+    else el.classList.remove('highlighted')
   }
+}
 
-  // Clicks
-
-  // State
-  let markingMode = false
-
-  const toggleMarkingMode = () => {
-    document
-      .querySelector('.feedback-target-container')
-      .classList.toggle('marking-mode')
-    markingMode = !markingMode
-  }
-
-  document.body.addEventListener('click', (event) => {
-    if (markingMode) {
-      if (isMarkable(event.target)) {
-        saveTag(event.target)
-        toggleMarkingMode()
-      }
+const handleClick = (event) => {
+  if (markingMode) {
+    if (isMarkable(event.target)) {
+      console.log('Tagged', event.target)
+      // Remember to remove the highlight after added comment
+      // saveTag(event.target)
+      // eslint-disable-next-line
+      toggleMarkingMode()
     }
+  }
+  event.preventDefault()
+}
+
+const handleHover = event => markableToggle(event.target)
+
+const toggleMarkingModeListeners = () => {
+  if (markingMode) {
+    document.body.addEventListener('mouseover', handleHover)
+    document.body.addEventListener('mouseout', handleHover)
+    document.body.addEventListener('click', handleClick)
+  } else {
+    document.body.removeEventListener('mouseover', handleHover)
+    document.body.removeEventListener('mouseout', handleHover)
+    document.body.removeEventListener('click', handleClick)
+  }
+}
+
+const toggleMarkingMode = () => {
+  const attributeName = 'data-feedback-react-root'
+  const reactRoot = shadowDocument().querySelector(`[${attributeName}]`)
+  reactRoot.setAttribute(attributeName, markingMode)
+  markingMode = !markingMode
+  toggleMarkingModeListeners()
+}
+
+// Observer
+
+const startObservingDomChange = () => {
+  hijackEventListeners()
+
+  // Create new observer
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((m) => {
+      const entry = {
+        mutation: m,
+        el: m.target,
+        value: m.target,
+        oldValue: m.oldValue,
+        addedNodes: m.addedNodes,
+        removedNodes: m.removedNodes,
+      }
+
+      console.log('🤖', 'Recording mutation', entry, JSON.stringify(eventLog))
+      logDomModifyingEvents()
+
+      observer.disconnect()
+      startObservingDomChange()
+    })
   })
 
-
-  // Observer
-
-  const startObservingDomChange = () => {
-    // Create new observer
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((m) => {
-        const entry = {
-          mutation: m,
-          el: m.target,
-          value: m.target,
-          oldValue: m.oldValue,
-          addedNodes: m.addedNodes,
-          removedNodes: m.removedNodes,
-        }
-
-        console.log('🤖', 'Recording mutation', entry, JSON.stringify(eventLog))
-        logDomModifyingEvents()
-
-        observer.disconnect()
-        startObservingDomChange()
-      })
-    })
-
-    const targetNode = document.querySelector('body')
-    const config = {
-      attributes: false,
-      childList: true,
-      subtree: true,
-    }
-    observer.observe(targetNode, config)
+  const targetNode = document.querySelector('body')
+  const config = {
+    attributes: false,
+    childList: true,
+    subtree: true,
   }
-
-  // Hover
-
-  const markableToggle = (el) => {
-    if (isMarkable(el)) {
-      if (markingMode) el.classList.toggle('highlighted')
-      else el.classList.remove('highlighted')
-    }
-  }
-
-  document.body.addEventListener('mouseover', event => markableToggle(event.target))
-
-  document.body.addEventListener('mouseout', event => markableToggle(event.target))
-
-  // Init
-
-  const init = () => {
-    loadTags()
-    startObservingDomChange()
-  }
-
-  init()
+  observer.observe(targetNode, config)
 }
+
+// Init
+
+const init = () => {
+  document.head.innerHTML += `
+  <style>
+    .highlighted { box-shadow: 0 0 0 1px red; }
+  </style>
+  ` // TODO: correct way
+
+  // loadTags()
+  // startObservingDomChange()
+}
+
+init()
+
+export { startObservingDomChange, toggleMarkingMode }

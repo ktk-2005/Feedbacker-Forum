@@ -7,16 +7,15 @@
   @include button(2px);
   @include display-and-animate();
   position: fixed;
-  bottom: 15%;
+  bottom: 12%;
   left: 3%;
   $dimension: 30px;
-  width: $dimension;
   height: $dimension;
-  padding: 2px;
+  padding: $baseline $spacer;
   box-shadow: 0 3px 5px $palette-light;
   background: $palette-accent;
   &.active {
-    background: red;
+    background: $palette-dark;
   }
   i {
     display: block;

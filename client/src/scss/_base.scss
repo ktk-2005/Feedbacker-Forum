@@ -1,10 +1,10 @@
 // Break cascade from outside css
-.feedback-app-container {
+[data-feedback-react-root] {
   all: initial;
 }
 
 // Normalize encapsulated
-.feedback-app-container {
+[data-feedback-react-root] {
   @import '../../node_modules/node.normalize.scss/normalize';
 }
 
@@ -14,11 +14,15 @@
 @import './mixins';
 
 // Set box sizing
-.feedback-app-container {
+[data-feedback-react-root] {
   box-sizing: border-box;
   *, *:before, *:after {
     box-sizing: inherit;
   }
+}
+
+[data-feedback-react-root='false'] {
+  display: none;
 }
 
 // Ensure that feedbacker tool is always on top

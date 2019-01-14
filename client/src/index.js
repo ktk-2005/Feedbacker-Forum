@@ -11,7 +11,7 @@ import classNames from 'classnames/bind'
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
-import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
+import TagElementButton from './components/tag-element-button/tag-element-button'
 import Reactions from './components/emoji-reactions/emoji-reactions'
 // Internal js
 import { setupPersist } from './persist'
@@ -207,8 +207,6 @@ const initialize = () => {
     </Provider>,
     prepareReactRoot()
   )
-
-  // initializeDomTagging()
 }
 
 initialize()
