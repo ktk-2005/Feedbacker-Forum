@@ -7,7 +7,7 @@
 @import '../survey-panel/survey-panel.scss';
 
 .comment-panel {
-  width: 35vw;
+  min-width: 300px;
   height: 100%;
 
   position: fixed;
