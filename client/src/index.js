@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 // Redux
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
+import { connect, Provider } from 'react-redux'
 // External libraries
 import * as R from 'ramda'
 import retargetEvents from 'react-shadow-dom-retarget-events'
@@ -11,15 +11,13 @@ import classNames from 'classnames/bind'
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
+import Reactions from './components/emoji-reactions/emoji-reactions'
 import { TagElementButton, initializeDomTagging } from './components/tag-element-button/tag-element-button'
 // Internal js
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
 // Styles
-import Reactions from './components/emoji-reactions/emoji-reactions'
-
 import styles from './scss/_base.scss'
-import { connect, Provider } from 'react-redux';
 
 
 const css = classNames.bind(styles)
@@ -147,7 +145,6 @@ class MainView extends React.Component {
           onClick={this.handleSurveyPanelClick}
         />
         <CommentPanel />
-        <ConnectedComments />
       </div>
     )
   }

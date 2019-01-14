@@ -4,6 +4,8 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import commentPanelStyles from './comment-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+import * as R from 'ramda'
+
 import ReactDOM from 'react-dom'
 import MainView from '../../index.js'
 
@@ -74,12 +76,13 @@ class CommentPanel extends React.Component {
     .then(response => response.json())
 
     .then((data) => {
-      const comments = data.map(comment => (
-        <div className={css('comment')} key={comment.id}>
+      console.log("data:", data)
+      const comments = R.map(([id, comment]) => (
+        <div className={css('comment')} key={id}>
           <div className={css('comment-text')}> {comment.text} </div>
           <div className={css('comment-time')}> {comment.time} </div>
         </div>
-      ))
+      ), R.toPairs(data))
       this.setState({ comments })
       this.scrollToBottom()
     })
