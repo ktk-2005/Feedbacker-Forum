@@ -16,4 +16,7 @@ INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('fb05d1a5',
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06aee', '2018-11-14 23:20:11', '🅱️', 'da776df3', '1bd8052b');
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06dw', '2018-11-14 23:20:11', '🅱️', 'da776df3', '1bd8052b');
 
-
+INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('5eaafea3', '2018-11-14 16:38:41', '&#x1f44d;', 'da776df3', '1bd8052a');
+INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('fb05d1a5', '2018-11-14 16:59:32', '&#x1f44d;', 'da776df3', '1bd8052a');
+INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06aee', '2018-11-14 23:20:11', '&#x1f44e;', 'da776df3', '1bd8052a');
+INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06dw', '2018-11-14 23:20:11', '&#x1f525;', 'da776df3', '1bd8052a');

@@ -16,13 +16,17 @@ import { TagElementButton, initializeDomTagging } from './components/tag-element
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
 // Styles
+import Reactions from './components/emoji-reactions/emoji-reactions'
+
 import styles from './scss/_base.scss'
+import { connect, Provider } from 'react-redux';
 
 
 const css = classNames.bind(styles)
 
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
+const LOAD_ALL = 'LOAD_ALL'
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -37,11 +41,45 @@ function persistReducer(state = { }, action) {
   }
 }
 
+function commentsReducer(state = {}, action) {
+  switch (action.type) {
+    case LOAD_ALL:
+      return action.comments
+    /*
+    case RELOAD_COMMENT:
+      return action
+
+    case PREVIEW_COMMENT:
+      return action
+    */
+    default:
+      return state
+  }
+}
+
 const reducer = combineReducers({
   persist: persistReducer,
+  comments: commentsReducer
 })
 
 const store = createStore(reducer)
+
+const feedbackAppRoot = () => {
+  const feedbackAppRoot = document.createElement('div')
+  feedbackAppRoot.setAttribute('data-feedback-app-root', true)
+  document.body.appendChild(feedbackAppRoot)
+  return feedbackAppRoot
+}
+
+const mapStateToProps = (state) => {
+  return { comments: state.comments }
+}
+
+function Comments(props) {
+  return R.map(([id, comment]) => <Reactions reactions={comment.reactions} comment_id={id} />, R.toPairs(props.comments))
+}
+
+const ConnectedComments = connect(mapStateToProps)(Comments)
 
 class MainView extends React.Component {
   constructor(props) {
@@ -67,6 +105,23 @@ class MainView extends React.Component {
   handleTagElementClick() {
     this.setState(state => ({
       taggingModeActive: !state.taggingModeActive,
+      panelIsHidden: true,
+      buttonIsHidden: false,
+      reactions: []
+    }))
+  }
+  /*
+  async componentDidMount() {
+    let a = await fetch('/api/reactions/cb38e8f6')
+    a = await a.json()
+    this.setState(state => ({...state, reactions: a}))
+  }
+  */
+  handleClick() {
+    this.setState(state => ({
+      ...state,
+      buttonIsHidden: !state.buttonIsHidden,
+      panelIsHidden: !state.panelIsHidden,
     }))
   }
 
@@ -92,6 +147,7 @@ class MainView extends React.Component {
           onClick={this.handleSurveyPanelClick}
         />
         <CommentPanel />
+        <ConnectedComments />
       </div>
     )
   }
@@ -134,8 +190,15 @@ const initialize = () => {
 
   const savePersist = setupPersist(loadPersist)
 
+  fetch('/api/comments')
+    .then(x => x.json())
+    .then(comments => {
+      store.dispatch({type: LOAD_ALL, comments})
+    })
+
   store.subscribe(() => {
     savePersist(store.getState().persist || { })
+    console.log(store.getState())
   })
 
   const prepareReactRoot = () => {

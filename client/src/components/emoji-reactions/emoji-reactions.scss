@@ -1,0 +1,65 @@
+@import '../../scss/mixins';
+@import '../../scss/colors';
+
+.reactions {
+  border-collapse: collapse;
+}
+
+.reaction{
+  @include reset-button;
+  outline: none;
+
+  border: solid 1px;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+  background: white;
+  width: 90px;
+  height: 30px;
+}
+
+.emoji {
+  height: 1em;
+  width: 2ch;
+  display: inline-block;
+  background-size: contain;
+}
+
+.reaction:first-of-type {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px
+}
+
+.reaction:last-of-type {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px
+}
+
+.counter {
+  margin-left: 1ch;
+  display: inline-block;
+}
+
+.fire {
+  background-image: url("/emojis/fire.png");
+}
+
+.up {
+  background-image: url("/emojis/thumbs-up.png");
+}
+
+.down {
+  background-image: url("/emojis/thumbs-down.png");
+}
+
+.toggled {
+  background-color: $palette-medium;
+}
