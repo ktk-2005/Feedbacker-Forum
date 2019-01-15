@@ -3,10 +3,7 @@
   all: initial;
 }
 
-// Normalize encapsulated
-[data-feedback-react-root], .feedback-app-container {
-  @import '../../node_modules/node.normalize.scss/normalize';
-}
+@import '../../node_modules/node.normalize.scss/normalize';
 
 // Import all project partials
 @import './variables';
@@ -21,8 +18,9 @@
   }
 }
 
+// For hiding on tagging mode active
 [data-feedback-react-root='false'] {
-  display: none;
+  display: none; // TODO: smoother and more performant alternative?
 }
 
 // Ensure that feedbacker tool is always on top

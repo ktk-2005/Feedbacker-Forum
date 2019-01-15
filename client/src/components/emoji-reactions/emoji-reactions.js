@@ -56,7 +56,7 @@ class Reactions extends Component {
 
   commentReactions(toggled, counts) {
     return (
-      <div className="reactions">
+      <div className={css('reactions')}>
         {this.state.reactions.map(reaction => this.reactionButton(reaction, toggled, counts))}
       </div>
     )

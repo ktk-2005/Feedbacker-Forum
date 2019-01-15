@@ -46,7 +46,7 @@ class CommentPanel extends React.Component {
 
   async handleSubmit(event) {
     event.preventDefault()
-    event.nativeEvent.stopImmediatePropagation();
+    event.nativeEvent.stopImmediatePropagation()
     if (!this.props.userPublic) {
       console.error('User not found')
       return
@@ -73,20 +73,25 @@ class CommentPanel extends React.Component {
 
   fetchComments() {
     fetch('/api/comments')
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({ comments: Comments(data, css) })
-      this.scrollToBottom()
-    })
-  }
-
-  shadowDocument() {
-    return document.querySelector('[data-feedback-shadow-root]').shadowRoot
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ comments: Comments(data, css) })
+        this.scrollToBottom()
+      })
   }
 
   scrollToBottom() {
     const el = shadowDocument().getElementById('comment-container')
     if (el) el.scrollTop = el.scrollHeight
+  }
+
+  commentContainer() {
+    if (this.state.comments.length < 1) return (<p>No comments fetched.</p>)
+    return (
+      <div className={css('comment-container')} id="comment-container">
+        {this.state.comments}
+      </div>
+    )
   }
 
   render() {
@@ -109,11 +114,10 @@ class CommentPanel extends React.Component {
             type="button"
             className={css('show-comments')}
             onClick={this.fetchComments}
-          > Show comments
+          >
+            Fetch comments
           </button>
-          <div className={css('comment-container')} id="comment-container">
-            {this.state.comments}
-          </div>
+          { this.commentContainer() }
           <form className={css('comment-form')} onSubmit={this.handleSubmit}>
             <textarea
               value={this.state.value}

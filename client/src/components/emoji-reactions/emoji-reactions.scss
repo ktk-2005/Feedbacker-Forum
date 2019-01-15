@@ -1,25 +1,37 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+@import '../../scss/atoms/button';
 
 .reactions {
-  border-collapse: collapse;
+  display: flex;
+  margin-top: $spacer;
 }
 
-.reaction { // TODO: whole order
+$toggled-inset-shadow: inset 0 1px 20px;
+
+.reaction {
   @include reset-button;
-  width: 90px; // TODO: no hardcoded
-  height: 30px; // TODO: ^
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  justify-content: center;
+  height: 100%;
   margin: 0;
-  padding: 0;
+  padding: $baseline;
   border: 1px solid $palette-light;
   outline: none;
+  box-shadow: $toggled-inset-shadow transparent;
   background: $palette-white;
   overflow: visible;
+  transition: $transition-default;
+  transition-property: box-shadow;
 }
 
+$symbol-height: 1em;
+
 .emoji {
-  height: 1em;
+  height: $symbol-height;
   width: 2ch;
   display: inline-block;
   background-color: transparent;
@@ -41,8 +53,20 @@
 }
 
 .counter {
-  margin-left: 1ch;
   display: inline-block;
+  margin-left: 0;
+  line-height: $symbol-height;
+  transition: $transition-default;
+}
+
+.toggled {
+  box-shadow: $toggled-inset-shadow $palette-light;
+  transition: $transition-default;
+
+  .counter {
+    margin-left: 1ch;
+    transition: $transition-default;
+  }
 }
 
 .fire {
@@ -55,8 +79,4 @@
 
 .down {
   background-image: url('/emojis/thumbs-down.png');
-}
-
-.toggled {
-  background-color: $palette-medium;
 }

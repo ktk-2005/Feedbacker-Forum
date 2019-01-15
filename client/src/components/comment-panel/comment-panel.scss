@@ -2,9 +2,9 @@
 @import '../../scss/colors';
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
-@import '../../scss/typography';
 
 @import '../survey-panel/survey-panel.scss';
+@import '../comments/comments.scss';
 
 $panel-min-width: 300px;
 
@@ -38,44 +38,32 @@ $panel-min-width: 300px;
   justify-content: flex-start;
 }
 
-.comment-container {
-  display: flex;
-  flex-flow: column;
-}
-
 .show-comments, .submit-comment {
   @include button($transition: false);
   padding: $baseline $spacer;
 }
 
 .show-comments {
+  flex-shrink: 0;
+  margin-bottom: $baseline;
   background-color: $palette-light;
 }
 
-.comment {
+.comment-container {
   display: flex;
   flex-flow: column;
-  margin-top: $spacer;
-  padding: $spacer;
-  // border: solid 1px $palette-medium;
-  border-radius: $border-radius-default;
-  background: $palette-white;
-  @include shadow-outline(1px);
-
-  .comment-text {
-    resize: none; // TODO: what?
-  }
-
-  .comment-time {
-    align-self: flex-end;
-  }
+  overflow-y: scroll;
+  // Make sure box-shadow is not cut-off
+  padding: $baseline;
+  margin: 0 (-$baseline);
 }
 
 .comment-form {
   display: flex;
   flex-flow: column;
+  flex-shrink: 0;
   justify-content: center;
-  margin-top: $spacer;
+  margin-top: $baseline;
 
   textarea {
     @extend .comment;

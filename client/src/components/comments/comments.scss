@@ -1,0 +1,30 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+
+.comment {
+  margin-top: $spacer;
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+  }
+
+  .text {
+    margin-top: $baseline;
+  }
+
+  .timestamp {
+    align-self: flex-end;
+    font-size: $font-size-small;
+  }
+}
