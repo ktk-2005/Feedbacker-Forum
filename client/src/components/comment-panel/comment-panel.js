@@ -46,7 +46,7 @@ class CommentPanel extends React.Component {
 
   async handleSubmit(event) {
     event.preventDefault()
-
+    event.nativeEvent.stopImmediatePropagation();
     if (!this.props.userPublic) {
       console.error('User not found')
       return

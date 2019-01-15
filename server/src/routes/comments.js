@@ -62,7 +62,6 @@ router.get('/', catchErrors(async (req, res) => {
 // Returns `{ id, threadId }` of the new comment
 router.post('/', catchErrors(async (req, res) => {
   const { text, userId, blob } = req.body
-
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({
