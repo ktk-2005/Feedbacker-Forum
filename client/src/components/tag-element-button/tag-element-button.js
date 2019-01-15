@@ -7,24 +7,32 @@ import styles from './tag-element-button.scss'
 const css = classNames.bind(styles)
 
 class TagElementButton extends React.Component {
+  constructor(props) {
+    super(props)
+    // DomTagging.hijackEventListeners() // TODO:
+  }
+
+  componentWillMount() {
+    const { elementTagged, toggleTagElementState } = this.props
+
+    DomTagging.setElementTaggedCallback(event => elementTagged(event))
+    DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
+  }
+
   componentDidMount() {
+    // DomTagging.startObservingDomChange() // TODO:
   }
 
   render() {
-    const { active, onClick } = this.props
-
-    const onClickOverride = () => {
-      onClick()
-      DomTagging.toggleMarkingMode()
-    }
+    const { active } = this.props
 
     return (
       <button
         type="button"
         className={active ? css('button', 'active') : css('button')}
-        onClick={onClickOverride}
+        onClick={DomTagging.toggleMarkingMode}
       >
-        <i>Tag</i>
+        {active ? 'Cancel' : 'Tag'}
       </button>
     )
   }

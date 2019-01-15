@@ -76,7 +76,8 @@ class MainView extends React.Component {
     super(props)
 
     this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
-    this.handleTagElementClick = this.handleTagElementClick.bind(this)
+    this.toggleTagElementState = this.toggleTagElementState.bind(this)
+    this.handleElementTagged = this.handleElementTagged.bind(this)
 
     this.state = {
       surveyPanelIsHidden: true,
@@ -92,29 +93,23 @@ class MainView extends React.Component {
     }))
   }
 
-  handleTagElementClick() {
+  toggleTagElementState() {
     this.setState(state => ({
       taggingModeActive: !state.taggingModeActive,
-      panelIsHidden: true,
-      buttonIsHidden: false,
-      reactions: [],
     }))
   }
 
-  /*
+  handleElementTagged(event) {
+    console.log('DOMT debug', 'index.js has tagged element', event)
+  }
+
+  /* // TODO: can be removed?
   async componentDidMount() {
     let a = await fetch('/api/reactions/cb38e8f6')
     a = await a.json()
     this.setState(state => ({...state, reactions: a}))
   }
   */
-  handleClick() {
-    this.setState(state => ({
-      ...state,
-      buttonIsHidden: !state.buttonIsHidden,
-      panelIsHidden: !state.panelIsHidden,
-    }))
-  }
 
   render() {
     const {
@@ -124,10 +119,13 @@ class MainView extends React.Component {
     } = this.state
 
     return (
-      <div className={css('feedback-app-container')}>
+      <div
+        className={taggingModeActive ? css('feedback-app-container', 'tagging-mode-active') : css('feedback-app-container')}
+      >
         <TagElementButton
           active={taggingModeActive}
-          onClick={this.handleTagElementClick}
+          elementTagged={this.handleElementTagged}
+          toggleTagElementState={this.toggleTagElementState}
         />
         <OpenSurveyPanelButton
           hidden={surveyButtonIsHidden}
@@ -143,6 +141,7 @@ class MainView extends React.Component {
   }
 }
 
+// TODO: what is this
 const initializedKey = '!!feedbacker_forum_initialized!!'
 
 const initialize = () => {

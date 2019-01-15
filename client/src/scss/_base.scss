@@ -19,8 +19,10 @@
 }
 
 // For hiding on tagging mode active
-[data-feedback-react-root='false'] {
-  display: none; // TODO: smoother and more performant alternative?
+.tagging-mode-active {
+  &, & * {
+    visibility: hidden; // TODO: smoother and more performant alternative?
+  }
 }
 
 // Ensure that feedbacker tool is always on top

@@ -15,6 +15,7 @@ $border-radius-default: 3px;
 $icon-dimension-default: 24px;
 
 $z-index-levels: (
+  -1: -1,
   1: 100000,
   2: 200000,
   3: 300000,

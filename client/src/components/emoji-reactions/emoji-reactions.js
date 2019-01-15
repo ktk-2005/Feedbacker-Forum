@@ -47,7 +47,12 @@ class Reactions extends Component {
 
   reactionButton(emoji, toggled, counts) {
     return (
-      <button key={emoji} className={css('reaction', toggled[emoji] ? 'toggled' : '')} onClick={() => this.handleClick(emoji, toggled)}>
+      <button
+        type="button"
+        key={emoji}
+        className={css('reaction', toggled[emoji] ? 'toggled' : '')}
+        onClick={() => this.handleClick(emoji, toggled)}
+      >
         <div className={css('emoji', emoji)} />
         <div className={css('counter')}>{counts[emoji]}</div>
       </button>
@@ -63,6 +68,7 @@ class Reactions extends Component {
   }
 
   async postReaction(emoji) {
+    // eslint-disable-next-line
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
@@ -82,6 +88,7 @@ class Reactions extends Component {
   }
 
   async deleteReaction(emoji) {
+    // eslint-disable-next-line
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
