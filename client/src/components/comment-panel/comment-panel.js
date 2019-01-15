@@ -58,7 +58,7 @@ class CommentPanel extends React.Component {
       body: JSON.stringify({
         text: this.state.value,
         userId: this.props.userPublic,
-        container: '',
+        container: 'APP-1111', // PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
       }),
     })
     this.setState({ value: '' })
