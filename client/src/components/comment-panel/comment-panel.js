@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as R from 'ramda'
 // Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
+import Comments from '../comments/comments'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -75,15 +75,7 @@ class CommentPanel extends React.Component {
     fetch('/api/comments')
     .then(response => response.json())
     .then((data) => {
-      console.log("data:", data)
-      // TODO: comments should be isolated to component
-      const comments = R.map(([id, comment]) => (
-        <div className={css('comment')} key={id}>
-          <div className={css('comment-text')}> {comment.text} </div>
-          <div className={css('comment-time')}> {comment.time} </div>
-        </div>
-      ), R.toPairs(data))
-      this.setState({ comments })
+      this.setState({ comments: Comments(data, css) })
       this.scrollToBottom()
     })
   }
@@ -94,7 +86,6 @@ class CommentPanel extends React.Component {
 
   scrollToBottom() {
     const el = shadowDocument().getElementById('comment-container')
-    console.log(el)
     if (el) el.scrollTop = el.scrollHeight
   }
 

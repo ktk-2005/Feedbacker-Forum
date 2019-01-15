@@ -36,8 +36,6 @@ class Reactions extends Component {
         toggleReactions: newToggled,
       }))
     }
-    console.log(emoji)
-    console.log('set it', this.state)
     if (this.state.toggleReactions[emoji]) {
       this.deleteReaction(emoji)
       toggle()
@@ -69,7 +67,6 @@ class Reactions extends Component {
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
     const body = JSON.stringify({ emoji, userId: userHash[0], commentId: comment_id })
-    console.log('body: ', body)
     await fetch('/api/reactions', {
       method: 'POST',
       headers: {
@@ -90,7 +87,6 @@ class Reactions extends Component {
     if (userHash.length === 0) return 'No user'
     for (const i of userHash) {
       const body = JSON.stringify({ emoji, userId: i, commentId: comment_id })
-      console.log('body: ', body)
       await fetch('/api/reactions', {
         method: 'DELETE',
         headers: {
@@ -108,7 +104,6 @@ class Reactions extends Component {
 
   render() {
     const { users, reactions } = this.props
-    console.log('reactions: ', reactions)
     const toggled = {}
     const incrementedCounts = {}
     for (const reaction of reactions) { // TODO: refactor whole loop and contents
