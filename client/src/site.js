@@ -1,10 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, combineReducers } from 'redux'
 import classNames from 'classnames/bind'
-import * as R from 'ramda'
-import { setupPersist } from './persist'
-import { apiUrl } from './meta/env.meta'
 import styles from './scss/_base.scss'
 import ReactRouter from './reactrouter'
 
