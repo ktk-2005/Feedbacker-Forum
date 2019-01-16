@@ -20,5 +20,5 @@ dev_db.sqlite
 # Executable files
 *.exe
 
-# Proxy on mac
+# Proxy on mac and linux
 proxy/proxy
