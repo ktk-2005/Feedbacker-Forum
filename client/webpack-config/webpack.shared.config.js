@@ -6,15 +6,23 @@ const outputPath = path.resolve(__dirname, '../build')
 // Webpack configuration shared between development and production builds
 module.exports = {
 
-  entry: [
-    'whatwg-fetch',    // < IE11 can't handle window.fetch()
-    '@babel/polyfill', // < Pass our source through a polyfill transformation
-    './src/index.js',  // < Our own entry point
-  ],
+  entry: {
+    embed: [
+      'whatwg-fetch',    // < IE11 can't handle window.fetch()
+      '@babel/polyfill', // < Pass our source through a polyfill transformation
+      './src/index.js',
+    ],
+    site: [
+      'whatwg-fetch',    // < IE11 can't handle window.fetch()
+      '@babel/polyfill', // < Pass our source through a polyfill transformation
+      './src/site.js',
+    ],
+  },
 
   // Output to ./build/ directory
   output: {
     path: outputPath,
+    filename: '[name]-bundle.js',
   },
 
   plugins: [
@@ -23,13 +31,18 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'static/', to: outputPath },
     ], {}),
-
   ],
 
   module: {
     rules: [
 
-      // Build *.meta.js source files with Babel
+      // Shim
+      // {
+      //   test: require.resolve('index.js'),
+      //   use: 'imports-loader?this=>window',
+      // },
+
+      // Build *.js source files with Babel
       {
         test: /\.meta.js$/,
         exclude: /node_modules/,
