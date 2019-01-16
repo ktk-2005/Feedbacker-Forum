@@ -11,6 +11,10 @@ cd client
 npm install
 npm run build:dev
 
+# Build the node-runner image
+cd ../docker
+docker build -t node-runner node-runner
+
 # Install the API server and run it
 cd ../server
 
@@ -34,4 +38,3 @@ Now you can for example open http://localhost:8080/test.html to see the API in a
 For further documentation see [docs/getting-started.md](docs/getting-started.md).
 
 [node]: https://nodejs.org/en/
-
