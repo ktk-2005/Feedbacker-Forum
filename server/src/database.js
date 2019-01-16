@@ -81,5 +81,11 @@ export async function verifyUser(user, secret) {
   }
 }
 
+export async function listContainers() {
+  return db.query('SELECT id, subdomain FROM containers')
+}
 export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }
 
+export async function removeContainer({
+  id,
+}) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
