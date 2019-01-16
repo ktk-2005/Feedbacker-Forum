@@ -25,7 +25,6 @@
 
 .panel-header {
   display: flex;
-  flex-shrink: 0;
   justify-content: flex-end;
   align-items: center;
   width: 100%;
@@ -65,5 +64,11 @@
 }
 
 .panel-body, .panel-header {
+  flex: none;
   padding: $baseline $spacer;
+}
+
+.panel-body {
+  flex: 1;
+  min-height: 0; // Firefox shrink bug
 }
