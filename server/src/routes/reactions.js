@@ -51,7 +51,6 @@ router.get('/:commentId', catchErrors(async (req, res) => {
 // Returns `{ id }` of the reaction
 router.post('/', catchErrors(async (req, res) => {
   const { emoji, userId, commentId } = req.body
-
   await attempt(async () => {
     const id = uuid()
     await addReaction({
