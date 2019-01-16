@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Create from './create'
 import Dashboard from './dashboard-view'
+import Build from './build-view'
 
 const ReactRouter = () => (
   <Router>
@@ -9,16 +10,20 @@ const ReactRouter = () => (
       <nav>
         <ul>
           <li>
-            <Link to="/create">Create</Link>
+            <Link to="/site/create">Create</Link>
           </li>
           <li>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/site/dashboard">Dashboard</Link>
+          </li>
+          <li>
+            <Link to="/site/build">Build</Link>
           </li>
         </ul>
       </nav>
 
-      <Route path="/create" component={Create} />
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/site/create" component={Create} />
+      <Route path="/site/dashboard" component={Dashboard} />
+      <Route path="/site/build" component={Build} />
     </div>
   </Router>
 )
