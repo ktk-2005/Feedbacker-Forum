@@ -11,7 +11,32 @@ const router = express.Router()
 // @api GET /api/comments
 // Retrieve all comments.
 //
-// returns JSON array of all comments grouped with reactions in database
+// returns JSON array of all comments grouped with reactions in database @json {
+//     "1bd8052b": {
+//         "id": "1bd8052b",
+//         "time": "2018-11-14 16:35:27",
+//         "text": "skrattia",
+//         "user_id": "da776df3",
+//         "reactions": [
+//             {
+//                 "id": "1ddb07c8",
+//                 "time": "2019-01-16 16:43:21",
+//                 "user_id": "da776df3",
+//                 "emoji": "🍑",
+//                 "comment_id": "1bd8052b"
+//             }
+//          ]
+//     },
+//     "cb38e8f6": {
+//         "id": "cb38e8f6",
+//         "time": "2018-11-14 17:10:42",
+//         "text": "tröttistä",
+//         "user_id": "da776df3",
+//         "reactions": []
+//     }
+// }
+
+
 router.get('/', catchErrors(async (req, res) => {
   const groupedComments = {}
   const comments = await getComments()

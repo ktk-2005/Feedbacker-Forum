@@ -20,12 +20,38 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L15)
+### [GET /api/comments](../server/src/routes/comments.js#L38)
 
 Retrieve all comments.
 
-returns JSON array of all comments in database
-### [POST /api/comments](../server/src/routes/comments.js#L36)
+returns JSON array of all comments grouped with reactions in database
+```json
+{
+    "1bd8052b": {
+        "id": "1bd8052b",
+        "time": "2018-11-14 16:35:27",
+        "text": "skrattia",
+        "user_id": "da776df3",
+        "reactions": [
+            {
+                "id": "1ddb07c8",
+                "time": "2019-01-16 16:43:21",
+                "user_id": "da776df3",
+                "emoji": "🍑",
+                "comment_id": "1bd8052b"
+            },
+         ],
+    },
+    "cb38e8f6": {
+        "id": "cb38e8f6",
+        "time": "2018-11-14 17:10:42",
+        "text": "tröttistä",
+        "user_id": "da776df3",
+        "reactions": []
+    },
+}
+```
+### [POST /api/comments](../server/src/routes/comments.js#L88)
 
 Adds comment to database.
 
@@ -50,7 +76,7 @@ comments can be linked to a thread with
 
 Returns `{ id, threadId }` of the new comment
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L61)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L112)
 
 Get comments by threadId
 
@@ -80,12 +106,12 @@ Returns `{ id }` of the created question
 
 ## Reactions
 
-### [GET /api/reactions](../server/src/routes/reactions.js#L13)
+### [GET /api/reactions](../server/src/routes/reactions.js#L15)
 
 Retrieve all reactions.
 
 returns JSON array of all reactions in database
-### [POST /api/reactions](../server/src/routes/reactions.js#L36)
+### [POST /api/reactions](../server/src/routes/reactions.js#L38)
 
 add reaction to the database.
 
@@ -100,11 +126,16 @@ Example body
 
 Returns `{ id }` of the reaction
 
-### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L21)
+### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L23)
 
 Retrieve all reactions by commentId.
 
 returns JSON array of all reactions to comment
+### [DELETE /api/reactions/:commentId](../server/src/routes/reactions.js#L56)
+
+Remove reaction from the database.
+
+Returns JSON indicating whether deletion was successful or not
 
 ## Users
 
