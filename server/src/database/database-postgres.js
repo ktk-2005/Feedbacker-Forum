@@ -107,6 +107,7 @@ class PostgresDatabase {
 
   run(str, values) {
     const preparedString = prepStatement(str)
+    console.log(preparedString)
     return this.db.none(preparedString, values)
   }
   /*
@@ -116,6 +117,7 @@ class PostgresDatabase {
 
   query(str, values) {
     const preparedString = prepStatement(str)
+    console.log(preparedString)
     return this.db.any(preparedString, values)
   }
   /*
@@ -125,6 +127,7 @@ class PostgresDatabase {
 
   exec(str, values) {
     const preparedString = prepStatement(str)
+    console.log(preparedString)
     return this.db.multi(preparedString, values)
   }
 }

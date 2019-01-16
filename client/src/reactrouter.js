@@ -1,8 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Create from './create'
-
-const All = () => <h2>HuutistaJokaTuutista</h2>
+import Dashboard from './dashboard-view'
 
 const ReactRouter = () => (
   <Router>
@@ -10,16 +9,16 @@ const ReactRouter = () => (
       <nav>
         <ul>
           <li>
-            <Link to="/create">Create</Link>
+            <Link to="/site/create">Create</Link>
           </li>
           <li>
-            <Link to="/all">All</Link>
+            <Link to="/site/dashboard">Dashboard</Link>
           </li>
         </ul>
       </nav>
 
-      <Route path="/create" component={Create} />
-      <Route path="/all" component={All} />
+      <Route path="/site/create" component={Create} />
+      <Route path="/site/dashboard" component={Dashboard} />
     </div>
   </Router>
 )
