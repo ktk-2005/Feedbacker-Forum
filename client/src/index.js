@@ -139,6 +139,14 @@ const initialize = () => {
 
   window[initializedKey] = true
 
+  const blockLegacyBrowsers = () => {
+    const isLegacy = window.navigator.userAgent.match(/(MSIE|Trident|Edge)/)
+    // eslint-disable-next-line
+    while (isLegacy) alert('This browser is not currently supported. Please use chrome or firefox.')
+  }
+
+  blockLegacyBrowsers()
+
   const loadPersist = async (state, allDataLoaded) => {
     store.dispatch({ type: LOAD_PERSIST, state })
 
