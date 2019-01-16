@@ -11,7 +11,8 @@
     "test:remoteapi": "mocha --require @babel/register --timeout 20000 src/api-tests",
     "test:api": "cross-env APP_SERVER_PORT=8086 babel-node src/setup.js --testApi && cross-env APP_SERVER_PORT=8086 babel-node src/setup.js --testApi --debugUuid",
     "doc": "light-api-doc -t ../misc/api-template.md -o ../docs/api.md src",
-    "watch": "babel-node src/setup.js --watch"
+    "watch": "babel-node src/setup.js --watch",
+    "help": "babel-node src/setup.js --help"
   },
   "author": "",
   "license": "MIT",
