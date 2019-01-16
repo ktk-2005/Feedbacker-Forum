@@ -178,3 +178,11 @@ Example body
 ```
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
+
+### [GET /site/](../server/src/routes/redirect.js#L13)
+
+Redirects url used by react router
+
+Redirects from urls used by react router to prevent accidental 404 errors
+from refreshing page when react router has changed url
+
