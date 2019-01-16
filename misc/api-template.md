@@ -44,3 +44,13 @@ Authentication is done using the standard `Authorization` header with a non-stan
 ## Users
 
 @api /api/users
+
+## Instances
+
+@api /api/instances
+
+@api /api/instances/new
+
+@api /api/instances/stop
+
+@api /api/instances/delete

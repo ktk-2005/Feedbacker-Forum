@@ -6,7 +6,7 @@ import {
 const router = express.Router()
 
 
-// @api GET /api/containers
+// @api GET /api/instances
 // Retrieve all instances in the database.
 //
 // Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-// @api POST /api/containers/new
+// @api POST /api/instances/new
 // Create a new container.
 //
 // Currently the only parameter considered is `instance_image`. The name and subdomain are
@@ -50,7 +50,7 @@ router.post('/new', async (req, res) => {
   }
 })
 
-// @api POST /api/containers/stop
+// @api POST /api/instances/stop
 // Stop a running container.
 //
 // Example body @json {
@@ -68,7 +68,7 @@ router.post('/stop', async (req, res) => {
   }
 })
 
-// @api POST /api/containers/delete
+// @api POST /api/instances/delete
 // Delete a container
 //
 // Example body @json {
