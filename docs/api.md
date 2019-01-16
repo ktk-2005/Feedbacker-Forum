@@ -31,24 +31,24 @@ returns JSON array of all comments grouped with reactions in database
         "id": "1bd8052b",
         "time": "2018-11-14 16:35:27",
         "text": "skrattia",
-        "user_id": "da776df3",
+        "userId": "da776df3",
         "reactions": [
             {
                 "id": "1ddb07c8",
                 "time": "2019-01-16 16:43:21",
-                "user_id": "da776df3",
+                "userId": "da776df3",
                 "emoji": "🍑",
-                "comment_id": "1bd8052b"
-            },
-         ],
+                "commentId": "1bd8052b"
+            }
+         ]
     },
     "cb38e8f6": {
         "id": "cb38e8f6",
         "time": "2018-11-14 17:10:42",
         "text": "tröttistä",
-        "user_id": "da776df3",
+        "userId": "da776df3",
         "reactions": []
-    },
+    }
 }
 ```
 ### [POST /api/comments](../server/src/routes/comments.js#L88)
@@ -60,6 +60,7 @@ Example body for a root comment
 {
   "text": "minttua",
   "user": "salaattipoika",
+  "secret": "408c43a509ee4c63",
   "container": "abcdef",
   "blob": "{\"path\": \"/path/to/element\"}"
 }
@@ -69,6 +70,7 @@ comments can be linked to a thread with
 {
   "text": "minttua",
   "user": "salaattipoika",
+  "secret": "408c43a509ee4c63",
   "threadId": "1234",
   "blob": "{\"path\": \"/path/to/element\"}"
 }
@@ -76,7 +78,7 @@ comments can be linked to a thread with
 
 Returns `{ id, threadId }` of the new comment
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L112)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L114)
 
 Get comments by threadId
 
@@ -89,7 +91,7 @@ returns JSON array of all comments in thread
 Retrieve all questions.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L27)
+### [POST /api/questions](../server/src/routes/questions.js#L36)
 
 adds question to database.
 
@@ -98,6 +100,7 @@ Example body
 {
   "text": "What?",
   "user": "salaattipoika",
+  "secret": "408c43a509ee4c63",
   "blob": "{\"path\": \"/path/to/element\"}"
 }
 ```
@@ -106,32 +109,23 @@ Returns `{ id }` of the created question
 
 ## Reactions
 
-### [GET /api/reactions](../server/src/routes/reactions.js#L15)
-
-Retrieve all reactions.
-
-returns JSON array of all reactions in database
-### [POST /api/reactions](../server/src/routes/reactions.js#L38)
+### [POST /api/reactions](../server/src/routes/reactions.js#L22)
 
 add reaction to the database.
 
 Example body
 ```json
 {
-  "emoji": "🍑",
+  "emoji": "fire",
   "user": "jaba",
-  "commentId": "1bd8052b"
+  "secret": "408c43a509ee4c63",
+  "comment_id": "1bd8052b"
 }
 ```
 
 Returns `{ id }` of the reaction
 
-### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L23)
-
-Retrieve all reactions by commentId.
-
-returns JSON array of all reactions to comment
-### [DELETE /api/reactions/:commentId](../server/src/routes/reactions.js#L56)
+### [DELETE /api/reactions/:commentId](../server/src/routes/reactions.js#L39)
 
 Remove reaction from the database.
 
