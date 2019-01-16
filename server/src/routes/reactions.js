@@ -39,8 +39,6 @@ router.post('/', catchErrors(async (req, res) => {
 router.delete('/', catchErrors(async (req, res) => {
   const { emoji, userId, secret, commentId } = req.body
   await verifyUser(userId, secret)
-
-  const { emoji, userId, commentId } = req.body
   res.json(await deleteReaction({ commentId, emoji, userId }))
 }))
 
