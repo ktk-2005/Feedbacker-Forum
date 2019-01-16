@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
 // Styles
-import styles from './emoji-reactions.scss'
+import styles from './reactions.scss'
 
 const css = classNames.bind(styles)
 
@@ -49,7 +49,7 @@ class Reactions extends Component {
         onClick={() => this.handleClick(emoji)}
       >
         <div className={css('emoji', emoji)} />
-        <div className={css('counter')}>{count}</div>
+        <div className={css('counter')} data-count={count}>{count}</div>
       </button>
     )
   }
@@ -59,7 +59,9 @@ class Reactions extends Component {
     const { users, commentId } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
-    const body = JSON.stringify({ emoji, userId: userHash[0], secret: users[userHash[0]], commentId })
+    const body = JSON.stringify({
+      emoji, userId: userHash[0], secret: users[userHash[0]], commentId,
+    })
     await fetch('/api/reactions', {
       method: 'POST',
       headers: {

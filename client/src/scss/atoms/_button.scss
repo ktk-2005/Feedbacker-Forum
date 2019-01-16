@@ -11,13 +11,13 @@
   outline: none;
   padding: $baseline;
   @if $transition {
-    transition: $transition-default;
+    transition: $transition-default-all;
   }
 
   @if $states {
     &:hover {
       @if $transition {
-        transition: $transition-default;
+        transition: $transition-default-all;
       }
     }
 
@@ -25,7 +25,7 @@
       @include shadow-outline($fade: $baseline);
       outline: none;
       @if $transition {
-        transition: $transition-default;
+        transition: $transition-default-all;
       }
     }
   }

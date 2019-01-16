@@ -1,6 +1,7 @@
 /* transitions */
 $animation-duration-default: 0.2s;
-$transition-default:  all $animation-duration-default ease-in-out;
+$transition-default-tail: $animation-duration-default ease-in-out;
+$transition-default-all: all $transition-default-tail;
 
 // Sizing
 

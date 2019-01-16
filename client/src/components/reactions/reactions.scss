@@ -24,7 +24,7 @@ $toggled-inset-shadow: inset 0 1px 20px;
   box-shadow: $toggled-inset-shadow transparent;
   background: $palette-white;
   overflow: visible;
-  transition: $transition-default;
+  transition: $transition-default-all;
   transition-property: box-shadow;
 }
 
@@ -56,16 +56,24 @@ $symbol-height: 1em;
   display: inline-block;
   margin-left: 0;
   line-height: $symbol-height;
-  transition: $transition-default;
+  transition: $transition-default-all;
 }
 
 .toggled {
   box-shadow: $toggled-inset-shadow $palette-light;
-  transition: $transition-default;
+  transition: $transition-default-all;
+}
 
-  .counter {
-    margin-left: 1ch;
-    transition: $transition-default;
+.counter {
+  width: auto;
+  margin-left: 1ch;
+  opacity: 1;
+  transition: $transition-default-all;
+  &[data-count='0'] {
+    width: 0;
+    margin-left: 0;
+    opacity: 0;
+    transition: margin-left $transition-default-tail, width $transition-default-tail;
   }
 }
 
