@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
-import Comments from '../comments/comments'
+import Comment from '../comment/comment'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -17,11 +17,14 @@ const mapStateToProps = (state) => {
   const users = (state.persist || {}).users || {}
   const userKeys = Object.keys(users)
   let publicKey = ''
+  let privateKey = ''
   if (userKeys.length >= 1) {
     publicKey = userKeys[0]
+    privateKey = users[publicKey]
   }
   return {
     userPublic: publicKey,
+    userPrivate: privateKey,
     comments: state.comments,
   }
 }
@@ -59,6 +62,7 @@ class CommentPanel extends React.Component {
       body: JSON.stringify({
         text: this.state.value,
         userId: this.props.userPublic,
+        secret: this.props.userPrivate,
         container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
       }),
     })
@@ -82,7 +86,7 @@ class CommentPanel extends React.Component {
   }
 
   scrollToBottom() {
-    const el = this.shadowDocument().getElementById('comment-container')
+    const el = shadowDocument().getElementById('comment-container')
     if (el) el.scrollTop = el.scrollHeight
   }
 
@@ -90,7 +94,10 @@ class CommentPanel extends React.Component {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
     return (
       <div className={css('comment-container')} id="comment-container">
-        <Comments comments={this.props.comments} />
+        {
+          R.map(([id, comment]) => <Comment key={id} comment={comment} id={id} />,
+            R.toPairs(this.props.comments))
+        }
       </div>
     )
   }

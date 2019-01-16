@@ -1,0 +1,8 @@
+
+BEGIN TRANSACTION;
+
+ALTER TABLE reactions
+  ADD UNIQUE (emoji, user_id, comment_id) ON CONFLICT ROLLBACK;
+
+COMMIT TRANSACTION;
+

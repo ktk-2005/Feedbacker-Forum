@@ -14,22 +14,24 @@ export async function initializeDatabase() {
   }
 }
 
-export async function getComments() { return db.query(`
-SELECT
-comments.id         AS comment_id,
-comments.time       AS comment_time,
-comments.text       AS comment_text,
-comments.user_id    AS comment_user_id,
-comments.thread_id  AS comment_thread_id,
-comments.blob       AS comment_blob,
-reactions.id        AS reaction_id,
-reactions.time      AS reaction_time,
-reactions.emoji     AS reaction_emoji,
-reactions.user_id   AS reaction_user_id,
-reactions.comment_id AS reaction_comment_id
-FROM comments
-LEFT JOIN reactions
-ON comments.id = reactions.comment_id`) }
+export async function getComments() {
+  return db.query(`
+    SELECT
+    comments.id         AS comment_id,
+    comments.time       AS comment_time,
+    comments.text       AS comment_text,
+    comments.user_id    AS comment_user_id,
+    comments.thread_id  AS comment_thread_id,
+    comments.blob       AS comment_blob,
+    reactions.id        AS reaction_id,
+    reactions.time      AS reaction_time,
+    reactions.emoji     AS reaction_emoji,
+    reactions.user_id   AS reaction_user_id,
+    reactions.comment_id AS reaction_comment_id
+    FROM comments
+    LEFT JOIN reactions
+    ON comments.id = reactions.comment_id`)
+}
 
 export async function getQuestions() { return db.query('SELECT * FROM questions') }
 
@@ -41,7 +43,7 @@ export async function addReaction({
 
 export async function deleteReaction({
   emoji, userId, commentId,
-}) { return db.run('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
+}) { return db.query('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
 
 export async function addComment({
   id, text, userId, threadId, blob,
@@ -60,3 +62,11 @@ export async function getThreadComments(values = []) { return db.query('SELECT *
 export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
+
+export async function verifyUser(user, secret) {
+  const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
+  if (!rows || rows.length === 0) {
+    throw new Error('Authentication failure')
+  }
+}
+

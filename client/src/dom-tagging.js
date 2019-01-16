@@ -225,6 +225,7 @@ const logDomModifyingEvents = () => {
 // Hijack all addEventListeners in window
 
 // Override for adding event listeners
+/*
 const oldAddEventListener = EventTarget.prototype.addEventListener
 
 const hijackEventListeners = () => {
@@ -242,6 +243,7 @@ const hijackEventListeners = () => {
     )
   }
 }
+*/
 
 const getEventTrace = () => {
   const l = eventLog
