@@ -13,17 +13,12 @@
   height: $dimension;
   padding: $baseline $spacer;
   box-shadow: 0 3px 5px $palette-light;
+  color: $palette-lighter;
   background: $palette-accent;
   &.active {
     background: $palette-dark;
-  }
-  i {
-    display: block;
-    width: $icon-dimension-default;
-    height: $icon-dimension-default;
-    margin-left: auto;
-    margin-right: auto;
-    color: $palette-lighter;
-    font-style: normal;
+    &, & * {
+      visibility: visible;
+    }
   }
 }

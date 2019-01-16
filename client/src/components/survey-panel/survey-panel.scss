@@ -25,6 +25,7 @@
 
 .panel-header {
   display: flex;
+  flex-shrink: 0;
   justify-content: flex-end;
   align-items: center;
   width: 100%;

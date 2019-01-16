@@ -47,7 +47,12 @@ class Reactions extends Component {
 
   reactionButton(emoji, toggled, counts) {
     return (
-      <button type="button" key={emoji} className={css('reaction', toggled[emoji] ? 'toggled' : '')} onClick={() => this.handleClick(emoji, toggled)}>
+      <button
+        type="button"
+        key={emoji}
+        className={css('reaction', toggled[emoji] ? 'toggled' : '')}
+        onClick={() => this.handleClick(emoji, toggled)}
+      >
         <div className={css('emoji', emoji)} />
         <div className={css('counter')}>{counts[emoji]}</div>
       </button>
@@ -63,6 +68,7 @@ class Reactions extends Component {
   }
 
   async postReaction(emoji) {
+    // eslint-disable-next-line
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
@@ -82,6 +88,7 @@ class Reactions extends Component {
   }
 
   async deleteReaction(emoji) {
+    // eslint-disable-next-line
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
@@ -119,7 +126,9 @@ class Reactions extends Component {
     const toggled = {}
     const incrementedCounts = {}
     for (const reaction of reactions) { // TODO: refactor whole loop and contents
-      incrementedCounts[reaction.emoji] = incrementedCounts[reaction.emoji] === undefined ? 1 : incrementedCounts[reaction.emoji] + 1
+      incrementedCounts[reaction.emoji] = incrementedCounts[reaction.emoji] === undefined
+        ? 1
+        : incrementedCounts[reaction.emoji] + 1
       toggled[reaction.emoji] = users.hasOwnProperty(reaction.user_id)
     }
     return this.commentReactions(toggled, incrementedCounts)

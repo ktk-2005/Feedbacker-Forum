@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import Moment from 'react-moment'
 import classNames from 'classnames/bind'
 // Components
-import Reactions from '../emoji-reactions/emoji-reactions'
+import Reactions from '../emoji-reactions/reactions'
 // Styles
 import styles from './comments.scss'
 

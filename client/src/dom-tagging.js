@@ -38,6 +38,7 @@ const logEvent = (eventName, event) => {
 const logDomModifyingEvents = () => {
   eventLog.domModifyingEvents = eventLog.domModifyingEvents || []
   eventLog.domModifyingEvents.push({
+    // TODO: below undefined (can't read length of undefined)
     historyIndex: eventLog.eventHistory.length,
     // index + 1, next item is the right event reference
   })
@@ -49,14 +50,17 @@ const logDomModifyingEvents = () => {
 const oldAddEventListener = EventTarget.prototype.addEventListener
 
 const hijackEventListeners = () => {
+  console.log('DOMT debug', 'hijack called')
+
   EventTarget.prototype.addEventListener = (eventName, eventHandler) => {
+    console.log('DOMT debug', 'hijack add event listener', 'this:', this, 'eventName:', eventName, 'eventHandler:', eventHandler)
     initialiseEventLog(eventName)
 
     oldAddEventListener.call(
       this, eventName, (event) => {
         logEvent(eventName, event)
         eventHandler(event)
-      }
+      }, false // default
     )
   }
 }
@@ -212,9 +216,17 @@ const isMarkable = el => (
     && !el.classList.contains('safezone')
 )
 
+const callbacks = {}
+// eslint-disable-next-line
+const setElementTaggedCallback = callback => callbacks.elementTagged = callback
+// eslint-disable-next-line
+const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState = callback
+
 // Hover
 
-const markableToggle = (el) => {
+const handleHover = (event) => {
+  const el = event.target
+  console.log('DOMT debug', 'mouse* fired', el)
   if (isMarkable(el)) {
     if (markingMode) el.classList.toggle('highlighted')
     else el.classList.remove('highlighted')
@@ -222,10 +234,11 @@ const markableToggle = (el) => {
 }
 
 const handleClick = (event) => {
+  // console.log('DOMT debug', 'click fired', event)
   if (markingMode) {
     if (isMarkable(event.target)) {
-      console.log('Tagged', event.target)
-      // Remember to remove the highlight after added comment
+      callbacks.elementTagged(event)
+      // TODO: Remember to remove the highlight after added comment
       // saveTag(event.target)
       // eslint-disable-next-line
       toggleMarkingMode()
@@ -233,8 +246,6 @@ const handleClick = (event) => {
   }
   event.preventDefault()
 }
-
-const handleHover = event => markableToggle(event.target)
 
 const toggleMarkingModeListeners = () => {
   if (markingMode) {
@@ -249,18 +260,14 @@ const toggleMarkingModeListeners = () => {
 }
 
 const toggleMarkingMode = () => {
-  const attributeName = 'data-feedback-react-root'
-  const reactRoot = shadowDocument().querySelector(`[${attributeName}]`)
-  reactRoot.setAttribute(attributeName, markingMode)
   markingMode = !markingMode
+  callbacks.toggleActiveState()
   toggleMarkingModeListeners()
 }
 
 // Observer
 
 const startObservingDomChange = () => {
-  hijackEventListeners()
-
   // Create new observer
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((m) => {
@@ -301,8 +308,15 @@ const init = () => {
 
   // loadTags()
   // startObservingDomChange()
+  // hijackEventListeners() TODO: does not work
 }
 
 init()
 
-export { startObservingDomChange, toggleMarkingMode }
+export {
+  setElementTaggedCallback,
+  setToggleTagElementStateCallback,
+  hijackEventListeners,
+  startObservingDomChange,
+  toggleMarkingMode
+}

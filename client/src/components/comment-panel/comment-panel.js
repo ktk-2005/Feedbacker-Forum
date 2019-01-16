@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
   }
   return {
     userPublic: publicKey,
-    comments: state.comments
+    comments: state.comments,
   }
 }
 
@@ -59,7 +59,7 @@ class CommentPanel extends React.Component {
       body: JSON.stringify({
         text: this.state.value,
         userId: this.props.userPublic,
-        container: 'APP-1111', // PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
+        container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
       }),
     })
     this.setState({ value: '' })
@@ -76,7 +76,7 @@ class CommentPanel extends React.Component {
     fetch('/api/comments')
       .then(response => response.json())
       .then((comments) => {
-        this.props.dispatch({type: 'LOAD_ALL', comments})
+        this.props.dispatch({ type: 'LOAD_ALL', comments })
         this.scrollToBottom()
       })
   }
