@@ -79,6 +79,8 @@ Rarely manually needed NPM scripts for server:
 The *docker/* directory contains subdirectories for both development and production Docker setups.
 They can be built using `docker-compose`. See [docs/docker.md](docker.md) for more details regarding the docker configuration.
 
+There is also the `node-runner` image source for building and running arbitrary node applications. It must built (`cd docker; docker build -t node-runner node-runner`) before the backend is functional.
+
 ### Development
 
 The development setup has only one container running the dev server that can be run locally with `npm start`.

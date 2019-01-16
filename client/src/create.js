@@ -13,13 +13,13 @@ const Create = () => (
       className={css('form-create')}
     >
       Git URL
-      <input type="text" name="instance_image" />
+      <input type="text" name="url" />
       Git Hash
-      <input type="text" name="instance_version" />
+      <input type="text" name="version" />
       Type
-      <input type="text" name="instance_type" />
+      <input type="text" name="type" />
       Name
-      <input type="text" name="instance_name" />
+      <input type="text" name="name" />
       <input type="submit" value="Create" />
     </form>
   </div>

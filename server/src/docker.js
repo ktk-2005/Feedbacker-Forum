@@ -15,7 +15,6 @@ class ContainerInfo {
 }
 
 function containerInfoTransform(containerInfo) {
-  console.log(containerInfo.NetworkSettings.IPAddress)
   return new ContainerInfo(
     containerInfo.Id,
     containerInfo.Id,
@@ -33,9 +32,17 @@ export async function getRunningContainers() {
   return listContainers()
 }
 
-export async function createNewContainer(image) {
+export async function createNewContainer(url, version, type, name) {
+  if (type !== 'node') {
+    throw Error(`createNewContainer: expected type 'node', was ${type}.`)
+  }
+
   const container = await docker.createContainer({
-    Image: image,
+    Image: 'node-runner',
+    Env: [
+      `GIT_CLONE_URL=${url}`,
+      `GIT_VERSION_HASH=${version}`,
+    ],
   })
 
   await container.start()
