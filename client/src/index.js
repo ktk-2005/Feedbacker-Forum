@@ -74,6 +74,7 @@ class MainView extends React.Component {
       surveyPanelIsHidden: true,
       surveyButtonIsHidden: false,
       taggingModeActive: false,
+      taggedElementXPath: '',
     }
   }
 
@@ -92,7 +93,10 @@ class MainView extends React.Component {
 
   handleElementTagged(event) {
     const xPath = DomTagging.getCompleteElementXPath(event)
-    console.log('DOMT debug', 'index.js has tagged element', event, 'xpath:', xPath)
+    this.setState({
+      taggedElementXPath: xPath,
+    })
+    console.log('DOMT debug', 'index.js has tagged element', event, 'xpath:', xPath, 'state:', this.state.taggedElementXPath)
   }
 
   render() {
@@ -119,7 +123,7 @@ class MainView extends React.Component {
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
         />
-        <CommentPanel />
+        <CommentPanel taggedElementXPath={this.state.taggedElementXPath} />
       </div>
     )
   }
