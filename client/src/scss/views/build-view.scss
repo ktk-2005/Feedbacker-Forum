@@ -1,0 +1,9 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/atoms/button';
+
+@import './create.scss';
+
+.build-view-container {
+  @extend .create-view;
+}
