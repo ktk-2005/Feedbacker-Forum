@@ -17,11 +17,14 @@ const mapStateToProps = (state) => {
   const users = (state.persist || {}).users || {}
   const userKeys = Object.keys(users)
   let publicKey = ''
+  let privateKey = ''
   if (userKeys.length >= 1) {
     publicKey = userKeys[0]
+    privateKey = users[publicKey]
   }
   return {
     userPublic: publicKey,
+    userPrivate: privateKey,
     comments: state.comments,
   }
 }
@@ -59,6 +62,7 @@ class CommentPanel extends React.Component {
       body: JSON.stringify({
         text: this.state.value,
         userId: this.props.userPublic,
+        secret: this.props.userPrivate,
         container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
       }),
     })

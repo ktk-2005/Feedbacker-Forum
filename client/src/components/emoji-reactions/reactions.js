@@ -59,7 +59,7 @@ class Reactions extends Component {
     const { users, commentId } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
-    const body = JSON.stringify({ emoji, userId: userHash[0], commentId })
+    const body = JSON.stringify({ emoji, userId: userHash[0], secret: users[userHash[0]], commentId })
     await fetch('/api/reactions', {
       method: 'POST',
       headers: {
@@ -81,7 +81,7 @@ class Reactions extends Component {
     if (userHash.length === 0) return 'No user'
 
     for (const i of userHash) {
-      const body = JSON.stringify({ emoji, userId: i, commentId })
+      const body = JSON.stringify({ emoji, userId: i, secret: users[i], commentId })
       // TODO: break loop if successful deletion
       await fetch('/api/reactions', {
         method: 'DELETE',
