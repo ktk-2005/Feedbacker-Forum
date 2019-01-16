@@ -7,20 +7,24 @@ import styles from './tag-element-button.scss'
 const css = classNames.bind(styles)
 
 class TagElementButton extends React.Component {
+  /*
   constructor(props) {
     super(props)
-    // DomTagging.hijackEventListeners() // TODO:
+    // TODO: Breaks react event handlers
+    DomTagging.hijackEventListeners()
   }
+
+  componentDidMount() {
+    // TODO: Works but unnecessary if events are not logged (hijacked)
+    DomTagging.startObservingDomChange()
+  }
+  */
 
   componentWillMount() {
     const { elementTagged, toggleTagElementState } = this.props
 
     DomTagging.setElementTaggedCallback(event => elementTagged(event))
     DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
-  }
-
-  componentDidMount() {
-    //DomTagging.startObservingDomChange()
   }
 
   render() {

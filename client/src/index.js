@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom'
 // Redux
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-// External libraries
+// External libraries & helpers
 import * as R from 'ramda'
 import retargetEvents from 'react-shadow-dom-retarget-events'
 import classNames from 'classnames/bind'
+import * as DomTagging from './dom-tagging'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -90,7 +91,8 @@ class MainView extends React.Component {
   }
 
   handleElementTagged(event) {
-    console.log('DOMT debug', 'index.js has tagged element', event)
+    const xPath = DomTagging.getCompleteElementXPath(event)
+    console.log('DOMT debug', 'index.js has tagged element', event, 'xpath:', xPath)
   }
 
   render() {

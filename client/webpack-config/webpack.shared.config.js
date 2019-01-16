@@ -28,7 +28,7 @@ module.exports = {
   module: {
     rules: [
 
-      // Build *.js source files with Babel
+      // Build *.meta.js source files with Babel
       {
         test: /\.meta.js$/,
         exclude: /node_modules/,
@@ -46,6 +46,7 @@ module.exports = {
         },
       },
 
+      // General sass files
       {
         test: /\.s?css$/,
         use: [
@@ -91,8 +92,8 @@ module.exports = {
       },
       {
         test: /\.png$/,
-        use: 'url-loader'
-      }
+        use: 'url-loader',
+      },
     ],
   },
 
