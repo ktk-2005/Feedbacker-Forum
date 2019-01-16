@@ -117,7 +117,7 @@ class Reactions extends Component {
   render() {
     return (
       <div className={css('reactions')}>
-        {this.state.reactions.map(reaction => this.reactionButton(reaction, toggled, counts))}
+        {this.state.reactions.map(reaction => this.reactionButton(reaction))}
       </div>
     )
   }

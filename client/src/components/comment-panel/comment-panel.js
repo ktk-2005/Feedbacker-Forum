@@ -91,7 +91,7 @@ class CommentPanel extends React.Component {
     return (
       <div className={css('comment-container')} id="comment-container">
         {
-          R.map(([id, comment]) => <Comment comment={comment} id={id} />,
+          R.map(([id, comment]) => <Comment key={id} comment={comment} id={id} />,
             R.toPairs(this.props.comments))
         }
       </div>
