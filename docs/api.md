@@ -190,7 +190,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L55)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L61)
 
 Stop a running container.
 
@@ -203,7 +203,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L73)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L79)
 
 Delete a container
 
