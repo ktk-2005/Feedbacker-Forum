@@ -24,53 +24,44 @@ class Reactions extends Component {
     }
   }
 
-  handleClick(emoji, toggled) {
-    /*
-    if (this.state.toggleReactions === {}) {
-      this.setState({ toggleReactions: toggled })
-    }
-    const toggle = () => {
-      const newToggled = this.state.toggleReactions
-      newToggled[emoji] = !newToggled[emoji]
-      this.setState(state => ({
-        ...state,
-        toggleReactions: newToggled,
-      }))
-    }
-    */
+  handleClick(emoji) {
+    const { users, reactions } = this.props
+    const toggled = reactions.some(r => r.emoji === emoji && users[r.user_id])
 
-    console.log('CLICK', toggled)
-    if (toggled[emoji]) {
+    if (toggled && false) {
       this.deleteReaction(emoji)
-      // toggle()
     } else {
       this.postReaction(emoji)
-      // toggle()
     }
   }
 
-  reactionButton(emoji, toggled, counts) {
-    if (this.props.comment_id == '0a8fbb57')
-    console.log('BUTTON', toggled)
+  reactionButton(emoji) {
+    const { users, reactions } = this.props
 
-    const handleClick = (toggled => () => this.handleClick(emoji, toggled))(toggled)
+    let count = 0
+    let toggled = false
+    for (const reaction of reactions) {
+      if (reaction.emoji !== emoji) continue
+      if (users.hasOwnProperty(reaction.user_id)) toggled = true
+      count += 1
+    }
 
     return (
       <button
         type="button"
         key={emoji}
-        className={css('reaction', toggled[emoji] ? 'toggled' : '')}
-        onClick={handleClick}
+        className={css('reaction', toggled ? 'toggled' : '')}
+        onClick={() => this.handleClick(emoji)}
       >
         <div className={css('emoji', emoji)} />
-        <div className={css('counter')}>{counts[emoji]}</div>
+        <div className={css('counter')}>{count}</div>
       </button>
     )
   }
 
   commentReactions(toggled, counts) {
-    if (this.props.comment_id == '0a8fbb57')
-    console.log('RENDER', toggled)
+    // if (this.props.comment_id == '1bd8052b')
+    // console.log('RENDER', toggled)
     return (
       <div className={css('reactions')}>
         {this.state.reactions.map(reaction => this.reactionButton(reaction, toggled, counts))}
@@ -133,19 +124,9 @@ class Reactions extends Component {
   }
 
   render() {
-    window.TOGGLED_SERIAL = (window.TOGGLED_SERIAL || 0) + 1
-
     const { users, reactions } = this.props
     const toggled = {serial: window.TOGGLED_SERIAL}
     const incrementedCounts = {}
-    for (const reaction of reactions) { // TODO: refactor whole loop and contents
-      incrementedCounts[reaction.emoji] = incrementedCounts[reaction.emoji] === undefined
-        ? 1
-        : incrementedCounts[reaction.emoji] + 1
-      if (users.hasOwnProperty(reaction.user_id)) {
-        toggled[reaction.emoji] = true
-      }
-    }
     return this.commentReactions(toggled, incrementedCounts)
   }
 }

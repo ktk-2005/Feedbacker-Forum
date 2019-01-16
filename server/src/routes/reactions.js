@@ -27,7 +27,7 @@ router.get('/:commentId', catchErrors(async (req, res) => {
 // add reaction to the database.
 //
 // Example body @json {
-//   "emoji": "🍑",
+//   "emoji": "fire",
 //   "user": "jaba",
 //   "comment_id": "1bd8052b"
 // }
