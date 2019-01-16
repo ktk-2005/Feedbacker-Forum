@@ -69,10 +69,10 @@ class Reactions extends Component {
 
   async postReaction(emoji) {
     // eslint-disable-next-line
-    const { users, comment_id } = this.props
+    const { users, commentId } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
-    const body = JSON.stringify({ emoji, userId: userHash[0], commentId: comment_id })
+    const body = JSON.stringify({ emoji, userId: userHash[0], commentId: commentId })
     await fetch('/api/reactions', {
       method: 'POST',
       headers: {
@@ -89,12 +89,12 @@ class Reactions extends Component {
 
   async deleteReaction(emoji) {
     // eslint-disable-next-line
-    const { users, comment_id } = this.props
+    const { users, commentId } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
 
     for (const i of userHash) {
-      const body = JSON.stringify({ emoji, userId: i, commentId: comment_id })
+      const body = JSON.stringify({ emoji, userId: i, commentId: commentId })
       // TODO: break loop if successful deletion
       await fetch('/api/reactions', {
         method: 'DELETE',
@@ -111,7 +111,7 @@ class Reactions extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ emoji, users: userHash, commentId: comment_id }),
+      body: JSON.stringify({ emoji, users: userHash, commentId: commentId }),
     })
     */
     fetch('/api/comments')
@@ -129,7 +129,7 @@ class Reactions extends Component {
       incrementedCounts[reaction.emoji] = incrementedCounts[reaction.emoji] === undefined
         ? 1
         : incrementedCounts[reaction.emoji] + 1
-      toggled[reaction.emoji] = users.hasOwnProperty(reaction.user_id)
+      toggled[reaction.emoji] = users.hasOwnProperty(reaction.userId)
     }
     return this.commentReactions(toggled, incrementedCounts)
   }

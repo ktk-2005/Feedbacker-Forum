@@ -94,7 +94,7 @@ Example body
 {
   "emoji": "🍑",
   "user": "jaba",
-  "comment_id": "1bd8052b"
+  "commentId": "1bd8052b"
 }
 ```
 

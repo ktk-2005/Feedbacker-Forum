@@ -23,8 +23,8 @@ router.get('/', catchErrors(async (req, res) => {
         id: comment.comment_id,
         time: comment.comment_time,
         text: comment.comment_text,
-        user_id: comment.comment_user_id,
-        thread_id: comment.thread_id,
+        userId: comment.comment_user_id,
+        threadId: comment.thread_id,
         blob: comment.blob,
         reactions: []}
       groupedComments[comment.comment_id] = result
@@ -34,9 +34,9 @@ router.get('/', catchErrors(async (req, res) => {
       let reaction = {
         id: comment.reaction_id,
         time: comment.reaction_time,
-        user_id: comment.reaction_user_id,
+        userId: comment.reaction_user_id,
         emoji: comment.reaction_emoji,
-        comment_id: comment.comment_id, }
+        commentId: comment.comment_id, }
       result.reactions.push(reaction)
     }
   }
@@ -86,7 +86,12 @@ router.post('/', catchErrors(async (req, res) => {
 // returns JSON array of all comments in thread
 router.get('/:threadId', catchErrors(async (req, res) => {
   const { threadId } = req.params
-  res.send(await getThreadComments(threadId))
+  const threads = await getThreadComments(threadId)
+  res.send(threads.map(r => ({
+    id: r.id,
+    containerID: r.container_id,
+    blob: r.blob,
+  })))
 }))
 
 module.exports = router
