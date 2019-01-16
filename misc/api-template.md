@@ -24,3 +24,13 @@
 ## Users
 
 @api /api/users
+
+## Instances
+
+@api /api/instances
+
+@api /api/instances/new
+
+@api /api/instances/stop
+
+@api /api/instances/delete
