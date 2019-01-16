@@ -7,7 +7,6 @@ import Button from './components/open-panel-button/open-panel-button'
 import FloatingPanel from './components/floating-panel-view/floating-panel-view'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
-import ReactRouter from './reactrouter'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
@@ -121,7 +120,7 @@ const initialize = () => {
 
   ReactDOM.render(
     <div className={css('feedback-app-main-container')}>
-      <ReactRouter />
+      <MainView />
     </div>,
     feedbackAppRoot()
   )
