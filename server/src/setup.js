@@ -62,6 +62,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--useMemoryDatabase'], {
+      help: 'Run using an in-memory database',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }

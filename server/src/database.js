@@ -1,12 +1,13 @@
 import SQLiteDatabase from './database/database-sqlite'
 import PostgresDatabase from './database/database-postgres'
-import { config } from './globals'
+import { config, args } from './globals'
 
 let db = null
 
 export async function initializeDatabase() {
   if (config.databaseUrl === undefined) {
-    db = new SQLiteDatabase(config.sqliteFilename)
+    const filename = args.useMemoryDatabase ? ':memory:' : config.sqliteFilename
+    db = new SQLiteDatabase(filename)
     await db.initialize(config.useTestData)
   } else {
     db = await new PostgresDatabase(config.databaseUrl)

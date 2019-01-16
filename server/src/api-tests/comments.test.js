@@ -18,14 +18,6 @@ describe('/api/comments', () => {
 })
 
 describe('/api/comments', () => {
-  it('first comment s text should be skrattia', async () => {
-    const comments = await apiRequest('/api/comments')
-    console.log('COMMENTTEXT', comments[Object.keys(comments)[0]].text)
-    assert.equal(comments[Object.keys(comments)[0]].text, 'skrattia')
-  })
-})
-
-describe('/api/comments', () => {
   it('should handle multiple posts', async () => {
     const body = { text: 'Test', userId: 'da776df3', secret: 'sf8a7s', container: 'APP-1111' }
     await apiRequest('/api/comments', { method: 'POST', body })

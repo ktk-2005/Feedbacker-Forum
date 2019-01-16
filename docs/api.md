@@ -86,12 +86,12 @@ returns JSON array of all comments in thread
 
 ## Questions
 
-### [GET /api/questions](../server/src/routes/questions.js#L13)
+### [GET /api/questions](../server/src/routes/questions.js#L15)
 
 Retrieve all questions.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L36)
+### [POST /api/questions](../server/src/routes/questions.js#L38)
 
 adds question to database.
 
@@ -124,8 +124,7 @@ Example body
 ```
 
 Returns `{ id }` of the reaction
-
-### [DELETE /api/reactions/:commentId](../server/src/routes/reactions.js#L39)
+### [DELETE /api/reactions](../server/src/routes/reactions.js#L41)
 
 Remove reaction from the database.
 

@@ -34,7 +34,7 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
-// @api DELETE /api/reactions/:commentId
+// @api DELETE /api/reactions
 // Remove reaction from the database.
 //
 // Returns JSON indicating whether deletion was successful or not
