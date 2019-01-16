@@ -32,8 +32,6 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
-//
-
 // @api DELETE /api/reactions/:commentId
 // Remove reaction from the database.
 //
@@ -42,9 +40,8 @@ router.delete('/', catchErrors(async (req, res) => {
   const { emoji, userId, secret, commentId } = req.body
   await verifyUser(userId, secret)
 
-  const resu = await deleteReaction({ commentId, emoji, userId })
-  console.log(resu)
-  res.json(resu)
+  const { emoji, userId, commentId } = req.body
+  res.json(await deleteReaction({ commentId, emoji, userId }))
 }))
 
 module.exports = router
