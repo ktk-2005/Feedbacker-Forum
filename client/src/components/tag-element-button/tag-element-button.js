@@ -20,7 +20,7 @@ class TagElementButton extends React.Component {
   }
 
   componentDidMount() {
-    DomTagging.startObservingDomChange()
+    //DomTagging.startObservingDomChange()
   }
 
   render() {

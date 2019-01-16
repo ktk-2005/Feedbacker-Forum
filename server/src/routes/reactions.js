@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getReactions, getCommentReactions, addReaction, deleteReaction } from '../database'
+import {
+  getReactions, getCommentReactions, addReaction, deleteReaction
+} from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
@@ -67,7 +69,7 @@ router.post('/', catchErrors(async (req, res) => {
 // Returns JSON indicating whether deletion was successful or not
 router.delete('/', catchErrors(async (req, res) => {
   const { emoji, userId, commentId } = req.body
-  const resu = await deleteReaction({commentId, emoji, userId})
+  const resu = await deleteReaction({ commentId, emoji, userId })
   console.log(resu)
   res.json(resu)
 }))

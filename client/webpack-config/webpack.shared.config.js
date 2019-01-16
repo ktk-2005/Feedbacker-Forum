@@ -91,8 +91,8 @@ module.exports = {
       },
       {
         test: /\.png$/,
-        use: 'url-loader'
-      }
+        use: 'url-loader',
+      },
     ],
   },
 

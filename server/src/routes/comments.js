@@ -18,7 +18,6 @@ router.get('/', catchErrors(async (req, res) => {
   for (const comment of comments) {
     let result = groupedComments[comment.comment_id]
     if (!result) {
-      //result = {id: comment.comment_id, user_id: comment.comment_user, reactions: []}
       result = {
         id: comment.comment_id,
         time: comment.comment_time,
@@ -26,17 +25,18 @@ router.get('/', catchErrors(async (req, res) => {
         userId: comment.comment_user_id,
         threadId: comment.thread_id,
         blob: comment.blob,
-        reactions: []}
+        reactions: [],
+      }
       groupedComments[comment.comment_id] = result
     }
     if (comment.reaction_id !== null) {
-      //let reaction = {id: comment.reaction_id, user_id: comment.reaction_user, emoji: comment.emoji}
-      let reaction = {
+      const reaction = {
         id: comment.reaction_id,
         time: comment.reaction_time,
         userId: comment.reaction_user_id,
         emoji: comment.reaction_emoji,
-        commentId: comment.comment_id, }
+        commentId: comment.comment_id,
+      }
       result.reactions.push(reaction)
     }
   }
