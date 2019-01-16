@@ -101,7 +101,7 @@ router.post('/', catchErrors(async (req, res) => {
   await attempt(async () => {
     const id = uuid()
     await addComment({
-      id, text, userId, threadId, blob,
+      id, text, userId, threadId, blob: JSON.stringify(blob),
     })
     res.json({ id, threadId })
   })
@@ -117,7 +117,7 @@ router.get('/:threadId', catchErrors(async (req, res) => {
   res.send(threads.map(r => ({
     id: r.id,
     containerID: r.container_id,
-    blob: r.blob,
+    blob: JSON.parse(r.blob || '{}'),
   })))
 }))
 
