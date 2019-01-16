@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getComments, getThreadComments, addComment, addThread
+  getComments, getThreadComments, addComment, addThread, verifyUser
 } from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
@@ -16,14 +16,14 @@ const router = express.Router()
 //         "id": "1bd8052b",
 //         "time": "2018-11-14 16:35:27",
 //         "text": "skrattia",
-//         "user_id": "da776df3",
+//         "userId": "da776df3",
 //         "reactions": [
 //             {
 //                 "id": "1ddb07c8",
 //                 "time": "2019-01-16 16:43:21",
-//                 "user_id": "da776df3",
+//                 "userId": "da776df3",
 //                 "emoji": "🍑",
-//                 "comment_id": "1bd8052b"
+//                 "commentId": "1bd8052b"
 //             }
 //          ]
 //     },
@@ -31,12 +31,10 @@ const router = express.Router()
 //         "id": "cb38e8f6",
 //         "time": "2018-11-14 17:10:42",
 //         "text": "tröttistä",
-//         "user_id": "da776df3",
+//         "userId": "da776df3",
 //         "reactions": []
 //     }
 // }
-
-
 router.get('/', catchErrors(async (req, res) => {
   const groupedComments = {}
   const comments = await getComments()
@@ -74,19 +72,23 @@ router.get('/', catchErrors(async (req, res) => {
 // Example body for a root comment @json {
 //   "text": "minttua",
 //   "user": "salaattipoika",
+//   "secret": "408c43a509ee4c63",
 //   "container": "abcdef",
 //   "blob": "{\"path\": \"/path/to/element\"}"
 // }
 // comments can be linked to a thread with @json {
 //   "text": "minttua",
 //   "user": "salaattipoika",
+//   "secret": "408c43a509ee4c63",
 //   "threadId": "1234",
 //   "blob": "{\"path\": \"/path/to/element\"}"
 // }
 //
 // Returns `{ id, threadId }` of the new comment
 router.post('/', catchErrors(async (req, res) => {
-  const { text, userId, blob } = req.body
+  const { text, userId, secret, blob } = req.body
+  await verifyUser(userId, secret)
+
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({

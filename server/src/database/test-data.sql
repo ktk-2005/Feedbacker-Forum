@@ -1,6 +1,6 @@
 -- Test data for development purposes
 
-INSERT INTO users (id, time, name, secret) VALUES ('da776df3', '2018-11-10 09:32:11', 'jaba', 'sf8a7sfasfa5a8afsk24432ndh8f5d');
+INSERT INTO users (id, time, name, secret) VALUES ('da776df3', '2018-11-10 09:32:11', 'jaba', 'sf8a7s');
 
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-1111', 'one', 'http://localhost:10001', 'da776df3');
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-2222', 'two', 'http://localhost:10002', 'da776df3');

@@ -62,3 +62,11 @@ export async function getThreadComments(values = []) { return db.query('SELECT *
 export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
+
+export async function verifyUser(user, secret) {
+  const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
+  if (!rows || rows.length == 0) {
+    throw new Error("Authentication failure")
+  }
+}
+

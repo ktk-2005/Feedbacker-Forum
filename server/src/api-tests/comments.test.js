@@ -8,6 +8,7 @@ describe('/api/comments', () => {
       body: {
         text: 'testing',
         userId: 'da776df3',
+        secret: 'sf8a7s',
         blob: '{"path": "/path/to/element"}',
         container: 'APP-1111',
       },
@@ -26,17 +27,17 @@ describe('/api/comments', () => {
 
 describe('/api/comments', () => {
   it('should handle multiple posts', async () => {
-    const body = { text: 'Test', userId: 'da776df3', container: 'APP-1111' }
+    const body = { text: 'Test', userId: 'da776df3', secret: 'sf8a7s', container: 'APP-1111' }
     await apiRequest('/api/comments', { method: 'POST', body })
     await apiRequest('/api/comments', { method: 'POST', body })
     await apiRequest('/api/comments', { method: 'POST', body })
   })
 
   it('should work with newly created user', async () => {
-    const { id: userId } = await apiRequest('/api/users', { method: 'POST' })
+    const { id: userId, secret } = await apiRequest('/api/users', { method: 'POST' })
     const response = await apiRequest('/api/comments', {
       method: 'POST',
-      body: { userId, text: 'First', container: 'APP-1111' },
+      body: { userId, secret, text: 'First', container: 'APP-1111' },
     })
 
     assert.equal(typeof response.id, 'string')
@@ -44,14 +45,15 @@ describe('/api/comments', () => {
 
   it('should support threading', async () => {
     const userId = 'da776df3'
+    const secret = 'sf8a7s'
     const { threadId } = await apiRequest('/api/comments', {
       method: 'POST',
-      body: { userId, text: 'First', container: 'APP-1111' },
+      body: { userId, secret, text: 'First', container: 'APP-1111' },
     })
 
     const response = await apiRequest('/api/comments', {
       method: 'POST',
-      body: { userId, threadId, text: 'Second' },
+      body: { userId, secret, threadId, text: 'Second' },
     })
     assert.equal(typeof response.id, 'string')
   })
@@ -62,6 +64,7 @@ describe('/api/comments', () => {
       body: {
         text: 'This is a comment',
         userId: 'da776df3',
+        secret: 'sf8a7s',
         blob: '{"path": "/path/to/element"}',
         container: 'APP-1111',
       },
@@ -72,7 +75,7 @@ describe('/api/comments', () => {
 
 describe('/api/questions', () => {
   it('should handle multiple posts', async () => {
-    const body = { text: 'Test', userId: 'da776df3', container: 'APP-1111' }
+    const body = { text: 'Test', userId: 'da776df3', secret: 'sf8a7s', container: 'APP-1111' }
     await apiRequest('/api/questions', { method: 'POST', body })
     await apiRequest('/api/questions', { method: 'POST', body })
     await apiRequest('/api/questions', { method: 'POST', body })
@@ -84,6 +87,7 @@ describe('/api/questions', () => {
       body: {
         text: 'Pääpäivä?',
         userId: 'da776df3',
+        secret: 'sf8a7s',
         blob: '{"path": "/path/to/element"}',
         threadId: 'THR-1234',
       },
@@ -102,28 +106,28 @@ describe('/api/questions', () => {
 
 describe('/api/reactions', () => {
   it('should handle multiple posts', async () => {
-    const body = { emoji: '🍑', userId: 'da776df3', commentId: '1bd8052b' }
-    await apiRequest('/api/reactions', { method: 'POST', body })
-    await apiRequest('/api/reactions', { method: 'POST', body })
-    await apiRequest('/api/reactions', { method: 'POST', body })
+    const { id: commentId } = await apiRequest('/api/comments', { method: 'POST',
+      body: { text: 'Test', userId: 'da776df3', secret: 'sf8a7s', container: 'APP-1111' } })
+
+    const body = { userId: 'da776df3', secret: 'sf8a7s', commentId }
+    await apiRequest('/api/reactions', { method: 'POST', body: { ...body, emoji: 'up' }  })
+    await apiRequest('/api/reactions', { method: 'POST', body: { ...body, emoji: 'down' } })
+    await apiRequest('/api/reactions', { method: 'POST', body: { ...body, emoji: 'fire' } })
   })
 
   it('should return OK', async () => {
+    const { id: commentId } = await apiRequest('/api/comments', { method: 'POST',
+      body: { text: 'Test', userId: 'da776df3', secret: 'sf8a7s', container: 'APP-1111' } })
+
     const response = await apiRequest('/api/reactions', {
       method: 'POST',
       body: {
         emoji: '🍑',
         userId: 'da776df3',
-        commentId: '1bd8052b',
+        secret: 'sf8a7s',
+        commentId,
       },
     })
     assert.equal(typeof response.id, 'string')
-  })
-})
-
-describe('/api/reactions', () => {
-  it('should return the last question', async () => {
-    const reactions = await apiRequest('/api/reactions')
-    assert.equal(reactions[reactions.length - 1].emoji, '🍑')
   })
 })
