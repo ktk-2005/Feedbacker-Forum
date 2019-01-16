@@ -16,6 +16,7 @@ $panel-min-width: 300px;
   position: fixed;
   display: flex;
   flex-flow: column;
+  flex-shrink: 0;
 
   right: 0;
   margin: 0;

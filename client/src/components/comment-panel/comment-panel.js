@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import * as R from 'ramda'
 // Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
@@ -21,6 +22,7 @@ const mapStateToProps = (state) => {
   }
   return {
     userPublic: publicKey,
+    comments: state.comments
   }
 }
 
@@ -30,7 +32,6 @@ class CommentPanel extends React.Component {
     this.state = {
       value: '',
       isHidden: false,
-      comments: [],
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -74,29 +75,27 @@ class CommentPanel extends React.Component {
   fetchComments() {
     fetch('/api/comments')
       .then(response => response.json())
-      .then((data) => {
-        this.setState({ comments: Comments(data, css) })
+      .then((comments) => {
+        this.props.dispatch({type: 'LOAD_ALL', comments})
         this.scrollToBottom()
       })
   }
 
   scrollToBottom() {
-    const el = shadowDocument().getElementById('comment-container')
+    const el = this.shadowDocument().getElementById('comment-container')
     if (el) el.scrollTop = el.scrollHeight
   }
 
   commentContainer() {
-    if (this.state.comments.length < 1) return (<p>No comments fetched.</p>)
+    if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
     return (
       <div className={css('comment-container')} id="comment-container">
-        {this.state.comments}
+        <Comments comments={this.props.comments} />
       </div>
     )
   }
 
   render() {
-    // const { data } = this.state
-
     return (
       <div className={this.state.isHidden ? css('panel-container', 'comment-panel', 'hidden') : css('panel-container', 'comment-panel')}>
         <div className={css('panel-header')}>
@@ -110,13 +109,6 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
-          <button
-            type="button"
-            className={css('show-comments')}
-            onClick={this.fetchComments}
-          >
-            Fetch comments
-          </button>
           { this.commentContainer() }
           <form className={css('comment-form')} onSubmit={this.handleSubmit}>
             <textarea

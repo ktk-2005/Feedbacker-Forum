@@ -53,7 +53,9 @@ router.post('/', catchErrors(async (req, res) => {
 // Returns JSON indicating whether deletion was successful or not
 router.delete('/', catchErrors(async (req, res) => {
   const { emoji, userId, commentId } = req.body
-  res.json(await deleteReaction({commentId, emoji, userId}))
+  const resu = await deleteReaction({commentId, emoji, userId})
+  console.log(resu)
+  res.json(resu)
 }))
 
 module.exports = router

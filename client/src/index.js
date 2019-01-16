@@ -61,7 +61,7 @@ const reducer = combineReducers({
 })
 
 const store = createStore(reducer)
-
+/*
 const mapStateToProps = state => ({ comments: state.comments })
 
 function Comments(props) {
@@ -70,7 +70,7 @@ function Comments(props) {
 }
 
 const ConnectedComments = connect(mapStateToProps)(Comments)
-
+*/
 class MainView extends React.Component {
   constructor(props) {
     super(props)
@@ -188,7 +188,6 @@ const initialize = () => {
 
   store.subscribe(() => {
     savePersist(store.getState().persist || { })
-    console.log(store.getState())
   })
 
   const prepareReactRoot = () => {

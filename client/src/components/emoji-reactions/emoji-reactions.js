@@ -47,7 +47,7 @@ class Reactions extends Component {
 
   reactionButton(emoji, toggled, counts) {
     return (
-      <button key={emoji} className={css('reaction', toggled[emoji] ? 'toggled' : '')} onClick={() => this.handleClick(emoji, toggled)}>
+      <button type="button" key={emoji} className={css('reaction', toggled[emoji] ? 'toggled' : '')} onClick={() => this.handleClick(emoji, toggled)}>
         <div className={css('emoji', emoji)} />
         <div className={css('counter')}>{counts[emoji]}</div>
       </button>
@@ -85,8 +85,10 @@ class Reactions extends Component {
     const { users, comment_id } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
+
     for (const i of userHash) {
       const body = JSON.stringify({ emoji, userId: i, commentId: comment_id })
+      // TODO: break loop if successful deletion
       await fetch('/api/reactions', {
         method: 'DELETE',
         headers: {
@@ -95,6 +97,16 @@ class Reactions extends Component {
         body,
       })
     }
+
+    /*
+    await fetch('/api/reactions', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ emoji, users: userHash, commentId: comment_id }),
+    })
+    */
     fetch('/api/comments')
       .then(x => x.json())
       .then((comments) => {

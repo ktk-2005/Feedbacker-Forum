@@ -10,7 +10,7 @@ import styles from './comments.scss'
 
 const css = classNames.bind(styles)
 
-const Comments = (data, css) => {
+const Comments = ({ comments }) => {
   return R.map(([id, comment]) => (
     <div className={css('comment')} key={id}>
       <div className={css('header')}>
@@ -28,7 +28,7 @@ const Comments = (data, css) => {
       </div>
       <Reactions reactions={comment.reactions} comment_id={id} />
     </div>
-  ), R.toPairs(data))
+  ), R.toPairs(comments))
 }
 
 export default Comments
