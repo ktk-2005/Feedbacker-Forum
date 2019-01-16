@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Create from './create'
 import Dashboard from './dashboard-view'
+import Build from './build-view'
 
 const ReactRouter = () => (
   <Router>
@@ -14,11 +15,15 @@ const ReactRouter = () => (
           <li>
             <Link to="/site/dashboard">Dashboard</Link>
           </li>
+          <li>
+            <Link to="/site/build">Build</Link>
+          </li>
         </ul>
       </nav>
 
       <Route path="/site/create" component={Create} />
       <Route path="/site/dashboard" component={Dashboard} />
+      <Route path="/site/build" component={Build} />
     </div>
   </Router>
 )
