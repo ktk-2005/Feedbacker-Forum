@@ -6,10 +6,6 @@ import styles from './emoji-reactions.scss'
 
 const css = classNames.bind(styles)
 
-// thumbs-up   unicode: U+1F44D -> &#x1f44d;
-// thumbs-down unicode: U+1F44E -> &#x1f44e;
-// fire        unicode: U+1F525 -> &#x1f525;
-
 const mapStateToProps = (state) => {
   // TODO: Check what is this
   const users = (state.persist || {}).users || {}
@@ -37,7 +33,6 @@ class Reactions extends Component {
 
   reactionButton(emoji) {
     const { users, reactions } = this.props
-    console.log(this.props.commentId)
     let count = 0
     let toggled = false
     for (const reaction of reactions) {
@@ -97,15 +92,6 @@ class Reactions extends Component {
       })
     }
 
-    /*
-    await fetch('/api/reactions', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ emoji, users: userHash, commentId: commentId }),
-    })
-    */
     fetch('/api/comments')
       .then(x => x.json())
       .then((comments) => {
