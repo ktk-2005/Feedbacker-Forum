@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getReactions, getCommentReactions, addReaction, deleteReaction, verifyUser
+  addReaction, deleteReaction, verifyUser
 } from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'

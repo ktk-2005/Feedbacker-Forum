@@ -65,8 +65,8 @@ export async function addUser({ id, name, secret }) { return db.run('INSERT INTO
 
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
-  if (!rows || rows.length == 0) {
-    throw new Error("Authentication failure")
+  if (!rows || rows.length === 0) {
+    throw new Error('Authentication failure')
   }
 }
 
