@@ -21,7 +21,6 @@ class Reactions extends Component {
     super(props, context)
     this.state = {
       reactions: ['up', 'down', 'fire'],
-      // toggleReactions: {},
     }
   }
 
@@ -29,7 +28,7 @@ class Reactions extends Component {
     const { users, reactions } = this.props
     const toggled = reactions.some(r => r.emoji === emoji && users[r.userId])
 
-    if (toggled && false) {
+    if (toggled) {
       this.deleteReaction(emoji)
     } else {
       this.postReaction(emoji)
