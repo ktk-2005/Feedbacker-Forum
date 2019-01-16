@@ -22,7 +22,7 @@ module.exports = {
   // Output to ./build/ directory
   output: {
     path: outputPath,
-    filename: '[name]-bundle.js',
+    filename: '[name].js',
   },
 
   plugins: [
