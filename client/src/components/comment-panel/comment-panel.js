@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
-import Comments from '../comments/comments'
+import Comment from '../comment/comment'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -82,7 +82,7 @@ class CommentPanel extends React.Component {
   }
 
   scrollToBottom() {
-    const el = this.shadowDocument().getElementById('comment-container')
+    const el = shadowDocument().getElementById('comment-container')
     if (el) el.scrollTop = el.scrollHeight
   }
 
@@ -90,7 +90,10 @@ class CommentPanel extends React.Component {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
     return (
       <div className={css('comment-container')} id="comment-container">
-        <Comments comments={this.props.comments} />
+        {
+          R.map(([id, comment]) => <Comment comment={comment} id={id} />,
+            R.toPairs(this.props.comments))
+        }
       </div>
     )
   }
