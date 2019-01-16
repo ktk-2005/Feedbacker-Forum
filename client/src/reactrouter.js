@@ -9,16 +9,16 @@ const ReactRouter = () => (
       <nav>
         <ul>
           <li>
-            <Link to="/create">Create</Link>
+            <Link to="/site/create">Create</Link>
           </li>
           <li>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/site/dashboard">Dashboard</Link>
           </li>
         </ul>
       </nav>
 
-      <Route path="/create" component={Create} />
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/site/create" component={Create} />
+      <Route path="/site/dashboard" component={Dashboard} />
     </div>
   </Router>
 )
