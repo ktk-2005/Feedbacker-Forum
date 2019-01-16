@@ -3,36 +3,19 @@ import { addContainer, listContainers, removeContainer } from './database'
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
-/* Custom data class for storing information about a container. */
-
-class ContainerInfo {
-  constructor(id, subdomain, ip, image) {
-    this.id = id
-    this.subdomain = subdomain
-    this.ip = ip
-    this.image = image
-  }
+async function getContainerInfoFromDocker(id) {
+  return docker.getContainer(id).inspect()
 }
 
-function containerInfoTransform(containerInfo) {
-  return new ContainerInfo(
-    containerInfo.Id,
-    containerInfo.Id,
-    containerInfo.NetworkSettings.IPAddress,
-    containerInfo.Image
-  )
-}
-
-async function getContainerInfo(id) {
-  const containerInfo = await docker.getContainer(id).inspect()
-  return containerInfoTransform(containerInfo)
-}
-
-export async function getRunningContainers() {
+async function getContainerInfoFromDatabase() {
   return listContainers()
 }
 
-export async function createNewContainer(url, version, type, name) {
+export async function getRunningContainers() {
+  return getContainerInfoFromDatabase()
+}
+
+export async function createNewContainer(url, version, type, name, port) {
   if (type !== 'node') {
     throw Error(`createNewContainer: expected type 'node', was ${type}.`)
   }
@@ -46,19 +29,32 @@ export async function createNewContainer(url, version, type, name) {
   })
 
   await container.start()
-  const containerInfo = await getContainerInfo(container.id)
+  const containerInfo = await getContainerInfoFromDocker(container.id)
 
   const containerData = {
-    id: containerInfo.id,
-    subdomain: containerInfo.subdomain,
-    ip: containerInfo.ip,
+    id: containerInfo.Id,
+    subdomain: name,
+    ip: containerInfo.NetworkSettings.IPAddress,
+    port,
     userId: 'da776df3',
     blob: null,
   }
 
-  await addContainer(containerData)
+  try {
+    await addContainer(containerData)
+  } catch (error) {
+    console.log(`Failed to add container to database. Error: ${error}`)
+    console.log(`Stopping and removing the docker container with id: ${container.id}`)
 
-  return containerData
+    try {
+      await container.stop()
+      await container.remove()
+    } catch (error) {
+      console.log(`Failed to stop and remove docker containers... Error: ${error}`)
+    }
+  }
+
+  return name
 }
 
 export async function stopContainer(id) {

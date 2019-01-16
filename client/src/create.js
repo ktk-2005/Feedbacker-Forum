@@ -12,16 +12,18 @@ const Create = () => (
       method="post"
       className={css('form-create')}
     >
-      Git URL
-      <input type="text" name="instance_image" />
-      Git Hash
-      <input type="text" name="instance_version" />
       Type
-      <select name="instance_type">
-        <option value="Node"> Node </option>
+      <select name="type">
+        <option value="node"> Node </option>
       </select>
+      Git URL
+      <input type="text" name="url" />
+      Git Hash
+      <input type="text" name="version" />
       Name
-      <input type="text" name="instance_name" />
+      <input type="text" name="name" />
+      Port
+      <input type="number" min="1" max="65535" name="port" />
       <input type="submit" value="Create" />
     </form>
   </div>

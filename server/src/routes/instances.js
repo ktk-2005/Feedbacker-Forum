@@ -2,6 +2,7 @@ import express from 'express'
 import {
   getRunningContainers, createNewContainer, stopContainer, deleteContainer
 } from '../docker'
+import { attempt, uuid } from './helpers'
 
 const router = express.Router()
 
@@ -36,12 +37,16 @@ router.get('/', async (req, res) => {
 router.post('/new', async (req, res) => {
   try {
     const {
-      url, version, type, name,
+      url, version, type, name, port,
     } = req.body
     if (type === 'node') {
-      const containerInfo = await createNewContainer(url, version, type, name)
-      res.send(containerInfo)
+      await attempt(async () => {
+        const suffixedName = `${name}-${uuid(5)}`
+        const containerInfo = await createNewContainer(url, version, type, suffixedName, port)
+        res.send(containerInfo)
+      })
     } else {
+      console.log(`/api/instances/new -- expected type 'node', but got '${type}'`)
       res.sendStatus(501)
     }
   } catch (error) {
