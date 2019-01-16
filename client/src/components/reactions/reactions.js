@@ -36,9 +36,10 @@ class Reactions extends Component {
     let count = 0
     let toggled = false
     for (const reaction of reactions) {
-      if (reaction.emoji !== emoji) continue
-      if (users.hasOwnProperty(reaction.userId)) toggled = true
-      count += 1
+      if (reaction.emoji === emoji) {
+        if (users.hasOwnProperty(reaction.userId)) toggled = true
+        count += 1
+      }
     }
 
     return (
@@ -60,7 +61,10 @@ class Reactions extends Component {
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
     const body = JSON.stringify({
-      emoji, userId: userHash[0], secret: users[userHash[0]], commentId,
+      emoji,
+      userId: userHash[0],
+      secret: users[userHash[0]],
+      commentId,
     })
     await fetch('/api/reactions', {
       method: 'POST',
