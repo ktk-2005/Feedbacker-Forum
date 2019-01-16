@@ -24,7 +24,7 @@ const Comment = ({ id, comment }) => (
         {comment.text}
       </div>
     </div>
-    <Reactions reactions={comment.reactions} comment_id={id} />
+    <Reactions reactions={comment.reactions} commentId={id} />
   </div>
 )
 
