@@ -35,9 +35,15 @@ router.get('/', async (req, res) => {
 
 router.post('/new', async (req, res) => {
   try {
-    console.log(req.body)
-    await createNewContainer(req.body.instance_image)
-    res.sendStatus(200)
+    const {
+      url, version, type, name,
+    } = req.body
+    if (type === 'node') {
+      const containerInfo = await createNewContainer(url, version, type, name)
+      res.send(containerInfo)
+    } else {
+      res.sendStatus(501)
+    }
   } catch (error) {
     console.log(error)
     res.sendStatus(500)
