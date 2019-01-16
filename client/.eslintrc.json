@@ -16,7 +16,6 @@
     "react/no-multi-comp": "off",
     "no-multi-spaces": "off",
     "no-unused-vars": "warn",
-    "no-template-curly-in-string": "off",
     "no-shadow": "off",
     "no-plusplus": ["off"],
     "no-param-reassign": ["error", { "props": false }],
