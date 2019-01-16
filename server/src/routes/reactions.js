@@ -14,10 +14,11 @@ const router = express.Router()
 // returns JSON array of all reactions in database
 router.get('/', catchErrors(async (req, res) => {
   const reactions = await getReactions()
+  console.log(reactions)
   res.send(reactions.map(r => ({
     commentId: r.comment_id,
     userID: r.user_id,
-    emoji: r.reaction_emoji,
+    emoji: r.emoji,
     time: r.time,
     id: r.id,
   })))
@@ -30,10 +31,11 @@ router.get('/', catchErrors(async (req, res) => {
 router.get('/:commentId', catchErrors(async (req, res) => {
   const { commentId } = req.params
   const reaction = await getCommentReactions(commentId)
+  console.log(reaction)
   res.send(reaction.map(r => ({
     commentId: r.comment_id,
     userID: r.user_id,
-    emoji: r.reaction_emoji,
+    emoji: r.emoji,
     time: r.time,
     id: r.id,
   })))

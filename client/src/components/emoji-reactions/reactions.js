@@ -37,7 +37,7 @@ class Reactions extends Component {
 
   reactionButton(emoji) {
     const { users, reactions } = this.props
-
+    console.log(this.props.commentId)
     let count = 0
     let toggled = false
     for (const reaction of reactions) {
