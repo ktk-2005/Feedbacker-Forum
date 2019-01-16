@@ -41,3 +41,15 @@ export async function getThreadComments(values = []) { return db.query('SELECT *
 export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
+
+export async function addContainer({
+  id, subdomain, ip, userId, blob,
+}) { return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, ip, userId, blob]) }
+
+export async function listContainers() {
+  return db.query('SELECT * FROM containers')
+}
+
+export async function removeContainer({
+  id,
+}) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
