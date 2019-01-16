@@ -17,7 +17,9 @@ const Create = () => (
       Git Hash
       <input type="text" name="instance_version" />
       Type
-      <input type="text" name="instance_type" />
+      <select name="instance_type">
+        <option value="Node"> Node </option>
+      </select>
       Name
       <input type="text" name="instance_name" />
       <input type="submit" value="Create" />
