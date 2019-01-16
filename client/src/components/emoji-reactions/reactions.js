@@ -11,7 +11,8 @@ const css = classNames.bind(styles)
 // fire        unicode: U+1F525 -> &#x1f525;
 
 const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
+  // TODO: Check what is this
+  const users = (state.persist || {}).users || {}
   return { users }
 }
 
@@ -26,7 +27,7 @@ class Reactions extends Component {
 
   handleClick(emoji) {
     const { users, reactions } = this.props
-    const toggled = reactions.some(r => r.emoji === emoji && users[r.user_id])
+    const toggled = reactions.some(r => r.emoji === emoji && users[r.userId])
 
     if (toggled && false) {
       this.deleteReaction(emoji)
@@ -42,7 +43,7 @@ class Reactions extends Component {
     let toggled = false
     for (const reaction of reactions) {
       if (reaction.emoji !== emoji) continue
-      if (users.hasOwnProperty(reaction.user_id)) toggled = true
+      if (users.hasOwnProperty(reaction.userId)) toggled = true
       count += 1
     }
 
@@ -59,22 +60,12 @@ class Reactions extends Component {
     )
   }
 
-  commentReactions(toggled, counts) {
-    // if (this.props.comment_id == '1bd8052b')
-    // console.log('RENDER', toggled)
-    return (
-      <div className={css('reactions')}>
-        {this.state.reactions.map(reaction => this.reactionButton(reaction, toggled, counts))}
-      </div>
-    )
-  }
-
   async postReaction(emoji) {
     // eslint-disable-next-line
-    const { users, comment_id } = this.props
+    const { users, commentId } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
-    const body = JSON.stringify({ emoji, userId: userHash[0], commentId: comment_id })
+    const body = JSON.stringify({ emoji, userId: userHash[0], commentId: commentId })
     await fetch('/api/reactions', {
       method: 'POST',
       headers: {
@@ -91,12 +82,12 @@ class Reactions extends Component {
 
   async deleteReaction(emoji) {
     // eslint-disable-next-line
-    const { users, comment_id } = this.props
+    const { users, commentId } = this.props
     const userHash = Object.keys(users)
     if (userHash.length === 0) return 'No user'
 
     for (const i of userHash) {
-      const body = JSON.stringify({ emoji, userId: i, commentId: comment_id })
+      const body = JSON.stringify({ emoji, userId: i, commentId: commentId })
       // TODO: break loop if successful deletion
       await fetch('/api/reactions', {
         method: 'DELETE',
@@ -113,7 +104,7 @@ class Reactions extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ emoji, users: userHash, commentId: comment_id }),
+      body: JSON.stringify({ emoji, users: userHash, commentId: commentId }),
     })
     */
     fetch('/api/comments')
@@ -124,10 +115,11 @@ class Reactions extends Component {
   }
 
   render() {
-    const { users, reactions } = this.props
-    const toggled = {serial: window.TOGGLED_SERIAL}
-    const incrementedCounts = {}
-    return this.commentReactions(toggled, incrementedCounts)
+    return (
+      <div className={css('reactions')}>
+        {this.state.reactions.map(reaction => this.reactionButton(reaction, toggled, counts))}
+      </div>
+    )
   }
 }
 

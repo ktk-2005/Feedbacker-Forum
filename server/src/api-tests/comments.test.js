@@ -19,7 +19,8 @@ describe('/api/comments', () => {
 describe('/api/comments', () => {
   it('first comment s text should be skrattia', async () => {
     const comments = await apiRequest('/api/comments')
-    assert.equal(comments[0].text, 'skrattia')
+    console.log('COMMENTTEXT', comments[Object.keys(comments)[0]].text)
+    assert.equal(comments[Object.keys(comments)[0]].text, 'skrattia')
   })
 })
 

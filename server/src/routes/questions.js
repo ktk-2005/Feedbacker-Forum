@@ -11,7 +11,15 @@ const router = express.Router()
 //
 // returns JSON array of all questions in database
 router.get('/', catchErrors(async (req, res) => {
-  res.send(await getQuestions())
+  const questions = await getQuestions()
+  res.send(questions.map(r => ({
+    id: r.id,
+    time: r.time,
+    text: r.text,
+    userID: r.user_id,
+    threadID: r.thread_id,
+    blob: r.blob,
+  })))
 }))
 
 // @api POST /api/questions
