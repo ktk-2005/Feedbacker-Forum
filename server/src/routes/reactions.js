@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getReactions, getCommentReactions, addReaction, deleteReaction, verifyUser
+  addReaction, deleteReaction, verifyUser
 } from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
@@ -20,7 +20,9 @@ const router = express.Router()
 //
 // Returns `{ id }` of the reaction
 router.post('/', catchErrors(async (req, res) => {
-  const { emoji, userId, secret, commentId } = req.body
+  const {
+    emoji, userId, secret, commentId,
+  } = req.body
   await verifyUser(userId, secret)
 
   await attempt(async () => {
@@ -37,7 +39,9 @@ router.post('/', catchErrors(async (req, res) => {
 //
 // Returns JSON indicating whether deletion was successful or not
 router.delete('/', catchErrors(async (req, res) => {
-  const { emoji, userId, secret, commentId } = req.body
+  const {
+    emoji, userId, secret, commentId,
+  } = req.body
   await verifyUser(userId, secret)
   res.json(await deleteReaction({ commentId, emoji, userId }))
 }))

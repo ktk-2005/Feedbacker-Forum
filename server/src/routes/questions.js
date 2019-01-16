@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getQuestions, addQuestion, addThread, verifyUser } from '../database'
+import {
+  getQuestions, addQuestion, addThread, verifyUser
+} from '../database'
 import { uuid, attempt } from './helpers'
 import { catchErrors } from '../handlers'
 
