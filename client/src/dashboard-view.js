@@ -6,6 +6,21 @@ import Create from './create'
 
 const css = classNames.bind(styles)
 
+const mapStateToProps = (state) => {
+  const users = (state.persist || {}).users || {}
+  const userKeys = Object.keys(users)
+  let publicKey = ''
+  let privateKey = ''
+  if (userKeys.length >= 1) {
+    publicKey = userKeys[0]
+    privateKey = users[publicKey]
+  }
+  return {
+    userPublic: publicKey,
+    userPrivate: privateKey,
+  }
+}
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -16,7 +31,11 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/instances')
+    fetch('/api/instances', {
+      headers: {
+        Authorization: atob(this.props.users),
+      }
+    })
       .then(response => response.json())
       .then(instances => this.setState({ instances }))
   }
@@ -49,4 +68,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard
+export default connect(mapStateToProps)(Dashboard)
