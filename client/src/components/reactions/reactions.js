@@ -7,7 +7,6 @@ import styles from './reactions.scss'
 const css = classNames.bind(styles)
 
 const mapStateToProps = (state) => {
-  // TODO: Check what is this
   const users = (state.persist || {}).users || {}
   return { users }
 }
