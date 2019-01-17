@@ -87,7 +87,7 @@ class Create extends React.Component {
           </label>
           <label htmlFor="name">
             Name
-            <input type="text" id="name" name="name" defaultValue="new-feature" pattern="[a-z0-9](-?[a-z0-9])" minlength="3" maxlength="20" required />
+            <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-z0-9](-?[a-z0-9])" minlength="3" maxlength="20" required />
           </label>
           <label htmlFor="port">
             Port
