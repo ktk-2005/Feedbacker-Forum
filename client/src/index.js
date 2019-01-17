@@ -8,6 +8,8 @@ import * as R from 'ramda'
 import retargetEvents from 'react-shadow-dom-retarget-events'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
+import apiCall from './api-call'
+import { setUsers } from './globals'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -15,10 +17,8 @@ import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
 // Internal js
 import { setupPersist } from './persist'
-import { apiUrl } from './meta/env.meta'
 // Styles
 import styles from './scss/_base.scss'
-
 
 const css = classNames.bind(styles)
 
@@ -150,10 +150,7 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const response = await fetch(`${apiUrl}/users`, {
-          method: 'POST',
-        })
-        const { id, secret } = await response.json()
+        const { id, secret } = await apiCall('POST', '/users')
 
         console.log('Created new user from API', { [id]: secret })
 
@@ -173,14 +170,15 @@ const initialize = () => {
 
   const savePersist = setupPersist(loadPersist)
 
-  fetch('/api/comments')
-    .then(x => x.json())
+  apiCall('GET', '/comments')
     .then((comments) => {
       store.dispatch({ type: LOAD_ALL, comments })
     })
 
   store.subscribe(() => {
-    savePersist(store.getState().persist || { })
+    const persist = store.getState().persist || { }
+    savePersist(persist)
+    setUsers(persist.users || { })
   })
 
   const prepareReactRoot = () => {

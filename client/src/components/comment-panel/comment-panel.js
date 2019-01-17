@@ -8,6 +8,7 @@ import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 // Components
 import Comment from '../comment/comment'
+import apiCall from '../../api-call'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -15,21 +16,9 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(commentPanelStyles)
 
-const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
-  const userKeys = Object.keys(users)
-  let publicKey = ''
-  let privateKey = ''
-  if (userKeys.length >= 1) {
-    publicKey = userKeys[0]
-    privateKey = users[publicKey]
-  }
-  return {
-    userPublic: publicKey,
-    userPrivate: privateKey,
-    comments: state.comments,
-  }
-}
+const mapStateToProps = state => ({
+  comments: state.comments,
+})
 
 class CommentPanel extends React.Component {
   constructor(props) {
@@ -53,10 +42,6 @@ class CommentPanel extends React.Component {
   async handleSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    if (!this.props.userPublic) {
-      console.error('User not found')
-      return
-    }
 
     const getBlob = () => {
       const xPath = this.props.taggedElementXPath
@@ -71,16 +56,9 @@ class CommentPanel extends React.Component {
       if (xPath) DomTagging.toggleHighlightElement(DomTagging.getElementByXPath(xPath))
     }
 
-    await fetch('/api/comments', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text: this.state.value,
-        userId: this.props.userPublic,
-        secret: this.props.userPrivate,
-        container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
-        blob: getBlob(),
-      }),
+    await apiCall('POST', '/comments', {
+      text: this.state.value,
+      blob: getBlob(),
     })
     unhighlightTaggedElement()
     this.setState({ value: '' })
@@ -94,8 +72,7 @@ class CommentPanel extends React.Component {
   }
 
   fetchComments() {
-    fetch('/api/comments')
-      .then(response => response.json())
+    apiCall('GET', '/comments')
       .then((comments) => {
         this.props.dispatch({ type: 'LOAD_ALL', comments })
         this.scrollToBottom()

@@ -1,6 +1,7 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+@import '../../scss/functions';
 @import '../../scss/atoms/button';
 
 .reactions {
@@ -78,13 +79,13 @@ $symbol-height: 1em;
 }
 
 .fire {
-  background-image: url('/emojis/fire.png');
+  background-image: static-url('/emojis/fire.png');
 }
 
 .up {
-  background-image: url('/emojis/thumbs-up.png');
+  background-image: static-url('/emojis/thumbs-up.png');
 }
 
 .down {
-  background-image: url('/emojis/thumbs-down.png');
+  background-image: static-url('/emojis/thumbs-down.png');
 }

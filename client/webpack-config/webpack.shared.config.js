@@ -23,6 +23,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'static/', to: outputPath },
     ], {}),
+
   ],
 
   module: {
@@ -82,6 +83,15 @@ module.exports = {
           },
           {
             loader: 'sass-loader',
+          },
+          {
+            loader: '@epegzz/sass-vars-loader',
+            options: {
+              syntax: 'scss',
+              vars: {
+                'static-url': JSON.stringify(process.env.STATIC_URL || 'http://localhost:8080'),
+              },
+            },
           },
         ],
       },

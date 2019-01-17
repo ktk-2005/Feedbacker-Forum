@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getComments, getThreadComments, addComment, addThread, verifyUser
+  getComments, getThreadComments, addComment, addThread
 } from '../database'
-import { uuid, attempt } from './helpers'
+import { uuid, attempt, reqContainer, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -36,8 +36,9 @@ const router = express.Router()
 //     }
 // }
 router.get('/', catchErrors(async (req, res) => {
+  const { container } = await reqContainer(req)
   const groupedComments = {}
-  const comments = await getComments()
+  const comments = await getComments(container)
   for (const comment of comments) {
     let result = groupedComments[comment.comment_id]
     if (!result) {
@@ -71,29 +72,24 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Example body for a root comment @json {
 //   "text": "minttua",
-//   "user": "salaattipoika",
-//   "secret": "408c43a509ee4c63",
-//   "container": "abcdef",
-//   "blob": "{\"path\": \"/path/to/element\"}"
+//   "blob": {\"path\": \"/path/to/element\"}
 // }
 // comments can be linked to a thread with @json {
 //   "text": "minttua",
-//   "user": "salaattipoika",
-//   "secret": "408c43a509ee4c63",
 //   "threadId": "1234",
-//   "blob": "{\"path\": \"/path/to/element\"}"
+//   "blob": {\"path\": \"/path/to/element\"}
 // }
 //
 // Returns `{ id, threadId }` of the new comment
 router.post('/', catchErrors(async (req, res) => {
-  const { text, userId, secret, blob } = req.body
-  await verifyUser(userId, secret)
+  const { text, blob } = req.body
+  const { container } = await reqContainer(req)
+  const { userId } = await reqUser(req)
 
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({
-      id: threadId,
-      container: req.body.container,
+      id: threadId, container,
     })
     return threadId
   })

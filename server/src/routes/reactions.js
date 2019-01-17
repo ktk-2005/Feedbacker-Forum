@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  addReaction, deleteReaction, verifyUser
+  addReaction, deleteReaction
 } from '../database'
-import { uuid, attempt } from './helpers'
+import { uuid, attempt, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -13,17 +13,13 @@ const router = express.Router()
 //
 // Example body @json {
 //   "emoji": "fire",
-//   "user": "jaba",
-//   "secret": "408c43a509ee4c63",
 //   "comment_id": "1bd8052b"
 // }
 //
 // Returns `{ id }` of the reaction
 router.post('/', catchErrors(async (req, res) => {
-  const {
-    emoji, userId, secret, commentId,
-  } = req.body
-  await verifyUser(userId, secret)
+  const { emoji, commentId } = req.body
+  const { userId } = await reqUser(req)
 
   await attempt(async () => {
     const id = uuid()
@@ -39,11 +35,16 @@ router.post('/', catchErrors(async (req, res) => {
 //
 // Returns JSON indicating whether deletion was successful or not
 router.delete('/', catchErrors(async (req, res) => {
-  const {
-    emoji, userId, secret, commentId,
-  } = req.body
-  await verifyUser(userId, secret)
-  res.json(await deleteReaction({ commentId, emoji, userId }))
+  const { emoji, commentId } = req.body
+  const { users } = await reqUser(req)
+  for (const userId in users) {
+    if (users.hasOwnProperty(userId)) {
+      try {
+        await deleteReaction({ commentId, emoji, userId })
+      } catch (err) { /* ignore */ }
+    }
+  }
+  res.json({ })
 }))
 
 module.exports = router
