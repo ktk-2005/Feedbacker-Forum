@@ -28,7 +28,6 @@ const Create = () => (
       <input type="number" min="1" max="65535" name="port" />
       <input type="submit" value="Create" />
     </form>
-    <Route path="/site/build" component={Build} />
   </div>
 )
 
