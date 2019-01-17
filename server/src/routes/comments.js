@@ -47,7 +47,7 @@ router.get('/', catchErrors(async (req, res) => {
         text: comment.comment_text,
         userId: comment.comment_user_id,
         threadId: comment.thread_id,
-        blob: comment.blob,
+        blob: JSON.parse(comment.comment_blob) || {},
         reactions: [],
       }
       groupedComments[comment.comment_id] = result

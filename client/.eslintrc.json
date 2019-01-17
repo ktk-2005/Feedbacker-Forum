@@ -31,6 +31,7 @@
     "no-restricted-syntax": "off",
     "no-prototype-builtins": "off",
     "class-methods-use-this": "off",
+    "no-continue": "off",
     "object-curly-newline": "off"
   },
 
