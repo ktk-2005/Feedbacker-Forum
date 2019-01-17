@@ -44,7 +44,7 @@ Example response
 
 ### [GET /api/comments](../server/src/routes/comments.js#L38)
 
-Retrieve all comments.
+Retrieve all comments of the current container instance.
 
 returns JSON array of all comments grouped with reactions in database
 ```json
@@ -75,13 +75,13 @@ returns JSON array of all comments grouped with reactions in database
 ```
 ### [POST /api/comments](../server/src/routes/comments.js#L84)
 
-Adds comment to database.
+Adds comment to the current container instance.
 
 Example body for a root comment
 ```json
 {
   "text": "minttua",
-  "blob": {\"path\": \"/path/to/element\"}
+  "blob": {"path": "/path/to/element"}
 }
 ```
 comments can be linked to a thread with
@@ -89,7 +89,7 @@ comments can be linked to a thread with
 {
   "text": "minttua",
   "threadId": "1234",
-  "blob": {\"path\": \"/path/to/element\"}
+  "blob": {"path": "/path/to/element"}
 }
 ```
 
@@ -97,7 +97,7 @@ Returns `{ id, threadId }` of the new comment
 
 ### [GET /api/comments/:threadId](../server/src/routes/comments.js#L110)
 
-Get comments by threadId
+Get comments by `threadId`
 
 returns JSON array of all comments in thread
 
@@ -105,7 +105,7 @@ returns JSON array of all comments in thread
 
 ### [GET /api/questions](../server/src/routes/questions.js#L15)
 
-Retrieve all questions.
+Retrieve all questions in the current container instance.
 
 returns JSON array of all questions in database
 ### [POST /api/questions](../server/src/routes/questions.js#L36)
@@ -116,7 +116,7 @@ Example body
 ```json
 {
   "text": "What?",
-  "blob": {\"path\": \"/path/to/element\"}
+  "blob": {"path": "/path/to/element"}
 }
 ```
 
@@ -126,20 +126,20 @@ Returns `{ id }` of the created question
 
 ### [POST /api/reactions](../server/src/routes/reactions.js#L20)
 
-add reaction to the database.
+add reaction to a comment.
 
 Example body
 ```json
 {
   "emoji": "fire",
-  "comment_id": "1bd8052b"
+  "commentId": "1bd8052b"
 }
 ```
 
 Returns `{ id }` of the reaction
 ### [DELETE /api/reactions](../server/src/routes/reactions.js#L37)
 
-Remove reaction from the database.
+Remove reaction from a comment.
 
 Returns JSON indicating whether deletion was successful or not
 

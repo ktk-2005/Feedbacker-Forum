@@ -9,7 +9,7 @@ import { catchErrors } from '../handlers'
 const router = express.Router()
 
 // @api GET /api/questions
-// Retrieve all questions.
+// Retrieve all questions in the current container instance.
 //
 // returns JSON array of all questions in database
 router.get('/', catchErrors(async (req, res) => {
@@ -29,7 +29,7 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Example body @json {
 //   "text": "What?",
-//   "blob": {\"path\": \"/path/to/element\"}
+//   "blob": {"path": "/path/to/element"}
 // }
 //
 // Returns `{ id }` of the created question
@@ -49,7 +49,7 @@ router.post('/', catchErrors(async (req, res) => {
   await attempt(async () => {
     const id = uuid()
     await addQuestion({
-      id, text, userId, threadId, blob,
+      id, text, userId, threadId, blob: JSON.stringify(blob),
     })
     res.json({ id })
   })

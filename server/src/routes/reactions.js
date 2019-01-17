@@ -9,11 +9,11 @@ import { catchErrors } from '../handlers'
 const router = express.Router()
 
 // @api POST /api/reactions
-// add reaction to the database.
+// add reaction to a comment.
 //
 // Example body @json {
 //   "emoji": "fire",
-//   "comment_id": "1bd8052b"
+//   "commentId": "1bd8052b"
 // }
 //
 // Returns `{ id }` of the reaction
@@ -31,7 +31,7 @@ router.post('/', catchErrors(async (req, res) => {
 }))
 
 // @api DELETE /api/reactions
-// Remove reaction from the database.
+// Remove reaction from a comment.
 //
 // Returns JSON indicating whether deletion was successful or not
 router.delete('/', catchErrors(async (req, res) => {

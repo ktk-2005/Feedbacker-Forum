@@ -34,7 +34,7 @@ export async function getComments(container) {
     ON comments.id = reactions.comment_id
     INNER JOIN threads
     ON comments.thread_id = threads.id
-    WHERE threads.container_id == ?
+    WHERE threads.container_id = ?
     `, [container])
 }
 
