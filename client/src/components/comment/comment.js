@@ -19,8 +19,8 @@ const handleToggleHighlight = (xPath) => {
   const element = DomTagging.getElementByXPath(xPath)
   element.scrollIntoView({
     behavior: 'smooth',
-    block: 'end',
-    inline: 'nearest',
+    block: 'center',
+    inline: 'center',
   })
   DomTagging.toggleHighlightElement(element, true)
 }
