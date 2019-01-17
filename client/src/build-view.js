@@ -32,7 +32,7 @@ class Build extends React.Component {
 
   render() {
     const { name } = this.props.match.params
-    const url = `//${name}.localhost:8080`
+    const url = `http://${name}.localhost:8080`
 
     return (
       <div className={css('build-view-container')}>
