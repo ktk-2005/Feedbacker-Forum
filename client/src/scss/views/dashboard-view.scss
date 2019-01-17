@@ -16,5 +16,16 @@
   background-color: $palette-accent;
   color: $palette-light;
   padding: 0.5em;
+}
+
+.instance-container {
+  display: flex;
+  flex-flow: column;
+  margin: 1em;
+}
+
+.instance {
+  border: solid 1px $palette-medium;
   box-shadow: 0 0 5px $palette-shadow-default;
+  padding: 1em;
 }
