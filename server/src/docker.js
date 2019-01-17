@@ -79,7 +79,7 @@ export async function createNewContainer(url, version, type, name, port) {
     }
   }
 
-  return name
+  return { id: containerInfo.Id, name }
 }
 
 export async function stopContainer(id) {
