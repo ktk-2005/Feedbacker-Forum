@@ -1,6 +1,8 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './scss/views/create.scss'
+import { Route, Link } from 'react-router-dom'
+import Build from './build-view'
 
 const css = classNames.bind(styles)
 
@@ -8,7 +10,7 @@ const Create = () => (
   <div className={css('create-view')}>
     <h2>Create an instance</h2>
     <form
-      action="/api/instances/new"
+      action="/site/build"
       method="post"
       className={css('form-create')}
     >
@@ -26,6 +28,7 @@ const Create = () => (
       <input type="number" min="1" max="65535" name="port" />
       <input type="submit" value="Create" />
     </form>
+    <Route path="/site/build" component={Build} />
   </div>
 )
 
