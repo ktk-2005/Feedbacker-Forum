@@ -60,10 +60,25 @@ module.exports = {
         },
       },
 
+      // General sass files
       {
         test: /\.s?css$/,
         use: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+            options: {
+              insertInto: () => {
+                let shadowRootElement = document.querySelector('[data-feedback-shadow-root]')
+                if (!shadowRootElement) {
+                  shadowRootElement = document.createElement('div')
+                  shadowRootElement.setAttribute('data-feedback-shadow-root', true)
+                  document.body.appendChild(shadowRootElement)
+                  shadowRootElement.attachShadow({ mode: 'open' })
+                }
+                return shadowRootElement.shadowRoot
+              },
+            },
+          },
           {
             loader: 'css-loader',
             options: {
@@ -82,12 +97,25 @@ module.exports = {
           {
             loader: 'sass-loader',
           },
+          {
+            loader: '@epegzz/sass-vars-loader',
+            options: {
+              syntax: 'scss',
+              vars: {
+                'static-url': JSON.stringify(process.env.STATIC_URL || 'http://localhost:8080'),
+              },
+            },
+          },
         ],
       },
 
       {
         test: /\.svg$/,
         use: 'svg-inline-loader',
+      },
+      {
+        test: /\.png$/,
+        use: 'url-loader',
       },
     ],
   },

@@ -1,0 +1,24 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+.button {
+  @include button(2px);
+  @include display-and-animate();
+  position: fixed;
+  bottom: 12%;
+  left: 3%;
+  $dimension: 30px;
+  height: $dimension;
+  padding: $baseline $spacer;
+  box-shadow: 0 3px 5px $palette-light;
+  color: $palette-lighter;
+  background: $palette-accent;
+  &.active {
+    background: $palette-dark;
+    &, & * {
+      visibility: visible;
+    }
+  }
+}
