@@ -22,10 +22,9 @@ class Build extends React.Component {
   }
 
   logPolling() {
-    fetch('/api/instances/logs/')
+    fetch(`/api/instances/logs/${this.props.location.state.containerId}`)
       .then(response => response.text())
       .then(data => this.setState({ data }))
-    console.log('BANANA SLAMA!')
   }
 
   render() {
@@ -33,7 +32,9 @@ class Build extends React.Component {
       <div className={css('build-view-container')}>
         <h3>Build...</h3>
         <div className={css('log-container')}>
-          {this.state.data}
+          <pre>
+            {this.state.data}
+          </pre>
         </div>
       </div>
     )
