@@ -47,7 +47,10 @@ class Create extends React.Component {
     })
       .then(response => response.json())
       .then((json) => {
-        this.setState({ redirect: true })
+        this.setState({
+          containerId: json.containerInfo.id,
+          redirect: true,
+        })
       })
   }
 
