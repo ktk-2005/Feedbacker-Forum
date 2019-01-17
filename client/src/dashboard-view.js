@@ -1,9 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import classNames from 'classnames/bind'
 import { Route, Link } from 'react-router-dom'
-import styles from './scss/views/dashboard-view.scss'
+// Redux
+import { connect } from 'react-redux'
+// Helpers
+import classNames from 'classnames/bind'
+// Components
 import Create from './create'
+// Styles
+import styles from './scss/views/dashboard-view.scss'
 
 const css = classNames.bind(styles)
 

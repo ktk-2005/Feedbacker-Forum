@@ -1,5 +1,7 @@
 import React from 'react'
+// Helpers
 import classNames from 'classnames/bind'
+// Styles
 import styles from './scss/views/build-view.scss'
 
 const css = classNames.bind(styles)
@@ -29,13 +31,13 @@ class Build extends React.Component {
   }
 
   render() {
-    const name = this.props.match.params.name
-    const url = `http://${name}.localhost:8080`
+    const {name} = this.props.match.params
+    const url = `//${name}.localhost:8080`
 
     return (
       <div className={css('build-view-container')}>
         <h3>Build...</h3>
-        <a href={url}>{url}</a>
+        <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
         <div className={css('log-container')}>
           <pre>
             {this.state.data}

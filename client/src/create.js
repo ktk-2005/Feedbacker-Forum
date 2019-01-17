@@ -1,8 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import classNames from 'classnames/bind'
 import { Route, Redirect } from 'react-router-dom'
+// Helpers
+import classNames from 'classnames/bind'
+import { shadowDocument } from './shadowDomHelper'
+// Components
 import Build from './build-view'
+// Styles
 import styles from './scss/views/create.scss'
 
 const css = classNames.bind(styles)
@@ -30,14 +34,15 @@ class Create extends React.Component {
     }
   }
 
+  // TODO: d.querySelector, better ids? is this the right way or some passing instead?
   postContainer() {
     fetch('/api/instances/new', {
       body: JSON.stringify({
-        url: document.getElementById('url').value,
-        version: document.getElementById('version').value,
+        url: shadowDocument().getElementById('url').value,
+        version: shadowDocument().getElementById('version').value,
         type: 'node',
-        port: document.getElementById('port').value,
-        name: document.getElementById('name').value,
+        port: shadowDocument().getElementById('port').value,
+        name: shadowDocument().getElementById('name').value,
         userId: this.props.userPublic,
       }),
       method: 'post',
@@ -92,7 +97,7 @@ class Create extends React.Component {
           </label>
           <label htmlFor="port">
             Port
-            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="4000" required />
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
           </label>
           <button type="button" onClick={this.postContainer}>
             Create
