@@ -56,6 +56,8 @@ class CommentPanel extends React.Component {
       return
     }
 
+    console.warn('here', this.state.taggedElementXPath)
+
     await fetch('/api/comments', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -64,6 +66,9 @@ class CommentPanel extends React.Component {
         userId: this.props.userPublic,
         secret: this.props.userPrivate,
         container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
+        blob: {
+          xPath: this.props.taggedElementXPath,
+        },
       }),
     })
     this.setState({ value: '' })

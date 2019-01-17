@@ -9,7 +9,7 @@ describe('/api/reactions', () => {
         userId: 'da776df3',
         secret: 'sf8a7s',
         emoji: 'fire',
-        commentId: '1907b7e5',
+        commentId: '13adr8sa',
       },
     })
     assert.equal(typeof response.id, 'string')
@@ -24,7 +24,7 @@ describe('/api/reactions', () => {
         userId: 'da776df3',
         secret: 'sf8a7s',
         emoji: 'fire',
-        commentId: '1907b7e5',
+        commentId: '13adr8sa',
       },
     })
     const response = await apiRequest('/api/reactions')

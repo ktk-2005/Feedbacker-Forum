@@ -19,8 +19,6 @@
 
 @api /api/reactions
 
-@api /api/reactions/:commentId
-
 ## Users
 
 @api /api/users

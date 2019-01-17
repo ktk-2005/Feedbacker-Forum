@@ -31,7 +31,11 @@
     "no-restricted-syntax": "off",
     "no-prototype-builtins": "off",
     "class-methods-use-this": "off",
+<<<<<<< HEAD
     "no-continue": "off"
+=======
+    "object-curly-newline": "off"
+>>>>>>> c0f6167d9246b5b9ec42fd0974859cafdf0bdebd
   },
 
   "globals": {

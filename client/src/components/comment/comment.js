@@ -3,7 +3,7 @@ import React from 'react'
 import Moment from 'react-moment'
 import classNames from 'classnames/bind'
 // Components
-import Reactions from '../emoji-reactions/reactions'
+import Reactions from '../reactions/reactions'
 // Styles
 import styles from './comment.scss'
 

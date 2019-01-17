@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom'
 // Redux
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-// External libraries
+// External libraries & helpers
 import * as R from 'ramda'
 import retargetEvents from 'react-shadow-dom-retarget-events'
 import classNames from 'classnames/bind'
+import * as DomTagging from './dom-tagging'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -73,6 +74,7 @@ class MainView extends React.Component {
       surveyPanelIsHidden: true,
       surveyButtonIsHidden: false,
       taggingModeActive: false,
+      taggedElementXPath: '',
     }
   }
 
@@ -90,7 +92,11 @@ class MainView extends React.Component {
   }
 
   handleElementTagged(event) {
-    console.log('DOMT debug', 'index.js has tagged element', event)
+    const xPath = DomTagging.getCompleteElementXPath(event)
+    this.setState({
+      taggedElementXPath: xPath,
+    })
+    console.log('DOMT debug', 'index.js has tagged element', event, 'xpath:', xPath, 'state:', this.state.taggedElementXPath)
   }
 
   render() {
@@ -117,7 +123,7 @@ class MainView extends React.Component {
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
         />
-        <CommentPanel />
+        <CommentPanel taggedElementXPath={this.state.taggedElementXPath} />
       </div>
     )
   }
@@ -132,6 +138,14 @@ const initialize = () => {
   }
 
   window[initializedKey] = true
+
+  const blockLegacyBrowsers = () => {
+    const isLegacy = window.navigator.userAgent.match(/(MSIE|Trident|Edge)/)
+    // eslint-disable-next-line
+    while (isLegacy) alert('This browser is not currently supported. Please use chrome or firefox.')
+  }
+
+  blockLegacyBrowsers()
 
   const loadPersist = async (state, allDataLoaded) => {
     store.dispatch({ type: LOAD_PERSIST, state })

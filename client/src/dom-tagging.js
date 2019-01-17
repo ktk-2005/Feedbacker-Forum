@@ -1,4 +1,182 @@
+// Helpers
 import { shadowRoot, shadowDocument } from './shadowDomHelper'
+
+// X path generation
+
+function getXPath(element) {
+  if (element.tagName === 'HTML') return '/HTML[1]'
+  if (element === document.body) return '/HTML[1]/BODY[1]'
+
+  let ix = 0
+  const siblings = element.parentNode.childNodes
+  for (let i = 0; i < siblings.length; i++) {
+    const sibling = siblings[i]
+    if (sibling === element) return `${getXPath(element.parentNode)}/${element.tagName}[${ix + 1}]`
+    if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++
+  }
+}
+
+const getElementByXPath = path => document.evaluate(
+  path,
+  document.documentElement,
+  null,
+  XPathResult.FIRST_ORDERED_NODE_TYPE,
+  null
+).singleNodeValue
+
+// Events
+
+// Polyfill
+function eventPathFallback(event) {
+  let el = event.target
+  if (el == null) return []
+  const pathArr = [el]
+  while (el.parentElement != null) {
+    el = el.parentElement
+    // Prepend element
+    pathArr.unshift(el)
+  }
+
+  return pathArr.reverse()
+}
+
+// TODO: For first iteration only, getEventTrace is used in bilateral implementation
+function getCompleteElementXPath(event) {
+  let { path } = event
+  if (!path) path = eventPathFallback(event)
+  console.log('getTrace', 'event.path:', event.path, 'eventPathFallback', eventPathFallback(event))
+  return getXPath(path[0])
+}
+
+// Clicks
+
+// State
+let markingMode = false
+
+// Helper
+
+const isMarkable = el => (
+  !['html', 'body'].includes(el.tagName)
+    && el !== shadowRoot()
+    && !shadowDocument().contains(el)
+)
+
+const callbacks = {}
+// eslint-disable-next-line
+const setElementTaggedCallback = callback => callbacks.elementTagged = callback
+// eslint-disable-next-line
+const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState = callback
+
+// Hover
+
+const handleHover = (event) => {
+  const el = event.target
+  console.log('DOMT debug', 'mouse* fired', el)
+  if (isMarkable(el)) {
+    if (markingMode) el.classList.toggle('dom-tagging-element-highlighted')
+    else el.classList.remove('dom-tagging-element-highlighted')
+  }
+}
+
+const handleClick = (event) => {
+  // console.log('DOMT debug', 'click fired', event)
+  if (markingMode) {
+    if (isMarkable(event.target)) {
+      callbacks.elementTagged(event)
+      // TODO: Remember to remove the highlight after added comment
+      // saveTag(event.target)
+      // eslint-disable-next-line
+      toggleMarkingMode()
+    }
+  }
+  event.preventDefault()
+}
+
+const toggleMarkingModeListeners = () => {
+  if (markingMode) {
+    document.body.addEventListener('mouseover', handleHover)
+    document.body.addEventListener('mouseout', handleHover)
+    document.body.addEventListener('click', handleClick)
+  } else {
+    document.body.removeEventListener('mouseover', handleHover)
+    document.body.removeEventListener('mouseout', handleHover)
+    document.body.removeEventListener('click', handleClick)
+  }
+}
+
+const toggleMarkingMode = () => {
+  markingMode = !markingMode
+  callbacks.toggleActiveState()
+  toggleMarkingModeListeners()
+}
+
+const includeDomTaggingCss = () => {
+  document.head.innerHTML += `
+  <style>
+    .dom-tagging-element-highlighted {
+      box-shadow: 0 0 0 1px red;
+    }
+  </style>
+  `
+}
+
+includeDomTaggingCss()
+
+export {
+  setElementTaggedCallback,
+  setToggleTagElementStateCallback,
+  // hijackEventListeners,
+  // startObservingDomChange,
+  toggleMarkingMode,
+  getCompleteElementXPath,
+  getElementByXPath
+}
+
+// TODO: Not in use below
+
+/* eslint-disable max-len */
+/*
+// Observer
+
+const startObservingDomChange = () => {
+  // Create new observer
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((m) => {
+      const entry = {
+        mutation: m,
+        el: m.target,
+        value: m.target,
+        oldValue: m.oldValue,
+        addedNodes: m.addedNodes,
+        removedNodes: m.removedNodes,
+      }
+
+      console.log('🤖', 'Recording mutation', entry, JSON.stringify(eventLog))
+      logDomModifyingEvents()
+
+      observer.disconnect()
+      startObservingDomChange()
+    })
+  })
+
+  const targetNode = document.querySelector('body')
+  const config = {
+    attributes: false,
+    childList: true,
+    subtree: true,
+  }
+  observer.observe(targetNode, config)
+}
+
+// Init
+
+const init = () => {
+  // loadTags()
+  // startObservingDomChange()
+  // hijackEventListeners() TODO: does not work
+}
+init()
+
 
 // Event logging
 
@@ -67,45 +245,6 @@ const hijackEventListeners = () => {
 }
 */
 
-// X path generation
-
-const getXPath = (element) => {
-  if (element.id !== '') return `id("${element.id}")`
-  if (element === document.body) return element.tagName
-
-  let ix = 0
-  const siblings = element.parentNode.childNodes
-  siblings.forEach((sibling) => {
-    if (sibling === element) return `${getXPath(element.parentNode)}/${element.tagName}[${ix + 1}]`
-    if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++
-  })
-}
-
-const getElementByXPath = path => document.evaluate(
-  path,
-  document.documentElement,
-  null,
-  XPathResult.FIRST_ORDERED_NODE_TYPE,
-  null
-).singleNodeValue
-
-// Events
-
-
-// Polyfill
-function eventPathFallback(event) {
-  let el = event.target
-  if (el == null) return []
-  const pathArr = [el]
-  while (el.parentElement != null) {
-    el = el.parentElement
-    // Prepend element
-    pathArr.unshift(el)
-  }
-
-  return pathArr.reverse()
-}
-
 const getEventTrace = () => {
   const l = eventLog
   if (!l.domModifyingEvents) return null
@@ -128,7 +267,7 @@ const getEventTrace = () => {
 
 // Tagging
 
-const localStorageKey = 'swp1-tagging-concept'
+/*const localStorageKey = 'swp1-tagging-concept'
 
 const getCommentsArray = () => JSON.parse(localStorage.getItem(localStorageKey)) || []
 
@@ -167,22 +306,21 @@ const loadTags = () => {
         el.setAttribute('title', title + item.comment)
       }
     })
-    */
 }
 
 const refreshTags = () => {
-  /*
+
     ['title', attributeName].forEach((a) => {
       document.querySelectorAll(`[${a}]`).forEach(el => el.removeAttribute(a))
     })
     loadTags()
-    */
+
 }
 
 // Save comment:
 
 const saveTag = (el) => {
-  /*
+
     const path = getXPath(el)
     const comment = prompt('Add comment')
     const trace = getEventTrace()
@@ -201,124 +339,6 @@ const saveTag = (el) => {
     )
     // Refresh view
     refreshTags()
-    */
+
 }
-
-// Clicks
-
-// State
-let markingMode = false // TODO: how to handle states correctly
-
-// Helper
-
-const isMarkable = el => (
-  !['html', 'body'].includes(el.tagName)
-    && el !== shadowRoot()
-    && !shadowDocument().contains(el)
-    && !el.classList.contains('safezone')
-)
-
-const callbacks = {}
-// eslint-disable-next-line
-const setElementTaggedCallback = callback => callbacks.elementTagged = callback
-// eslint-disable-next-line
-const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState = callback
-
-// Hover
-
-const handleHover = (event) => {
-  const el = event.target
-  console.log('DOMT debug', 'mouse* fired', el)
-  if (isMarkable(el)) {
-    if (markingMode) el.classList.toggle('highlighted')
-    else el.classList.remove('highlighted')
-  }
-}
-
-const handleClick = (event) => {
-  // console.log('DOMT debug', 'click fired', event)
-  if (markingMode) {
-    if (isMarkable(event.target)) {
-      callbacks.elementTagged(event)
-      // TODO: Remember to remove the highlight after added comment
-      // saveTag(event.target)
-      // eslint-disable-next-line
-      toggleMarkingMode()
-    }
-  }
-  event.preventDefault()
-}
-
-const toggleMarkingModeListeners = () => {
-  if (markingMode) {
-    document.body.addEventListener('mouseover', handleHover)
-    document.body.addEventListener('mouseout', handleHover)
-    document.body.addEventListener('click', handleClick)
-  } else {
-    document.body.removeEventListener('mouseover', handleHover)
-    document.body.removeEventListener('mouseout', handleHover)
-    document.body.removeEventListener('click', handleClick)
-  }
-}
-
-const toggleMarkingMode = () => {
-  markingMode = !markingMode
-  callbacks.toggleActiveState()
-  toggleMarkingModeListeners()
-}
-
-// Observer
-
-const startObservingDomChange = () => {
-  // Create new observer
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((m) => {
-      const entry = {
-        mutation: m,
-        el: m.target,
-        value: m.target,
-        oldValue: m.oldValue,
-        addedNodes: m.addedNodes,
-        removedNodes: m.removedNodes,
-      }
-
-      console.log('🤖', 'Recording mutation', entry, JSON.stringify(eventLog))
-      logDomModifyingEvents()
-
-      observer.disconnect()
-      startObservingDomChange()
-    })
-  })
-
-  const targetNode = document.querySelector('body')
-  const config = {
-    attributes: false,
-    childList: true,
-    subtree: true,
-  }
-  observer.observe(targetNode, config)
-}
-
-// Init
-
-const init = () => {
-  document.head.innerHTML += `
-  <style>
-    .highlighted { box-shadow: 0 0 0 1px red; }
-  </style>
-  ` // TODO: correct way
-
-  // loadTags()
-  // startObservingDomChange()
-  // hijackEventListeners() TODO: does not work
-}
-
-init()
-
-export {
-  setElementTaggedCallback,
-  setToggleTagElementStateCallback,
-  hijackEventListeners,
-  startObservingDomChange,
-  toggleMarkingMode
-}
+*/

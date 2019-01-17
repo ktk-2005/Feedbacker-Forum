@@ -41,6 +41,6 @@ export default function apiRequest(path, extraOpts) {
     ...extraOpts,
   }
 
-  return tryRequest(opts, 20)
+  return tryRequest(opts, 80)
 }
 
