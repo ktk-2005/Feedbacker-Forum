@@ -1,40 +1,25 @@
 /* eslint-disable camelcase */
 import express from 'express'
-import { getReactions, getCommentReactions, addReaction } from '../database'
-import { uuid, attempt } from './helpers'
+import {
+  addReaction, deleteReaction
+} from '../database'
+import { uuid, attempt, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
 
-// @api GET /api/reactions
-// Retrieve all reactions.
-//
-// returns JSON array of all reactions in database
-router.get('/', catchErrors(async (req, res) => {
-  res.send(await getReactions())
-}))
-
-// @api GET /api/reactions/:commentId
-// Retrieve all reactions by commentId.
-//
-// returns JSON array of all reactions to comment
-router.get('/:commentId', catchErrors(async (req, res) => {
-  const { commentId } = req.params
-  res.send(await getCommentReactions(commentId))
-}))
-
 // @api POST /api/reactions
-// add reaction to the database.
+// add reaction to a comment.
 //
 // Example body @json {
-//   "emoji": "🍑",
-//   "user": "jaba",
-//   "comment_id": "1bd8052b"
+//   "emoji": "fire",
+//   "commentId": "1bd8052b"
 // }
 //
 // Returns `{ id }` of the reaction
 router.post('/', catchErrors(async (req, res) => {
-  const { emoji, userId, commentId } = req.body
+  const { emoji, commentId } = req.body
+  const { userId } = await reqUser(req)
 
   await attempt(async () => {
     const id = uuid()
@@ -43,6 +28,23 @@ router.post('/', catchErrors(async (req, res) => {
     })
     res.json({ id })
   })
+}))
+
+// @api DELETE /api/reactions
+// Remove reaction from a comment.
+//
+// Returns JSON indicating whether deletion was successful or not
+router.delete('/', catchErrors(async (req, res) => {
+  const { emoji, commentId } = req.body
+  const { users } = await reqUser(req)
+  for (const userId in users) {
+    if (users.hasOwnProperty(userId)) {
+      try {
+        await deleteReaction({ commentId, emoji, userId })
+      } catch (err) { /* ignore */ }
+    }
+  }
+  res.json({ })
 }))
 
 module.exports = router

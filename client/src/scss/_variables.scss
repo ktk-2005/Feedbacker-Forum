@@ -1,13 +1,28 @@
 /* transitions */
 $animation-duration-default: 0.2s;
+$transition-default-tail: $animation-duration-default ease-in-out;
+$transition-default-all: all $transition-default-tail;
 
-/* buttons */
+// Sizing
+
+$baseline: 7px;
+$spacer: $baseline * 2;
+$font-size-default: $baseline * 2;
+$font-size-small: $baseline * 1.5;
+
+// buttons
 $border-radius-default: 3px;
 
 $icon-dimension-default: 24px;
 
 $z-index-levels: (
+  -1: -1,
   1: 100000,
   2: 200000,
   3: 300000,
 );
+
+@function static-url($path) {
+  @return url($static-url + $path);
+}
+

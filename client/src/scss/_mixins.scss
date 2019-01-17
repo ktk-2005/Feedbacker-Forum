@@ -14,3 +14,7 @@
 @mixin z-level($key) {
   z-index: map-get($z-index-levels, $key);
 }
+
+@mixin shadow-outline($y: 0, $fade: 5px) {
+  box-shadow: 0 0 0 1px $palette-white, 0 $y $fade $palette-shadow-default;
+}

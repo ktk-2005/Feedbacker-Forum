@@ -87,7 +87,7 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.run(...args, (err) => {
         if (err) {
-          verboseError(`RUNERROR: ${err}`)
+          verboseError(`RUNERROR: ${err} on query ${args}`)
           reject(err)
         } else {
           resolve()
@@ -104,7 +104,7 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.all(...args, (err, res) => {
         if (err) {
-          verboseError(`QUERYERROR: ${err}`)
+          verboseError(`QUERYERROR: ${err} on query ${args}`)
           reject(err)
         } else {
           resolve(res)
@@ -121,7 +121,7 @@ class SQLiteDatabase {
     return new Promise((resolve, reject) => {
       this.db.exec(...args, (err) => {
         if (err) {
-          verboseError(`EXECERROR: ${err}`)
+          verboseError(`EXECERROR: ${err} on query ${args}`)
           reject(err)
         } else {
           resolve()
