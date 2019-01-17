@@ -8,7 +8,6 @@ import apiCall from '../../api-call.js'
 const css = classNames.bind(styles)
 
 const mapStateToProps = (state) => {
-  // TODO: Check what is this
   const users = (state.persist || {}).users || {}
   return { users }
 }

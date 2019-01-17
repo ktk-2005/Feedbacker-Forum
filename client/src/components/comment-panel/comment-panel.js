@@ -5,6 +5,8 @@ import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
+import * as DomTagging from '../../dom-tagging'
+// Components
 import Comment from '../comment/comment'
 import apiCall from '../../api-call.js'
 // Styles
@@ -15,17 +17,7 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
-  const userKeys = Object.keys(users)
-  let publicKey = ''
-  let privateKey = ''
-  if (userKeys.length >= 1) {
-    publicKey = userKeys[0]
-    privateKey = users[publicKey]
-  }
   return {
-    userPublic: publicKey,
-    userPrivate: privateKey,
     comments: state.comments,
   }
 }
@@ -52,21 +44,25 @@ class CommentPanel extends React.Component {
   async handleSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    if (!this.props.userPublic) {
-      console.error('User not found')
-      return
+
+    const getBlob = () => {
+      const xPath = this.props.taggedElementXPath
+      if (xPath) {
+        return { xPath }
+      }
+      return {}
     }
 
-    console.warn('here', this.state.taggedElementXPath)
+    const unhighlightTaggedElement = () => {
+      const { xPath } = getBlob()
+      if (xPath) DomTagging.toggleHighlightElement(DomTagging.getElementByXPath(xPath))
+    }
 
     await apiCall('POST', '/comments', {
       text: this.state.value,
-      userId: this.props.userPublic,
-      secret: this.props.userPrivate,
-      blob: {
-        xPath: this.props.taggedElementXPath,
-      },
+      blob: getBlob(),
     })
+    unhighlightTaggedElement()
     this.setState({ value: '' })
     await this.fetchComments()
   }
@@ -92,11 +88,15 @@ class CommentPanel extends React.Component {
 
   commentContainer() {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
+    const sortByTime = R.sortBy(arr => arr[1].time)
+    const sortedCommentArray = sortByTime(R.toPairs(this.props.comments))
     return (
       <div className={css('comment-container')} id="comment-container">
         {
-          R.map(([id, comment]) => <Comment key={id} comment={comment} id={id} />,
-            R.toPairs(this.props.comments))
+          R.map(
+            ([id, comment]) => <Comment key={id} comment={comment} id={id} />,
+            sortedCommentArray
+          )
         }
       </div>
     )

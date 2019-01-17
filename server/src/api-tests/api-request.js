@@ -3,17 +3,22 @@ import util from 'util'
 import errors from 'request-promise-native/errors'
 import btoa from 'btoa'
 
+
 const setTimeoutPromise = util.promisify(setTimeout)
 
 let totalFailedRequests = 0
 
 // Attempt to send a request to the API server, called again
 // with a timeout if it fails to respond.
-function tryRequest(opts, retriesLeft) {
+function tryRequest(opts, retriesLeft, shouldFail) {
   let promise = request(opts)
 
-  if (retriesLeft > 1) {
+  if (retriesLeft > 1 || shouldFaill) {
     promise = promise.catch((error) => {
+      if (error.statusCode === 500 && shouldFail
+  l) {
+        return Promise.resolve('Failed')
+      }
       if (!(error instanceof errors.RequestError
         || (error instanceof errors.StatusCodeError && error.statusCode === 502))) {
         return Promise.reject(error)
@@ -28,7 +33,6 @@ function tryRequest(opts, retriesLeft) {
         .then(() => tryRequest(opts, retriesLeft - 1))
     })
   }
-
   return promise
 }
 
@@ -56,7 +60,6 @@ export default function apiRequest(method, path, body, optsArg) {
     },
     ...(opts.request || {}),
   }
-
-  return tryRequest(reqOpts, 80)
+  return tryRequest(reqOpts, 80, opts.fail || false)
 }
 
