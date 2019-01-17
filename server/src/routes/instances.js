@@ -5,7 +5,8 @@ import {
   getRunningContainersByUser,
   createNewContainer,
   stopContainer,
-  deleteContainer
+  deleteContainer,
+  getContainerLogs,
 } from '../docker'
 import { verifyUser } from '../database'
 import { attempt, uuid } from './helpers'
@@ -52,9 +53,9 @@ router.get('/', async (req, res) => {
 // Retrieve logs of an instance.
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.
-router.get('/logs', async (req, res) => {
+router.get('/logs/:id', async (req, res) => {
   try {
-    const logs = await getContainerLogs(req.query.id)
+    const logs = await getContainerLogs(req.params.id)
     res.type('txt')
     res.send(logs)
   } catch (error) {

@@ -1,5 +1,4 @@
 import Docker from 'dockerode'
-//import stream from 'stream'
 import {
   addContainer,
   listContainers,
@@ -30,22 +29,7 @@ export async function getContainerLogs(id) {
     timestamps: true,
   })
 
-  /* const muxedStream = new stream.PassThrough()
-  const demuxedStream = new stream.PassThrough()
-
-  demuxedStream.on('data', chunk => console.log(chunk))
-
-  muxedStream.write(muxedBuffer)
-  container.modem.demuxStream(muxedStream, demuxedStream, demuxedStream)
-
-  muxedStream.on('end', () => console.log('muxedStream end'))
-
-  console.log('demuxed')
-
-  return demuxedStream.read() */
-
   return muxedBuffer
-
 }
 
 async function getContainerInfoFromDatabaseByUser(userId) {
