@@ -77,13 +77,13 @@ class Create extends React.Component {
             <option id="type" value="node"> Node </option>
           </select>
           Git URL
-          <input id="url" type="text" name="url" value="https://github.com/bqqbarbhg/docker-test-server.git" />
+          <input id="url" type="text" name="url" />
           Git Hash
-          <input id="version" type="text" name="version" value="master" />
+          <input id="version" type="text" name="version" />
           Name
-          <input id="name" type="text" name="name" value="name" />
+          <input id="name" type="text" name="name" />
           Port
-          <input id="port" type="number" min="1" max="65535" name="port" value="4000" />
+          <input id="port" type="number" min="1" max="65535" name="port" />
           <button type="button" onClick={this.postContainer} />
         </form>
         <Route path="/build" component={Build} />
