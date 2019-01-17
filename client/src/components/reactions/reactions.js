@@ -87,7 +87,9 @@ class Reactions extends Component {
     if (userHash.length === 0) return 'No user'
 
     for (const i of userHash) {
-      const body = JSON.stringify({ emoji, userId: i, secret: users[i], commentId })
+      const body = JSON.stringify({
+        emoji, userId: i, secret: users[i], commentId,
+      })
       // TODO: break loop if successful deletion
       await fetch('/api/reactions', {
         method: 'DELETE',
