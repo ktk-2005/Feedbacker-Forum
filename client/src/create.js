@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
-import { Route, Link, Redirect } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import Build from './build-view'
 import styles from './scss/views/create.scss'
 
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
   const userKeys = Object.keys(users)
   let publicKey = ''
   if (userKeys.length >= 1) {
-    publicKey = userKeys[0]
+    [publicKey] = userKeys
   }
   return {
     userPublic: publicKey,
@@ -58,8 +58,7 @@ class Create extends React.Component {
     if (this.state.redirect) {
       return (
         <Redirect to={{
-          pathname: '/site/build',
-          state: { containerId: this.state.containerId },
+          pathname: `/site/build-view/${this.state.containerId}`,
         }}
         />
       )
@@ -77,14 +76,14 @@ class Create extends React.Component {
             <option id="type" value="node"> Node </option>
           </select>
           Git URL
-          <input id="url" type="text" name="url" value="https://github.com/bqqbarbhg/docker-test-server.git" />
+          <input id="url" type="text" name="url" defaultValue="https://github.com/bqqbarbhg/docker-test-server.git" />
           Git Hash
-          <input id="version" type="text" name="version" value="master" />
+          <input id="version" type="text" name="version" defaultValue="master" />
           Name
-          <input id="name" type="text" name="name" value="name" />
+          <input id="name" type="text" name="name" defaultValue="name" />
           Port
-          <input id="port" type="number" min="1" max="65535" name="port" value="4000" />
-          <button type="button" onClick={this.postContainer} />
+          <input id="port" type="number" min="1" max="65535" name="port" defaultValue="4000" />
+          <button type="button" onClick={this.postContainer}>Create</button>
         </form>
         <Route path="/build" component={Build} />
       </div>
