@@ -101,7 +101,7 @@ class CommentPanel extends React.Component {
 
   render() {
     return (
-      <div className={this.state.isHidden ? css('panel-container', 'comment-panel', 'hidden') : css('panel-container', 'comment-panel')}>
+      <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
         <div className={css('panel-header')}>
           <h5 className={css('heading')}>Comments</h5>
           <button

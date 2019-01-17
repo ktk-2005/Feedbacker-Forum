@@ -115,7 +115,7 @@ class MainView extends React.Component {
 
     return (
       <div
-        className={taggingModeActive ? css('feedback-app-container', 'tagging-mode-active') : css('feedback-app-container')}
+        className={css('feedback-app-container', { 'tagging-mode-active': taggingModeActive })}
       >
         <TagElementButton
           active={taggingModeActive}

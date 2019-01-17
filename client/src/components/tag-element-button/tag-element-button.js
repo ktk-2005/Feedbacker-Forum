@@ -33,7 +33,7 @@ class TagElementButton extends React.Component {
     return (
       <button
         type="button"
-        className={active ? css('button', 'active') : css('button')}
+        className={css('button', { active })}
         onClick={DomTagging.toggleMarkingMode}
       >
         {active ? 'Cancel' : 'Tag'}

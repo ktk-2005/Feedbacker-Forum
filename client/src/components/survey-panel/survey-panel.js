@@ -13,7 +13,7 @@ class SurveyPanel extends React.Component {
     const { hidden, onClick } = this.props
 
     return (
-      <div className={hidden ? css('panel-container', 'hidden') : css('panel-container')}>
+      <div className={css('panel-container', { hidden })}>
         <Draggable
           defaultPosition={{ x: 10, y: 10 }}
           position={null}
