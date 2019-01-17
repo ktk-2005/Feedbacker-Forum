@@ -49,6 +49,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "dependencies": {
+    "file-loader": "^3.0.1",
     "react-router-dom": "^4.3.1"
   },
   "browserslist": [

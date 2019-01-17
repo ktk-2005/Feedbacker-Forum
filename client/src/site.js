@@ -1,16 +1,39 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
-import classNames from 'classnames/bind'
+import { Provider } from 'react-redux'
 import * as R from 'ramda'
-import { setupPersist } from './persist'
-import { apiUrl } from './meta/env.meta'
+import classNames from 'classnames/bind'
 import styles from './scss/_base.scss'
 import ReactRouter from './reactrouter'
+import { setupPersist } from './persist'
+import { apiUrl } from './meta/env.meta'
 
 const css = classNames.bind(styles)
 
 const initializedKey = '!!feedbacker_forum_initialized!!'
+
+const LOAD_PERSIST = 'LOAD_PERSIST'
+const SET_PERSIST = 'SET_PERSIST'
+
+function persistReducer(state = { }, action) {
+  switch (action.type) {
+    case LOAD_PERSIST:
+      return action.state
+
+    case SET_PERSIST:
+      return R.mergeDeepRight(state, action.data)
+
+    default:
+      return state
+  }
+}
+
+const reducer = combineReducers({
+  persist: persistReducer,
+})
+
+const store = createStore(reducer)
 
 const initialize = () => {
   if (window[initializedKey] || !document.body) {
@@ -19,10 +42,44 @@ const initialize = () => {
 
   window[initializedKey] = true
 
+  const loadPersist = async (state, allDataLoaded) => {
+    store.dispatch({ type: LOAD_PERSIST, state })
+
+    if (allDataLoaded) {
+      if (!state.users || R.isEmpty(state.users)) {
+        const response = await fetch(`${apiUrl}/users`, {
+          method: 'POST',
+        })
+        const { id, secret } = await response.json()
+
+        console.log('Created new user from API', { [id]: secret })
+
+        store.dispatch({
+          type: SET_PERSIST,
+          data: {
+            users: {
+              [id]: secret,
+            },
+          },
+        })
+      } else {
+        console.log('Loaded user from persistent storage', state.users)
+      }
+    }
+  }
+
+  const savePersist = setupPersist(loadPersist)
+
+  store.subscribe(() => {
+    savePersist(store.getState().persist || { })
+  })
+
   ReactDOM.render(
-    <div className={css('feedback-app-main-container')}>
-      <ReactRouter />
-    </div>,
+    <Provider store={store}>
+      <div className={css('feedback-app-main-container')}>
+        <ReactRouter />
+      </div>
+    </Provider>,
     document.getElementById('root')
   )
 }

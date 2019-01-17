@@ -1,7 +1,13 @@
 import express from 'express'
+import * as R from 'ramda'
 import {
-  getRunningContainers, createNewContainer, stopContainer, deleteContainer
+  // getRunningContainers,
+  getRunningContainersByUser,
+  createNewContainer,
+  stopContainer,
+  deleteContainer
 } from '../docker'
+import { verifyUser } from '../database'
 import { attempt, uuid } from './helpers'
 
 const router = express.Router()
@@ -11,10 +17,30 @@ const router = express.Router()
 // Retrieve all instances in the database.
 //
 // Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
-
+/*
 router.get('/', async (req, res) => {
   try {
     const containers = await getRunningContainers()
+    res.send(containers)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+})
+*/
+router.get('/', async (req, res) => {
+  try {
+    const [type, token] = req.get('Authorization').split(' ')
+    // let users = JSON.parse(atob(token))
+    let users = JSON.parse(Buffer.from(token, 'base64').toString())
+    users = R.toPairs(users)
+    const containers = []
+    for (const [userId, secret] of users) {
+      try {
+        await verifyUser(userId, secret)
+        containers.push(...await getRunningContainersByUser([userId]))
+      } catch (error) { /* ignore */ }
+    }
     res.send(containers)
   } catch (error) {
     console.log(error)
