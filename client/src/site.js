@@ -1,14 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+// Redux
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
+// Helpers
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
-import styles from './scss/_base.scss'
 import ReactRouter from './reactrouter'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
 import { prepareReactRoot } from './shadowDomHelper'
+// Styles
+import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
 
