@@ -1,5 +1,5 @@
 import Docker from 'dockerode'
-import { addContainer, listContainers, removeContainer } from './database'
+import { addContainer, listContainers, listContainersByUser, removeContainer } from './database'
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
@@ -13,6 +13,14 @@ async function getContainerInfoFromDatabase() {
 
 export async function getRunningContainers() {
   return getContainerInfoFromDatabase()
+}
+
+async function getContainerInfoFromDatabaseByUser(userId) {
+  return listContainersByUser(userId)
+}
+
+export async function getRunningContainersByUser(userId) {
+  return getContainerInfoFromDatabaseByUser(userId)
 }
 
 export async function createNewContainer(url, version, type, name, port) {

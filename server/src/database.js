@@ -53,6 +53,10 @@ export async function listContainers() {
   return db.query('SELECT id, subdomain FROM containers')
 }
 
+export async function listContainersByUser(values = []) {
+  return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
+}
+
 export async function removeContainer({
   id,
 }) { return db.run('DELETE FROM containers WHERE id=?', [id]) }

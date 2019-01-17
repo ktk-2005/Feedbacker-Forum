@@ -1,7 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import { Route, Link } from 'react-router-dom'
-
 import styles from './scss/views/dashboard-view.scss'
 import Create from './create'
 
@@ -37,12 +36,12 @@ class Dashboard extends React.Component {
           </Link>
         </div>
         <div className={css('instance-container')}>
-          <ul>
-          <h2>your containers</h2>
+          <h2>Your containers</h2>
             {instances.map(instance =>
-              <li key={instance.id}>{instance.id}</li>
+              <div key={instance.id} className={css('instance')}>
+                <div>{instance.id}</div>
+              </div>
             )}
-          </ul>
         </div>
         <Route path="/site/create" component={Create} />
       </div>

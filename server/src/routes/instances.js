@@ -1,6 +1,6 @@
 import express from 'express'
 import {
-  getRunningContainers, createNewContainer, stopContainer, deleteContainer
+  getRunningContainers, getRunningContainersByUser, createNewContainer, stopContainer, deleteContainer
 } from '../docker'
 import { attempt, uuid } from './helpers'
 
@@ -15,6 +15,17 @@ const router = express.Router()
 router.get('/', async (req, res) => {
   try {
     const containers = await getRunningContainers()
+    res.send(containers)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params
+    const containers = await getRunningContainersByUser([userId])
     res.send(containers)
   } catch (error) {
     console.log(error)
