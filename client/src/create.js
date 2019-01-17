@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
-import { Route, Link, Redirect } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import Build from './build-view'
 import styles from './scss/views/create.scss'
 
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
   const userKeys = Object.keys(users)
   let publicKey = ''
   if (userKeys.length >= 1) {
-    publicKey = userKeys[0]
+    [publicKey] = userKeys
   }
   return {
     userPublic: publicKey,
@@ -58,8 +58,7 @@ class Create extends React.Component {
     if (this.state.redirect) {
       return (
         <Redirect to={{
-          pathname: '/site/build',
-          state: { containerId: this.state.containerId },
+          pathname: `/site/build-view/${this.state.containerId}`,
         }}
         />
       )
@@ -72,19 +71,31 @@ class Create extends React.Component {
           className={css('form-create')}
           id="form"
         >
-          Type
-          <select name="type">
-            <option id="type" value="node"> Node </option>
-          </select>
-          Git URL
-          <input id="url" type="text" name="url" />
-          Git Hash
-          <input id="version" type="text" name="version" />
-          Name
-          <input id="name" type="text" name="name" pattern="[a-z0-9](-?[a-z0-9])" minlength="3" maxlength="20" />
-          Port
-          <input id="port" type="number" min="1" max="65535" name="port" />
-          <button type="button" onClick={this.postContainer} />
+          <label htmlFor="application">
+            Application type
+            <select name="application" id="application" form="form" required>
+              <option value="node">Node.js</option>
+            </select>
+          </label>
+          <label htmlFor="url">
+            Git URL
+            <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
+          </label>
+          <label htmlFor="version">
+            Git Hash
+            <input type="text" id="version" name="version" placeholder="master or commit hash" required />
+          </label>
+          <label htmlFor="name">
+            Name
+            <input type="text" id="name" name="name" defaultValue="new-feature" pattern="[a-z0-9](-?[a-z0-9])" minlength="3" maxlength="20" required />
+          </label>
+          <label htmlFor="port">
+            Port
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="4000" required />
+          </label>
+          <button type="button" onClick={this.postContainer}>
+            Create
+          </button>
         </form>
         <Route path="/build" component={Build} />
       </div>
