@@ -49,7 +49,7 @@ router.post('/', catchErrors(async (req, res) => {
   await attempt(async () => {
     const id = uuid()
     await addQuestion({
-      id, text, userId, threadId, JSON.stringify(blob),
+      id, text, userId, threadId, blob: JSON.stringify(blob),
     })
     res.json({ id })
   })
