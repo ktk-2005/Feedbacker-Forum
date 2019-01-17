@@ -6,6 +6,7 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import Comment from '../comment/comment'
+import apiCall from '../../api-call.js'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -58,18 +59,13 @@ class CommentPanel extends React.Component {
 
     console.warn('here', this.state.taggedElementXPath)
 
-    await fetch('/api/comments', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text: this.state.value,
-        userId: this.props.userPublic,
-        secret: this.props.userPrivate,
-        container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
-        blob: {
-          xPath: this.props.taggedElementXPath,
-        },
-      }),
+    await apiCall('POST', '/comments', {
+      text: this.state.value,
+      userId: this.props.userPublic,
+      secret: this.props.userPrivate,
+      blob: {
+        xPath: this.props.taggedElementXPath,
+      },
     })
     this.setState({ value: '' })
     await this.fetchComments()
@@ -82,8 +78,7 @@ class CommentPanel extends React.Component {
   }
 
   fetchComments() {
-    fetch('/api/comments')
-      .then(response => response.json())
+    apiCall('GET', '/comments')
       .then((comments) => {
         this.props.dispatch({ type: 'LOAD_ALL', comments })
         this.scrollToBottom()

@@ -15,7 +15,7 @@ export async function initializeDatabase() {
   }
 }
 
-export async function getComments() {
+export async function getComments(container) {
   return db.query(`
     SELECT
     comments.id         AS comment_id,
@@ -31,7 +31,11 @@ export async function getComments() {
     reactions.comment_id AS reaction_comment_id
     FROM comments
     LEFT JOIN reactions
-    ON comments.id = reactions.comment_id`)
+    ON comments.id = reactions.comment_id
+    INNER JOIN threads
+    ON comments.thread_id = threads.id
+    WHERE threads.container_id == ?
+    `, [container])
 }
 
 export async function getQuestions() { return db.query('SELECT * FROM questions') }
@@ -70,4 +74,6 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
+
+export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }
 

@@ -21,3 +21,8 @@ $z-index-levels: (
   2: 200000,
   3: 300000,
 );
+
+@function static-url($path) {
+  @return url($static-url + $path);
+}
+

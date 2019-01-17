@@ -6,6 +6,8 @@ INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-1111', 'one', 
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-2222', 'two', 'http://localhost:10002', 'da776df3');
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APD-1111', 'done', 'http://dockerhost:10001', 'da776df3');
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APD-2222', 'dtwo', 'http://dockerhost:10002', 'da776df3');
+INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-TEST', 'test', 'http://localhost:8080', 'da776df3');
+INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-OTHR', 'other', 'http://localhost:8080', 'da776df3');
 
 INSERT INTO threads (id, container_id) VALUES ('THR-1234', 'APP-1111');
 

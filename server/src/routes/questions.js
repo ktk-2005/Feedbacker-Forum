@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getQuestions, addQuestion, addThread, verifyUser
+  getQuestions, addQuestion, addThread
 } from '../database'
-import { uuid, attempt } from './helpers'
+import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -36,14 +36,14 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns `{ id }` of the created question
 router.post('/', catchErrors(async (req, res) => {
-  const { text, userId, secret, blob } = req.body
-  await verifyUser(userId, secret)
+  const { text, blob } = req.body
+  const { userId } = await reqUser(req)
+  const { container } = await reqContainer(req)
 
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({
-      id: threadId,
-      container: req.body.container,
+      id: threadId, container
     })
     return threadId
   })

@@ -19,6 +19,7 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "@babel/preset-react": "^7.0.0",
+    "@epegzz/sass-vars-loader": "^4.0.0",
     "autoprefixer": "^9.3.1",
     "babel-loader": "^8.0.4",
     "classnames": "^2.2.6",

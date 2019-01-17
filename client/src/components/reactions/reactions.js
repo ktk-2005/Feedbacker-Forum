@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
 // Styles
 import styles from './reactions.scss'
+import apiCall from '../../api-call.js'
 
 const css = classNames.bind(styles)
 
@@ -56,55 +57,19 @@ class Reactions extends Component {
   }
 
   async postReaction(emoji) {
-    // eslint-disable-next-line
-    const { users, commentId } = this.props
-    const userHash = Object.keys(users)
-    if (userHash.length === 0) return 'No user'
-    const body = JSON.stringify({
-      emoji,
-      userId: userHash[0],
-      secret: users[userHash[0]],
-      commentId,
-    })
-    await fetch('/api/reactions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body,
-    })
-    fetch('/api/comments')
-      .then(x => x.json())
-      .then((comments) => {
-        this.props.dispatch({ type: 'LOAD_ALL', comments })
-      })
+    const { commentId } = this.props
+    await apiCall('POST', '/reactions', { emoji, commentId })
+
+    const comments = await apiCall('GET', '/comments')
+    this.props.dispatch({ type: 'LOAD_ALL', comments })
   }
 
   async deleteReaction(emoji) {
-    // eslint-disable-next-line
-    const { users, commentId } = this.props
-    const userHash = Object.keys(users)
-    if (userHash.length === 0) return 'No user'
+    const { commentId } = this.props
+    await apiCall('DELETE', '/reactions', { emoji, commentId })
 
-    for (const i of userHash) {
-      const body = JSON.stringify({
-        emoji, userId: i, secret: users[i], commentId,
-      })
-      // TODO: break loop if successful deletion
-      await fetch('/api/reactions', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body,
-      })
-    }
-
-    fetch('/api/comments')
-      .then(x => x.json())
-      .then((comments) => {
-        this.props.dispatch({ type: 'LOAD_ALL', comments })
-      })
+    const comments = await apiCall('GET', '/comments')
+    this.props.dispatch({ type: 'LOAD_ALL', comments })
   }
 
   render() {

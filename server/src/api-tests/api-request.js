@@ -1,6 +1,7 @@
 import request from 'request-promise-native'
 import util from 'util'
 import errors from 'request-promise-native/errors'
+import btoa from 'btoa'
 
 const setTimeoutPromise = util.promisify(setTimeout)
 
@@ -31,16 +32,31 @@ function tryRequest(opts, retriesLeft) {
   return promise
 }
 
-// Perform a request to API endpoint `path`, `extraOpts` are passed as-is
+// Perform a request to API endpoint `path`, `opts` are passed as-is
 // to the `request` package.
-export default function apiRequest(path, extraOpts) {
+export default function apiRequest(method, path, body, optsArg) {
   const port = process.env.APP_SERVER_PORT || '8080'
-  const opts = {
-    uri: `http://localhost:${port}${path}`,
-    json: true,
-    ...extraOpts,
+  const opts = optsArg || { }
+
+  const users = opts.users || {
+    'da776df3': 'sf8a7s',
   }
 
-  return tryRequest(opts, 80)
+  const container = opts.container || 'one'
+
+  const authToken = btoa(JSON.stringify(users))
+
+  const reqOpts = {
+    uri: `http://localhost:${port}${path}`,
+    json: true,
+    method, body,
+    headers: {
+      'Authorization': `Feedbacker ${authToken}`,
+      'X-Feedback-Host': `${container}.localhost`,
+    },
+    ...(opts.request || {}),
+  }
+
+  return tryRequest(reqOpts, 80)
 }
 
