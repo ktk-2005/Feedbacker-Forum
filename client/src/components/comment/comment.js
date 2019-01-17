@@ -17,7 +17,7 @@ const Comment = ({ id, comment }) => (
       <Moment
         className={css('timestamp')}
         date={comment.time}
-        format="D.MM.YYYY HH:MM"
+        format="D.MM.YYYY HH:mm"
         tz={moment.tz.guess()}
       />
     </div>

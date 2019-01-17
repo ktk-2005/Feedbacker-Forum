@@ -97,11 +97,15 @@ class CommentPanel extends React.Component {
 
   commentContainer() {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
+    const sortByTime = R.sortBy(arr => arr[1].time)
+    const sortedCommentArray = sortByTime(R.toPairs(this.props.comments))
     return (
       <div className={css('comment-container')} id="comment-container">
         {
-          R.map(([id, comment]) => <Comment key={id} comment={comment} id={id} />,
-            R.toPairs(this.props.comments))
+          R.map(
+            ([id, comment]) => <Comment key={id} comment={comment} id={id} />,
+            sortedCommentArray
+          )
         }
       </div>
     )
