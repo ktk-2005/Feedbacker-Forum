@@ -29,7 +29,7 @@ class Build extends React.Component {
   }
 
   render() {
-    const name = this.props.match.params.name
+    const { name } = this.props.match.params
     const url = `http://${name}.localhost:8080`
 
     return (

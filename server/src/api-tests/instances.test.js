@@ -10,7 +10,7 @@ describe('/api/instances', () => {
 
 describe('/api/instances', () => {
   it('should return needed values', async () => {
-    const response = await apiRequest('GET','/api/instances')
+    const response = await apiRequest('GET', '/api/instances')
     const firstInstance = response[0]
     assert.strictEqual(firstInstance.hasOwnProperty('id'), true)
     assert.strictEqual(firstInstance.hasOwnProperty('subdomain'), true)

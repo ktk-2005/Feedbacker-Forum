@@ -10,12 +10,12 @@ import { config } from './globals'
 let docker = null
 
 export function initializeDocker() {
-  let opts = { }
+  const opts = { }
 
   if (config.dockerUrl) {
     const [url, port] = config.dockerUrl.split(':')
     opts.host = url
-    opts.port = parseInt(port)
+    opts.port = parseInt(port, 10)
   } else if (/^win/.test(process.platform)) {
     opts.socketPath = '//./pipe/docker_engine'
   } else {
@@ -62,7 +62,7 @@ export async function createNewContainer(url, version, type, name, port, userId)
     throw Error(`createNewContainer: expected type 'node', was ${type}.`)
   }
 
-  const hostPort = Math.floor(20000 + Math.random() * 9999) | 0
+  const hostPort = Math.floor(20000 + Math.random() * 9999) || 0
 
   const opts = {
     Image: 'node-runner',
@@ -90,7 +90,7 @@ export async function createNewContainer(url, version, type, name, port, userId)
     subdomain: name,
     userId,
     blob: null,
-    url: `http://localhost:${hostPort}`
+    url: `http://localhost:${hostPort}`,
   }
 
   try {
