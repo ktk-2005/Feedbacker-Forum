@@ -13,7 +13,6 @@ import { config, args } from './globals'
 import apiRoute from './routes/routes'
 import { notFound, devErr, prodErr } from './handlers'
 import listEndpoints from './list-endpoints'
-import redirect from './routes/redirect'
 
 const writeFile = promisify(fs.writeFile)
 
