@@ -81,7 +81,7 @@ class Create extends React.Component {
           Git Hash
           <input id="version" type="text" name="version" />
           Name
-          <input id="name" type="text" name="name" />
+          <input id="name" type="text" name="name" pattern="[a-z0-9](-?[a-z0-9])" minlength="3" maxlength="20" />
           Port
           <input id="port" type="number" min="1" max="65535" name="port" />
           <button type="button" onClick={this.postContainer} />

@@ -43,9 +43,8 @@ export async function getCommentReactions(values = []) { return db.query('SELECT
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
 export async function addContainer({
-  id, subdomain, ip, userId, blob, port,
+  id, subdomain, userId, blob, url,
 }) {
-  const url = `http://${ip}:${port}`
   return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
 }
 

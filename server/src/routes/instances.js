@@ -80,6 +80,14 @@ router.post('/new', async (req, res) => {
     const {
       url, version, type, name, port, userId,
     } = req.body
+
+    if (name.length < 3 || name.length > 20) {
+      throw new Error(`Name too short or long ${name}`)
+    }
+    if (!name.match(/[a-z0-9](-?[a-z0-9])*/)) {
+      throw new Error(`Bad container name ${name}`)
+    }
+
     if (type === 'node') {
       await attempt(async () => {
         const suffixedName = `${name}-${uuid(5)}`
