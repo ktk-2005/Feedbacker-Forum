@@ -1,7 +1,8 @@
 import React from 'react'
 // Helpers
-import Moment from 'react-moment'
 import classNames from 'classnames/bind'
+import Moment from 'react-moment'
+import moment from 'moment-timezone'
 // Components
 import Reactions from '../reactions/reactions'
 // Styles
@@ -17,6 +18,7 @@ const Comment = ({ id, comment }) => (
         className={css('timestamp')}
         date={comment.time}
         format="D.MM.YYYY HH:MM"
+        tz={moment.tz.guess()}
       />
     </div>
     <div className={css('body')}>
