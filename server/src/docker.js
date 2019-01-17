@@ -5,8 +5,25 @@ import {
   listContainersByUser,
   removeContainer
 } from './database'
+import { config } from './globals'
 
-const docker = new Docker({ socketPath: '/var/run/docker.sock' })
+let docker = null
+
+export function initializeDocker() {
+  let opts = { }
+
+  if (config.dockerUrl) {
+    const [url, port] = config.dockerUrl.split(':')
+    opts.host = url
+    opts.port = parseInt(port)
+  } else if (/^win/.test(process.platform)) {
+    opts.socketPath = '//./pipe/docker_engine'
+  } else {
+    opts.socketPath = '/var/run/docker.sock'
+  }
+
+  docker = new Docker(opts)
+}
 
 async function getContainerInfoFromDocker(id) {
   return docker.getContainer(id).inspect()

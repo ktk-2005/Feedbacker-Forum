@@ -71,7 +71,7 @@ router.get('/logs/:id', async (req, res) => {
 // generated automatically.
 //
 // Example body @json {
-//  "instance_image": "nginx"
+//  "type": "node"
 // }
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
