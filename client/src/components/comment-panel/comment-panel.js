@@ -71,12 +71,10 @@ class CommentPanel extends React.Component {
     }))
   }
 
-  fetchComments() {
-    apiCall('GET', '/comments')
-      .then((comments) => {
-        this.props.dispatch({ type: 'LOAD_ALL', comments })
-        this.scrollToBottom()
-      })
+  async fetchComments() {
+    const comments = await apiCall('GET', '/comments')
+    this.props.dispatch({ type: 'LOAD_ALL', comments })
+    this.scrollToBottom()
   }
 
   scrollToBottom() {
