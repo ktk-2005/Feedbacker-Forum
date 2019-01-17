@@ -5,36 +5,35 @@ import * as R from 'ramda'
 
 const css = classNames.bind(styles)
 
-class Build extends React.component {
+class Build extends React.Component {
   constructor(props) {
     super(props)
+
+    this.logPolling = this.logPolling.bind(this)
 
     this.state = {
       data: [],
     }
-
-    this.logPolling = this.logPolling.bind(this)
   }
 
   logPolling() {
-    while (true) {
       fetch("/api/instances/logs")
-      .then(response => response.json())
-      .then(data =>
-        this.setState
-        }
-    }
+        .then(response => response.json())
+        .then(data => this.setState({ data }))
+      console.log('banana slama!')
+  }
+
+  componentDidMount() {
+    logPolling()
   }
 
   render() {
     return (
       <div className={css('build-view-container')}>
         <h3>Build...</h3>
-        <button
-          type = "button"
-          onClick={logPolling}
-        >logPolling
-        </button>
+        <div className={css('log-container')}>
+          {this.state.data}
+        </div>
       </div>
     )
   }
