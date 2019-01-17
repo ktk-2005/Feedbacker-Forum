@@ -1,12 +1,15 @@
 import React from 'react'
 // Helpers
 import classNames from 'classnames/bind'
+import InlineSVG from 'svg-inline-react'
 import Moment from 'react-moment'
 import moment from 'moment-timezone'
 // Components
 import Reactions from '../reactions/reactions'
 // Styles
 import styles from './comment.scss'
+// Assets
+import TargetIcon from '../../assets/svg/baseline-location_searching-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -20,6 +23,9 @@ const Comment = ({ id, comment }) => (
         format="D.MM.YYYY HH:mm"
         tz={moment.tz.guess()}
       />
+      <div className={css('icon')}>
+        <InlineSVG src={TargetIcon} />
+      </div>
     </div>
     <div className={css('body')}>
       <div className={css('text')}>

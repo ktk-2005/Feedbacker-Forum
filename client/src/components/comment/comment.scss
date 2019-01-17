@@ -19,6 +19,12 @@
     align-content: center;
   }
 
+  .icon {
+    display: block;
+    width: $icon-dimension-default;
+    height: $icon-dimension-default;
+  }
+
   .text {
     margin-top: $baseline;
   }
