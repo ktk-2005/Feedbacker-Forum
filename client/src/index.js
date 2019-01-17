@@ -10,6 +10,7 @@ import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
 import { setUsers } from './globals'
+import { shadowDocument } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -69,6 +70,7 @@ class MainView extends React.Component {
     this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
+    this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
 
     this.state = {
       surveyPanelIsHidden: true,
@@ -98,6 +100,12 @@ class MainView extends React.Component {
     })
   }
 
+  unsetTaggedElement() {
+    this.setState({
+      taggedElementXPath: '',
+    })
+  }
+
   render() {
     const {
       surveyButtonIsHidden,
@@ -122,7 +130,10 @@ class MainView extends React.Component {
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
         />
-        <CommentPanel taggedElementXPath={this.state.taggedElementXPath} />
+        <CommentPanel
+          taggedElementXPath={this.state.taggedElementXPath}
+          unsetTaggedElement={this.unsetTaggedElement}
+        />
       </div>
     )
   }
@@ -182,7 +193,7 @@ const initialize = () => {
   })
 
   const prepareReactRoot = () => {
-    const shadow = document.querySelector('[data-feedback-shadow-root]').shadowRoot
+    const shadow = shadowDocument()
     // Events fail otherwise in shadow root
     retargetEvents(shadow)
     const reactRoot = document.createElement('div')

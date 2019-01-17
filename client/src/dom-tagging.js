@@ -5,13 +5,14 @@ import { shadowRoot, shadowDocument } from './shadowDomHelper'
 
 // Never use this outside, event.target cannot be trusted so you need to pass el directly
 
+// Ensure that svg or it's elements cannot be tagged
+const getSVGParent = (element) => {
+  if (element instanceof SVGElement) {
+    return getSVGParent(element.parentNode)
+  } else return element
+}
+
 const getXPath = (element) => {
-  // Ensure that svg or it's elements cannot be tagged
-  const getSVGParent = (element) => {
-    if (element instanceof SVGElement) {
-      return getSVGParent(element.parentNode)
-    } else return element
-  }
   // Generates the path recursively
   const createXPath = (element) => {
     if (element.tagName === 'HTML') return '/HTML[1]'
@@ -84,6 +85,8 @@ const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState
 
 const toggleHighlightElement = (el, forceAdd = false) => {
   const className = 'dom-tagging-element-highlighted'
+  // SVG should never be tagged
+  el = getSVGParent(el)
   // Check that two tags cannot be present at same time
   document.querySelectorAll(`.${ className }`).forEach( taggedEl => {
     if (taggedEl !== el) toggleHighlightElement(taggedEl)

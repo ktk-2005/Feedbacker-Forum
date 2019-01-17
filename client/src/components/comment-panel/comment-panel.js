@@ -61,6 +61,7 @@ class CommentPanel extends React.Component {
       blob: getBlob(),
     })
     unhighlightTaggedElement()
+    this.props.unsetTaggedElement()
     this.setState({ value: '' })
     await this.fetchComments()
   }
