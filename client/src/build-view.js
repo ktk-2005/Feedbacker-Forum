@@ -37,7 +37,7 @@ class Build extends React.Component {
     return (
       <div className={css('build-view-container')}>
         <h3>Build...</h3>
-        <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        <a href={url} target="_blank" rel="noopener noreferrer">Feedbackable UI: {url}</a>
         <div className={css('log-container')}>
           <pre>
             {this.state.data}

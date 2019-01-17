@@ -64,7 +64,7 @@ class Dashboard extends React.Component {
           <h2>Your instances</h2>
           {
             instances.map((instance) => {
-              const instanceUrl = `${instance.subdomain}.${window.location.host}`
+              const instanceUrl = `http://${instance.subdomain}.${window.location.host}`
 
               return (
                 <div key={instance.id} className={css('instance-card')}>
@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
                     rel="noreferrer noopener"
                     className={css('ui-link')}
                   >
-                    Go to UI
+                    Go to feedbackable UI
                   </a>
                 </div>
               )
