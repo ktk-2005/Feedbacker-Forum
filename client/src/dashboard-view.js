@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
 import { Route, Link } from 'react-router-dom'
 import styles from './scss/views/dashboard-view.scss'
@@ -18,6 +19,7 @@ const mapStateToProps = (state) => {
   return {
     userPublic: publicKey,
     userPrivate: privateKey,
+    users,
   }
 }
 
@@ -26,21 +28,23 @@ class Dashboard extends React.Component {
     super(props)
 
     this.state = {
-      instances: []
+      instances: [],
     }
   }
 
   componentDidMount() {
+    console.log(JSON.stringify(this.props.users))
+    const authToken = btoa(JSON.stringify(this.props.users))
     fetch('/api/instances', {
       headers: {
-        Authorization: atob(this.props.users),
-      }
+        Authorization: `Feedbacker ${authToken}`,
+      },
     })
       .then(response => response.json())
       .then(instances => this.setState({ instances }))
   }
 
-  render () {
+  render() {
     const { instances } = this.state
 
     return (
@@ -56,11 +60,11 @@ class Dashboard extends React.Component {
         </div>
         <div className={css('instance-container')}>
           <h2>Your containers</h2>
-            {instances.map(instance =>
-              <div key={instance.id} className={css('instance')}>
-                <div>{instance.id}</div>
-              </div>
-            )}
+          {instances.map(instance => (
+            <div key={instance.id} className={css('instance')}>
+              <div>{instance.id}</div>
+            </div>
+          ))}
         </div>
         <Route path="/site/create" component={Create} />
       </div>
