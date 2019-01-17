@@ -27,8 +27,7 @@ describe('/api/reactions', () => {
         commentId: '13adr8sa',
       },
     })
-    const response = await apiRequest('/api/reactions')
-    console.log(response)
-    assert.equal('string', 'string')
+    const response = await apiRequest('/api/comments')
+    assert.equal(response['13adr8sa'].reactions.find(r => r.userId === 'da776df3' && r.emoji === 'fire'), undefined)
   })
 })
