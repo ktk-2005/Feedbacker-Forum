@@ -6,6 +6,7 @@ import { promisify } from 'util'
 import childProcess from 'child_process'
 import cors from 'cors'
 import proxy from 'express-http-proxy'
+import path from 'path'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -48,7 +49,7 @@ export function startServer() {
       preserveHostHdr: true,
       skipToNextHandlerFilter: () => false,
     })))
-    app.use(express.static('../client/build'))
+    app.use(express.static(path.join(__dirname, '../../client/build')))
   }
 
   app.use(cors())
@@ -63,7 +64,9 @@ export function startServer() {
   app.use('/api', apiRoute)
 
   // redirect /site/* urls modified by react router
-  app.use('/site', redirect)
+  app.use('*', (_, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build/site.html'))
+  })
 
   app.use(notFound)
 
