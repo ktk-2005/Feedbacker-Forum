@@ -8,7 +8,7 @@ import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 // Components
 import Comment from '../comment/comment'
-import apiCall from '../../api-call.js'
+import apiCall from '../../api-call'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -16,11 +16,9 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
 const css = classNames.bind(commentPanelStyles)
 
-const mapStateToProps = (state) => {
-  return {
-    comments: state.comments,
-  }
-}
+const mapStateToProps = state => ({
+  comments: state.comments,
+})
 
 class CommentPanel extends React.Component {
   constructor(props) {

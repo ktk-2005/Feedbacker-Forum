@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
 // Styles
 import styles from './reactions.scss'
-import apiCall from '../../api-call.js'
+import apiCall from '../../api-call'
 
 const css = classNames.bind(styles)
 

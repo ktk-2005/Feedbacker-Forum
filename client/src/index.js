@@ -8,8 +8,8 @@ import * as R from 'ramda'
 import retargetEvents from 'react-shadow-dom-retarget-events'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
-import apiCall from './api-call.js'
-import { setUsers } from './globals.js'
+import apiCall from './api-call'
+import { setUsers } from './globals'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -17,7 +17,6 @@ import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
 // Internal js
 import { setupPersist } from './persist'
-import { apiUrl } from './meta/env.meta'
 // Styles
 import styles from './scss/_base.scss'
 
