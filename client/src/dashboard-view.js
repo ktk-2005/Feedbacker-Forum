@@ -47,7 +47,7 @@ class Dashboard extends React.Component {
 
     return (
       <div className={css('dashboard')}>
-        <div className={css('top')}>
+        <div className={css('top-section')}>
           <Link to="/site/create">
             <button
               className={css('create-button')}

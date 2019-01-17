@@ -2,7 +2,7 @@
 @import '../../scss/colors';
 @import '../../scss/atoms/button';
 
-.top {
+.top-section {
   display: flex;
   justify-content: flex-end;
 
@@ -23,6 +23,11 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  padding: 1em;
+
+  h2 {
+    align-self: start;
+  }
 }
 
 .instance-card {
