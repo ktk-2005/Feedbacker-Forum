@@ -5,6 +5,8 @@ import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
+import * as DomTagging from '../../dom-tagging'
+// Components
 import Comment from '../comment/comment'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
@@ -56,7 +58,18 @@ class CommentPanel extends React.Component {
       return
     }
 
-    console.warn('here', this.state.taggedElementXPath)
+    const getBlob = () => {
+      const xPath = this.props.taggedElementXPath
+      if (xPath) {
+        return { xPath }
+      }
+      return {}
+    }
+
+    const unhighlightTaggedElement = () => {
+      const { xPath } = getBlob()
+      if (xPath) DomTagging.toggleHighlightElement(DomTagging.getElementByXPath(xPath))
+    }
 
     await fetch('/api/comments', {
       method: 'post',
@@ -66,11 +79,10 @@ class CommentPanel extends React.Component {
         userId: this.props.userPublic,
         secret: this.props.userPrivate,
         container: 'APP-1111', // TODO: PLACEHOLDER UNTIL CONTAINERS ARE PROPERLY IMPLEMENTED
-        blob: {
-          xPath: this.props.taggedElementXPath,
-        },
+        blob: getBlob(),
       }),
     })
+    unhighlightTaggedElement()
     this.setState({ value: '' })
     await this.fetchComments()
   }

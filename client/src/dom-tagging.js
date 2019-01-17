@@ -3,6 +3,7 @@ import { shadowRoot, shadowDocument } from './shadowDomHelper'
 
 // X path generation
 
+// Never use this outside, event.target cannot be trusted so you need to pass el directly
 function getXPath(element) {
   if (element.tagName === 'HTML') return '/HTML[1]'
   if (element === document.body) return '/HTML[1]/BODY[1]'
@@ -41,10 +42,9 @@ function eventPathFallback(event) {
 }
 
 // TODO: For first iteration only, getEventTrace is used in bilateral implementation
-function getCompleteElementXPath(event) {
+function getXPathByElement(event) {
   let { path } = event
   if (!path) path = eventPathFallback(event)
-  console.log('getTrace', 'event.path:', event.path, 'eventPathFallback', eventPathFallback(event))
   return getXPath(path[0])
 }
 
@@ -67,14 +67,27 @@ const setElementTaggedCallback = callback => callbacks.elementTagged = callback
 // eslint-disable-next-line
 const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState = callback
 
+const toggleHighlightElement = (el, forceAdd = false) => {
+  const className = 'dom-tagging-element-highlighted'
+  // Check that two tags cannot be present at same time
+  document.querySelectorAll(`.${ className }`).forEach( taggedEl => {
+    if (taggedEl !== el) toggleHighlightElement(taggedEl)
+  })
+
+  // Force for highlight element on click for comment targets
+  if (forceAdd) {
+    if(!el.classList.contains(className)){
+      el.classList.add(className)
+    }
+  } else el.classList.toggle(className)
+}
+
 // Hover
 
 const handleHover = (event) => {
   const el = event.target
-  console.log('DOMT debug', 'mouse* fired', el)
   if (isMarkable(el)) {
-    if (markingMode) el.classList.toggle('dom-tagging-element-highlighted')
-    else el.classList.remove('dom-tagging-element-highlighted')
+    toggleHighlightElement(el)
   }
 }
 
@@ -83,7 +96,6 @@ const handleClick = (event) => {
   if (markingMode) {
     if (isMarkable(event.target)) {
       callbacks.elementTagged(event)
-      // TODO: Remember to remove the highlight after added comment
       // saveTag(event.target)
       // eslint-disable-next-line
       toggleMarkingMode()
@@ -128,8 +140,9 @@ export {
   // hijackEventListeners,
   // startObservingDomChange,
   toggleMarkingMode,
-  getCompleteElementXPath,
-  getElementByXPath
+  getXPathByElement,
+  getElementByXPath,
+  toggleHighlightElement
 }
 
 // TODO: Not in use below
@@ -243,7 +256,6 @@ const hijackEventListeners = () => {
     )
   }
 }
-*/
 
 const getEventTrace = () => {
   const l = eventLog
@@ -267,7 +279,7 @@ const getEventTrace = () => {
 
 // Tagging
 
-/*const localStorageKey = 'swp1-tagging-concept'
+const localStorageKey = 'swp1-tagging-concept'
 
 const getCommentsArray = () => JSON.parse(localStorage.getItem(localStorageKey)) || []
 

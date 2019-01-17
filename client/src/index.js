@@ -92,11 +92,10 @@ class MainView extends React.Component {
   }
 
   handleElementTagged(event) {
-    const xPath = DomTagging.getCompleteElementXPath(event)
+    const xPath = DomTagging.getXPathByElement(event)
     this.setState({
       taggedElementXPath: xPath,
     })
-    console.log('DOMT debug', 'index.js has tagged element', event, 'xpath:', xPath, 'state:', this.state.taggedElementXPath)
   }
 
   render() {
