@@ -18,6 +18,7 @@ import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
 // Internal js
 import { setupPersist } from './persist'
+import { loadPersistData, setPersistData, loadComments } from './actions'
 // Styles
 import styles from './scss/_base.scss'
 
@@ -157,7 +158,7 @@ const initialize = () => {
   blockLegacyBrowsers()
 
   const loadPersist = async (state, allDataLoaded) => {
-    store.dispatch({ type: LOAD_PERSIST, state })
+    store.dispatch(loadPersistData(state))
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
@@ -165,14 +166,7 @@ const initialize = () => {
 
         console.log('Created new user from API', { [id]: secret })
 
-        store.dispatch({
-          type: SET_PERSIST,
-          data: {
-            users: {
-              [id]: secret,
-            },
-          },
-        })
+        store.dispatch(setPersistData({ users: { [id]: secret } }))
       } else {
         console.log('Loaded user from persistent storage', state.users)
       }
@@ -183,7 +177,7 @@ const initialize = () => {
 
   apiCall('GET', '/comments')
     .then((comments) => {
-      store.dispatch({ type: LOAD_ALL, comments })
+      store.dispatch(loadComments(comments))
     })
 
   store.subscribe(() => {

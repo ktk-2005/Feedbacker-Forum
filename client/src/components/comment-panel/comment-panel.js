@@ -6,6 +6,8 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
+import { loadComments } from '../../actions'
+
 // Components
 import Comment from '../comment/comment'
 import apiCall from '../../api-call'
@@ -13,6 +15,8 @@ import apiCall from '../../api-call'
 import commentPanelStyles from './comment-panel.scss'
 // Assets
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+
+
 
 const css = classNames.bind(commentPanelStyles)
 
@@ -74,7 +78,7 @@ class CommentPanel extends React.Component {
 
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
-    this.props.dispatch({ type: 'LOAD_ALL', comments })
+    this.props.dispatch(loadComments(comments))
     this.scrollToBottom()
   }
 

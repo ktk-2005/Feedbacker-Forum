@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 // Styles
 import styles from './reactions.scss'
 import apiCall from '../../api-call'
+import { loadComments } from '../../actions'
 
 const css = classNames.bind(styles)
 
@@ -57,7 +58,7 @@ class Reactions extends Component {
     await apiCall('POST', '/reactions', { emoji, commentId })
 
     const comments = await apiCall('GET', '/comments')
-    this.props.dispatch({ type: 'LOAD_ALL', comments })
+    this.props.dispatch(loadComments(comments))
   }
 
   async deleteReaction(emoji) {
@@ -65,7 +66,7 @@ class Reactions extends Component {
     await apiCall('DELETE', '/reactions', { emoji, commentId })
 
     const comments = await apiCall('GET', '/comments')
-    this.props.dispatch({ type: 'LOAD_ALL', comments })
+    this.props.dispatch(loadComments(comments))
   }
 
   render() {
