@@ -1,7 +1,8 @@
 import React from 'react'
 import classNames from 'classnames/bind'
-import styles from './scss/views/dashboard-view.scss'
 import { Route, Link } from 'react-router-dom'
+
+import styles from './scss/views/dashboard-view.scss'
 import Create from './create'
 
 const css = classNames.bind(styles)
