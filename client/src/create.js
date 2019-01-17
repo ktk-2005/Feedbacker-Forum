@@ -71,19 +71,31 @@ class Create extends React.Component {
           className={css('form-create')}
           id="form"
         >
-          Type
-          <select name="type">
-            <option id="type" value="node"> Node </option>
-          </select>
-          Git URL
-          <input id="url" type="text" name="url" defaultValue="https://github.com/bqqbarbhg/docker-test-server.git" />
-          Git Hash
-          <input id="version" type="text" name="version" defaultValue="master" />
-          Name
-          <input id="name" type="text" name="name" defaultValue="name" />
-          Port
-          <input id="port" type="number" min="1" max="65535" name="port" defaultValue="4000" />
-          <button type="button" onClick={this.postContainer}>Create</button>
+          <label htmlFor="application">
+            Application type
+            <select name="application" id="application" form="form" required>
+              <option value="node">Node.js</option>
+            </select>
+          </label>
+          <label htmlFor="url">
+            Git URL
+            <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
+          </label>
+          <label htmlFor="version">
+            Git Hash
+            <input type="text" id="version" name="version" placeholder="master or commit hash" required />
+          </label>
+          <label htmlFor="name">
+            Name
+            <input type="text" id="name" name="name" defaultValue="new-feature" required />
+          </label>
+          <label htmlFor="port">
+            Port
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="4000" required />
+          </label>
+          <button type="button" onClick={this.postContainer}>
+            Create
+          </button>
         </form>
         <Route path="/build" component={Build} />
       </div>
