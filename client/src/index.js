@@ -5,12 +5,11 @@ import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 // External libraries & helpers
 import * as R from 'ramda'
-import retargetEvents from 'react-shadow-dom-retarget-events'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
 import { setUsers } from './globals'
-import { shadowDocument } from './shadowDomHelper'
+import { prepareReactRoot } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -186,15 +185,6 @@ const initialize = () => {
     setUsers(persist.users || { })
   })
 
-  const prepareReactRoot = () => {
-    const shadow = shadowDocument()
-    // Events fail otherwise in shadow root
-    retargetEvents(shadow)
-    const reactRoot = document.createElement('div')
-    reactRoot.setAttribute('data-feedback-react-root', true)
-    shadow.appendChild(reactRoot)
-    return reactRoot
-  }
 
   ReactDOM.render(
     <Provider store={store}>

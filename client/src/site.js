@@ -8,6 +8,7 @@ import styles from './scss/_base.scss'
 import ReactRouter from './reactrouter'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
+import { prepareReactRoot } from './shadowDomHelper'
 
 const css = classNames.bind(styles)
 
@@ -74,13 +75,14 @@ const initialize = () => {
     savePersist(store.getState().persist || { })
   })
 
+
   ReactDOM.render(
     <Provider store={store}>
       <div className={css('feedback-app-main-container')}>
         <ReactRouter />
       </div>
     </Provider>,
-    document.getElementById('root')
+    prepareReactRoot()
   )
 }
 
