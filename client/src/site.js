@@ -4,10 +4,15 @@ import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
+import {
+  BrowserRouter as Router, Redirect, Route, Switch
+} from 'react-router-dom'
 import styles from './scss/_base.scss'
-import ReactRouter from './reactrouter'
 import { setupPersist } from './persist'
 import { apiUrl } from './meta/env.meta'
+import Dashboard from './dashboard-view'
+import Create from './create'
+import Build from './build-view'
 
 const css = classNames.bind(styles)
 
@@ -76,9 +81,16 @@ const initialize = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <div className={css('feedback-app-main-container')}>
-        <ReactRouter />
-      </div>
+      <Router>
+        <div className={css('feedback-app-main-container')}>
+          <Switch>
+            <Redirect exact from="/" to="/dashboard" />
+            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/create" component={Create} />
+            <Route exact path="/build-view/:id" component={Build} />
+          </Switch>
+        </div>
+      </Router>
     </Provider>,
     document.getElementById('root')
   )

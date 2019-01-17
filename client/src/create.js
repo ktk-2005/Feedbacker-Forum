@@ -58,7 +58,7 @@ class Create extends React.Component {
     if (this.state.redirect) {
       return (
         <Redirect to={{
-          pathname: `/site/build-view/${this.state.containerId}`,
+          pathname: `/build-view/${this.state.containerId}`,
         }}
         />
       )
@@ -85,7 +85,6 @@ class Create extends React.Component {
           <input id="port" type="number" min="1" max="65535" name="port" defaultValue="4000" />
           <button type="button" onClick={this.postContainer}>Create</button>
         </form>
-        <Route path="/build" component={Build} />
       </div>
     )
   }

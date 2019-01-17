@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
     return (
       <div className={css('dashboard')}>
         <div className={css('top')}>
-          <Link to="/site/create">
+          <Link to="/create">
             <button
               className={css('create-button')}
               type="button"
@@ -64,7 +64,6 @@ class Dashboard extends React.Component {
             </div>
           ))}
         </div>
-        <Route path="/site/create" component={Create} />
       </div>
     )
   }
