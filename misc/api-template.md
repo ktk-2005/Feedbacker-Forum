@@ -34,3 +34,5 @@
 @api /api/instances/stop
 
 @api /api/instances/delete
+
+@api /site/

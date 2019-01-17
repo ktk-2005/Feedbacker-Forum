@@ -50,7 +50,7 @@ export async function addContainer({
 }
 
 export async function listContainers() {
-  return db.query('SELECT * FROM containers')
+  return db.query('SELECT id, subdomain FROM containers')
 }
 
 export async function removeContainer({
