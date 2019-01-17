@@ -1,11 +1,7 @@
 import express from 'express'
 import * as R from 'ramda'
 import {
-  // getRunningContainers,
-  getRunningContainersByUser,
-  createNewContainer,
-  stopContainer,
-  deleteContainer
+  getRunningContainers, createNewContainer, stopContainer, deleteContainer, getContainerLogs
 } from '../docker'
 import { verifyUser } from '../database'
 import { attempt, uuid } from './helpers'
@@ -22,6 +18,21 @@ router.get('/', async (req, res) => {
   try {
     const containers = await getRunningContainers()
     res.send(containers)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+})
+
+// @api GET /api/instances/logs
+// Retrieve logs of an instance.
+//
+// Returns 200 OK and a string with logs or 500 ISE if an error occurred.
+router.get('/logs', async (req, res) => {
+  try {
+    const logs = await getContainerLogs(req.query.id)
+    res.type('txt')
+    res.send(logs)
   } catch (error) {
     console.log(error)
     res.sendStatus(500)
@@ -59,7 +70,6 @@ router.get('/', async (req, res) => {
 // }
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-
 router.post('/new', async (req, res) => {
   try {
     const {
