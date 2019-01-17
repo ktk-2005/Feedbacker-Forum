@@ -9,7 +9,7 @@ import { catchErrors } from '../handlers'
 const router = express.Router()
 
 // @api GET /api/comments
-// Retrieve all comments.
+// Retrieve all comments of the current container instance.
 //
 // returns JSON array of all comments grouped with reactions in database @json {
 //     "1bd8052b": {
@@ -68,16 +68,16 @@ router.get('/', catchErrors(async (req, res) => {
 }))
 
 // @api POST /api/comments
-// Adds comment to database.
+// Adds comment to the current container instance.
 //
 // Example body for a root comment @json {
 //   "text": "minttua",
-//   "blob": {\"path\": \"/path/to/element\"}
+//   "blob": {"path": "/path/to/element"}
 // }
 // comments can be linked to a thread with @json {
 //   "text": "minttua",
 //   "threadId": "1234",
-//   "blob": {\"path\": \"/path/to/element\"}
+//   "blob": {"path": "/path/to/element"}
 // }
 //
 // Returns `{ id, threadId }` of the new comment
@@ -104,7 +104,7 @@ router.post('/', catchErrors(async (req, res) => {
 }))
 
 // @api GET /api/comments/:threadId
-// Get comments by threadId
+// Get comments by `threadId`
 //
 // returns JSON array of all comments in thread
 router.get('/:threadId', catchErrors(async (req, res) => {
