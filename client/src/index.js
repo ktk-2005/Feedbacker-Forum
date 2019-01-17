@@ -129,7 +129,6 @@ class MainView extends React.Component {
   }
 }
 
-// TODO: what is this
 const initializedKey = '!!feedbacker_forum_initialized!!'
 
 const initialize = () => {
