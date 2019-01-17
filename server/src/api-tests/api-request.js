@@ -13,7 +13,7 @@ let totalFailedRequests = 0
 function tryRequest(opts, retriesLeft, shouldFail) {
   let promise = request(opts)
 
-  if (retriesLeft > 1 || shouldFaill) {
+  if (retriesLeft > 1 || shouldFail) {
     promise = promise.catch((error) => {
       if (error.statusCode === 500 && shouldFail) {
         return Promise.resolve('Failed')
