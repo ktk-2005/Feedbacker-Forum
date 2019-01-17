@@ -15,8 +15,7 @@ function tryRequest(opts, retriesLeft, shouldFail) {
 
   if (retriesLeft > 1 || shouldFaill) {
     promise = promise.catch((error) => {
-      if (error.statusCode === 500 && shouldFail
-  l) {
+      if (error.statusCode === 500 && shouldFail) {
         return Promise.resolve('Failed')
       }
       if (!(error instanceof errors.RequestError

@@ -13,15 +13,10 @@ describe('/api/reactions', () => {
 
 describe('api/reactions', () => {
   it('should not be able to post two of the same reactions', async () => {
-    const response = await apiRequest('/api/reactions', {
-      method: 'POST',
-      body: {
-        userId: 'da776df3',
-        secret: 'sf8a7s',
-        emoji: 'fire',
-        commentId: '13adr8sa',
-      },
-    }, true)
+    const response = await apiRequest('POST', '/api/reactions', {
+      emoji: 'fire',
+      commentId: '13adr8sa',
+    }, { fail: true })
     assert.equal(response, 'Failed')
   })
 })
