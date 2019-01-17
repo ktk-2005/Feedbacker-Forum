@@ -4,31 +4,46 @@ import { shadowRoot, shadowDocument } from './shadowDomHelper'
 // X path generation
 
 // Never use this outside, event.target cannot be trusted so you need to pass el directly
-function getXPath(element) {
-  if (element.tagName === 'HTML') return '/HTML[1]'
-  if (element === document.body) return '/HTML[1]/BODY[1]'
 
-  let ix = 0
-  const siblings = element.parentNode.childNodes
-  for (let i = 0; i < siblings.length; i++) {
-    const sibling = siblings[i]
-    if (sibling === element) return `${getXPath(element.parentNode)}/${element.tagName}[${ix + 1}]`
-    if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++
+const getXPath = (element) => {
+  // Ensure that svg or it's elements cannot be tagged
+  const getSVGParent = (element) => {
+    if (element instanceof SVGElement) {
+      return getSVGParent(element.parentNode)
+    } else return element
   }
+  // Generates the path recursively
+  const createXPath = (element) => {
+    if (element.tagName === 'HTML') return '/HTML[1]'
+    if (element === document.body) return '/HTML[1]/BODY[1]'
+
+    let ix = 0
+    const siblings = element.parentNode.childNodes
+    for (let i = 0; i < siblings.length; i++) {
+      const sibling = siblings[i]
+      if (sibling === element) return `${createXPath(element.parentNode)}/${element.tagName}[${ix + 1}]`
+      if (sibling.nodeType === 1 && sibling.tagName === element.tagName) ix++
+    }
+  }
+  // Check if element is SVG or sub-element
+  element = getSVGParent(element)
+  return createXPath(element)
 }
 
-const getElementByXPath = path => document.evaluate(
-  path,
-  document.documentElement,
-  null,
-  XPathResult.FIRST_ORDERED_NODE_TYPE,
-  null
-).singleNodeValue
+const getElementByXPath = path => {
+  return document.evaluate(
+    path,
+    document.documentElement,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue
+}
 
 // Events
 
 // Polyfill
-function eventPathFallback(event) {
+const eventPathFallback = (event) => {
   let el = event.target
   if (el == null) return []
   const pathArr = [el]
@@ -42,7 +57,7 @@ function eventPathFallback(event) {
 }
 
 // TODO: For first iteration only, getEventTrace is used in bilateral implementation
-function getXPathByElement(event) {
+const getXPathByElement = (event) => {
   let { path } = event
   if (!path) path = eventPathFallback(event)
   return getXPath(path[0])
@@ -123,10 +138,11 @@ const toggleMarkingMode = () => {
 }
 
 const includeDomTaggingCss = () => {
+  const accentColor = '#00c0cb'
   document.head.innerHTML += `
   <style>
     .dom-tagging-element-highlighted {
-      box-shadow: 0 0 0 1px red;
+      box-shadow: 0 0 1px 1px ${ accentColor }, 0 0 2px 3px white;
     }
   </style>
   `

@@ -28,19 +28,15 @@ const handleToggleHighlight = (xPath) => {
 const targetElement = (comment) => {
   const xPath = R.path(['blob', 'xPath'], comment)
   if (xPath) {
-    // TODO: this step is present as we do not simulate events
-    const elementPresentInDOM = DomTagging.getElementByXPath(xPath)
-    if (elementPresentInDOM) {
-      return (
-        <button
-          type="button"
-          className={css('target-icon')}
-          onClick={() => handleToggleHighlight(xPath)}
-        >
-          <InlineSVG src={TargetIcon} raw />
-        </button>
-      )
-    }
+    return (
+      <button
+        type="button"
+        className={css('target-icon')}
+        onClick={() => handleToggleHighlight(xPath)}
+      >
+        <InlineSVG src={TargetIcon} raw />
+      </button>
+    )
   }
 }
 
