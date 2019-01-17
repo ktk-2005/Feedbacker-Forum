@@ -40,7 +40,7 @@ export async function getRunningContainersByUser(userId) {
   return getContainerInfoFromDatabaseByUser(userId)
 }
 
-export async function createNewContainer(url, version, type, name, port) {
+export async function createNewContainer(url, version, type, name, port, userId) {
   if (type !== 'node') {
     throw Error(`createNewContainer: expected type 'node', was ${type}.`)
   }
@@ -61,7 +61,7 @@ export async function createNewContainer(url, version, type, name, port) {
     subdomain: name,
     ip: containerInfo.NetworkSettings.IPAddress,
     port,
-    userId: 'da776df3',
+    userId,
     blob: null,
   }
 

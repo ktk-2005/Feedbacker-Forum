@@ -93,13 +93,15 @@ router.get('/logs/:id', async (req, res) => {
 router.post('/new', async (req, res) => {
   try {
     const {
-      url, version, type, name, port,
+      url, version, type, name, port, userId,
     } = req.body
     if (type === 'node') {
       await attempt(async () => {
         const suffixedName = `${name}-${uuid(5)}`
-        const containerInfo = await createNewContainer(url, version, type, suffixedName, port)
-        res.send(containerInfo)
+        const containerInfo = await createNewContainer(
+          url, version, type, suffixedName, port, userId
+        )
+        res.json({ containerInfo })
       })
     } else {
       console.log(`/api/instances/new -- expected type 'node', but got '${type}'`)
