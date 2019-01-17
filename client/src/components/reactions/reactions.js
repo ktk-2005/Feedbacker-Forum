@@ -13,13 +13,6 @@ const mapStateToProps = (state) => {
 }
 
 class Reactions extends Component {
-  constructor(props, context) {
-    super(props, context)
-    this.state = {
-      reactions: ['up', 'down', 'fire'],
-    }
-  }
-
   handleClick(emoji) {
     const { users, reactions } = this.props
     const toggled = reactions.some(r => r.emoji === emoji && users[r.userId])
@@ -42,6 +35,10 @@ class Reactions extends Component {
       }
     }
 
+    // Change up to lit when enough of positive feedback
+    let cssEmojiClass = emoji
+    if (emoji === 'up' && count >= 3) cssEmojiClass = 'fire'
+
     return (
       <button
         type="button"
@@ -49,7 +46,7 @@ class Reactions extends Component {
         className={css('reaction', toggled ? 'toggled' : '')}
         onClick={() => this.handleClick(emoji)}
       >
-        <div className={css('emoji', emoji)} />
+        <div className={css('emoji', cssEmojiClass)} />
         <div className={css('counter')} data-count={count}>{count}</div>
       </button>
     )
@@ -72,9 +69,10 @@ class Reactions extends Component {
   }
 
   render() {
+    const reactionTypes = ['up', 'down', 'joy', 'thinking']
     return (
       <div className={css('reactions')}>
-        {this.state.reactions.map(reaction => this.reactionButton(reaction))}
+        {reactionTypes.map(reaction => this.reactionButton(reaction))}
       </div>
     )
   }
