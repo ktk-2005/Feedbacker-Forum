@@ -3,6 +3,8 @@
 
   "rules": {
     "consistent-return": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/label-has-for": "off",
     "linebreak-style": "off",
     "no-multiple-empty-lines": "off",
     "semi": ["error", "never"],

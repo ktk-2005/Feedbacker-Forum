@@ -10,7 +10,7 @@ import { config } from './globals'
 let docker = null
 
 export function initializeDocker() {
-  const opts = { }
+  let opts = { }
 
   if (config.dockerUrl) {
     const [url, port] = config.dockerUrl.split(':')
@@ -62,13 +62,25 @@ export async function createNewContainer(url, version, type, name, port, userId)
     throw Error(`createNewContainer: expected type 'node', was ${type}.`)
   }
 
-  const container = await docker.createContainer({
+  const hostPort = Math.floor(20000 + Math.random() * 9999) | 0
+
+  const opts = {
     Image: 'node-runner',
+    ExposedPorts: { [`${port}/tcp`]: {} },
+    HostConfig: {
+      PortBindings: {
+        [`${port}/tcp`]: [{ HostPort: `${hostPort}` }],
+      },
+    },
     Env: [
       `GIT_CLONE_URL=${url}`,
       `GIT_VERSION_HASH=${version}`,
     ],
-  })
+  }
+
+  console.log('Creating container', JSON.stringify(opts))
+
+  const container = await docker.createContainer(opts)
 
   await container.start()
   const containerInfo = await getContainerInfoFromDocker(container.id)
@@ -76,10 +88,9 @@ export async function createNewContainer(url, version, type, name, port, userId)
   const containerData = {
     id: containerInfo.Id,
     subdomain: name,
-    ip: containerInfo.NetworkSettings.IPAddress,
-    port,
     userId,
     blob: null,
+    url: `http://localhost:${hostPort}`
   }
 
   try {

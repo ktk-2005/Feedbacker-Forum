@@ -28,21 +28,6 @@ router.get('/', async (req, res) => {
     res.sendStatus(500)
   }
 })
-
-// @api GET /api/instances/logs
-// Retrieve logs of an instance.
-//
-// Returns 200 OK and a string with logs or 500 ISE if an error occurred.
-router.get('/logs', async (req, res) => {
-  try {
-    const logs = await getContainerLogs(req.query.id)
-    res.type('txt')
-    res.send(logs)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
-  }
-})
 */
 router.get('/', async (req, res) => {
   try {
@@ -95,6 +80,14 @@ router.post('/new', async (req, res) => {
     const {
       url, version, type, name, port, userId,
     } = req.body
+
+    if (name.length < 3 || name.length > 20) {
+      throw new Error(`Name too short or long ${name}`)
+    }
+    if (!name.match(/[a-z0-9](-?[a-z0-9])*/)) {
+      throw new Error(`Bad container name ${name}`)
+    }
+
     if (type === 'node') {
       await attempt(async () => {
         const suffixedName = `${name}-${uuid(5)}`

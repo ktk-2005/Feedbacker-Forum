@@ -69,22 +69,14 @@ export async function getCommentReactions(values = []) { return db.query('SELECT
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
 export async function addContainer({
-  id, subdomain, ip, userId, blob, port,
+  id, subdomain, userId, blob, url,
 }) {
-  const url = `http://${ip}:${port}`
   return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
-}
-export async function verifyUser(user, secret) {
-  const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
-  if (!rows || rows.length === 0) {
-    throw new Error('Authentication failure')
-  }
 }
 
 export async function listContainers() {
   return db.query('SELECT id, subdomain FROM containers')
 }
-export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }
 
 export async function listContainersByUser(values = []) {
   return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
@@ -93,3 +85,10 @@ export async function listContainersByUser(values = []) {
 export async function removeContainer({
   id,
 }) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
+
+export async function verifyUser(user, secret) {
+  const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
+  if (!rows || rows.length === 0) {
+    throw new Error('Authentication failure')
+  }
+}
