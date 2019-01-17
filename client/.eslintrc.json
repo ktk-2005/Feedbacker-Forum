@@ -30,7 +30,8 @@
     "no-await-in-loop": "off",
     "no-restricted-syntax": "off",
     "no-prototype-builtins": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-continue": "off"
   },
 
   "globals": {

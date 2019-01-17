@@ -18,7 +18,7 @@ describe('/api/reactions', () => {
 
 describe('/api/reactions', () => {
   it('should return OK for deleting a reaction', async () => {
-    const response = await apiRequest('/api/reactions', {
+    await apiRequest('/api/reactions', {
       method: 'DELETE',
       body: {
         userId: 'da776df3',
@@ -27,6 +27,7 @@ describe('/api/reactions', () => {
         commentId: '1907b7e5',
       },
     })
+    const response = await apiRequest('/api/reactions')
     console.log(response)
     assert.equal('string', 'string')
   })
