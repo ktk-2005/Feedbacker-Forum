@@ -9,17 +9,23 @@ class Build extends React.Component {
   constructor(props) {
     super(props)
 
+    this.logPolling = this.logPolling.bind(this)
+
     this.state = {
       data: [],
     }
   }
 
   componentDidMount() {
-      fetch("/api/instances/logs", {
-      })
-        .then(response => response.text())
-        .then(data => this.setState({ data }))
-      console.log('banana slama!')
+    this.logPolling()
+    this.timer = setInterval(() => this.logPolling(), 2000)
+  }
+
+  logPolling() {
+    fetch('/api/instances/logs/')
+      .then(response => response.text())
+      .then(data => this.setState({ data }))
+    console.log('BANANA SLAMA!')
   }
 
   render() {
