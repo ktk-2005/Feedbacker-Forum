@@ -31,7 +31,7 @@ class Build extends React.Component {
   }
 
   render() {
-    const {name} = this.props.match.params
+    const { name } = this.props.match.params
     const url = `//${name}.localhost:8080`
 
     return (
