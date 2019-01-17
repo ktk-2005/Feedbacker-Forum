@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
     "react-moment": "^0.8.4",
     "react-shadow-dom-retarget-events": "^1.0.8",
     "url-loader": "^1.1.2"
