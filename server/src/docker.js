@@ -10,7 +10,7 @@ import { config } from './globals'
 let docker = null
 
 export function initializeDocker() {
-  let opts = { }
+  const opts = { }
 
   if (config.dockerUrl) {
     const [url, port] = config.dockerUrl.split(':')
