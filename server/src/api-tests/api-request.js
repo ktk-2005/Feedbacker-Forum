@@ -42,7 +42,7 @@ export default function apiRequest(method, path, body, optsArg) {
   const opts = optsArg || { }
 
   const users = opts.users || {
-    'da776df3': 'sf8a7s',
+    da776df3: 'sf8a7s',
   }
 
   const container = opts.container || 'one'
@@ -52,9 +52,10 @@ export default function apiRequest(method, path, body, optsArg) {
   const reqOpts = {
     uri: `http://localhost:${port}${path}`,
     json: true,
-    method, body,
+    method,
+    body,
     headers: {
-      'Authorization': `Feedbacker ${authToken}`,
+      Authorization: `Feedbacker ${authToken}`,
       'X-Feedback-Host': `${container}.localhost`,
     },
     ...(opts.request || {}),

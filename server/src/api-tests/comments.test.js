@@ -5,7 +5,7 @@ describe('/api/comments', () => {
   it('should return OK for posting a commment', async () => {
     const response = await apiRequest('POST', '/api/comments', {
       text: 'testing',
-      blob: {"path": "/path/to/element"},
+      blob: { path: '/path/to/element' },
     })
     assert.equal(typeof response.id, 'string')
   })
@@ -38,7 +38,7 @@ describe('/api/comments', () => {
   it('every comment text should be string', async () => {
     const response = await apiRequest('POST', '/api/comments', {
       text: 'This is a comment',
-      blob: {"path": "/path/to/element"},
+      blob: { path: '/path/to/element' },
     })
     assert.equal(typeof response.id, 'string')
   })
@@ -55,7 +55,7 @@ describe('/api/questions', () => {
   it('should return OK', async () => {
     const response = await apiRequest('POST', '/api/questions', {
       text: 'Pääpäivä?',
-      blob: {"path": "/path/to/element"},
+      blob: { path: '/path/to/element' },
     })
     assert.equal(typeof response.id, 'string')
   })

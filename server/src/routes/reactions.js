@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  addReaction, deleteReaction, verifyUser
+  addReaction, deleteReaction
 } from '../database'
 import { uuid, attempt, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
@@ -40,9 +40,11 @@ router.delete('/', catchErrors(async (req, res) => {
   const { emoji, commentId } = req.body
   const { users } = await reqUser(req)
   for (const userId in users) {
-    try {
-      await deleteReaction({ commentId, emoji, userId })
-    } catch (err) { /* ignore */ }
+    if (users.hasOwnProperty(userId)) {
+      try {
+        await deleteReaction({ commentId, emoji, userId })
+      } catch (err) { /* ignore */ }
+    }
   }
   res.json({ })
 }))

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getComments, getThreadComments, addComment, addThread, verifyUser
+  getComments, getThreadComments, addComment, addThread
 } from '../database'
 import { uuid, attempt, reqContainer, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
@@ -86,14 +86,14 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns `{ id, threadId }` of the new comment
 router.post('/', catchErrors(async (req, res) => {
-  const { text, blob, host } = req.body
+  const { text, blob } = req.body
   const { container } = await reqContainer(req)
   const { userId } = await reqUser(req)
 
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({
-      id: threadId, container
+      id: threadId, container,
     })
     return threadId
   })

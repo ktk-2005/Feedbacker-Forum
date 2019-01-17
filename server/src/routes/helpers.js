@@ -60,16 +60,18 @@ export async function reqUser(req) {
   const auth = req.get('Authorization')
   if (!auth) throw new Error('No Authorization header')
   const [scheme, token] = auth.split(' ')
-  if (scheme != 'Feedbacker') throw new Error('Unsupported Authorization scheme')
+  if (scheme !== 'Feedbacker') throw new Error('Unsupported Authorization scheme')
   const users = JSON.parse(Buffer.from(token, 'base64').toString())
-  let verifiedUsers = { }
+  const verifiedUsers = { }
 
   for (const user in users) {
-    try {
-      const secret = users[user]
-      await verifyUser(user, secret)
-      verifiedUsers[user] = secret
-    } catch (error) { /* ignore */ }
+    if (users.hasOwnProperty(user)) {
+      try {
+        const secret = users[user]
+        await verifyUser(user, secret)
+        verifiedUsers[user] = secret
+      } catch (error) { /* ignore */ }
+    }
   }
 
   const keys = Object.keys(verifiedUsers)

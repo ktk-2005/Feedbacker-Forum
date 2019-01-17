@@ -20,8 +20,7 @@ function matchSubdomain(fn, target) {
     const host = process.env.APP_DOMAIN || 'localhost'
     if (req.hostname !== host) {
       const subdomain = req.hostname.split('.')
-      if (subdomain.length > 1 && subdomain[0] == target)
-        return fn(req, res, next)
+      if (subdomain.length > 1 && subdomain[0] === target) return fn(req, res, next)
     }
     return next()
   }

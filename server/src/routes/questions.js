@@ -43,7 +43,7 @@ router.post('/', catchErrors(async (req, res) => {
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({
-      id: threadId, container
+      id: threadId, container,
     })
     return threadId
   })

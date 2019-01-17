@@ -21,7 +21,8 @@
     "import/prefer-default-export": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "no-prototype-builtins": "off"
   },
 
   "env": {
