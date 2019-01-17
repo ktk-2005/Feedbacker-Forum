@@ -29,7 +29,7 @@ services:
     environment:
       FFGP_DB_DRIVER: postgres
       FFGP_DB_CONNECT: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}?sslmode=disable
-      FFGP_INJECT_SCRIPT: ${APP_URL}/main.js
+      FFGP_INJECT_SCRIPT: ${APP_URL}/embed.js
     depends_on:
       - postgres
 
