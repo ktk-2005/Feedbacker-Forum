@@ -27,6 +27,11 @@ class TagElementButton extends React.Component {
     DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
   }
 
+  componentWillUnmount() {
+    DomTagging.setElementTaggedCallback(null)
+    DomTagging.setToggleTagElementStateCallback(null)
+  }
+
   render() {
     const { active } = this.props
 
