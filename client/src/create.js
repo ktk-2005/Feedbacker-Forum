@@ -1,6 +1,8 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './scss/views/create.scss'
+import { Route, Link } from 'react-router-dom'
+import Build from './build-view'
 
 const css = classNames.bind(styles)
 
@@ -29,6 +31,11 @@ const Create = () => (
   <div className={css('create-view')}>
     <h2>Create an instance</h2>
     <form
+<<<<<<< HEAD
+      action="/site/build"
+      method="post"
+=======
+>>>>>>> b6373736f7cba60094151f5a9dd89b127a70f0bc
       className={css('form-create')}
       onSubmit={huutis}
       id="form"
