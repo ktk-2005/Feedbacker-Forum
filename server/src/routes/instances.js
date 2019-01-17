@@ -48,6 +48,21 @@ router.get('/', async (req, res) => {
   }
 })
 
+// @api GET /api/instances/logs
+// Retrieve logs of an instance.
+//
+// Returns 200 OK and a string with logs or 500 ISE if an error occurred.
+router.get('/logs', async (req, res) => {
+  try {
+    const logs = await getContainerLogs(req.query.id)
+    res.type('txt')
+    res.send(logs)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+})
+
 // @api POST /api/instances/new
 // Create a new container.
 //
@@ -59,7 +74,6 @@ router.get('/', async (req, res) => {
 // }
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-
 router.post('/new', async (req, res) => {
   try {
     const {

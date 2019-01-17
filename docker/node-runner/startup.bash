@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 git clone $GIT_CLONE_URL /app
 cd /app
 git reset --hard $GIT_VERSION_HASH
