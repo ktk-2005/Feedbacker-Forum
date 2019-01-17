@@ -14,7 +14,6 @@ function tryRequest(opts, retriesLeft, fail) {
 
   if (retriesLeft > 1 || fail) {
     promise = promise.catch((error) => {
-
       if (error.statusCode === 500 && fail) {
         return Promise.resolve('Failed')
       }
@@ -37,13 +36,13 @@ function tryRequest(opts, retriesLeft, fail) {
 
 // Perform a request to API endpoint `path`, `extraOpts` are passed as-is
 // to the `request` package.
-export default function apiRequest(path,extraOpts, fail = false) {
+export default function apiRequest(path, extraOpts, fail = false) {
   const port = process.env.APP_SERVER_PORT || '8080'
   const opts = {
     uri: `http://localhost:${port}${path}`,
     json: true,
     ...extraOpts,
   }
-  return tryRequest(opts, 80 , fail)
+  return tryRequest(opts, 80, fail)
 }
 
