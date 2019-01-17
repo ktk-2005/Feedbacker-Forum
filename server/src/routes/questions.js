@@ -29,9 +29,7 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Example body @json {
 //   "text": "What?",
-//   "user": "salaattipoika",
-//   "secret": "408c43a509ee4c63",
-//   "blob": "{\"path\": \"/path/to/element\"}"
+//   "blob": {\"path\": \"/path/to/element\"}
 // }
 //
 // Returns `{ id }` of the created question

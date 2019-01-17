@@ -4,6 +4,28 @@
 
 # API
 
+## Headers
+
+Some API endpoints require specific headers to be set.
+This allows us to conveniently pass contextual information to the server without having to append it manually to every request.
+
+You don't need to set the headers manually in the client code: They are set automatically when using [`apiCall()`](/client/src/api-call.js).
+
+### Instance
+
+Instance specific endpoints like comments expect the current instance to be passed through the `X-Feedback-Host` header. This header simply contains the hostname of the current page. The API server parses the container subdomain ID from the header.
+
+### Authentication
+
+Authentication is done using the standard `Authorization` header with a non-standard `Feedbacker` scheme. The content of the authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
+
+```json
+{
+  "public-token-1": "private-token-1",
+  "public-token-2": "private-token-2"
+}
+```
+
 ## Version
 
 ### [GET /api/version](../server/src/routes/version.js#L49)
@@ -51,7 +73,7 @@ returns JSON array of all comments grouped with reactions in database
     }
 }
 ```
-### [POST /api/comments](../server/src/routes/comments.js#L88)
+### [POST /api/comments](../server/src/routes/comments.js#L84)
 
 Adds comment to database.
 
@@ -59,26 +81,21 @@ Example body for a root comment
 ```json
 {
   "text": "minttua",
-  "user": "salaattipoika",
-  "secret": "408c43a509ee4c63",
-  "container": "abcdef",
-  "blob": "{\"path\": \"/path/to/element\"}"
+  "blob": {\"path\": \"/path/to/element\"}
 }
 ```
 comments can be linked to a thread with
 ```json
 {
   "text": "minttua",
-  "user": "salaattipoika",
-  "secret": "408c43a509ee4c63",
   "threadId": "1234",
-  "blob": "{\"path\": \"/path/to/element\"}"
+  "blob": {\"path\": \"/path/to/element\"}
 }
 ```
 
 Returns `{ id, threadId }` of the new comment
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L114)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L110)
 
 Get comments by threadId
 
@@ -91,7 +108,7 @@ returns JSON array of all comments in thread
 Retrieve all questions.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L38)
+### [POST /api/questions](../server/src/routes/questions.js#L36)
 
 adds question to database.
 
@@ -99,9 +116,7 @@ Example body
 ```json
 {
   "text": "What?",
-  "user": "salaattipoika",
-  "secret": "408c43a509ee4c63",
-  "blob": "{\"path\": \"/path/to/element\"}"
+  "blob": {\"path\": \"/path/to/element\"}
 }
 ```
 
@@ -109,7 +124,7 @@ Returns `{ id }` of the created question
 
 ## Reactions
 
-### [POST /api/reactions](../server/src/routes/reactions.js#L22)
+### [POST /api/reactions](../server/src/routes/reactions.js#L20)
 
 add reaction to the database.
 
@@ -117,14 +132,12 @@ Example body
 ```json
 {
   "emoji": "fire",
-  "user": "jaba",
-  "secret": "408c43a509ee4c63",
   "comment_id": "1bd8052b"
 }
 ```
 
 Returns `{ id }` of the reaction
-### [DELETE /api/reactions](../server/src/routes/reactions.js#L41)
+### [DELETE /api/reactions](../server/src/routes/reactions.js#L37)
 
 Remove reaction from the database.
 

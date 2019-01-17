@@ -13,8 +13,6 @@ const router = express.Router()
 //
 // Example body @json {
 //   "emoji": "fire",
-//   "user": "jaba",
-//   "secret": "408c43a509ee4c63",
 //   "comment_id": "1bd8052b"
 // }
 //

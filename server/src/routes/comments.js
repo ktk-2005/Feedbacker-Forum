@@ -72,16 +72,12 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Example body for a root comment @json {
 //   "text": "minttua",
-//   "user": "salaattipoika",
-//   "secret": "408c43a509ee4c63",
-//   "blob": "{\"path\": \"/path/to/element\"}"
+//   "blob": {\"path\": \"/path/to/element\"}
 // }
 // comments can be linked to a thread with @json {
 //   "text": "minttua",
-//   "user": "salaattipoika",
-//   "secret": "408c43a509ee4c63",
 //   "threadId": "1234",
-//   "blob": "{\"path\": \"/path/to/element\"}"
+//   "blob": {\"path\": \"/path/to/element\"}
 // }
 //
 // Returns `{ id, threadId }` of the new comment
