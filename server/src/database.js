@@ -53,6 +53,17 @@ export async function listContainers() {
   return db.query('SELECT id, subdomain FROM containers')
 }
 
+export async function listContainersByUser(values = []) {
+  return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
+}
+
 export async function removeContainer({
   id,
 }) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
+
+export async function verifyUser(user, secret) {
+  const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
+  if (!rows || rows.length === 0) {
+    throw new Error('Authentication failure')
+  }
+}

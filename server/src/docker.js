@@ -1,6 +1,11 @@
 import Docker from 'dockerode'
-import stream from 'stream'
-import { addContainer, listContainers, removeContainer } from './database'
+//import stream from 'stream'
+import {
+  addContainer,
+  listContainers,
+  listContainersByUser,
+  removeContainer
+} from './database'
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' })
 
@@ -25,7 +30,7 @@ export async function getContainerLogs(id) {
     timestamps: true,
   })
 
-  /*const muxedStream = new stream.PassThrough()
+  /* const muxedStream = new stream.PassThrough()
   const demuxedStream = new stream.PassThrough()
 
   demuxedStream.on('data', chunk => console.log(chunk))
@@ -37,9 +42,18 @@ export async function getContainerLogs(id) {
 
   console.log('demuxed')
 
-  return demuxedStream.read()*/
+  return demuxedStream.read() */
 
   return muxedBuffer
+
+}
+
+async function getContainerInfoFromDatabaseByUser(userId) {
+  return listContainersByUser(userId)
+}
+
+export async function getRunningContainersByUser(userId) {
+  return getContainerInfoFromDatabaseByUser(userId)
 }
 
 export async function createNewContainer(url, version, type, name, port) {
