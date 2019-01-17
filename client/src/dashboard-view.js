@@ -33,11 +33,9 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    console.log(JSON.stringify(this.props.users))
-    const authToken = btoa(JSON.stringify(this.props.users))
     fetch('/api/instances', {
       headers: {
-        Authorization: `Feedbacker ${authToken}`,
+        Authorization: `Feedbacker ${btoa(JSON.stringify(this.props.users))}`,
       },
     })
       .then(response => response.json())
