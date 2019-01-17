@@ -49,6 +49,7 @@ class Create extends React.Component {
       .then((json) => {
         this.setState({
           containerId: json.containerInfo.id,
+          containerName: json.containerInfo.name,
           redirect: true,
         })
       })
@@ -58,7 +59,7 @@ class Create extends React.Component {
     if (this.state.redirect) {
       return (
         <Redirect to={{
-          pathname: `/site/build-view/${this.state.containerId}`,
+          pathname: `/site/build-view/${this.state.containerName}`,
         }}
         />
       )

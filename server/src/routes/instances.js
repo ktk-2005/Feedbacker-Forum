@@ -8,7 +8,7 @@ import {
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser } from '../database'
+import { verifyUser, resolveContainer } from '../database'
 import { attempt, uuid } from './helpers'
 
 const router = express.Router()
@@ -53,9 +53,11 @@ router.get('/', async (req, res) => {
 // Retrieve logs of an instance.
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.
-router.get('/logs/:id', async (req, res) => {
+router.get('/logs/:name', async (req, res) => {
   try {
-    const logs = await getContainerLogs(req.params.id)
+    const id = await resolveContainer(req.params.name)
+
+    const logs = await getContainerLogs(id)
     res.type('txt')
     res.send(logs)
   } catch (error) {

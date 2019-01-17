@@ -20,7 +20,7 @@ const ReactRouter = () => (
 
       <Route path="/site/create" component={Create} />
       <Route path="/site/dashboard" component={Dashboard} />
-      <Route path="/site/build-view/:id" component={Build} />
+      <Route path="/site/build-view/:name" component={Build} />
     </div>
   </Router>
 )

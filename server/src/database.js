@@ -78,6 +78,13 @@ export async function listContainers() {
   return db.query('SELECT id, subdomain FROM containers')
 }
 
+export async function resolveContainer(subdomain) {
+  const rows = await db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
+  if (!rows || rows.length == 0) throw new Error(`Invalid container ${subdomain}`)
+  console.log(rows)
+  return rows[0].id
+}
+
 export async function listContainersByUser(values = []) {
   return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
 }

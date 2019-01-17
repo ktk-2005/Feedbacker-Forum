@@ -52,17 +52,31 @@ class Dashboard extends React.Component {
             <button
               className={css('create-button')}
               type="button"
-            >Create new
+            >New instance
             </button>
           </Link>
         </div>
-        <div className={css('instance-container')}>
-          <h2>Your containers</h2>
-          {instances.map(instance => (
-            <div key={instance.id} className={css('instance')}>
-              <div>{instance.id}</div>
-            </div>
-          ))}
+        <div className={css('instances-container')}>
+          <h2>Your instances</h2>
+          {
+            instances.map((instance) => {
+              const instanceUrl = `${instance.subdomain}.${window.location.host}`
+
+              return (
+                <div key={instance.id} className={css('instance-card')}>
+                  <h5>{instance.subdomain}</h5>
+                  <a
+                    href={instanceUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className={css('ui-link')}
+                  >
+                    Go to UI
+                  </a>
+                </div>
+              )
+            })
+          }
         </div>
         <Route path="/site/create" component={Create} />
       </div>
