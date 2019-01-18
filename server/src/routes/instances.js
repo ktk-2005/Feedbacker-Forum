@@ -62,16 +62,16 @@ router.get('/logs/:name', catchErrors(async (req, res) => {
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/new', catchErrors(async (req, res) => {
   const {
-    url, version, type, name, port
+    url, version, type, name, port,
   } = req.body
 
   const { userId } = await reqUser(req)
 
   if (!url) {
-    throw new HttpError(400, `No git url given`)
+    throw new HttpError(400, 'No git url given')
   }
   if (!version) {
-    throw new HttpError(400, `No git version given`)
+    throw new HttpError(400, 'No git version given')
   }
   if (name.length < 3 || name.length > 20) {
     throw new HttpError(400, `Name too short or long: ${name}`)

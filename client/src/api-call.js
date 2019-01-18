@@ -34,18 +34,17 @@ export default async function (method, endpoint, body = null, opts = { }) {
 
   const response = await fetch(url, args)
 
-  if (opts.rawResponse) {
-    return response
+  // -- Early return if raw response
+  if (opts.rawResponse) return response
+
+  const json = await response.json()
+  if (response.status >= 400 && response.status <= 599) {
+    const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
+    console.error(message)
+    if (json.stack) console.error(json.stack)
+    throw new Error(message)
   } else {
-    const json = await response.json()
-    if (response.status >= 400 && response.status <= 599) {
-      const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
-      console.error(message)
-      if (json.stack) console.error(json.stack)
-      throw new Error(message)
-    } else {
-      return json
-    }
+    return json
   }
 }
 

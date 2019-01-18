@@ -10,8 +10,7 @@ export function subscribeUsers(func) {
   userCallbackCouter++
   userChangeCallbacks.set(userCallbackCouter, func)
 
-  if (!R.isEmpty(users))
-    func(users)
+  if (!R.isEmpty(users)) func(users)
 
   return userCallbackCouter
 }

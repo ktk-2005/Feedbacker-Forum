@@ -30,6 +30,7 @@ module.exports.notFound = (req, res, next) => {
   Development Error Hanlder
   log error stack trace
 */
+// eslint-disable-next-line no-unused-vars
 module.exports.devErr = (err, req, res, next) => {
   console.error(err)
   const errorDetails = {
@@ -45,6 +46,7 @@ module.exports.devErr = (err, req, res, next) => {
   Production Error Hanlder
   No stacktraces are leaked to user
 */
+// eslint-disable-next-line no-unused-vars
 module.exports.prodErr = (err, req, res, next) => {
   console.error(err)
   res.status(err.status || 500)

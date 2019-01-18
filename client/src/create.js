@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
@@ -32,7 +31,7 @@ class Create extends React.Component {
       version: inputValue('version'),
       type: 'node',
       port: inputValue('port'),
-      name: inputValue('name').toLowerCase()
+      name: inputValue('name').toLowerCase(),
     })
 
     console.log(json)

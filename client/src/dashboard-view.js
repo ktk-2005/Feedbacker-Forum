@@ -1,7 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-// Redux
-import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
@@ -22,17 +20,17 @@ class Dashboard extends React.Component {
     }
   }
 
-  async refreshInstances() {
-    const instances = await apiCall('GET', '/instances')
-    this.setState({ instances })
-  }
-
   componentDidMount() {
     this.userSub = subscribeUsers(this.refreshInstances)
   }
 
   componentWillUnmount() {
     unsubscribeUsers(this.userSub)
+  }
+
+  async refreshInstances() {
+    const instances = await apiCall('GET', '/instances')
+    this.setState({ instances })
   }
 
   render() {
