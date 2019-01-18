@@ -1,9 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import classNames from 'classnames/bind'
 import { Route, Link } from 'react-router-dom'
+// Redux
+import { connect } from 'react-redux'
+// Helpers
+import classNames from 'classnames/bind'
+// Styles
 import styles from './scss/views/dashboard-view.scss'
-import Create from './create'
 
 const css = classNames.bind(styles)
 
@@ -47,22 +49,36 @@ class Dashboard extends React.Component {
 
     return (
       <div className={css('dashboard')}>
-        <div className={css('top')}>
+        <div className={css('top-section')}>
           <Link to="/create">
             <button
               className={css('create-button')}
               type="button"
-            >Create new
+            >New instance
             </button>
           </Link>
         </div>
-        <div className={css('instance-container')}>
-          <h2>Your containers</h2>
-          {instances.map(instance => (
-            <div key={instance.id} className={css('instance')}>
-              <div>{instance.id}</div>
-            </div>
-          ))}
+        <div className={css('instances-container')}>
+          <h2>Your instances</h2>
+          {
+            instances.map((instance) => {
+              const instanceUrl = `http://${instance.subdomain}.${window.location.host}`
+
+              return (
+                <div key={instance.id} className={css('instance-card')}>
+                  <h5>{instance.subdomain}</h5>
+                  <a
+                    href={instanceUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className={css('ui-link')}
+                  >
+                    Go to feedbackable UI
+                  </a>
+                </div>
+              )
+            })
+          }
         </div>
       </div>
     )

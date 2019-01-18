@@ -8,7 +8,7 @@ import {
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser } from '../database'
+import { verifyUser, resolveContainer } from '../database'
 import { attempt, uuid } from './helpers'
 
 const router = express.Router()
@@ -53,9 +53,11 @@ router.get('/', async (req, res) => {
 // Retrieve logs of an instance.
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.
-router.get('/logs/:id', async (req, res) => {
+router.get('/logs/:name', async (req, res) => {
   try {
-    const logs = await getContainerLogs(req.params.id)
+    const id = await resolveContainer(req.params.name)
+
+    const logs = await getContainerLogs(id)
     res.type('txt')
     res.send(logs)
   } catch (error) {
@@ -80,6 +82,14 @@ router.post('/new', async (req, res) => {
     const {
       url, version, type, name, port, userId,
     } = req.body
+
+    if (name.length < 3 || name.length > 20) {
+      throw new Error(`Name too short or long ${name}`)
+    }
+    if (!name.match(/[a-z0-9](-?[a-z0-9])*/)) {
+      throw new Error(`Bad container name ${name}`)
+    }
+
     if (type === 'node') {
       await attempt(async () => {
         const suffixedName = `${name}-${uuid(5)}`

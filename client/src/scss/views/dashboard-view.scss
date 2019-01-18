@@ -2,7 +2,7 @@
 @import '../../scss/colors';
 @import '../../scss/atoms/button';
 
-.top {
+.top-section {
   display: flex;
   justify-content: flex-end;
 
@@ -13,19 +13,38 @@
 
 .create-button {
   @include button();
-  background-color: $palette-accent;
-  color: $palette-light;
-  padding: 0.5em;
+  background-color: $palette-light;
+  color: $palette-medium;
+  padding: 1em 2em;
 }
 
-.instance-container {
+.instances-container {
   display: flex;
   flex-flow: column;
-  margin: 1em;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+
+  h2 {
+    align-self: start;
+  }
 }
 
-.instance {
-  border: solid 1px $palette-medium;
-  box-shadow: 0 0 5px $palette-shadow-default;
-  padding: 1em;
+.instance-card {
+  flex: 1;
+  max-width: 100%;
+  min-width: 50%;
+  padding: 2em;
+  margin: 1em;
+  border-radius: 3px;
+  box-shadow: 0 0 10px $palette-shadow-default;
+
+  h5 {
+    text-transform: capitalize;
+    align-self: start;
+  }
+
+  .ui-link {
+    align-self: end;
+  }
 }

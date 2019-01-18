@@ -1,18 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+// Redux
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
+// Helpers
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import {
   BrowserRouter as Router, Redirect, Route, Switch
 } from 'react-router-dom'
-import styles from './scss/_base.scss'
 import { setupPersist } from './persist'
-import { apiUrl } from './meta/env.meta'
 import Dashboard from './dashboard-view'
 import Create from './create'
 import Build from './build-view'
+import { apiUrl } from './meta/env.meta'
+import { prepareReactRoot } from './shadowDomHelper'
+// Styles
+import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
 
@@ -79,6 +83,7 @@ const initialize = () => {
     savePersist(store.getState().persist || { })
   })
 
+
   ReactDOM.render(
     <Provider store={store}>
       <Router>
@@ -87,12 +92,12 @@ const initialize = () => {
             <Redirect exact from="/" to="/dashboard" />
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/create" component={Create} />
-            <Route exact path="/build-view/:id" component={Build} />
+            <Route exact path="/build-view/:name" component={Build} />
           </Switch>
         </div>
       </Router>
     </Provider>,
-    document.getElementById('root')
+    prepareReactRoot()
   )
 }
 

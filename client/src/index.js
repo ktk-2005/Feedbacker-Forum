@@ -1,18 +1,31 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+// Redux
 import { createStore, combineReducers } from 'redux'
-import classNames from 'classnames/bind'
+import { Provider } from 'react-redux'
+// External libraries & helpers
 import * as R from 'ramda'
-import Button from './components/open-panel-button/open-panel-button'
-import FloatingPanel from './components/floating-panel-view/floating-panel-view'
+import classNames from 'classnames/bind'
+import * as DomTagging from './dom-tagging'
+import apiCall from './api-call'
+import { setUsers } from './globals'
+import { prepareReactRoot } from './shadowDomHelper'
+// Components
+import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
+import SurveyPanel from './components/survey-panel/survey-panel'
+import CommentPanel from './components/comment-panel/comment-panel'
+import TagElementButton from './components/tag-element-button/tag-element-button'
+// Internal js
 import { setupPersist } from './persist'
-import { apiUrl } from './meta/env.meta'
+import { loadPersistData, setPersistData, loadComments } from './actions'
+// Styles
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
 
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
+const LOAD_ALL = 'LOAD_ALL'
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -27,50 +40,99 @@ function persistReducer(state = { }, action) {
   }
 }
 
+function commentsReducer(state = {}, action) {
+  switch (action.type) {
+    case LOAD_ALL:
+      return action.comments
+    /*
+    case RELOAD_COMMENT:
+      return action
+
+    case PREVIEW_COMMENT:
+      return action
+    */
+    default:
+      return state
+  }
+}
+
 const reducer = combineReducers({
   persist: persistReducer,
+  comments: commentsReducer,
 })
 
 const store = createStore(reducer)
-
-const feedbackAppRoot = () => {
-  const feedbackAppRoot = document.createElement('div')
-  feedbackAppRoot.setAttribute('data-feedback-app-root', true)
-  document.body.appendChild(feedbackAppRoot)
-  return feedbackAppRoot
-}
 
 class MainView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.handleClick = this.handleClick.bind(this)
+    this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
+    this.toggleTagElementState = this.toggleTagElementState.bind(this)
+    this.handleElementTagged = this.handleElementTagged.bind(this)
+    this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
 
     this.state = {
-      panelIsHidden: true,
-      buttonIsHidden: false,
+      surveyPanelIsHidden: true,
+      surveyButtonIsHidden: false,
+      taggingModeActive: false,
+      taggedElementXPath: '',
     }
   }
 
-  handleClick() {
+  handleSurveyPanelClick() {
     this.setState(state => ({
-      buttonIsHidden: !state.buttonIsHidden,
-      panelIsHidden: !state.panelIsHidden,
+      surveyPanelIsHidden: !state.surveyPanelIsHidden,
+      surveyButtonIsHidden: !state.surveyButtonIsHidden,
     }))
   }
 
+  toggleTagElementState() {
+    this.setState(state => ({
+      taggingModeActive: !state.taggingModeActive,
+    }))
+  }
+
+  handleElementTagged(event) {
+    const xPath = DomTagging.getXPathByElement(event)
+    this.setState({
+      taggedElementXPath: xPath,
+    })
+  }
+
+  unsetTaggedElement() {
+    this.setState({
+      taggedElementXPath: '',
+    })
+  }
+
   render() {
-    const { buttonIsHidden, panelIsHidden } = this.state
+    const {
+      surveyButtonIsHidden,
+      surveyPanelIsHidden,
+      taggingModeActive,
+    } = this.state
 
     return (
-      <div>
-        <Button
-          hidden={buttonIsHidden}
-          onClick={this.handleClick}
+      <div
+        className={css('feedback-app-container', { 'tagging-mode-active': taggingModeActive })}
+      >
+        <TagElementButton
+          active={taggingModeActive}
+          elementTagged={this.handleElementTagged}
+          toggleTagElementState={this.toggleTagElementState}
         />
-        <FloatingPanel
-          hidden={panelIsHidden}
-          onClick={this.handleClick}
+        <OpenSurveyPanelButton
+          hidden={surveyButtonIsHidden}
+          onClick={this.handleSurveyPanelClick}
+        />
+        <SurveyPanel
+          hidden={surveyPanelIsHidden}
+          onClick={this.handleSurveyPanelClick}
+        />
+        <CommentPanel
+          taggedElementXPath={this.state.taggedElementXPath}
+          unsetTaggedElement={this.unsetTaggedElement}
         />
       </div>
     )
@@ -86,26 +148,24 @@ const initialize = () => {
 
   window[initializedKey] = true
 
+  const blockLegacyBrowsers = () => {
+    const isLegacy = window.navigator.userAgent.match(/(MSIE|Trident|Edge)/)
+    // eslint-disable-next-line
+    while (isLegacy) alert('This browser is not currently supported. Please use chrome or firefox.')
+  }
+
+  blockLegacyBrowsers()
+
   const loadPersist = async (state, allDataLoaded) => {
-    store.dispatch({ type: LOAD_PERSIST, state })
+    store.dispatch(loadPersistData(state))
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const response = await fetch(`${apiUrl}/users`, {
-          method: 'POST',
-        })
-        const { id, secret } = await response.json()
+        const { id, secret } = await apiCall('POST', '/users')
 
         console.log('Created new user from API', { [id]: secret })
 
-        store.dispatch({
-          type: SET_PERSIST,
-          data: {
-            users: {
-              [id]: secret,
-            },
-          },
-        })
+        store.dispatch(setPersistData({ users: { [id]: secret } }))
       } else {
         console.log('Loaded user from persistent storage', state.users)
       }
@@ -114,15 +174,23 @@ const initialize = () => {
 
   const savePersist = setupPersist(loadPersist)
 
+  apiCall('GET', '/comments')
+    .then((comments) => {
+      store.dispatch(loadComments(comments))
+    })
+
   store.subscribe(() => {
-    savePersist(store.getState().persist || { })
+    const persist = store.getState().persist || { }
+    savePersist(persist)
+    setUsers(persist.users || { })
   })
 
+
   ReactDOM.render(
-    <div className={css('feedback-app-main-container')}>
+    <Provider store={store}>
       <MainView />
-    </div>,
-    feedbackAppRoot()
+    </Provider>,
+    prepareReactRoot()
   )
 }
 

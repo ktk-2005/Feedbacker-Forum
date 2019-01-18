@@ -6,4 +6,5 @@
 
 .build-view-container {
   @extend .create-view;
+  max-width: unset;
 }

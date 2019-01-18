@@ -4,6 +4,28 @@
 
 # API
 
+## Headers
+
+Some API endpoints require specific headers to be set.
+This allows us to conveniently pass contextual information to the server without having to append it manually to every request.
+
+You don't need to set the headers manually in the client code: They are set automatically when using [`apiCall()`](/client/src/api-call.js).
+
+### Instance
+
+Instance specific endpoints like comments expect the current instance to be passed through the `X-Feedback-Host` header. This header simply contains the hostname of the current page. The API server parses the container subdomain ID from the header.
+
+### Authentication
+
+Authentication is done using the standard `Authorization` header with a non-standard `Feedbacker` scheme. The content of the authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
+
+```json
+{
+  "public-token-1": "private-token-1",
+  "public-token-2": "private-token-2"
+}
+```
+
 ## Version
 
 ### [GET /api/version](../server/src/routes/version.js#L49)
@@ -20,50 +42,73 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L15)
+### [GET /api/comments](../server/src/routes/comments.js#L38)
 
-Retrieve all comments.
+Retrieve all comments of the current container instance.
 
-returns JSON array of all comments in database
-### [POST /api/comments](../server/src/routes/comments.js#L36)
+returns JSON array of all comments grouped with reactions in database
+```json
+{
+    "1bd8052b": {
+        "id": "1bd8052b",
+        "time": "2018-11-14 16:35:27",
+        "text": "skrattia",
+        "userId": "da776df3",
+        "reactions": [
+            {
+                "id": "1ddb07c8",
+                "time": "2019-01-16 16:43:21",
+                "userId": "da776df3",
+                "emoji": "🍑",
+                "commentId": "1bd8052b"
+            }
+         ]
+    },
+    "cb38e8f6": {
+        "id": "cb38e8f6",
+        "time": "2018-11-14 17:10:42",
+        "text": "tröttistä",
+        "userId": "da776df3",
+        "reactions": []
+    }
+}
+```
+### [POST /api/comments](../server/src/routes/comments.js#L84)
 
-Adds comment to database.
+Adds comment to the current container instance.
 
 Example body for a root comment
 ```json
 {
   "text": "minttua",
-  "user": "salaattipoika",
-  "container": "abcdef",
-  "blob": "{\"path\": \"/path/to/element\"}"
+  "blob": {"path": "/path/to/element"}
 }
 ```
 comments can be linked to a thread with
 ```json
 {
   "text": "minttua",
-  "user": "salaattipoika",
   "threadId": "1234",
-  "blob": "{\"path\": \"/path/to/element\"}"
+  "blob": {"path": "/path/to/element"}
 }
 ```
 
 Returns `{ id, threadId }` of the new comment
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L61)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L110)
 
-Get comments by threadId
+Get comments by `threadId`
 
 returns JSON array of all comments in thread
 
 ## Questions
 
-### [GET /api/questions](../server/src/routes/questions.js#L13)
+### [GET /api/questions](../server/src/routes/questions.js#L15)
 
-Retrieve all questions.
+Retrieve all questions in the current container instance.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L27)
+### [POST /api/questions](../server/src/routes/questions.js#L36)
 
 adds question to database.
 
@@ -71,8 +116,7 @@ Example body
 ```json
 {
   "text": "What?",
-  "user": "salaattipoika",
-  "blob": "{\"path\": \"/path/to/element\"}"
+  "blob": {"path": "/path/to/element"}
 }
 ```
 
@@ -80,31 +124,24 @@ Returns `{ id }` of the created question
 
 ## Reactions
 
-### [GET /api/reactions](../server/src/routes/reactions.js#L13)
+### [POST /api/reactions](../server/src/routes/reactions.js#L20)
 
-Retrieve all reactions.
-
-returns JSON array of all reactions in database
-### [POST /api/reactions](../server/src/routes/reactions.js#L36)
-
-add reaction to the database.
+add reaction to a comment.
 
 Example body
 ```json
 {
-  "emoji": "🍑",
-  "user": "jaba",
-  "comment_id": "1bd8052b"
+  "emoji": "fire",
+  "commentId": "1bd8052b"
 }
 ```
 
 Returns `{ id }` of the reaction
+### [DELETE /api/reactions](../server/src/routes/reactions.js#L37)
 
-### [GET /api/reactions/:commentId](../server/src/routes/reactions.js#L21)
+Remove reaction from a comment.
 
-Retrieve all reactions by commentId.
-
-returns JSON array of all reactions to comment
+Returns JSON indicating whether deletion was successful or not
 
 ## Users
 

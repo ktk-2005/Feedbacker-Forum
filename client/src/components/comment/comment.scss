@@ -1,0 +1,54 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+.comment {
+  margin-top: $spacer;
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .target-icon {
+    @include reset-button();
+    cursor: pointer;
+
+    svg {
+      $target-icon-dimension: $icon-dimension-default / 2;
+      width: $target-icon-dimension;
+      height: $target-icon-dimension;
+      fill: $palette-dark;
+      transition: fill $transition-default-tail
+    }
+
+    &:hover svg {
+      fill: $palette-black;
+      transition: fill $transition-default-tail
+    }
+
+    &:focus svg {
+      fill: $palette-accent;
+      transition: fill $transition-default-tail
+    }
+  }
+
+  .text {
+    margin-top: $baseline;
+  }
+
+  .timestamp {
+    align-self: flex-end;
+    font-size: $font-size-small;
+  }
+}

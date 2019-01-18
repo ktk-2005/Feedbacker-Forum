@@ -1,0 +1,6 @@
+
+/* Resolve path to our static URL */
+@function static-url($path) {
+  @return url($static-url + $path);
+}
+

@@ -1,0 +1,98 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/functions';
+@import '../../scss/atoms/button';
+
+.reactions {
+  display: flex;
+  margin-top: $spacer;
+}
+
+$toggled-inset-shadow: inset 0 1px 20px;
+$reaction-border: 1px solid $palette-light;
+.reaction {
+  @include reset-button;
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+  padding: $baseline;
+  border: $reaction-border;
+  border-right: 0;
+  outline: none;
+  box-shadow: $toggled-inset-shadow transparent;
+  background: $palette-white;
+  overflow: visible;
+  transition: $transition-default-all;
+  transition-property: box-shadow;
+}
+
+.reaction:first-of-type {
+  border-bottom-left-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
+}
+
+.reaction:last-of-type {
+  border-right: $reaction-border;
+  border-bottom-right-radius: $border-radius-default;
+  border-top-right-radius: $border-radius-default;
+}
+
+$symbol-height: 1em;
+.emoji {
+  height: $symbol-height;
+  width: 2ch;
+  display: inline-block;
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.counter {
+  display: inline-block;
+  margin-left: 0;
+  line-height: $symbol-height;
+  transition: $transition-default-all;
+}
+
+.toggled {
+  box-shadow: $toggled-inset-shadow $palette-light;
+  transition: $transition-default-all;
+}
+
+.counter {
+  width: auto;
+  margin-left: 1ch;
+  opacity: 1;
+  transition: $transition-default-all;
+  &[data-count='0'] {
+    width: 0;
+    margin-left: 0;
+    opacity: 0;
+    transition: margin-left $transition-default-tail, width $transition-default-tail;
+  }
+}
+
+.up {
+  background-image: static-url('/emojis/thumbs-up.png');
+}
+
+.down {
+  background-image: static-url('/emojis/thumbs-down.png');
+}
+
+.fire {
+  background-image: static-url('/emojis/fire.png');
+}
+
+.joy {
+  background-image: static-url('/emojis/face-with-tears-of-joy.png');
+}
+
+.thinking {
+  background-image: static-url('/emojis/thinking-face.png');
+}
