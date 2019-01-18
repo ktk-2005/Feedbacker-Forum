@@ -61,7 +61,7 @@ class Create extends React.Component {
     if (this.state.redirect) {
       return (
         <Redirect to={{
-          pathname: `/build-view/${this.state.containerName}`,
+          pathname: `/logs/${this.state.containerName}`,
         }}
         />
       )
