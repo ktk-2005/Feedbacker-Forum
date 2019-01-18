@@ -2,6 +2,7 @@ import React from 'react'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
+import { subscribeUsers, unsubscribeUsers } from './globals'
 // Styles
 import styles from './scss/views/build-view.scss'
 
@@ -11,18 +12,21 @@ class Build extends React.Component {
   constructor(props) {
     super(props)
 
+    this.logPolling = this.logPolling.bind(this)
+
     this.state = {
       data: '',
     }
   }
 
   componentDidMount() {
-    this.logPolling()
-    this.timer = setInterval(() => this.logPolling(), 2000)
+    this.userSub = subscribeUsers(this.logPolling)
+    this.timer = setInterval(this.logPolling, 2000)
   }
 
   componentWillUnmount() {
     clearInterval(this.timer)
+    unsubscribeUsers(this.userSub)
   }
 
   async logPolling() {

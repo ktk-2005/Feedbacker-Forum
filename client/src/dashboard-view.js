@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
+import { subscribeUsers, unsubscribeUsers } from './globals'
 // Styles
 import styles from './scss/views/dashboard-view.scss'
 
@@ -14,14 +15,24 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props)
 
+    this.refreshInstances = this.refreshInstances.bind(this)
+
     this.state = {
       instances: [],
     }
   }
 
-  async componentDidMount() {
-    const instances = apiCall('/api/instances')
+  async refreshInstances() {
+    const instances = await apiCall('GET', '/instances')
     this.setState({ instances })
+  }
+
+  componentDidMount() {
+    this.userSub = subscribeUsers(this.refreshInstances)
+  }
+
+  componentWillUnmount() {
+    unsubscribeUsers(this.userSub)
   }
 
   render() {
