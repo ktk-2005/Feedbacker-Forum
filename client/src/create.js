@@ -97,7 +97,10 @@ class Create extends React.Component {
               Port
               <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
             </label>
-            <button type="submit" onClick={this.postContainer}>
+            <button
+              type="submit"
+              onSubmit={this.postContainer}
+            >
               Create
             </button>
           </form>
