@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 // Redux
 import { connect } from 'react-redux'
 // Helpers
@@ -28,8 +28,9 @@ class Dashboard extends React.Component {
     const { instances } = this.state
 
     return (
-      <div className={css('dashboard')}>
+      <>
         <div className={css('top-section')}>
+          <h2>Dashboard</h2>
           <Link to="/create">
             <button
               className={css('create-button')}
@@ -46,21 +47,26 @@ class Dashboard extends React.Component {
 
               return (
                 <div key={instance.id} className={css('instance-card')}>
-                  <h5>{instance.subdomain}</h5>
-                  <a
-                    href={instanceUrl}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className={css('ui-link')}
-                  >
-                    Go to feedbackable UI
-                  </a>
+                  <h5>Instance: {instance.subdomain}</h5>
+                  <div className={css('button-container')}>
+                    <Link to={`/logs/${instance.subdomain}`}>
+                      Open instance logs
+                    </Link>
+                    <a
+                      href={instanceUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className={css('accent')}
+                    >
+                      Go to feedbackable UI
+                    </a>
+                  </div>
                 </div>
               )
             })
           }
         </div>
-      </div>
+      </>
     )
   }
 }

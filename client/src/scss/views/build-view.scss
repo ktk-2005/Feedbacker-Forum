@@ -1,10 +1,38 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
-@import '../../scss/atoms/button';
 
 @import './create.scss';
+@import './dashboard-view.scss';
 
-.build-view-container {
+$palette-console: #0D1323;
+
+.build-view {
   @extend .create-view;
-  max-width: unset;
+
+  h2 {
+    margin-bottom: $spacer;
+  }
+}
+
+pre {
+  max-height: 50vh;
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  font-family: monospace;
+  font-size: $baseline * 1.5;
+  line-height: 250%;
+  overflow-wrap: break-word;
+  background-color: $palette-console;
+  color: $palette-white;
+}
+
+.next-action-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.container-link {
+  @extend %anchor-button-accent;
+  margin-left: $spacer;
+  color: $palette-white;
 }
