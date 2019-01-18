@@ -48,6 +48,7 @@
     padding: $baseline $spacer;
     border: none;
     border-radius: $border-radius-default;
+    line-height: normal;
     box-shadow: 0 2px 5px $palette-shadow-light;
 
     &:focus {
@@ -57,8 +58,8 @@
   }
 
   select {
-    height: 2 * $baseline + $spacer;
     background: $palette-white;
+    appearance: none;
   }
 
   button[type="submit"] {
