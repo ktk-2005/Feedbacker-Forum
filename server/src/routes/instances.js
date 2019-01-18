@@ -9,7 +9,9 @@ import {
   getContainerLogs,
 } from '../docker'
 import { verifyUser, resolveContainer } from '../database'
-import { attempt, uuid } from './helpers'
+import { attempt, uuid, reqUser } from './helpers'
+import { catchErrors } from '../handlers'
+import HttpError from '../http-error'
 
 const router = express.Router()
 
@@ -18,54 +20,34 @@ const router = express.Router()
 // Retrieve all instances in the database.
 //
 // Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
-/*
-router.get('/', async (req, res) => {
-  try {
-    const containers = await getRunningContainers()
-    res.send(containers)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
+router.get('/', catchErrors(async (req, res) => {
+  const { users } = await reqUser(req)
+  const containers = []
+  for (const [userId, secret] of R.toPairs(users)) {
+    try {
+      await verifyUser(userId, secret)
+      containers.push(...await getRunningContainersByUser([userId]))
+    } catch (error) { /* ignore */ }
   }
-})
-*/
-router.get('/', async (req, res) => {
-  try {
-    const [type, token] = req.get('Authorization').split(' ')
-    // let users = JSON.parse(atob(token))
-    if (type !== 'Feedbacker') throw new Error('Unsupported authorization type')
-    let users = JSON.parse(Buffer.from(token, 'base64').toString())
-    users = R.toPairs(users)
-    const containers = []
-    for (const [userId, secret] of users) {
-      try {
-        await verifyUser(userId, secret)
-        containers.push(...await getRunningContainersByUser([userId]))
-      } catch (error) { /* ignore */ }
-    }
-    res.send(containers)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
-  }
-})
+  res.send(containers)
+}))
 
 // @api GET /api/instances/logs/:name
 // Retrieve logs of an instance.
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.
-router.get('/logs/:name', async (req, res) => {
-  try {
-    const id = await resolveContainer(req.params.name)
+router.get('/logs/:name', catchErrors(async (req, res) => {
+  const { users } = await reqUser(req)
+  const { id, userId } = await resolveContainer(req.params.name)
 
-    const logs = await getContainerLogs(id)
-    res.type('txt')
-    res.send(logs)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
+  if (!users.hasOwnProperty(userId)) {
+    throw new HttpError(403, 'Only instance owner can see logs')
   }
-})
+
+  const logs = await getContainerLogs(id)
+  res.type('txt')
+  res.send(logs)
+}))
 
 // @api POST /api/instances/new
 // Create a new container.
@@ -78,36 +60,38 @@ router.get('/logs/:name', async (req, res) => {
 // }
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-router.post('/new', async (req, res) => {
-  try {
-    const {
-      url, version, type, name, port, userId,
-    } = req.body
+router.post('/new', catchErrors(async (req, res) => {
+  const {
+    url, version, type, name, port
+  } = req.body
 
-    if (name.length < 3 || name.length > 20) {
-      throw new Error(`Name too short or long ${name}`)
-    }
-    if (!name.match(/[a-z0-9](-?[a-z0-9])*/)) {
-      throw new Error(`Bad container name ${name}`)
-    }
+  const { userId } = await reqUser(req)
 
-    if (type === 'node') {
-      await attempt(async () => {
-        const suffixedName = `${name}-${uuid(5)}`
-        const containerInfo = await createNewContainer(
-          url, version, type, suffixedName, port, userId
-        )
-        res.json({ containerInfo })
-      })
-    } else {
-      console.log(`/api/instances/new -- expected type 'node', but got '${type}'`)
-      res.sendStatus(501)
-    }
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
+  if (!url) {
+    throw new HttpError(400, `No git url given`)
   }
-})
+  if (!version) {
+    throw new HttpError(400, `No git version given`)
+  }
+  if (name.length < 3 || name.length > 20) {
+    throw new HttpError(400, `Name too short or long: ${name}`)
+  }
+  if (!name.match(/[a-z0-9](-?[a-z0-9])*/)) {
+    throw new HttpError(400, `Bad container name: ${name}`)
+  }
+
+  if (type === 'node') {
+    await attempt(async () => {
+      const suffixedName = `${name}-${uuid(5)}`
+      const containerInfo = await createNewContainer(
+        url, version, type, suffixedName, port, userId
+      )
+      res.json({ containerInfo })
+    })
+  } else {
+    throw new HttpError(501, `Expected type 'node', but got '${type}'`)
+  }
+}))
 
 // @api POST /api/instances/stop
 // Stop a running container.
@@ -117,15 +101,10 @@ router.post('/new', async (req, res) => {
 // }
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-router.post('/stop', async (req, res) => {
-  try {
-    await stopContainer(req.body.instance_id)
-    res.sendStatus(200)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
-  }
-})
+router.post('/stop', catchErrors(async (req, res) => {
+  await stopContainer(req.body.instance_id)
+  res.sendStatus(200)
+}))
 
 // @api POST /api/instances/delete
 // Delete a container
@@ -135,14 +114,9 @@ router.post('/stop', async (req, res) => {
 // }
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-router.post('/delete', async (req, res) => {
-  try {
-    await deleteContainer(req.body.intance_id)
-    res.send(200)
-  } catch (error) {
-    console.log(error)
-    res.send(500)
-  }
-})
+router.post('/delete', catchErrors(async (req, res) => {
+  await deleteContainer(req.body.intance_id)
+  res.send(200)
+}))
 
 module.exports = router

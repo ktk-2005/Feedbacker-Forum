@@ -4,22 +4,11 @@ import { Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
 import { shadowDocument } from './shadowDomHelper'
+import apiCall from './api-call'
 // Styles
 import styles from './scss/views/create.scss'
 
 const css = classNames.bind(styles)
-
-const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
-  const userKeys = Object.keys(users)
-  let publicKey = ''
-  if (userKeys.length >= 1) {
-    [publicKey] = userKeys
-  }
-  return {
-    userPublic: publicKey,
-  }
-}
 
 class Create extends React.Component {
   constructor(props) {
@@ -33,28 +22,21 @@ class Create extends React.Component {
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
-  postContainer() {
-    fetch('/api/instances/new', {
-      body: JSON.stringify({
-        url: shadowDocument().getElementById('url').value,
-        version: shadowDocument().getElementById('version').value,
-        type: 'node',
-        port: shadowDocument().getElementById('port').value,
-        name: shadowDocument().getElementById('name').value,
-        userId: this.props.userPublic,
-      }),
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  async postContainer() {
+    const json = await apiCall('POST', '/instances/new', {
+      url: shadowDocument().getElementById('url').value,
+      version: shadowDocument().getElementById('version').value,
+      type: 'node',
+      port: shadowDocument().getElementById('port').value,
+      name: shadowDocument().getElementById('name').value,
     })
-      .then(response => response.json())
-      .then((json) => {
-        this.setState({
-          containerName: json.containerInfo.name,
-          redirect: true,
-        })
-      })
+
+    console.log(json)
+
+    this.setState({
+      containerName: json.containerInfo.name,
+      redirect: true,
+    })
   }
 
   render() {
@@ -105,4 +87,4 @@ class Create extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Create)
+export default Create
