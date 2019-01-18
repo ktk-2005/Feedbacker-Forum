@@ -89,8 +89,7 @@ const initialize = () => {
       <Router>
         <div className={css('feedback-app-main-container')}>
           <Switch>
-            <Redirect exact from="/" to="/dashboard" />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/" component={Dashboard} />
             <Route exact path="/create" component={Create} />
             <Route exact path="/logs/:name" component={Build} />
           </Switch>
