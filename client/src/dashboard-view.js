@@ -39,7 +39,8 @@ class Dashboard extends React.Component {
       if (instances.length < 1) {
         return (
           <p>
-            No instances created. Go ahead and create one by clicking on the &quot;New instance&quot; button.
+            No instances created.
+            Go ahead and create one by clicking on the &quot;New instance&quot; button.
           </p>
         )
       }
