@@ -1,5 +1,6 @@
 import React from 'react'
 // Helpers
+import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
 import { subscribeUsers, unsubscribeUsers } from './globals'
@@ -55,7 +56,14 @@ class Build extends React.Component {
               {this.state.data}
             </pre>
           </div>
-          <div className={css('next-action-container')}>
+          <div className={css('button-container')}>
+            <Link to="/">
+              <button
+                className={css('dashboard-button')}
+                type="button"
+              >Back to dashboard
+              </button>
+            </Link>
             <label>
               Feedbackable UI:
               <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url}</a>

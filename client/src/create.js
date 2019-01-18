@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
 import { shadowDocument } from './shadowDomHelper'
@@ -83,9 +83,18 @@ class Create extends React.Component {
               Port
               <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
             </label>
-            <button type="submit">
-              Create
-            </button>
+            <div className={css('button-container')}>
+              <Link to="/">
+                <button
+                  className={css('dashboard-button')}
+                  type="button"
+                >Back to dashboard
+                </button>
+              </Link>
+              <button type="submit">
+                Create
+              </button>
+            </div>
           </form>
         </div>
       </div>

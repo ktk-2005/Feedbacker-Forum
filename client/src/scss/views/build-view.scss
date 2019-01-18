@@ -26,11 +26,6 @@ pre {
   color: $palette-white;
 }
 
-.next-action-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .container-link {
   @extend %anchor-button-accent;
   margin-left: $spacer;

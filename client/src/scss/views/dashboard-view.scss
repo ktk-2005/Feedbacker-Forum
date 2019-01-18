@@ -12,7 +12,7 @@
   text-decoration: none;
   align-self: end;
   padding: $baseline $spacer;
-  box-shadow: 0 2px 5px $palette-shadow-light;
+  box-shadow: 0 1px 5px $palette-shadow-light;
   color: $palette-dark;
 }
 
@@ -54,6 +54,16 @@
   }
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacer;
+
+  > *:not(:first-of-type) {
+    margin-left: $spacer;
+  }
+}
+
 .instance-card {
   flex: 1;
   padding: $spacer;
@@ -64,16 +74,6 @@
   h5 {
     text-transform: capitalize;
     align-self: start;
-  }
-
-  .button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: $spacer;
-
-    > *:not(:first-of-type) {
-      margin-left: $spacer;
-    }
   }
 
   a, button {
