@@ -22,6 +22,7 @@ class Create extends React.Component {
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
   async postContainer(event) {
+    // TODO: why so slow?
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
     const doc = shadowDocument()
