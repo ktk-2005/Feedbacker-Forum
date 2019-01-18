@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-// @api GET /api/instances/logs
+// @api GET /api/instances/logs/:name
 // Retrieve logs of an instance.
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.

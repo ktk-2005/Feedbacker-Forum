@@ -51,7 +51,7 @@ Authentication is done using the standard `Authorization` header with a non-stan
 
 @api /api/instances/new
 
-@api /api/instances/logs
+@api /api/instances/logs/:name
 
 @api /api/instances/stop
 

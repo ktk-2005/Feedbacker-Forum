@@ -190,7 +190,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs](../server/src/routes/instances.js#L57)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L57)
 
 Retrieve logs of an instance.
 
