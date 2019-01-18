@@ -23,6 +23,7 @@ class Create extends React.Component {
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
   async postContainer(event) {
     event.preventDefault()
+    event.nativeEvent.stopImmediatePropagation()
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
