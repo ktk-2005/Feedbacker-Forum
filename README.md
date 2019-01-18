@@ -15,6 +15,10 @@ npm run build:dev
 cd ../docker
 docker build -t node-runner node-runner
 
+# If you want to build the proxy
+cd ../proxy
+go build
+
 # Install the API server and run it
 cd ../server
 
