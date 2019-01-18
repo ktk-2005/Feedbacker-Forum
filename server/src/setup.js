@@ -5,6 +5,7 @@ import { ArgumentParser } from 'argparse'
 import path from 'path'
 
 import { initializeDatabase } from './database'
+import { initializeDocker } from './docker'
 import { startServer } from './server'
 import { args, config } from './globals'
 
@@ -101,6 +102,11 @@ function overrideConfigFromEnv() {
     config.useTestData = useTestData !== '0'
   }
   config.databaseUrl = process.env.DATABASE_URL
+
+  const dockerUrl = process.env.DOCKER_HOST_URL
+  if (dockerUrl) {
+    config.dockerUrl = dockerUrl
+  }
 }
 
 export async function startup() {
@@ -127,6 +133,7 @@ export async function startup() {
   overrideConfigFromEnv()
 
   await initializeDatabase()
+  initializeDocker()
 
   if (args.startProxy) {
     console.log('Starting proxy')

@@ -1,0 +1,73 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+@import '../../scss/typography';
+
+@import './dashboard-view.scss';
+
+.center-center-block {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  > * {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+  }
+}
+
+.dashboard-button {
+  @extend %anchor-button;
+}
+
+.create-view {
+  max-width: 700px;
+  padding: $spacer * 4;
+  border-radius: $border-radius-default;
+  box-shadow: 0 2px 10px $palette-shadow-default;
+  background-color: $palette-lighter;
+
+  h2 {
+    margin-bottom: $spacer;
+  }
+}
+
+.form-create {
+  display: flex;
+  flex-shrink: 0;
+  flex-flow: column;
+  line-height: 2;
+
+  label {
+    margin-bottom: $spacer;
+  }
+
+  input:not([type="submit"]), select {
+    display: block;
+    width: 100%;
+    margin-top: $baseline;
+    padding: $baseline $spacer;
+    border: none;
+    border-radius: $border-radius-default;
+    line-height: normal;
+    box-shadow: 0 2px 5px $palette-shadow-light;
+
+    &:focus {
+      outline: none;
+      @include shadow-outline($fade: $baseline);
+    }
+  }
+
+  select {
+    background: $palette-white;
+    appearance: none;
+  }
+
+  button[type="submit"] {
+    @extend %anchor-button-accent;
+    align-self: flex-end;
+  }
+}

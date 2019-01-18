@@ -165,3 +165,59 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
+
+## Instances
+
+### [GET /api/instances](../server/src/routes/instances.js#L23)
+
+Retrieve all instances in the database.
+
+Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
+
+### [POST /api/instances/new](../server/src/routes/instances.js#L63)
+
+Create a new container.
+
+Currently the only parameter considered is `instance_image`. The name and subdomain are
+generated automatically.
+
+Example body
+```json
+{
+ "type": "node"
+}
+```
+
+Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
+
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L39)
+
+Retrieve logs of an instance.
+
+Returns 200 OK and a string with logs or 500 ISE if an error occurred.
+
+### [POST /api/instances/stop](../server/src/routes/instances.js#L104)
+
+Stop a running container.
+
+Example body
+```json
+{
+ "id": "212ef098098a098b0980c980980"
+}
+```
+
+Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
+
+### [POST /api/instances/delete](../server/src/routes/instances.js#L117)
+
+Delete a container
+
+Example body
+```json
+{
+ "id": "212ef098098a098b0980c980980"
+}
+```
+
+Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.

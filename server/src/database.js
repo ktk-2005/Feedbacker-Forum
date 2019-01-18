@@ -68,6 +68,33 @@ export async function getCommentReactions(values = []) { return db.query('SELECT
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
+export async function addContainer({
+  id, subdomain, userId, blob, url,
+}) {
+  return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
+}
+
+export async function listContainers() {
+  return db.query('SELECT id, subdomain FROM containers')
+}
+
+export async function resolveContainer(subdomain) {
+  const rows = await db.query('SELECT id, user_id FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
+  if (!rows || rows.length === 0) throw new Error(`Invalid container ${subdomain}`)
+  return {
+    id: rows[0].id,
+    userId: rows[0].user_id,
+  }
+}
+
+export async function listContainersByUser(values = []) {
+  return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
+}
+
+export async function removeContainer({
+  id,
+}) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
+
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
   if (!rows || rows.length === 0) {
@@ -76,4 +103,3 @@ export async function verifyUser(user, secret) {
 }
 
 export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }
-

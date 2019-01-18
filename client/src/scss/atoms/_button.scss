@@ -1,11 +1,33 @@
 @import '../typography';
 @import '../mixins';
 
+@mixin reset-button() {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  outline: none;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+}
+
 @mixin button(
   $border-radius: $border-radius-default,
   $states: true,
   $transition: true
 ) {
+  @include reset-button();
   border: none;
   border-radius: $border-radius;
   outline: none;
@@ -28,26 +50,5 @@
         transition: $transition-default-all;
       }
     }
-  }
-}
-
-@mixin reset-button {
-  border: none;
-  margin: 0;
-  padding: 0;
-  width: auto;
-  overflow: visible;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  line-height: normal;
-  outline: none;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
-  -webkit-appearance: none;
-
-  &::-moz-focus-inner {
-    border: 0;
-    padding: 0;
   }
 }

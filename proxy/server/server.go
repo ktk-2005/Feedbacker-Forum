@@ -76,6 +76,12 @@ func redirectRequest(req *http.Request) {
 			req.URL.Scheme = target.Scheme
 			req.URL.Host = target.Host
 			req.Host = target.Host
+
+			accept := strings.ToLower(req.Header.Get("Accept"))
+			if strings.Contains(accept, "text/html") {
+				req.Header.Del("Accept-Encoding")
+			}
+
 			return
 		}
 	}
@@ -87,11 +93,22 @@ func redirectRequest(req *http.Request) {
 func modifyResponse(res *http.Response) error {
 
 	// Only modify responses with Content-Type: text/html
-	contentTypes := res.Header["Content-Type"]
-	if len(contentTypes) == 0 {
-		return nil
+	isHtml := false
+
+	contentType := strings.ToLower(res.Header.Get("Content-Type"))
+	if strings.Contains(contentType, "text/html") {
+		isHtml = true
 	}
-	if contentTypes[0] != "text/html" {
+
+	req := res.Request
+	if req != nil {
+		accept := strings.ToLower(req.Header.Get("Accept"))
+		if strings.Contains(accept, "text/html") {
+			isHtml = true
+		}
+	}
+
+	if !isHtml {
 		return nil
 	}
 

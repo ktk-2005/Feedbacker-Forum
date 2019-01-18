@@ -1,0 +1,33 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+
+@import './create.scss';
+@import './dashboard-view.scss';
+
+$palette-console: #0D1323;
+
+.build-view {
+  @extend .create-view;
+
+  h2 {
+    margin-bottom: $spacer;
+  }
+
+  pre {
+    max-height: 50vh;
+    padding: $spacer;
+    border-radius: $border-radius-default;
+    font-family: monospace;
+    font-size: $baseline * 1.5;
+    line-height: 250%;
+    overflow-wrap: break-word;
+    background-color: $palette-console;
+    color: $palette-white;
+  }
+}
+
+.container-link {
+  @extend %anchor-button-accent;
+  margin-left: $spacer;
+  color: $palette-white;
+}
