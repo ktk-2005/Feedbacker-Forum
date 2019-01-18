@@ -22,7 +22,8 @@ class Create extends React.Component {
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
-  async postContainer() {
+  async postContainer(event) {
+    event.preventDefault()
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
@@ -59,6 +60,7 @@ class Create extends React.Component {
           <form
             className={css('form-create')}
             id="form"
+            onSubmit={this.postContainer}
           >
             <label htmlFor="application">
               Application type
@@ -82,10 +84,7 @@ class Create extends React.Component {
               Port
               <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
             </label>
-            <button
-              type="submit"
-              onSubmit={this.postContainer}
-            >
+            <button type="submit">
               Create
             </button>
           </form>
