@@ -32,6 +32,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.0",
+    "file-loader": "^3.0.1",
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
     "node-sass": "^4.10.0",
@@ -43,6 +44,7 @@
     "react-draggable": "^3.0.5",
     "react-moment": "^0.8.4",
     "react-redux": "^5.1.1",
+    "react-router-dom": "^4.3.1",
     "react-shadow-dom-retarget-events": "^1.0.8",
     "redux": "^4.0.1",
     "sass-loader": "^7.1.0",
@@ -55,10 +57,7 @@
     "webpack-cli": "^3.1.2",
     "whatwg-fetch": "^3.0.0"
   },
-  "dependencies": {
-    "file-loader": "^3.0.1",
-    "react-router-dom": "^4.3.1"
-  },
+  "dependencies": {},
   "browserslist": [
     "last 2 versions",
     "IE 11",
