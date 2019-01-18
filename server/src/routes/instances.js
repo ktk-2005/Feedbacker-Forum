@@ -33,6 +33,7 @@ router.get('/', async (req, res) => {
   try {
     const [type, token] = req.get('Authorization').split(' ')
     // let users = JSON.parse(atob(token))
+    if (type !== 'Feedbacker') throw new Error('Unsupported authorization type')
     let users = JSON.parse(Buffer.from(token, 'base64').toString())
     users = R.toPairs(users)
     const containers = []
