@@ -1,18 +1,18 @@
 import * as R from 'ramda'
 
 let users = { }
-let userCallbackCouter = 0
+let userCallbackCounter = 0
 const userChangeCallbacks = new Map()
 
 // Subscribe `func(users)` to be called when users are loaded or created
 // Returns an unsubscribe token
 export function subscribeUsers(func) {
-  userCallbackCouter++
-  userChangeCallbacks.set(userCallbackCouter, func)
+  userCallbackCounter++
+  userChangeCallbacks.set(userCallbackCounter, func)
 
   if (!R.isEmpty(users)) func(users)
 
-  return userCallbackCouter
+  return userCallbackCounter
 }
 
 // Cancel a previous user subscription, called with the return value of `subscribeUsers()`
