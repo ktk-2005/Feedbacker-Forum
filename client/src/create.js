@@ -23,12 +23,15 @@ class Create extends React.Component {
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
   async postContainer() {
+    const doc = shadowDocument()
+    const inputValue = name => doc.getElementById(name).value
+
     const json = await apiCall('POST', '/instances/new', {
-      url: shadowDocument().getElementById('url').value,
-      version: shadowDocument().getElementById('version').value,
+      url: inputValue('url'),
+      version: inputValue('version'),
       type: 'node',
-      port: shadowDocument().getElementById('port').value,
-      name: shadowDocument().getElementById('name').value,
+      port: inputValue('port'),
+      name: inputValue('name').toLowerCase()
     })
 
     console.log(json)
@@ -73,7 +76,7 @@ class Create extends React.Component {
             </label>
             <label htmlFor="name">
               Name
-              <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-z0-9](-?[a-z0-9])" minLength="3" maxLength="20" required />
+              <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
             </label>
             <label htmlFor="port">
               Port
