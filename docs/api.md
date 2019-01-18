@@ -168,13 +168,13 @@ Example response
 
 ## Instances
 
-### [GET /api/instances](../server/src/routes/instances.js#L13)
+### [GET /api/instances](../server/src/routes/instances.js#L21)
 
 Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L35)
+### [POST /api/instances/new](../server/src/routes/instances.js#L81)
 
 Create a new container.
 
@@ -184,13 +184,19 @@ generated automatically.
 Example body
 ```json
 {
- "instance_image": "nginx"
+ "type": "node"
 }
 ```
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L61)
+### [GET /api/instances/logs](../server/src/routes/instances.js#L57)
+
+Retrieve logs of an instance.
+
+Returns 200 OK and a string with logs or 500 ISE if an error occurred.
+
+### [POST /api/instances/stop](../server/src/routes/instances.js#L120)
 
 Stop a running container.
 
@@ -203,7 +209,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L79)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L138)
 
 Delete a container
 
@@ -215,11 +221,3 @@ Example body
 ```
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-
-### [GET /site/](../server/src/routes/redirect.js#L13)
-
-Redirects url used by react router
-
-Redirects from urls used by react router to prevent accidental 404 errors
-from refreshing page when react router has changed url
-
