@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Route, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
 import { shadowDocument } from './shadowDomHelper'
-// Components
-import Build from './build-view'
 // Styles
 import styles from './scss/views/create.scss'
 
@@ -63,7 +61,7 @@ class Create extends React.Component {
     if (this.state.redirect) {
       return (
         <Redirect to={{
-          pathname: `/site/build-view/${this.state.containerName}`,
+          pathname: `/build-view/${this.state.containerName}`,
         }}
         />
       )
@@ -102,7 +100,6 @@ class Create extends React.Component {
             Create
           </button>
         </form>
-        <Route path="/build" component={Build} />
       </div>
     )
   }

@@ -62,9 +62,9 @@ export function startServer() {
 
   app.use('/api', apiRoute)
 
-  // redirect /site/* urls modified by react router
+  // redirect /* urls modified by react router
   app.use('*', (_, res) => {
-    res.sendFile(path.join(__dirname, '../../client/build/site.html'))
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
   })
 
   app.use(notFound)

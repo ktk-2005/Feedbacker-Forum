@@ -4,8 +4,6 @@ import { Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
-// Components
-import Create from './create'
 // Styles
 import styles from './scss/views/dashboard-view.scss'
 
@@ -52,7 +50,7 @@ class Dashboard extends React.Component {
     return (
       <div className={css('dashboard')}>
         <div className={css('top-section')}>
-          <Link to="/site/create">
+          <Link to="/create">
             <button
               className={css('create-button')}
               type="button"
@@ -82,7 +80,6 @@ class Dashboard extends React.Component {
             })
           }
         </div>
-        <Route path="/site/create" component={Create} />
       </div>
     )
   }

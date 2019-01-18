@@ -6,8 +6,13 @@ import { Provider } from 'react-redux'
 // Helpers
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
-import ReactRouter from './reactrouter'
+import {
+  BrowserRouter as Router, Redirect, Route, Switch
+} from 'react-router-dom'
 import { setupPersist } from './persist'
+import Dashboard from './dashboard-view'
+import Create from './create'
+import Build from './build-view'
 import { apiUrl } from './meta/env.meta'
 import { prepareReactRoot } from './shadowDomHelper'
 // Styles
@@ -81,9 +86,16 @@ const initialize = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <div className={css('feedback-app-main-container')}>
-        <ReactRouter />
-      </div>
+      <Router>
+        <div className={css('feedback-app-main-container')}>
+          <Switch>
+            <Redirect exact from="/" to="/dashboard" />
+            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/create" component={Create} />
+            <Route exact path="/build-view/:name" component={Build} />
+          </Switch>
+        </div>
+      </Router>
     </Provider>,
     prepareReactRoot()
   )
