@@ -84,7 +84,12 @@ class Dashboard extends React.Component {
               )
             })
           }
-          { noInstances() }
+          { instances.length < 1 ? (
+            <p>
+              No instances created.
+              Go ahead and create one by clicking on the &quot;New instance&quot; button.
+            </p>
+          ) : null }
         </div>
       </>
     )
