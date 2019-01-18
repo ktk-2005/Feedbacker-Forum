@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import {
-  BrowserRouter as Router, Redirect, Route, Switch
+  BrowserRouter as Router, Route, Switch
 } from 'react-router-dom'
 import { setupPersist } from './persist'
 import Dashboard from './dashboard-view'
@@ -87,7 +87,7 @@ const initialize = () => {
   ReactDOM.render(
     <Provider store={store}>
       <Router>
-        <div className={css('feedback-app-main-container')}>
+        <div className={css('feedback-app-container', 'site-views')}>
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/create" component={Create} />

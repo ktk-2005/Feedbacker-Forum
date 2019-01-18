@@ -1,21 +1,44 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
+@import '../../scss/mixins';
 @import '../../scss/atoms/button';
+@import '../../scss/typography';
+
+// Placeholders
+
+%anchor-button {
+  @include button();
+  display: inline-block;
+  text-decoration: none;
+  align-self: end;
+  padding: $baseline $spacer;
+  box-shadow: 0 2px 5px $palette-shadow-light;
+  color: $palette-dark;
+}
+
+%accent {
+  box-shadow: 0 2px 5px $palette-shadow-default;
+  background: $palette-accent;
+  color: $palette-lighter;
+}
+
+%anchor-button-accent {
+  @extend %anchor-button;
+  @extend %accent;
+}
 
 .top-section {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
 
-  padding: 2em;
-  border-bottom: solid 1px $palette-medium;
-  box-shadow: 0 0 10px $palette-shadow-default;
+  padding: $spacer * 3;
+  box-shadow: 0 0 10px $palette-shadow-light;
 }
 
 .create-button {
-  @include button();
-  background-color: $palette-light;
-  color: $palette-medium;
-  padding: 1em 2em;
+  @extend %anchor-button-accent;
+  align-self: flex-end;
 }
 
 .instances-container {
@@ -23,20 +46,19 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  padding: 1em;
+  padding: $spacer * 2;
 
   h2 {
-    align-self: start;
+    margin-top: $spacer * 3;
+    margin-bottom: $spacer * 2;
   }
 }
 
 .instance-card {
   flex: 1;
-  max-width: 100%;
-  min-width: 50%;
-  padding: 2em;
-  margin: 1em;
-  border-radius: 3px;
+  padding: $spacer;
+  margin: $spacer;
+  border-radius: $border-radius-default;
   box-shadow: 0 0 10px $palette-shadow-default;
 
   h5 {
@@ -44,7 +66,21 @@
     align-self: start;
   }
 
-  .ui-link {
-    align-self: end;
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $spacer;
+
+    > *:not(:first-of-type) {
+      margin-left: $spacer;
+    }
+  }
+
+  a, button {
+    @extend %anchor-button;
+
+    &.accent {
+      @extend %accent;
+    }
   }
 }

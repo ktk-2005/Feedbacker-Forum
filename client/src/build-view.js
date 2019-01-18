@@ -35,13 +35,20 @@ class Build extends React.Component {
     const url = `http://${name}.localhost:8080`
 
     return (
-      <div className={css('build-view-container')}>
-        <h3>Build...</h3>
-        <a href={url} target="_blank" rel="noopener noreferrer">Feedbackable UI: {url}</a>
-        <div className={css('log-container')}>
-          <pre>
-            {this.state.data}
-          </pre>
+      <div className={css('center-center-block')}>
+        <div className={css('build-view')}>
+          <h2>Container status: </h2>
+          <div className={css('log-container')}>
+            <pre>
+              {this.state.data}
+            </pre>
+          </div>
+          <div className={css('next-action-container')}>
+            <label>
+              Feedbackable UI:
+              <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url}</a>
+            </label>
+          </div>
         </div>
       </div>
     )
