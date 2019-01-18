@@ -6,8 +6,12 @@
   and pass it along to our express middleware with next()
 */
 
-module.exports.catchErrors = fn => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch(next)
+module.exports.catchErrors = fn => async (req, res, next) => {
+  try {
+    await fn(req, res, next)
+  } catch (error) {
+    await next(error)
+  }
 }
 
 /*
@@ -26,22 +30,25 @@ module.exports.notFound = (req, res, next) => {
   Development Error Hanlder
   log error stack trace
 */
-module.exports.devErr = (err, req, res) => {
-  console.log(err.stack)
+// eslint-disable-next-line no-unused-vars
+module.exports.devErr = (err, req, res, next) => {
+  console.error(err)
   const errorDetails = {
     message: err.message,
     status: err.status,
     stack: err.stack,
   }
   res.status(err.status || 500)
-  res.send(errorDetails)
+  res.json(errorDetails)
 }
 
 /*
   Production Error Hanlder
   No stacktraces are leaked to user
 */
-module.exports.prodErr = (err, req, res) => {
+// eslint-disable-next-line no-unused-vars
+module.exports.prodErr = (err, req, res, next) => {
+  console.error(err)
   res.status(err.status || 500)
   res.json({
     errors: {

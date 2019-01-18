@@ -1,33 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-// Redux
-import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
+import apiCall from './api-call'
+import { subscribeUsers, unsubscribeUsers } from './globals'
 // Styles
 import styles from './scss/views/dashboard-view.scss'
 
 const css = classNames.bind(styles)
 
-const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
-  const userKeys = Object.keys(users)
-  let publicKey = ''
-  let privateKey = ''
-  if (userKeys.length >= 1) {
-    publicKey = userKeys[0]
-    privateKey = users[publicKey]
-  }
-  return {
-    userPublic: publicKey,
-    userPrivate: privateKey,
-    users,
-  }
-}
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
+
+    this.refreshInstances = this.refreshInstances.bind(this)
 
     this.state = {
       instances: [],
@@ -35,13 +21,16 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/instances', {
-      headers: {
-        Authorization: `Feedbacker ${btoa(JSON.stringify(this.props.users))}`,
-      },
-    })
-      .then(response => response.json())
-      .then(instances => this.setState({ instances }))
+    this.userSub = subscribeUsers(this.refreshInstances)
+  }
+
+  componentWillUnmount() {
+    unsubscribeUsers(this.userSub)
+  }
+
+  async refreshInstances() {
+    const instances = await apiCall('GET', '/instances')
+    this.setState({ instances })
   }
 
   render() {
@@ -101,4 +90,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Dashboard)
+export default Dashboard

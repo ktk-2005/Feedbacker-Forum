@@ -13,8 +13,9 @@ import { setupPersist } from './persist'
 import Dashboard from './dashboard-view'
 import Create from './create'
 import Build from './build-view'
-import { apiUrl } from './meta/env.meta'
 import { prepareReactRoot } from './shadowDomHelper'
+import { setUsers } from './globals'
+import apiCall from './api-call'
 // Styles
 import styles from './scss/_base.scss'
 
@@ -56,10 +57,7 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const response = await fetch(`${apiUrl}/users`, {
-          method: 'POST',
-        })
-        const { id, secret } = await response.json()
+        const { id, secret } = await apiCall('POST', '/users')
 
         console.log('Created new user from API', { [id]: secret })
 
@@ -80,9 +78,10 @@ const initialize = () => {
   const savePersist = setupPersist(loadPersist)
 
   store.subscribe(() => {
-    savePersist(store.getState().persist || { })
+    const persist = store.getState().persist || { }
+    savePersist(persist)
+    setUsers(persist.users || { })
   })
-
 
   ReactDOM.render(
     <Provider store={store}>

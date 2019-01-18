@@ -1,25 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
 import { shadowDocument } from './shadowDomHelper'
+import apiCall from './api-call'
 // Styles
 import styles from './scss/views/create.scss'
 
 const css = classNames.bind(styles)
-
-const mapStateToProps = (state) => {
-  const users = (state.persist || {}).users || {}
-  const userKeys = Object.keys(users)
-  let publicKey = ''
-  if (userKeys.length >= 1) {
-    [publicKey] = userKeys
-  }
-  return {
-    userPublic: publicKey,
-  }
-}
 
 class Create extends React.Component {
   constructor(props) {
@@ -33,28 +21,25 @@ class Create extends React.Component {
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
-  postContainer() {
-    fetch('/api/instances/new', {
-      body: JSON.stringify({
-        url: shadowDocument().getElementById('url').value,
-        version: shadowDocument().getElementById('version').value,
-        type: 'node',
-        port: shadowDocument().getElementById('port').value,
-        name: shadowDocument().getElementById('name').value,
-        userId: this.props.userPublic,
-      }),
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  async postContainer(event) {
+    event.preventDefault()
+    const doc = shadowDocument()
+    const inputValue = name => doc.getElementById(name).value
+
+    const json = await apiCall('POST', '/instances/new', {
+      url: inputValue('url'),
+      version: inputValue('version'),
+      type: 'node',
+      port: inputValue('port'),
+      name: inputValue('name').toLowerCase(),
     })
-      .then(response => response.json())
-      .then((json) => {
-        this.setState({
-          containerName: json.containerInfo.name,
-          redirect: true,
-        })
-      })
+
+    console.log(json)
+
+    this.setState({
+      containerName: json.containerInfo.name,
+      redirect: true,
+    })
   }
 
   render() {
@@ -74,6 +59,7 @@ class Create extends React.Component {
           <form
             className={css('form-create')}
             id="form"
+            onSubmit={this.postContainer}
           >
             <label htmlFor="application">
               Application type
@@ -91,16 +77,13 @@ class Create extends React.Component {
             </label>
             <label htmlFor="name">
               Name
-              <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-z0-9](-?[a-z0-9])" minLength="3" maxLength="20" required />
+              <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
             </label>
             <label htmlFor="port">
               Port
               <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
             </label>
-            <button
-              type="submit"
-              onSubmit={this.postContainer}
-            >
+            <button type="submit">
               Create
             </button>
           </form>
@@ -110,4 +93,4 @@ class Create extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Create)
+export default Create

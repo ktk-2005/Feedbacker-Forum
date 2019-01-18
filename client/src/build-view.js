@@ -1,6 +1,8 @@
 import React from 'react'
 // Helpers
 import classNames from 'classnames/bind'
+import apiCall from './api-call'
+import { subscribeUsers, unsubscribeUsers } from './globals'
 // Styles
 import styles from './scss/views/build-view.scss'
 
@@ -10,24 +12,34 @@ class Build extends React.Component {
   constructor(props) {
     super(props)
 
+    this.logPolling = this.logPolling.bind(this)
+
     this.state = {
-      data: null,
+      data: '',
     }
   }
 
   componentDidMount() {
-    this.logPolling()
-    this.timer = setInterval(() => this.logPolling(), 2000)
+    this.userSub = subscribeUsers(this.logPolling)
+    this.timer = setInterval(this.logPolling, 2000)
   }
 
   componentWillUnmount() {
     clearInterval(this.timer)
+    unsubscribeUsers(this.userSub)
   }
 
-  logPolling() {
-    fetch(`/api/instances/logs/${this.props.match.params.name}`)
-      .then(response => response.text())
-      .then(data => this.setState({ data }))
+  async logPolling() {
+    const { name } = this.props.match.params
+    const response = await apiCall('GET', `/instances/logs/${name}`, null, {
+      rawResponse: true,
+    })
+    const text = await response.text()
+    if (response.status < 400) {
+      this.setState({ data: text })
+    } else {
+      console.error('Failed to get logs', text)
+    }
   }
 
   render() {

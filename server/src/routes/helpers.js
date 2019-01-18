@@ -1,6 +1,7 @@
 import uuidv4 from 'uuid/v4'
 import { args } from '../globals'
 import { findContainerIdBySubdomain, verifyUser } from '../database'
+import HttpError from '../http-error'
 
 function makeUuid(length = 8) {
   return uuidv4().split('-').join('').slice(0, length)
@@ -42,25 +43,25 @@ export async function attempt(fn, maxTries = 20) {
 // Find a container ID from a hostname
 export async function resolveContainerFromHost(host) {
   const parts = host.split('.', 2)
-  if (parts.length <= 1) throw new Error('Failed to extract subdomain from hostname')
+  if (parts.length <= 1) throw new HttpError(400, 'Failed to extract subdomain from hostname')
   const subdomain = parts[0]
   const row = await findContainerIdBySubdomain(subdomain) || []
-  if (row.length < 1) throw new Error(`No container exists for subdomain ${subdomain}`)
+  if (row.length < 1) throw new HttpError(400, `No container exists for subdomain ${subdomain}`)
   return row[0].id
 }
 
 export async function reqContainer(req) {
   const host = req.get('X-Feedback-Host')
-  if (!host) throw new Error('No X-Feedback-Host header')
+  if (!host) throw new HttpError(400, 'No X-Feedback-Host header')
   const container = await resolveContainerFromHost(host)
   return { container }
 }
 
 export async function reqUser(req) {
   const auth = req.get('Authorization')
-  if (!auth) throw new Error('No Authorization header')
+  if (!auth) throw new HttpError(401, 'No Authorization header')
   const [scheme, token] = auth.split(' ')
-  if (scheme !== 'Feedbacker') throw new Error('Unsupported Authorization scheme')
+  if (scheme !== 'Feedbacker') throw new HttpError(401, 'Unsupported Authorization scheme')
   const users = JSON.parse(Buffer.from(token, 'base64').toString())
   const verifiedUsers = { }
 
@@ -76,7 +77,7 @@ export async function reqUser(req) {
 
   const keys = Object.keys(verifiedUsers)
   if (keys.length === 0) {
-    throw new Error('No valid user found')
+    throw new HttpError(401, 'No valid user found')
   }
 
   return {
