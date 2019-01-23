@@ -1,6 +1,7 @@
 import React from 'react'
 import apiCall from '../../api-call'
-import Question from '../question/question'
+import Question from './question'
+import Answer from './answer'
 
 class Survey extends React.Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class Survey extends React.Component {
           question={questions[currentIndex]}
           length={questions.length}
         />
+        <Answer />
       </div>
     )
   }
