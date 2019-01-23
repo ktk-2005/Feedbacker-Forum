@@ -9,7 +9,7 @@ INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APD-2222', 'dtwo',
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-TEST', 'test', 'http://localhost:8080', 'da776df3');
 INSERT INTO containers (id, subdomain, url, user_id) VALUES ('APP-OTHR', 'other', 'http://localhost:8080', 'da776df3');
 
-INSERT INTO threads (id, container_id) VALUES ('THR-1234', 'APP-1111');
+INSERT INTO threads (id, container_id) VALUES ('THR-1234', 'APP-TEST');
 
 INSERT INTO comments (id, time, text, user_id, thread_id) VALUES ('1bd8052b', '2018-11-14 16:35:27', 'skrattia', 'da776df3', 'THR-1234');
 INSERT INTO comments (id, time, text, user_id, thread_id) VALUES ('cb38e8f6', '2018-11-14 17:10:42', 'tröttistä', 'da776df3', 'THR-1234');

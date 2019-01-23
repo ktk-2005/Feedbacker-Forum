@@ -9,7 +9,7 @@ import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
 
 // Components
-import Comment from '../comment/comment'
+import Thread from '../thread/thread'
 import apiCall from '../../api-call'
 import SubmitField from '../submit-field/submit-field'
 // Styles
@@ -88,16 +88,23 @@ class CommentPanel extends React.Component {
     if (el) el.scrollTop = el.scrollHeight
   }
 
-  commentContainer() {
+  threadContainer() {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
-    const sortByTime = R.sortBy(arr => arr[1].time)
-    const sortedCommentArray = sortByTime(R.toPairs(this.props.comments))
+    const threadIds = new Set(Object.values(this.props.comments).map(comment => comment.threadId))
+    const groupByThread = R.groupBy((comment) => {
+      for (const id of threadIds) {
+        if (comment.threadId === id) {
+          return id
+        }
+      }
+    })
+    const threadArray = groupByThread(Object.values(this.props.comments))
     return (
       <div className={css('comment-container')} id="comment-container">
         {
           R.map(
-            ([id, comment]) => <Comment key={id} comment={comment} id={id} />,
-            sortedCommentArray
+            ([id, comments]) => <Thread key={id} comments={comments} id={id} />,
+            R.toPairs(threadArray)
           )
         }
       </div>
@@ -118,12 +125,13 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
-          { this.commentContainer() }
+          { this.threadContainer() }
           <SubmitField
             value={this.state.value}
             onSubmit={this.handleSubmit}
             onChange={this.handleChange}
           />
+
         </div>
       </div>
     )
