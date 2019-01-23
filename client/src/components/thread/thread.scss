@@ -1,0 +1,19 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+.thread {
+  .comment {
+    width: 80%;
+    &:first-of-type {
+      width: 100%;
+    }
+  }
+}
+
+.show-thread {
+  @include button();
+  @include z-level(9)
+  margin: -$spacer auto;
+}

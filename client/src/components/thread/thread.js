@@ -4,6 +4,7 @@ import * as R from 'ramda'
 import classNames from 'classnames/bind'
 
 import Comment from '../comment/comment'
+import SubmitField from '../submit-field/submit-field'
 
 import styles from './thread.scss'
 
@@ -14,16 +15,32 @@ class Thread extends React.Component {
     super(props)
     this.state = {
       isExpanded: false,
+      buttonText: 'Reply',
     }
+
+    this.handleClick = this.handleClick.bind(this)
   }
 
+  handleClick() {
+    this.setState(prevState => ({ isExpanded: !prevState.isExpanded }))
+    console.log('Exnpanding thread is expanded: ', this.state.isExpanded)
+  }
 
   render() {
-    const { isExpanded } = this.state
-    console.log(isExpanded)
     const comment = this.props.comments[0]
+    const { buttonText, isExpanded } = this.state
     return (
-      <Comment key={comment.id} comment={comment} id={comment.id} />
+      <div className={css('thread')}>
+        <Comment key={comment.id} comment={comment} id={comment.id} />
+        <button
+          className={css('show-thread')}
+          type="button"
+          onClick={this.handleClick}
+        >
+          { buttonText }
+        </button>
+        {isExpanded ? <SubmitField /> : null}
+      </div>
     )
   }
 }
