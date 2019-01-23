@@ -38,7 +38,9 @@ class Survey extends React.Component {
           question={questions[currentIndex]}
           length={questions.length}
         />
-        <Answer />
+        <Answer
+          question={questions[currentIndex]}
+        />
       </div>
     )
   }
