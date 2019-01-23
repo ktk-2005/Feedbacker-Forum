@@ -84,7 +84,7 @@ class CommentPanel extends React.Component {
   }
 
   scrollToBottom() {
-    const el = shadowDocument().getElementById('comment-container')
+    const el = shadowDocument().getElementById('thread--container')
     if (el) el.scrollTop = el.scrollHeight
   }
 
@@ -100,7 +100,7 @@ class CommentPanel extends React.Component {
     })
     const threadArray = groupByThread(Object.values(this.props.comments))
     return (
-      <div className={css('comment-container')} id="comment-container">
+      <div className={css('thread-container')} id="thread--container">
         {
           R.map(
             ([id, comments]) => <Thread key={id} comments={comments} id={id} />,
