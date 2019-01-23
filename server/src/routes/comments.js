@@ -64,7 +64,6 @@ router.get('/', catchErrors(async (req, res) => {
       result.reactions.push(reaction)
     }
   }
-  console.log(groupedComments)
   res.send(groupedComments)
 }))
 

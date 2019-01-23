@@ -23,7 +23,7 @@ class Thread extends React.Component {
     console.log(isExpanded)
     const comment = this.props.comments[0]
     return (
-      <Comment key={comment.id} comment={comment} />
+      <Comment key={comment.id} comment={comment} id={comment.id} />
     )
   }
 }
