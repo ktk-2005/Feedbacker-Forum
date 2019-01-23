@@ -11,6 +11,7 @@ import { loadComments } from '../../actions'
 // Components
 import Comment from '../comment/comment'
 import apiCall from '../../api-call'
+import SubmitField from '../submit-field/submit-field'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -120,14 +121,11 @@ class CommentPanel extends React.Component {
         </div>
         <div className={css('panel-body')}>
           { this.commentContainer() }
-          <form className={css('comment-form')} onSubmit={this.handleSubmit}>
-            <textarea
-              value={this.state.value}
-              onChange={this.handleChange}
-              placeholder="Write comment..."
-            />
-            <input className={css('submit-comment')} type="submit" value="Comment" />
-          </form>
+          <SubmitField
+            value={this.state.value}
+            onSubmit={this.handleSubmit}
+            onChange={this.handleChange}
+          />
         </div>
       </div>
     )
