@@ -6,6 +6,7 @@ const Question = ({ question, length }) => {
     <div>
       <h1>QUESTION</h1>
       {jaba}
+      // Wathc out for merge conflicts >:DD
       {question}
       {length}
     </div>
