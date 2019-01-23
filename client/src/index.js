@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Modal from 'react-modal'
 // Redux
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
@@ -194,12 +195,15 @@ const initialize = () => {
     setUsers(persist.users || { })
   })
 
+  const root = prepareReactRoot()
+
+  Modal.setAppElement(root)
 
   ReactDOM.render(
     <Provider store={store}>
       <MainView />
     </Provider>,
-    prepareReactRoot()
+    root
   )
 }
 
