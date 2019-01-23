@@ -47,10 +47,11 @@ CREATE TABLE questions (
     time      VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
     text      TEXT NOT NULL,
     user_id   CHAR(8) NOT NULL,
-    thread_id VARCHAR(8) NOT NULL,
+    container_id VARCHAR(8) NOT NULL,
+    type      VARCHAR(16) NOT NULL,
     blob      TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (thread_id) REFERENCES threads(id)
+    FOREIGN KEY (container_id) REFERENCES containers(id)
 );
 
 -- Table: reactions
@@ -64,6 +65,17 @@ CREATE TABLE reactions (
     FOREIGN KEY (comment_id) REFERENCES comments(id),
 
     UNIQUE (emoji, user_id, comment_id) ON CONFLICT ROLLBACK
+);
+
+-- Table: answers
+CREATE TABLE answers (
+    id        CHAR(8) UNIQUE NOT NULL,
+    time      VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+    user_id   CHAR(8) NOT NULL,
+    question_id CHAR(8) NOT NULL,
+    blob      TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 
 

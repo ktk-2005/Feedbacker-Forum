@@ -4,6 +4,7 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import styles from './survey-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+import Survey from '../survey/survey'
 
 const css = classNames.bind(styles)
 
@@ -33,6 +34,7 @@ class SurveyPanel extends React.Component {
                 <InlineSVG src={CloseIcon} />
               </button>
             </div>
+            <Survey />
           </div>
         </Draggable>
       </div>

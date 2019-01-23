@@ -38,7 +38,7 @@ export async function getComments(container) {
     `, [container])
 }
 
-export async function getQuestions() { return db.query('SELECT * FROM questions') }
+export async function getQuestions(container) { return db.query('SELECT * FROM questions WHERE container_id = ?', [container]) }
 
 export async function getReactions() { return db.query('SELECT * FROM reactions') }
 
