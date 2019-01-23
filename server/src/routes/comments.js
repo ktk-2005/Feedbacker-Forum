@@ -47,7 +47,7 @@ router.get('/', catchErrors(async (req, res) => {
         time: comment.comment_time,
         text: comment.comment_text,
         userId: comment.comment_user_id,
-        threadId: comment.thread_id,
+        threadId: comment.comment_thread_id,
         blob: JSON.parse(comment.comment_blob) || {},
         reactions: [],
       }
@@ -64,6 +64,7 @@ router.get('/', catchErrors(async (req, res) => {
       result.reactions.push(reaction)
     }
   }
+  console.log(groupedComments)
   res.send(groupedComments)
 }))
 
