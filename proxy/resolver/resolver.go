@@ -1,5 +1,15 @@
 package resolver
 
+// -- Resolver
+//
+// This package is responsible for resolving subdomain names into container instances.
+// Does database queries and caches the results for a while. The public API consists of
+// two functions: `Initialize()` and `Resolve()`
+//
+// Usage:
+//   err := resolver.Initialize(&resolver.Config{ ... })
+//   container, err := resolver.Resolve(subdomain)
+
 import (
 	"net/url"
 	"time"
