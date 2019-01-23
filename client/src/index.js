@@ -15,6 +15,7 @@ import OpenSurveyPanelButton from './components/open-survey-panel-button/open-su
 import SurveyPanel from './components/survey-panel/survey-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
+import Intro from './components/onboarding/onboarding'
 // Internal js
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments } from './actions'
@@ -26,6 +27,7 @@ const css = classNames.bind(styles)
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
+const INTRO_DONE = 'INTRO_DONE'
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -34,6 +36,12 @@ function persistReducer(state = { }, action) {
 
     case SET_PERSIST:
       return R.mergeDeepRight(state, action.data)
+
+    case INTRO_DONE:
+      return {
+        ...state,
+        introDone: true,
+      }
 
     default:
       return state
@@ -134,6 +142,7 @@ class MainView extends React.Component {
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
         />
+        <Intro />
       </div>
     )
   }
