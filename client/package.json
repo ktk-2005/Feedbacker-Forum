@@ -40,6 +40,8 @@
     "postcss-loader": "^3.0.0",
     "ramda": "^0.26.0",
     "react": "^16.6.1",
+    "react-dnd": "^7.0.2",
+    "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.6.1",
     "react-draggable": "^3.0.5",
     "react-moment": "^0.8.4",

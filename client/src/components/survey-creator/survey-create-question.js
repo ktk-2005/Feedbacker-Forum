@@ -1,6 +1,24 @@
 import React from 'react'
+import { DragSource } from 'react-dnd'
 
-function SurveyCreateQuestion({ question, edited, onSelect, onDeselect, onEdit }) {
+const dragSource = {
+  beginDrag: (props) => ({ question }),
+}
+
+const dragCollect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging(),
+})
+
+function SurveyCreateQuestion({
+  question,
+  edited,
+  onSelect,
+  onDeselect,
+  onEdit,
+  connectDragSource,
+  isDragging
+}) {
   const { text } = question
 
   const updateText = (event) => onEdit({ text: event.target.value })
@@ -20,5 +38,5 @@ function SurveyCreateQuestion({ question, edited, onSelect, onDeselect, onEdit }
   }</div>
 }
 
-export default SurveyCreateQuestion
+export default DragSource('SurveyCreateQuestion', dragSource, dragCollect)(SurveyCreateQuestion)
 
