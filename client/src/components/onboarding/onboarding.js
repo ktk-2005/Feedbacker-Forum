@@ -1,13 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import ReactModal from 'react-modal'
 // Helpers
+import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import { introDone } from '../../actions'
+import { shadowModalRoot } from '../../shadowDomHelper'
 // Styles
 import styles from './onboarding.scss'
+import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+import ArrowIcon from '../../assets/svg/baseline-arrow_back_ios-24px.svg'
 
 const css = classNames.bind(styles)
+
+const final = 5
 
 const mapStateToProps = (state) => {
   const persist = state.persist || {}
@@ -28,21 +35,51 @@ class Onboarding extends React.Component {
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
   }
 
-
-
   step() {
     if (this.state.step === 1) {
-      return (<h2>hello</h2>)
+      return (
+        <div>
+          <h2>Hello!</h2>
+          <p>
+            Welcome to use the Feedbacker Forum app.
+            This tutorial will guide you through the basic functions of the app.
+          </p>
+        </div>
+      )
     } else if (this.state.step === 2) {
-      return (<h2>hello2</h2>)
-    } else {
-      return (<h2>hello3</h2>)
+      return (
+        <div>
+          <h2>Survey Panel</h2>
+          <p>This button opens the survey panel.</p>
+        </div>
+      )
+    } else if (this.state.step === 3) {
+      return (
+        <div>
+          <h2>Commenting</h2>
+          <p>You can leave free form comments and view other people&#39;s comments here.</p>
+        </div>
+      )
+    } else if (this.state.step === 4) {
+      return (
+        <div>
+          <h2>Commenting</h2>
+          <p>You can tag and comment on a specific element by clicking this button.</p>
+        </div>
+      )
+    } else if (this.state.step === 5) {
+      return (
+        <div>
+          <h2>Done</h2>
+          <p>Now you&#39;re ready to start giving feedback!</p>
+        </div>
+      )
     }
   }
 
   handleNextClick() {
     this.setState(state => ({
-      step: state.step + 1,
+      step: R.min(final, state.step + 1),
     }))
   }
 
@@ -50,34 +87,58 @@ class Onboarding extends React.Component {
     this.setState(state => ({
       step: R.max(1, (state.step - 1)),
     }))
-    console.log(this.state.step)
   }
 
   render() {
+    const { step } = this.state
     return (
-      <div className={this.props.onboarding ? css('intro-container') : css('intro-container', 'hidden')}>
-        <div className={css('modal')}>
+      <ReactModal
+        className={css('intro-modal')}
+        isOpen={this.props.onboarding}
+        parentSelector={shadowModalRoot}
+        overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
+      >
+        <div className={css('modal-header')}>
           <button
             type="button"
+            className={css('close-button')}
             onClick={() => this.props.dispatch(introDone())}
-            className={css('skip-button')}
-          >skip
-          </button>
-          { this.step() }
-          <button
-            type="button"
-            className={css('previous-button')}
-            onClick={this.handlePreviousClick}
-          >previous
-          </button>
-          <button
-            type="button"
-            className={css('next-button')}
-            onClick={this.handleNextClick}
-          >next
+          >
+            <InlineSVG src={CloseIcon} />
           </button>
         </div>
-      </div>
+        <div className={css('modal-content')}>
+          { this.step() }
+        </div>
+        <div className={css('step-buttons')}>
+          <button
+            type="button"
+            className={step === 1 ? css('previous-button', 'hidden') : css('previous-button')}
+            onClick={this.handlePreviousClick}
+          >
+            <InlineSVG src={ArrowIcon} />
+          </button>
+          <button
+            type="button"
+            className={step === final ? css('next-button', 'hidden') : css('next-button')}
+            onClick={this.handleNextClick}
+          >
+            <InlineSVG src={ArrowIcon} />
+          </button>
+        </div>
+        <button
+          type="button"
+          className={step !== final ? css('hidden') : css('done-button')}
+          onClick={() => this.props.dispatch(introDone())}
+        >Close tutorial
+        </button>
+        <button
+          type="button"
+          onClick={() => this.props.dispatch(introDone())}
+          className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
+        >skip
+        </button>
+      </ReactModal>
     )
   }
 }
