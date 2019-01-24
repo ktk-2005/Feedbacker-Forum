@@ -124,14 +124,6 @@ class MainView extends React.Component {
           elementTagged={this.handleElementTagged}
           toggleTagElementState={this.toggleTagElementState}
         />
-        <OpenSurveyPanelButton
-          hidden={surveyButtonIsHidden}
-          onClick={this.handleSurveyPanelClick}
-        />
-        <SurveyPanel
-          hidden={surveyPanelIsHidden}
-          onClick={this.handleSurveyPanelClick}
-        />
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}

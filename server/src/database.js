@@ -55,8 +55,8 @@ export async function addComment({
 }) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId, blob]) }
 
 export async function addQuestion({
-  id, text, userId, container, blob,
-}) { return db.run('INSERT INTO questions(id, text, user_id, container_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, container, blob]) }
+  id, text, type, userId, container, blob,
+}) { return db.run('INSERT INTO questions(id, text, type, user_id, container_id, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, text, type, userId, container, blob]) }
 
 export async function addAnswer({
   id, userId, questionId, blob,

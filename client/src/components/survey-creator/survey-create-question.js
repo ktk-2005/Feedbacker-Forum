@@ -1,14 +1,12 @@
 import React from 'react'
-import { DragSource } from 'react-dnd'
+import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 
-const dragSource = {
-  beginDrag: (props) => ({ question }),
-}
-
-const dragCollect = (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging(),
-})
+const Handle = SortableHandle(() => (
+  <span style={{
+    MozUserSelect: 'none',
+    cursor: 'move',
+  }}>Drag me</span>
+))
 
 function SurveyCreateQuestion({
   question,
@@ -16,15 +14,14 @@ function SurveyCreateQuestion({
   onSelect,
   onDeselect,
   onEdit,
-  connectDragSource,
-  isDragging
 }) {
   const { text } = question
 
   const updateText = (event) => onEdit({ text: event.target.value })
 
-  return <div>{
-    edited ? (
+  return (<div>
+    <Handle />
+    {edited ? (
     <>
       <button key="deselect" onClick={onDeselect}>Done</button>
       <input type="text" autoFocus onChange={updateText} value={text} />
@@ -35,8 +32,8 @@ function SurveyCreateQuestion({
       <span>{text}</span>
     </>
   )
-  }</div>
+  }</div>)
 }
 
-export default DragSource('SurveyCreateQuestion', dragSource, dragCollect)(SurveyCreateQuestion)
+export default SortableElement(SurveyCreateQuestion)
 

@@ -73,3 +73,7 @@
   min-height: 0; // Firefox shrink bug
 }
 
+.drag-helper {
+  @include z-level(1);
+}
+

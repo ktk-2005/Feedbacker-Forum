@@ -36,22 +36,18 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns `{ id }` of the created question
 router.post('/', catchErrors(async (req, res) => {
-  const { text, blob } = req.body
+  const { text, type, blob } = req.body || { }
   const { userId } = await reqUser(req)
   const { container } = await reqContainer(req)
-  /*
-  const threadId = req.body.threadId || await attempt(async () => {
-    const threadId = uuid()
-    await addThread({
-      id: threadId, container,
-    })
-    return threadId
-  })
-  */
   await attempt(async () => {
     const id = uuid()
     await addQuestion({
-      id, text, userId, container, blob: JSON.stringify(blob),
+      id,
+      text: text || '',
+      type: type || 'text',
+      userId,
+      container,
+      blob: JSON.stringify(blob || { }),
     })
     res.json({ id })
   })
