@@ -16,7 +16,7 @@ import OpenSurveyPanelButton from './components/open-survey-panel-button/open-su
 import SurveyPanel from './components/survey-panel/survey-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
-import Intro from './components/onboarding/onboarding'
+import Onboarding from './components/onboarding/onboarding'
 // Internal js
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments } from './actions'
@@ -142,8 +142,9 @@ class MainView extends React.Component {
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
+          id="target"
         />
-        <Intro />
+        <Onboarding />
       </div>
     )
   }
