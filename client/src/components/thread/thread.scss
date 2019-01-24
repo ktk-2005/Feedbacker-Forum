@@ -10,10 +10,14 @@
       width: 100%;
     }
   }
+
+  .comment-form {
+    width: 80%;
+    color: $palette-dark;
+  }
 }
 
 .show-thread {
   @include button();
-  @include z-level(9)
-  margin: -$spacer auto;
+  margin: -20 * $spacer auto;
 }

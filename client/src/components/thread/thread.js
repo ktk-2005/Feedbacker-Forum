@@ -1,5 +1,4 @@
 import React from 'react'
-import * as R from 'ramda'
 
 import classNames from 'classnames/bind'
 
@@ -15,20 +14,40 @@ class Thread extends React.Component {
     super(props)
     this.state = {
       isExpanded: false,
-      buttonText: 'Reply',
+      buttonText: this.props.comments.length > 1 ? 'Expand' : 'Reply',
     }
 
     this.handleClick = this.handleClick.bind(this)
+    this.expandedThread = this.expandedThread.bind(this)
   }
 
   handleClick() {
-    this.setState(prevState => ({ isExpanded: !prevState.isExpanded }))
-    console.log('Exnpanding thread is expanded: ', this.state.isExpanded)
+    this.setState(prevState => ({
+      isExpanded: !prevState.isExpanded,
+      buttonText: prevState.isExpanded ? 'Reply' : 'Collapse',
+    }))
+    console.log('Expanding thread is expanded: ', this.state.isExpanded)
+  }
+
+  expandedThread() {
+    if (!this.state.isExpanded) { return }
+    const threadComments = this.props.comments.slice(1)
+    return (
+      <>
+        {threadComments.map(
+          comment => <Comment key={comment.id} comment={comment} id={comment.id} />,
+        )}
+        <SubmitField
+          onSubmit={this.props.onSubmit}
+          onChange={this.props.onChange}
+        />
+      </>
+    )
   }
 
   render() {
     const comment = this.props.comments[0]
-    const { buttonText, isExpanded } = this.state
+    const { buttonText } = this.state
     return (
       <div className={css('thread')}>
         <Comment key={comment.id} comment={comment} id={comment.id} />
@@ -39,19 +58,11 @@ class Thread extends React.Component {
         >
           { buttonText }
         </button>
-        {isExpanded ? <SubmitField /> : null}
+        { this.expandedThread() }
       </div>
     )
   }
 }
-
-/* threadContainer() {
-  if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
-  const threads = new Set(Object.values(this.props.comments).map(comment => comment.threadId)))
-  const threadGroups = R.groupBy((arr) => {
-
-  })
-} */
 
 export default Thread
 
