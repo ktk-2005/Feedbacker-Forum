@@ -29,7 +29,8 @@ class Answer extends React.Component {
   }
 
   render() {
-    if (this.props.question.blob.text) {
+    console.log(this.props.question)
+    if (this.props.question.type === 'text') {
       return (
         <div>
           <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
@@ -42,12 +43,18 @@ class Answer extends React.Component {
           </form>
         </div>
       )
-    } else if (this.props.question.blob.binary) {
+    } else if (this.props.question.type === 'binary') {
       return (
         <div>
           <form>
 
           </form>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+
         </div>
       )
     }
