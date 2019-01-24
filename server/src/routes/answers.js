@@ -23,3 +23,5 @@ router.post('/', catchErrors(async (req, res) => {
     res.json({ id })
   })
 }))
+
+module.exports = router
