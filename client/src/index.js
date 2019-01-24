@@ -13,6 +13,7 @@ import { prepareReactRoot } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
+import SurveyCreatePanel from './components/survey-creator/survey-create-panel'
 import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
 // Internal js
@@ -133,6 +134,10 @@ class MainView extends React.Component {
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
+        />
+        <SurveyCreatePanel
+          hidden={false}
+          onClick={this.handleSurveyPanelClick}
         />
       </div>
     )
