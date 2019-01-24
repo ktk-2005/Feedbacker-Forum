@@ -45,6 +45,7 @@
     "pg": "^7.7.1",
     "pg-promise": "^8.5.4",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "winston": "^3.1.0"
   }
 }

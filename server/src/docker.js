@@ -6,9 +6,14 @@ import {
   removeContainer
 } from './database'
 import { config } from './globals'
+import logger from './logger'
+import { NestedError } from './errors'
 
+// Docker socket handle, set in `initializeDocker` when server is started.
 let docker = null
 
+// Initializes the `docker` variable to the docker socket path
+// for the current operating system.
 export function initializeDocker() {
   const opts = { }
 
@@ -25,6 +30,8 @@ export function initializeDocker() {
   docker = new Docker(opts)
 }
 
+// Methods for retrieving data from the Docker API or from the database
+
 async function getContainerInfoFromDocker(id) {
   return docker.getContainer(id).inspect()
 }
@@ -33,8 +40,17 @@ async function getContainerInfoFromDatabase() {
   return listContainers()
 }
 
+// Retrieves all containers tracked in the database
 export async function getRunningContainers() {
   return getContainerInfoFromDatabase()
+}
+
+async function getContainerInfoFromDatabaseByUser(userId) {
+  return listContainersByUser(userId)
+}
+
+export async function getRunningContainersByUser(userId) {
+  return getContainerInfoFromDatabaseByUser(userId)
 }
 
 export async function getContainerLogs(id) {
@@ -49,19 +65,16 @@ export async function getContainerLogs(id) {
   return muxedBuffer
 }
 
-async function getContainerInfoFromDatabaseByUser(userId) {
-  return listContainersByUser(userId)
-}
-
-export async function getRunningContainersByUser(userId) {
-  return getContainerInfoFromDatabaseByUser(userId)
-}
+/* Operational methods */
 
 export async function createNewContainer(url, version, type, name, port, userId) {
   if (type !== 'node') {
     throw Error(`createNewContainer: expected type 'node', was ${type}.`)
   }
 
+  // Chooses a random port for the instance between the range [20 000 - 29 999].
+  // The port is randomized because the Windows and OS X Docker versions
+  // don't support connecting directly to different container IPs.
   const hostPort = Math.floor(20000 + Math.random() * 9999) || 0
 
   const opts = {
@@ -78,8 +91,6 @@ export async function createNewContainer(url, version, type, name, port, userId)
     ],
   }
 
-  console.log('Creating container', JSON.stringify(opts))
-
   const container = await docker.createContainer(opts)
 
   await container.start()
@@ -93,18 +104,17 @@ export async function createNewContainer(url, version, type, name, port, userId)
     url: `http://localhost:${hostPort}`,
   }
 
+  logger.info(`Container created and started. Id: ${containerData.id}`)
+
   try {
     await addContainer(containerData)
   } catch (error) {
-    console.log(`Failed to add container to database. Error: ${error}`)
-    console.log(`Stopping and removing the docker container with id: ${container.id}`)
-
     try {
-      await container.stop()
-      await container.remove()
-    } catch (error) {
-      console.log(`Failed to stop and remove docker containers... Error: ${error}`)
+      await container.remove({ v: true, force: true, link: true })
+    } catch (error2) {
+      throw new NestedError('Unable to add container to database and unable to remove container from docker.', NestedError.fromError(error2, error), containerData)
     }
+    throw new NestedError('Couldn\'t add container to database, but removed the created container successfully.', error)
   }
 
   return { id: containerInfo.Id, name }
@@ -112,11 +122,18 @@ export async function createNewContainer(url, version, type, name, port, userId)
 
 export async function stopContainer(id) {
   const container = await docker.getContainer(id)
-  await container.stop()
+  await container.stop({
+    // Default timeout is 10s
+    t: 5,
+  })
 }
 
 export async function deleteContainer(id) {
   const container = await docker.getContainer(id)
-  await container.remove()
+  await container.remove({
+    v: true, // remove associated volumes
+    force: true, // stop if running
+    link: true, // remove container links
+  })
   await removeContainer(id)
 }

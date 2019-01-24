@@ -1,3 +1,6 @@
+import logger from './logger'
+import { HttpError } from './errors'
+
 /*
   Catch Errors Handler
   With async/await, you need some way to catch errors
@@ -21,8 +24,7 @@ module.exports.catchErrors = fn => async (req, res, next) => {
    the next error handler to display
 */
 module.exports.notFound = (req, res, next) => {
-  const err = new Error('Not Found')
-  err.status = 404
+  const err = new HttpError(404, 'Not Found')
   next(err)
 }
 
@@ -32,7 +34,7 @@ module.exports.notFound = (req, res, next) => {
 */
 // eslint-disable-next-line no-unused-vars
 module.exports.devErr = (err, req, res, next) => {
-  console.error(err)
+  logger.error(err)
   const errorDetails = {
     message: err.message,
     status: err.status,
@@ -43,12 +45,12 @@ module.exports.devErr = (err, req, res, next) => {
 }
 
 /*
-  Production Error Hanlder
+  Production Error Handler
   No stacktraces are leaked to user
 */
 // eslint-disable-next-line no-unused-vars
 module.exports.prodErr = (err, req, res, next) => {
-  console.error(err)
+  logger.error(err)
   res.status(err.status || 500)
   res.json({
     errors: {
