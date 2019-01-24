@@ -103,7 +103,14 @@ class CommentPanel extends React.Component {
       <div className={css('thread-container')} id="thread--container">
         {
           R.map(
-            ([id, comments]) => <Thread key={id} comments={comments} id={id} />,
+            ([id, comments]) => (
+              <Thread
+                key={id}
+                comments={comments}
+                id={id}
+                onSubmit={this.handleSubmit}
+                onChange={this.handleChange}
+              />),
             R.toPairs(threadArray)
           )
         }
