@@ -1,5 +1,11 @@
 package server
 
+// -- Server
+//
+// This package handles the incoming requests and redirects them to the appropriate
+// containers. It is based on the standard `httputil.ReverseProxy` utility. This also
+// handles injecting the script tag into served HTML files.
+
 import (
 	"bytes"
 	"fmt"
