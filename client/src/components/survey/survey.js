@@ -36,6 +36,7 @@ class Survey extends React.Component {
         <h1>SURVEY PANEL</h1>
         <Question
           question={questions[currentIndex]}
+          current={currentIndex}
           length={questions.length}
         />
         <Answer

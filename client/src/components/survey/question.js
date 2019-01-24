@@ -1,13 +1,11 @@
 import React from 'react'
 
-const Question = ({ question, length }) => {
-  return (
-    <div>
-      <h1>QUESTION</h1>
-      {question}
-      {length}
-    </div>
-  )
-}
+const Question = ({ question, current, length }) => (
+  <div>
+    <h1>QUESTION {current}</h1>
+    {question.text}
+    {length}
+  </div>
+)
 
 export default Question

@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import styles from './survey.scss'
+import apiCall from '../../api-call'
 
 const css = classNames.bind(styles)
 
@@ -18,17 +19,34 @@ class Answer extends React.Component {
     })
   }
 
+  async handleTextSubmit(event) {
+    event.preventDefault()
+    await apiCall('POST', '/answers', {
+      questionId: this.props.question.id,
+      blob: { text: this.state.value },
+    })
+    this.setState({ value: '' })
+  }
+
   render() {
     if (this.props.question.blob.text) {
       return (
         <div>
-          <form className={css('answer-form')} onSubmit={this.handleSubmit}>
+          <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
             <textarea
               value={this.state.value}
               onChange={this.handleChange}
               placeholder="Write answer..."
             />
-            <input className={css('submit-answer')} type="submit" value="Answer" />
+            <input className={css('submit-text-answer')} type="submit" value="Answer" />
+          </form>
+        </div>
+      )
+    } else if (this.props.question.blob.binary) {
+      return (
+        <div>
+          <form>
+
           </form>
         </div>
       )

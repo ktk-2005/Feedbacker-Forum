@@ -38,7 +38,7 @@ router.post('/', catchErrors(async (req, res) => {
   const { text, blob } = req.body
   const { userId } = await reqUser(req)
   const { container } = await reqContainer(req)
-
+  /*
   const threadId = req.body.threadId || await attempt(async () => {
     const threadId = uuid()
     await addThread({
@@ -46,11 +46,11 @@ router.post('/', catchErrors(async (req, res) => {
     })
     return threadId
   })
-
+  */
   await attempt(async () => {
     const id = uuid()
     await addQuestion({
-      id, text, userId, threadId, blob: JSON.stringify(blob),
+      id, text, userId, container, blob: JSON.stringify(blob),
     })
     res.json({ id })
   })
