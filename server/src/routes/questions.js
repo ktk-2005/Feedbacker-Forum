@@ -21,6 +21,7 @@ router.get('/', catchErrors(async (req, res) => {
     text: r.text,
     userID: r.user_id,
     containerID: r.container_id,
+    type: r.type,
     blob: r.blob,
   })))
 }))
