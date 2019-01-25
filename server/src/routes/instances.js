@@ -4,6 +4,7 @@ import {
   // getRunningContainers,
   getRunningContainersByUser,
   createNewContainer,
+  startContainer,
   stopContainer,
   deleteContainer,
   getContainerLogs,
@@ -12,6 +13,7 @@ import { verifyUser, resolveContainer } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import HttpError from '../errors'
+import logger from '../logger';
 
 const router = express.Router()
 
@@ -29,6 +31,7 @@ router.get('/', catchErrors(async (req, res) => {
       containers.push(...await getRunningContainersByUser([userId]))
     } catch (error) { /* ignore */ }
   }
+  // console.log(containers)
   res.send(containers)
 }))
 
@@ -103,6 +106,21 @@ router.post('/new', catchErrors(async (req, res) => {
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/stop', catchErrors(async (req, res) => {
   await stopContainer(req.body.name)
+  logger.info(`Stopped container with name ${req.body.name}`)
+  res.sendStatus(200)
+}))
+
+// @api POST /api/instances/stop
+// Start a stopped container.
+//
+// Example body @json {
+//  "name": "testapp-ab012"
+// }
+//
+// Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
+router.post('/start', catchErrors(async (req, res) => {
+  await startContainer(req.body.name)
+  logger.info(`Started container with name ${req.body.name}`)
   res.sendStatus(200)
 }))
 
@@ -116,6 +134,7 @@ router.post('/stop', catchErrors(async (req, res) => {
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/delete', catchErrors(async (req, res) => {
   await deleteContainer(req.body.name)
+  logger.info(`Deleted container with name ${req.body.name}`)
   res.send(200)
 }))
 

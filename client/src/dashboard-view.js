@@ -1,11 +1,15 @@
 import React from 'react'
+import R from 'ramda'
 import { Link } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
 import { subscribeUsers, unsubscribeUsers } from './globals'
+// Components
+import ContainerCard from './container-card'
 // Styles
 import styles from './scss/views/dashboard-view.scss'
+
 
 const css = classNames.bind(styles)
 
@@ -31,6 +35,15 @@ class Dashboard extends React.Component {
   async refreshInstances() {
     const instances = await apiCall('GET', '/instances')
     this.setState({ instances })
+  }
+
+  removeContainerCallback(containerName) {
+    this.setState((prevState) => {
+      const instancesWithoutDeletedOne = R.reject(
+        instance => instance.id === containerName, prevState.instances
+      )
+      return instancesWithoutDeletedOne
+    })
   }
 
   render() {
@@ -60,36 +73,13 @@ class Dashboard extends React.Component {
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>
-          {
-            instances.map((instance) => {
-              const instanceUrl = `http://${instance.subdomain}.${window.location.host}`
-
-              return (
-                <div key={instance.id} className={css('instance-card')}>
-                  <h5>Instance: {instance.subdomain}</h5>
-                  <div className={css('button-container')}>
-                    <Link to={`/logs/${instance.subdomain}`}>
-                      Open instance logs
-                    </Link>
-                    <a
-                      href={instanceUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className={css('accent')}
-                    >
-                      Go to feedbackable UI
-                    </a>
-                  </div>
-                </div>
-              )
-            })
-          }
-          { instances.length < 1 ? (
-            <p>
-              No instances created.
-              Go ahead and create one by clicking on the &quot;New instance&quot; button.
-            </p>
-          ) : null }
+          { instances.map(instance => (<ContainerCard
+            key={instance.id}
+            removeContainerCallback={this.removeContainerCallback}
+            instance={instance}
+          />
+          )) }
+          { noInstances() }
         </div>
       </>
     )

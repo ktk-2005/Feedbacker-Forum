@@ -7,7 +7,7 @@ import {
 } from './database'
 import { config } from './globals'
 import logger from './logger'
-import { NestedError } from './errors'
+import { NestedError, HttpError } from './errors'
 
 // Docker socket handle, set in `initializeDocker` when server is started.
 let docker = null
@@ -36,21 +36,14 @@ async function getContainerInfoFromDocker(id) {
   return docker.getContainer(id).inspect()
 }
 
-async function getContainerInfoFromDatabase() {
-  return listContainers()
-}
-
-// Retrieves all containers tracked in the database
-export async function getRunningContainers() {
-  return getContainerInfoFromDatabase()
-}
-
-async function getContainerInfoFromDatabaseByUser(userId) {
-  return listContainersByUser(userId)
-}
-
 export async function getRunningContainersByUser(userId) {
-  return getContainerInfoFromDatabaseByUser(userId)
+  const trackedContainers = await listContainersByUser(userId)
+  return Promise.all(trackedContainers.map(async (container) => {
+    const containerCopy = container
+    const dockerContainerInfo = await getContainerInfoFromDocker(container.id)
+    containerCopy.running = dockerContainerInfo.State.Running
+    return containerCopy
+  }))
 }
 
 export async function getContainerLogs(id) {
@@ -78,6 +71,7 @@ export async function createNewContainer(url, version, type, name, port, userId)
   const hostPort = Math.floor(20000 + Math.random() * 9999) || 0
 
   const opts = {
+    name,
     Image: 'node-runner',
     ExposedPorts: { [`${port}/tcp`]: {} },
     HostConfig: {
@@ -110,7 +104,7 @@ export async function createNewContainer(url, version, type, name, port, userId)
     await addContainer(containerData)
   } catch (error) {
     try {
-      await container.remove({ v: true, force: true, link: true })
+      await container.remove({ force: true })
     } catch (error2) {
       throw new NestedError('Unable to add container to database and unable to remove container from docker.', NestedError.fromError(error2, error), containerData)
     }
@@ -120,8 +114,19 @@ export async function createNewContainer(url, version, type, name, port, userId)
   return { id: containerInfo.Id, name }
 }
 
+export async function startContainer(id) {
+  const container = await docker.getContainer(id)
+  if ((await container.inspect()).State.Running) {
+    throw new HttpError(400, 'Instance is already running.')
+  }
+  await container.start()
+}
+
 export async function stopContainer(id) {
   const container = await docker.getContainer(id)
+  if (!(await container.inspect()).State.Running) {
+    throw new HttpError(400, 'Instance is already stopped.')
+  }
   await container.stop({
     // Default timeout is 10s
     t: 5,
@@ -131,9 +136,7 @@ export async function stopContainer(id) {
 export async function deleteContainer(id) {
   const container = await docker.getContainer(id)
   await container.remove({
-    v: true, // remove associated volumes
-    force: true, // stop if running
-    link: true, // remove container links
+    force: true,
   })
   await removeContainer(id)
 }
