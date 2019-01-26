@@ -74,11 +74,12 @@
   .header-container {
     display: flex;
     justify-content: space-between;
-    flex-flow: row-reverse;
+    flex-flow: row-reverse wrap;
+
 
     h5 {
       text-transform: capitalize;
-      align-self: start;
+      margin-right: auto;
     }
 
     .header-button-container {
