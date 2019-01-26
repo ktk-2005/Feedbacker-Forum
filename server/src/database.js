@@ -62,6 +62,10 @@ export async function addAnswer({
   id, userId, questionId, blob,
 }) { return db.run('INSERT INTO answers(id, user_id, question_id, blob) VALUES (?, ?, ?, ?)', [id, userId, questionId, blob]) }
 
+export async function getAnswer({
+  userId, questionId,
+}) { return db.query('SELECT * FROM answers WHERE user_id=? AND question_id=?', [userId, questionId]) }
+
 export async function addThread({
   id, container, blob,
 }) { return db.run('INSERT INTO threads(id, container_id, blob) VALUES (?, ?, ?)', [id, container, blob]) }
