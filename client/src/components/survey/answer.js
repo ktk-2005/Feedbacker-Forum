@@ -21,7 +21,7 @@ class Answer extends React.Component {
   async componentDidMount() {
     let prevAnswer = await apiCall('GET', `/answers/${this.props.question.id}`)
     prevAnswer = prevAnswer.length === 0 ? {} : prevAnswer[0]
-    if (prevAnswer.blob.text) {
+    if (prevAnswer.blob && prevAnswer.blob.text) {
       this.setState({value: prevAnswer.blob.text})
     }
     this.setState(state => ({
