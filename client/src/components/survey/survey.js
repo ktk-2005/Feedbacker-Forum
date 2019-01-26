@@ -17,7 +17,6 @@ class Survey extends React.Component {
     this.state = {
       questions: [],
       currentIndex: 0,
-      answers: [],
     }
   }
 
@@ -26,7 +25,6 @@ class Survey extends React.Component {
     this.setState(state => ({
       ...state,
       questions,
-      answers: <>{questions.map(q => <Answer key={q.id} question={q} />)}</>,
     }))
   }
 
@@ -59,7 +57,7 @@ class Survey extends React.Component {
   }
 
   render() {
-    const { questions, currentIndex, answers } = this.state
+    const { questions, currentIndex } = this.state
     if (this.state.questions.length < 1) {
       return (
         <div>
@@ -73,7 +71,10 @@ class Survey extends React.Component {
             question={questions[currentIndex]}
             current={currentIndex}
           />
-          {answers.props.children[currentIndex]}
+          <Answer
+            key={currentIndex}
+            question={questions[currentIndex]}
+          />
           {this.buttons()}
         </div>
       )
