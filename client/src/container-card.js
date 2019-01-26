@@ -1,3 +1,4 @@
+// React and library imports
 import React from 'react'
 import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
@@ -78,13 +79,25 @@ class ContainerCard extends React.Component {
       <div key={instance.id} className={css('instance-card')}>
         <div className={css('header-container')}>
           <div className={css('header-button-container')}>
-            <button type="button" disabled={this.state.containerRunning || this.isOperationPending} onClick={this.startContainer}>
-              <InlineSVG src={StartIcon} />
+            <button
+              type="button"
+              disabled={this.state.containerRunning || this.isOperationPending()}
+              onClick={this.startContainer}
+            >
+              {<InlineSVG src={StartIcon} />}
             </button>
-            <button type="button" disabled={!this.state.containerRunning || this.isOperationPending} onClick={this.stopContainer}>
+            <button
+              type="button"
+              disabled={!this.state.containerRunning || this.isOperationPending()}
+              onClick={this.stopContainer}
+            >
               <InlineSVG src={StopIcon} />
             </button>
-            <button type="button" disabled={this.isOperationPending} onClick={this.removeContainer}>
+            <button
+              type="button"
+              disabled={this.isOperationPending()}
+              onClick={this.removeContainer}
+            >
               <InlineSVG src={CloseIcon} />
             </button>
           </div>
