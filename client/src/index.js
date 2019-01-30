@@ -14,6 +14,7 @@ import { prepareReactRoot } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
+import OpenCommentPanelButton from './components/open-comment-panel-button/open-comment-panel-button'
 import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
 import Onboarding from './components/onboarding/onboarding'
@@ -77,6 +78,7 @@ class MainView extends React.Component {
     super(props)
 
     this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
+    this.handleCommentPanelClick = this.handleCommentPanelClick.bind(this)
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
@@ -84,6 +86,8 @@ class MainView extends React.Component {
     this.state = {
       surveyPanelIsHidden: true,
       surveyButtonIsHidden: false,
+      commentPanelIsHidden: true,
+      commentPanelButtonIsHidden: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
@@ -93,6 +97,13 @@ class MainView extends React.Component {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
       surveyButtonIsHidden: !state.surveyButtonIsHidden,
+    }))
+  }
+
+  handleCommentPanelClick() {
+    this.setState(state => ({
+      commentPanelIsHidden: !state.commentPanelIsHidden,
+      commentPanelButtonIsHidden: !state.commentPanelButtonIsHidden,
     }))
   }
 
@@ -119,6 +130,8 @@ class MainView extends React.Component {
     const {
       surveyButtonIsHidden,
       surveyPanelIsHidden,
+      commentPanelButtonIsHidden,
+      commentPanelIsHidden,
       taggingModeActive,
     } = this.state
 
@@ -139,9 +152,15 @@ class MainView extends React.Component {
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
         />
+        <OpenCommentPanelButton
+          hidden={commentPanelButtonIsHidden}
+          onClick={this.handleCommentPanelClick}
+        />
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
+          hidden={commentPanelIsHidden}
+          onClick={this.handleCommentPanelClick}
         />
         <Onboarding />
       </div>

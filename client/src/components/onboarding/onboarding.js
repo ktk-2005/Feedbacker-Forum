@@ -14,7 +14,7 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 import ArrowIcon from '../../assets/svg/baseline-arrow_back_ios-24px.svg'
 
 const css = classNames.bind(styles)
-const final = 6
+const final = 7
 
 const mapStateToProps = (state) => {
   const persist = state.persist || {}

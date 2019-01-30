@@ -40,6 +40,7 @@ class TagElementButton extends React.Component {
         type="button"
         className={css('button', { active })}
         onClick={DomTagging.toggleMarkingMode}
+        data-introduction-step="6"
       >
         {active ? 'Cancel' : 'Tag'}
       </button>
@@ -48,4 +49,3 @@ class TagElementButton extends React.Component {
 }
 
 export default TagElementButton
-

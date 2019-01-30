@@ -29,12 +29,10 @@ class CommentPanel extends React.Component {
     super(props)
     this.state = {
       value: '',
-      isHidden: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
@@ -70,12 +68,6 @@ class CommentPanel extends React.Component {
     await this.fetchComments()
   }
 
-  handleClick() {
-    this.setState(state => ({
-      isHidden: !state.isHidden,
-    }))
-  }
-
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
     this.props.dispatch(loadComments(comments))
@@ -104,14 +96,20 @@ class CommentPanel extends React.Component {
   }
 
   render() {
+    const { hidden, onClick } = this.props
+
     return (
-      <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
+      <div
+        className={css('panel-container', 'comment-panel', { hidden })}
+        data-introduction-step="5"
+      >
         <div className={css('panel-header')}>
           <h5 className={css('heading')}>Comments</h5>
           <button
             type="button"
             className={css('close-button')}
-            onClick={this.handleClick}
+            onClick={onClick}
+            data-introduction-step-close="3"
           >
             <InlineSVG src={CloseIcon} />
           </button>
