@@ -1,3 +1,16 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/functions';
+@import '../../scss/atoms/button';
+
+$toggled-inset-shadow: inset 0 1px 20px;
+
+.toggled {
+  box-shadow: $toggled-inset-shadow $palette-light;
+  transition: $transition-default-all;
+}
+
 .next-question {
   float: right;
 }
