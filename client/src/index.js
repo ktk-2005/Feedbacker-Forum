@@ -128,7 +128,7 @@ class MainView extends React.Component {
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
         />
-        <SurveyCreatePanel
+        <SurveyPanel
           hidden={false}
           onClick={this.handleSurveyPanelClick}
         />

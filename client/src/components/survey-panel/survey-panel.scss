@@ -15,7 +15,7 @@
   position: fixed;
   display: flex;
   flex-flow: column;
-  width: 30vw;
+  width: 40vw;
   height: 90vh;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
@@ -72,3 +72,10 @@
   flex: 1;
   min-height: 0; // Firefox shrink bug
 }
+
+.edit-container {
+  // SAMULI HAX
+  padding: 14px;
+  margin: 0 (-$baseline);
+}
+
