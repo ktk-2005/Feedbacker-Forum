@@ -43,7 +43,6 @@ class CommentPanel extends React.Component {
   }
 
   handleChange(threadId, event) {
-    console.log('Handling: ', threadId, event)
     this.setState({
       value: event.target.value,
       currentThread: threadId || '',

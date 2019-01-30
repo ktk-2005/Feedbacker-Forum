@@ -27,11 +27,11 @@ class Thread extends React.Component {
   }
 
   handleClick() {
+    const openText = this.props.comments.length > 1 ? 'Expand' : 'Reply'
     this.setState(prevState => ({
       isExpanded: !prevState.isExpanded,
-      buttonText: prevState.isExpanded ? 'Reply' : 'Collapse',
+      buttonText: prevState.isExpanded ? openText : 'Collapse',
     }))
-    console.log('Expanding thread is expanded: ', this.state.isExpanded)
   }
 
   expandedThread() {
