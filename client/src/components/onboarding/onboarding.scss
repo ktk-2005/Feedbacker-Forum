@@ -91,3 +91,22 @@
     background-color: rgba(0, 0, 0, 0.3);
   }
 }
+
+[animation-pulse] {
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 0 0 currentColor;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(.9);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 50px rgba(#5a99d4, 0);
+  }
+  100% {
+    transform: scale(.9);
+    box-shadow: 0 0 0 0 rgba(#5a99d4, 0);
+  }
+}
