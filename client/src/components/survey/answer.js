@@ -13,11 +13,10 @@ class Answer extends React.Component {
     this.handleTextSubmit = this.handleTextSubmit.bind(this)
     this.submit = this.submit.bind(this)
     this.handleBinarySubmit = this.handleBinarySubmit.bind(this)
-    this.handlePosBinarySubmit = this.handlePosBinarySubmit.bind(this)
-    this.handleNegBinarySubmit = this.handleNegBinarySubmit.bind(this)
 
     this.state = {
       value: '',
+      editText: false,
       binary: { answered: false, answer: false },
       prevAnswer: {},
     }
@@ -26,7 +25,6 @@ class Answer extends React.Component {
   async componentDidMount() {
     let prevAnswer = await apiCall('GET', `/answers/${this.props.question.id}`)
     prevAnswer = prevAnswer.length === 0 ? {} : prevAnswer[0]
-    console.log("prev",prevAnswer)
     if (prevAnswer.blob && prevAnswer.blob.text) {
       this.setState({ value: prevAnswer.blob.text })
     } else if (prevAnswer.blob && prevAnswer.blob.binary) {
@@ -65,66 +63,55 @@ class Answer extends React.Component {
     await this.submit(blob)
     this.setState(state => ({
        // value: '',
+       editText: false,
        prevAnswer: { ...state.prevAnswer, blob },
       }))
   }
 
   async handleBinarySubmit(answer) {
-    const binary = { answered: true, answer }
-    const blob = { binary: { answer } }
-    await this.submit(blob)
-    this.setState(state => ({
-      binary,
-      prevAnswer: { ...state.prevAnswer, blob: { binary: { answer: binary.answer } } }
-    }))
-  }
-
-  async handlePosBinarySubmit(event) {
-    // event.preventDefault()
-    // event.nativeEvent.stopImmediatePropagation()
-    if (this.state.binary.answered && this.state.binary.answer) {
-      // smth
+    if (this.state.binary.answered && this.state.binary.answer === answer) {
+      // Do nothing
     } else {
-      await this.handleBinarySubmit(true)
-    }
-  }
-
-  async handleNegBinarySubmit(event) {
-    // event.preventDefault()
-    // event.nativeEvent.stopImmediatePropagation()
-    if (this.state.binary.answered && !this.state.binary.answer) {
-      // smth
-    } else {
-      await this.handleBinarySubmit(false)
+      const binary = { answered: true, answer }
+      const blob = { binary: { answer } }
+      await this.submit(blob)
+      this.setState(state => ({
+        binary,
+        prevAnswer: { ...state.prevAnswer, blob: { binary: { answer: binary.answer } } }
+      }))
     }
   }
 
   render() {
     if (this.props.question.type === 'text') {
-      // ATTEMPT TO FETCH PREVIOUS ANSWER
       const blob = this.state.prevAnswer.blob
       return (
         <div>
-          <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
-            <textarea
-              value={this.state.value}
-              onChange={this.handleChange}
-              placeholder="Write answer..."
-            />
-            <input
-              className={css('submit-text-answer')}
-              type="submit"
-              value={blob && blob.text ? "Edit answer" : "Answer"} />
-          </form>
+          {blob && blob.text && !this.state.editText ?
+            <div>
+              <p>{this.state.value}</p>
+              <button onClick={() => this.setState({ editText: true })}>Edit answer</button>
+            </div> :
+            <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
+              <textarea
+                value={this.state.value}
+                onChange={this.handleChange}
+                placeholder="Write answer..."
+              />
+              <input
+                className={css('submit-text-answer')}
+                type="submit"
+                value={blob && blob.text ? "Save" : "Submit"} />
+            </form>
+          }
         </div>
       )
     } else if (this.props.question.type === 'binary') {
       const { binary } = this.state
-      console.log("binary",binary)
       return (
-        <div>
-          <button type="button" className={css('binary-answer', binary.answered && binary.answer ? 'toggled' : '')} onClick={this.handlePosBinarySubmit}>Yes</button>
-          <button type="button" className={css('binary-answer', binary.answered && !binary.answer ? 'toggled' : '')} onClick={this.handleNegBinarySubmit}>No</button>
+        <div className={css('binary')}>
+          <button type="button" className={css('binary-answer', binary.answered && binary.answer ? 'toggled' : '')} onClick={() => this.handleBinarySubmit(true)}>Yes</button>
+          <button type="button" className={css('binary-answer', binary.answered && !binary.answer ? 'toggled' : '')} onClick={() => this.handleBinarySubmit(false)}>No</button>
         </div>
       )
     } else {

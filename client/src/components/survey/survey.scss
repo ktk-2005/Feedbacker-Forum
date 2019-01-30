@@ -4,7 +4,42 @@
 @import '../../scss/functions';
 @import '../../scss/atoms/button';
 
+.binary {
+  display: flex;
+  margin: $spacer;
+}
+
 $toggled-inset-shadow: inset 0 1px 20px;
+$binary-border: 1px solid $palette-light;
+.binary-answer {
+  @include reset-button;
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+  padding: $baseline;
+  border: $binary-border;
+  border-right: 0;
+  outline: none;
+  box-shadow: $toggled-inset-shadow transparent;
+  background: $palette-white;
+  overflow: visible;
+  transition: $transition-default-all;
+  transition-property: box-shadow;
+}
+
+.binary-answer:first-of-type {
+  border-bottom-left-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
+}
+
+.binary-answer:last-of-type {
+  border-right: $binary-border;
+  border-bottom-right-radius: $border-radius-default;
+  border-top-right-radius: $border-radius-default;
+}
 
 .toggled {
   box-shadow: $toggled-inset-shadow $palette-light;
