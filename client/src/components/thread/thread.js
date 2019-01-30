@@ -57,14 +57,17 @@ class Thread extends React.Component {
     return (
       <div className={css('thread')}>
         <Comment key={comment.id} comment={comment} id={comment.id} />
-        <button
-          className={css('show-thread')}
-          type="button"
-          onClick={this.handleClick}
-        >
-          { buttonText }
-        </button>
-        { this.expandedThread() }
+        <div className={css('expand-button-container')}>
+          <button
+            type="button"
+            onClick={this.handleClick}
+          >
+            { buttonText }
+          </button>
+        </div>
+        <aside className={css('sub-thread')}>
+          { this.expandedThread() }
+        </aside>
       </div>
     )
   }
