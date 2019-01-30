@@ -10,8 +10,12 @@
     width: calc(100% - #{$spacer});
   }
 
-  > div:first-of-type {
+  > *:first-of-type {
     margin-top: -$spacer;
+  }
+
+  > div:first-of-type ~ form {
+    margin-top: $spacer;
   }
 }
 
