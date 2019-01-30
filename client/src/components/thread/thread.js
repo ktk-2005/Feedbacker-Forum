@@ -17,8 +17,13 @@ class Thread extends React.Component {
       buttonText: this.props.comments.length > 1 ? 'Expand' : 'Reply',
     }
 
+    this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.expandedThread = this.expandedThread.bind(this)
+  }
+
+  handleChange(event) {
+    this.props.onChange(this.props.id, event)
   }
 
   handleClick() {
@@ -38,8 +43,9 @@ class Thread extends React.Component {
           comment => <Comment key={comment.id} comment={comment} id={comment.id} />,
         )}
         <SubmitField
+          value={this.props.value}
           onSubmit={this.props.onSubmit}
-          onChange={this.props.onChange}
+          onChange={this.handleChange}
         />
       </>
     )

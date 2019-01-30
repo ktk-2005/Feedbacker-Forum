@@ -31,6 +31,7 @@ class CommentPanel extends React.Component {
     super(props)
     this.state = {
       value: '',
+      currentThread: '',
       isHidden: false,
     }
 
@@ -41,8 +42,12 @@ class CommentPanel extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
-  handleChange(event) {
-    this.setState({ value: event.target.value })
+  handleChange(threadId, event) {
+    console.log('Handling: ', threadId, event)
+    this.setState({
+      value: event.target.value,
+      currentThread: threadId || '',
+    })
   }
 
   async handleSubmit(event) {
@@ -65,6 +70,7 @@ class CommentPanel extends React.Component {
     await apiCall('POST', '/comments', {
       text: this.state.value,
       blob: getBlob(),
+      threadId: this.state.currentThread || null,
     })
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
@@ -135,9 +141,9 @@ class CommentPanel extends React.Component {
         <div className={css('panel-body')}>
           { this.threadContainer() }
           <SubmitField
-            value={this.state.value}
+            value={this.state.currentThread ? '' : this.state.value}
             onSubmit={this.handleSubmit}
-            onChange={this.handleChange}
+            onChange={event => this.handleChange('', event)}
           />
         </div>
       </div>
