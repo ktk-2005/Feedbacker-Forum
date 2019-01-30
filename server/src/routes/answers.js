@@ -1,6 +1,6 @@
 import express from 'express'
 import {
-  addAnswer, getAnswer,
+  addAnswer, getAnswer, editAnswer
 } from '../database'
 import { uuid, attempt, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
@@ -39,6 +39,18 @@ router.get('/:questionId', catchErrors(async (req, res) => {
       questionId: a.question_id,
       blob: JSON.parse(a.blob),
     })))
+  })
+}))
+
+// @api PUT /api/answers/:questionId
+// Edits an answer of a user for specific question
+router.put('/:questionId', catchErrors(async (req, res) => {
+  const { questionId } = req.params
+  const { blob } = req.body
+  const { userId } = await reqUser(req)
+  console.log(blob)
+  await attempt(async () => {
+    res.send(await editAnswer({ userId, questionId, blob: JSON.stringify(blob) }))
   })
 }))
 

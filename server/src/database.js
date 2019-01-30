@@ -66,6 +66,10 @@ export async function getAnswer({
   userId, questionId,
 }) { return db.query('SELECT * FROM answers WHERE user_id=? AND question_id=?', [userId, questionId]) }
 
+export async function editAnswer({
+  userId, questionId, blob,
+}) { return db.query('UPDATE answers SET blob=? WHERE user_id=? AND question_id=?', [blob, userId, questionId]) }
+
 export async function addThread({
   id, container, blob,
 }) { return db.run('INSERT INTO threads(id, container_id, blob) VALUES (?, ?, ?)', [id, container, blob]) }

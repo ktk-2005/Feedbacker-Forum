@@ -20,6 +20,7 @@ class Answer extends React.Component {
 
   async componentDidMount() {
     let prevAnswer = await apiCall('GET', `/answers/${this.props.question.id}`)
+    console.log(prevAnswer)
     prevAnswer = prevAnswer.length === 0 ? {} : prevAnswer[0]
     if (prevAnswer.blob && prevAnswer.blob.text) {
       this.setState({value: prevAnswer.blob.text})
@@ -39,14 +40,21 @@ class Answer extends React.Component {
   async handleTextSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    // TODO: check if post or update
-    await apiCall('POST', '/answers', {
-      questionId: this.props.question.id,
-      blob: { text: this.state.value },
-    })
+    const { prevAnswer } = this.state
+    const blob = { text: this.state.value }
+    if (prevAnswer && prevAnswer.blob && prevAnswer.blob.text) {
+      await apiCall('PUT', `/answers/${this.props.question.id}`, {
+        blob,
+      })
+    } else {
+      await apiCall('POST', '/answers', {
+        questionId: this.props.question.id,
+        blob,
+      })
+    }
     this.setState(state => ({
        // value: '',
-       prevAnswer: { blob: { text: state.value } },
+       prevAnswer: { ...state.prevAnswer, blob },
       }))
   }
 
