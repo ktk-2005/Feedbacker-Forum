@@ -1,39 +1,60 @@
 
 export default class Mutex {
   constructor() {
-    this.impQueued = 0
-    this.impCompleted = 0
-    this.impPromise = null
-    this.impDone = () => {
-      this.impCompleted += 1
-      if (this.impCompleted == this.impQueued) {
-        this.impPromise = null
+    this.pendingImp = []
+    this.runningImp = false
+    this.listenersImp = []
+  }
+
+  async runStep() {
+    if (this.runningImp) return
+
+    this.runningImp = true
+    while (this.pendingImp.length > 0) {
+      const func = this.pendingImp[0]
+      try {
+        await func()
+      } catch (err) {
+        console.error('Error in mutex')
+        console.error(err)
       }
+      this.pendingImp.shift()
     }
+    this.runningImp = false
+    this.notifyListeners()
   }
 
   attempt(func) {
-    const pFunc = Promise.resolve(func).then(this.impDone).catch(this.impDone)
-    if (!this.impPromise) {
-      this.impQueued += 1
-      this.impPromise = pFunc
-      return pFunc
-    } else {
-      return Promise.resolve(null)
-    }
+    if (this.pendingImp.length > 0) return
+    this.queue(func)
   }
 
   queue(func) {
-    const pFunc = Promise.resolve(func).then(this.impDone).catch(this.impDone)
-    this.impQueued += 1
-    if (this.impPromise) {
-      this.impPromise.then(pFunc)
-    }
-    return pFunc
+    this.pendingImp.push(func)
+    this.notifyListeners()
+    this.runStep()
   }
 
   get free() {
-    return !this.impPromise
+    return this.pendingImp.length === 0
+  }
+
+  notifyListeners() {
+    const free = this.free
+    for (const listener of this.listenersImp) {
+      listener(free)
+    }
+  }
+
+  connectFree(listener) {
+    this.listenersImp.push(listener)
+    listener(this.free)
+  }
+
+  disconnectFree(listener) {
+    const index = this.listenersImp.find(listener)
+    if (index < 0) return
+    this.listenersImp.splice(index, 1)
   }
 
 }

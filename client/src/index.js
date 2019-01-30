@@ -132,6 +132,7 @@ class MainView extends React.Component {
           hidden={false}
           onClick={this.handleSurveyPanelClick}
         />
+
       </div>
     )
   }

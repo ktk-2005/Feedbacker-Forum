@@ -7,6 +7,7 @@ import childProcess from 'child_process'
 import cors from 'cors'
 import proxy from 'express-http-proxy'
 import path from 'path'
+import delay from 'express-delay'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -39,6 +40,9 @@ function anySubdomain(fn) {
 
 export function startServer() {
   const app = express()
+
+  if (args.delay)
+    app.use(delay(args.delay))
 
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')

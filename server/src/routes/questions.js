@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getQuestions, addQuestion, addThread
+  getQuestions, addQuestion, editQuestion, addThread, removeQuestion
 } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { catchErrors } from '../handlers'
+import HttpError from '../http-error.js'
 
 const router = express.Router()
 
@@ -38,7 +39,12 @@ router.get('/', catchErrors(async (req, res) => {
 router.post('/', catchErrors(async (req, res) => {
   const { text, type, blob } = req.body || { }
   const { userId } = await reqUser(req)
-  const { container } = await reqContainer(req)
+  const { container, containerOwner } = await reqContainer(req)
+
+  if (userId != containerOwner && !container.includes('-')) {
+    throw new HttpError(403, 'Only instance owner can create questions')
+  }
+
   await attempt(async () => {
     const id = uuid()
     await addQuestion({
@@ -51,6 +57,44 @@ router.post('/', catchErrors(async (req, res) => {
     })
     res.json({ id })
   })
+}))
+
+// @api DELETE /api/questions/:id
+// Delete a previously posted question
+router.delete('/:id', catchErrors(async (req, res) => {
+  const { id } = req.params
+  const { userId } = await reqUser(req)
+  const { container, containerOwner } = await reqContainer(req)
+
+  if (userId != containerOwner && !container.includes('-')) {
+    throw new HttpError(403, 'Only instance owner can delete questions')
+  }
+
+  await removeQuestion({ id })
+
+  res.json({ id })
+}))
+
+// @api PUT /api/questions/:id
+// Update a previously posted question
+router.put('/:id', catchErrors(async (req, res) => {
+  const { text, type, blob } = req.body || { }
+  const { id } = req.params
+  const { userId } = await reqUser(req)
+  const { container, containerOwner } = await reqContainer(req)
+
+  if (userId != containerOwner && !container.includes('-')) {
+    throw new HttpError(403, 'Only instance owner can edit questions')
+  }
+
+  await editQuestion({
+    id,
+    text: text || '',
+    type: type || 'text',
+    blob: JSON.stringify(blob || { }),
+  })
+
+  res.json({ id })
 }))
 
 module.exports = router

@@ -13,7 +13,10 @@ function SurveyCreateQuestion({
   edited,
   onSelect,
   onDeselect,
+  onDelete,
   onEdit,
+  deleted,
+  disabledImp: disabled,
 }) {
   const { text } = question
 
@@ -23,12 +26,13 @@ function SurveyCreateQuestion({
     <Handle />
     {edited ? (
     <>
-      <button key="deselect" onClick={onDeselect}>Done</button>
-      <input type="text" autoFocus onChange={updateText} value={text} />
+      <button disabled={disabled} key="deselect" onClick={onDeselect}>Done</button>
+      <button disabled={disabled} key="delete" onClick={onDelete}>Delete</button>
+      <input disabled={deleted} type="text" autoFocus onChange={updateText} value={text} />
     </>
   ) : (
     <>
-      <button key="select" onClick={onSelect}>Edit</button>
+      <button disabled={disabled} key="select" onClick={onSelect}>Edit</button>
       <span>{text}</span>
     </>
   )

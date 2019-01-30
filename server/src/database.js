@@ -58,6 +58,13 @@ export async function addQuestion({
   id, text, type, userId, container, blob,
 }) { return db.run('INSERT INTO questions(id, text, type, user_id, container_id, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, text, type, userId, container, blob]) }
 
+export async function editQuestion({
+  id, text, type, blob
+}) { return db.run('UPDATE questions SET text=?, type=?, blob=? WHERE id=? ', [text, type, blob, id]) }
+
+export async function removeQuestion({ id })
+{ return db.run('DELETE FROM questions WHERE id = ?', [id]) }
+
 export async function addAnswer({
   id, userId, questionId, blob,
 }) { return db.run('INSERT INTO answers(id, user_id, question_id, blob) VALUES (?, ?, ?, ?)', [id, userId, questionId, blob]) }
@@ -106,4 +113,3 @@ export async function verifyUser(user, secret) {
   }
 }
 
-export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }

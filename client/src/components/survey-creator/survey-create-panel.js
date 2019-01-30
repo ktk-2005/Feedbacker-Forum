@@ -19,20 +19,32 @@ const SortableSurveyList = SortableContainer(({
   editIndex,
   handleSelect,
   handleEdit,
+  handleDelete,
+  edit,
+  disabled,
 }) => {
   return (
     <div>
-      {questions.map((question, index) => (
-        <SurveyCreateQuestion
+      {questions.map((question, index) => {
+        const id = question.id
+        const edited = id === edit.id
+
+        const editedQuestion = edited ? { ...question, ...edit } : question
+
+        return (<SurveyCreateQuestion
           key={question.id}
           index={index}
-          question={question}
-          edited={index === editIndex}
-          onSelect={() => handleSelect(index)}
-          onDeselect={() => handleSelect(-1)}
-          onEdit={change => handleEdit(index, change)}
-        />
-      ))}
+          question={editedQuestion}
+          edited={edited}
+          onSelect={() => handleSelect(id)}
+          onDeselect={() => handleSelect(null)}
+          onDelete={() => handleDelete(id)}
+          onEdit={change => handleEdit(id, change)}
+          disabled={disabled}
+          disabled_={disabled}
+          deleted={edited && edit.deleted}
+        />)
+      })}
     </div>
   )
 })
@@ -46,32 +58,75 @@ class SurveyCreatePanel extends React.Component {
     this.mutex = new Mutex()
     this.handleQuestionEdit = this.handleQuestionEdit.bind(this)
     this.handleQuestionSelect = this.handleQuestionSelect.bind(this)
+    this.handleQuestionDelete = this.handleQuestionDelete.bind(this)
     this.handleNew = this.handleNew.bind(this)
     this.handleSortStart = this.handleSortStart.bind(this)
     this.handleSortEnd = this.handleSortEnd.bind(this)
+    this.mutexListener = this.mutexListener.bind(this)
+    this.editMirror = { }
 
     this.state = {
-      questions: [
-        { id: 'a', text: 'Hello world!' },
-        { id: 'b', text: 'What is this' },
-        { id: 'c', text: 'More of this stuff' },
-      ],
-      editIndex: -1,
+      questions: [],
+      edit: { },
+      mutexFree: false,
     }
   }
 
-  handleQuestionSelect(index) {
-    this.setState({ editIndex: index })
+  componentDidMount() {
+    this.mutex.queue(async () => {
+      const questions = await apiCall('GET', '/questions')
+      await this.setStateAsync({ questions })
+    })
+
+    this.mutex.connectFree(this.mutexListener)
   }
 
-  handleQuestionEdit(index, change) {
+  componentWillUnmount() {
+    this.mutex.disconnectFree(this.mutexListener)
+  }
+
+  mutexListener(free) {
+    this.setState({ mutexFree: free })
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve)
+    })
+  }
+
+  handleQuestionSelect(id) {
+    this.mutex.queue(async () => {
+      const { edit } = this.state
+      let questions = null
+
+      if (edit.id && edit.modified) {
+        try {
+          await apiCall('PUT', `/questions/${edit.id}`, this.state.edit)
+          questions = await apiCall('GET', '/questions')
+        } catch (err) { /* Nop */ }
+      }
+
+      if (id) {
+        await this.setStateAsync({ edit: { id } })
+      } else {
+        await this.setStateAsync({ edit: { } })
+      }
+
+      if (questions) {
+        await this.setStateAsync({ questions })
+      }
+    })
+  }
+
+  handleQuestionEdit(id, change) {
     this.setState(({questions}) => ({
-      questions: R.adjust(index, R.mergeLeft(change), questions)
+      edit: { id, modified: true, ...change },
     }))
   }
 
   handleSortStart() {
-    this.setState({ editIndex: -1 })
+    this.setState({ edit: { } })
   }
 
   handleSortEnd({ oldIndex, newIndex }) {
@@ -80,24 +135,33 @@ class SurveyCreatePanel extends React.Component {
     }))
   }
 
-  handleNew() {
-    mutex.attempt(async () => {
+  async handleNew() {
+    this.mutex.attempt(async () => {
       const predict = { id: '(pending)', text: '', type: 'text' }
-      this.setState(({ questions }) => {
-        questions: R.append(predict, questions)
-        editIndex: questions.length,
-      })
+      this.setState(({ questions }) => ({
+        questions: R.append(predict, questions),
+        edit: { id: '(pending)' },
+      }))
 
-      await apiCall('POST', '/questions')
+      const { id: newId } = await apiCall('POST', '/questions')
       const questions = await apiCall('GET', '/questions')
 
-      this.setState({ questions })
+      await this.setStateAsync(({ edit }) => ({ questions, edit: { ...edit, id: newId } }))
+    })
+  }
+
+  async handleQuestionDelete(id) {
+    this.mutex.attempt(async () => {
+      this.setState(({ edit }) => ({ edit: { ...edit, id, deleted: true } }))
+      await apiCall('DELETE', `/questions/${id}`)
+      const questions = await apiCall('GET', '/questions')
+      await this.setStateAsync({ questions, edit: { } })
     })
   }
 
   render() {
     const { hidden, onClick } = this.props
-    const { questions, editIndex } = this.state
+    const { questions, edit, mutexFree } = this.state
 
     return (
       <div className={css('panel-container', { hidden })}>
@@ -117,9 +181,11 @@ class SurveyCreatePanel extends React.Component {
 
             <SortableSurveyList
               questions={questions}
-              editIndex={editIndex}
+              edit={edit}
               handleSelect={this.handleQuestionSelect}
               handleEdit={this.handleQuestionEdit}
+              handleDelete={this.handleQuestionDelete}
+              disabled={!mutexFree}
 
               useDragHandle
               lockAxis="y"
@@ -129,7 +195,7 @@ class SurveyCreatePanel extends React.Component {
               onSortEnd={this.handleSortEnd}
             />
 
-            <button enabled={mutex.free} onClick={this.handleNew}>Add question</button>
+            <button disabled={!mutexFree} onClick={this.handleNew}>Add question</button>
 
           </div>
         </Draggable>
