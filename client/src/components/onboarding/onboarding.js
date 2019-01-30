@@ -25,6 +25,12 @@ const mapStateToProps = (state) => {
 
 const togglePulseAnimation = (step) => {
   shadowDocument().querySelector(`[data-introduction-step="${step}"]`)
+    .toggleAttribute('animation-pulse')
+}
+
+const clickElement = (step) => {
+  shadowDocument().querySelector(`[data-introduction-step-close="${step}"]`)
+    .click()
 }
 
 class Onboarding extends React.Component {
@@ -51,6 +57,8 @@ class Onboarding extends React.Component {
         </div>
       )
     } else if (this.state.step === 2) {
+      // Start pulse animation
+      togglePulseAnimation(this.state.step)
       return (
         <div>
           <h2>Survey Panel</h2>
@@ -58,6 +66,8 @@ class Onboarding extends React.Component {
         </div>
       )
     } else if (this.state.step === 3) {
+      // Remove last animation
+      togglePulseAnimation(this.state.step - 1)
       return (
         <div>
           <h2>Survey Panel</h2>
