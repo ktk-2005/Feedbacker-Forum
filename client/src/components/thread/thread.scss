@@ -3,21 +3,28 @@
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
 
-.thread {
-  .comment {
-    width: 80%;
-    &:first-of-type {
-      width: 100%;
-    }
+.sub-thread {
+  margin-bottom: $spacer;
+  > * {
+    margin-left: $spacer;
+    width: calc(100% - #{$spacer});
   }
 
-  .comment-form {
-    width: 80%;
-    color: $palette-dark;
+  > div:first-of-type {
+    margin-top: -$spacer;
   }
 }
 
-.show-thread {
-  @include button();
-  margin: -20 * $spacer auto;
+.expand-button-container {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    @include button();
+    background: white;
+    @include shadow-outline(1px);
+    position: relative;
+    top: -$baseline;
+    margin-right: $spacer;
+  }
 }
