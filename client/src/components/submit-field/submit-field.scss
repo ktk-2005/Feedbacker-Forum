@@ -5,8 +5,7 @@
 
 @import '../survey-panel/survey-panel.scss';
 @import '../comment/comment.scss';
-
-$panel-min-width: 300px;
+@import '../comment-panel/comment-panel.scss';
 
 .comment-form {
   display: flex;
@@ -19,9 +18,10 @@ $panel-min-width: 300px;
   textarea {
     @extend .comment;
     display: block;
-    max-width: 100%;
     min-width: 100%;
+    max-width: 100%;
     min-height: 3em;
+    max-height: $panel-min-width;
     border: none;
 
     &:focus {
