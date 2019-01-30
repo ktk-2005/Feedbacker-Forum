@@ -6,7 +6,7 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import { introDone } from '../../actions'
-import { shadowModalRoot } from '../../shadowDomHelper'
+import { shadowModalRoot, shadowDocument } from '../../shadowDomHelper'
 // Styles
 import styles from './onboarding.scss'
 // Assets
@@ -14,14 +14,17 @@ import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 import ArrowIcon from '../../assets/svg/baseline-arrow_back_ios-24px.svg'
 
 const css = classNames.bind(styles)
-
 const final = 6
 
 const mapStateToProps = (state) => {
   const persist = state.persist || {}
   return ({
-    onboarding: !R.isEmpty(persist.users) && !persist.introDone
+    onboarding: !R.isEmpty(persist.users) && !persist.introDone,
   })
+}
+
+const togglePulseAnimation = (step) => {
+  shadowDocument().querySelector(`[data-introduction-step="${step}"]`)
 }
 
 class Onboarding extends React.Component {
@@ -93,62 +96,60 @@ class Onboarding extends React.Component {
 
   handlePreviousClick() {
     this.setState(state => ({
-      step: R.max(1, (state.step - 1)),
+      step: R.max(1, state.step - 1),
     }))
   }
 
   render() {
     const { step } = this.state
     return (
-      <div>
-        <ReactModal
-          className={css('intro-modal')}
-          isOpen={this.props.onboarding}
-          parentSelector={shadowModalRoot}
-          overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
-        >
-          <div className={css('modal-header')}>
-            <button
-              type="button"
-              className={css('close-button')}
-              onClick={() => this.props.dispatch(introDone())}
-            >
-              <InlineSVG src={CloseIcon} />
-            </button>
-          </div>
-          <div className={css('modal-content')}>
-            { this.step() }
-          </div>
-          <div className={css('step-buttons')}>
-            <button
-              type="button"
-              className={step === 1 ? css('previous-button', 'hidden') : css('previous-button')}
-              onClick={this.handlePreviousClick}
-            >
-              <InlineSVG src={ArrowIcon} />
-            </button>
-            <button
-              type="button"
-              className={step === final ? css('next-button', 'hidden') : css('next-button')}
-              onClick={this.handleNextClick}
-            >
-              <InlineSVG src={ArrowIcon} />
-            </button>
-          </div>
+      <ReactModal
+        className={css('intro-modal')}
+        isOpen={this.props.onboarding}
+        parentSelector={shadowModalRoot}
+        overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
+      >
+        <div className={css('modal-header')}>
           <button
             type="button"
-            className={step !== final ? css('hidden') : css('done-button')}
+            className={css('close-button')}
             onClick={() => this.props.dispatch(introDone())}
-          >Close tutorial
+          >
+            <InlineSVG src={CloseIcon} />
+          </button>
+        </div>
+        <div className={css('modal-content')}>
+          { this.step() }
+        </div>
+        <div className={css('step-buttons')}>
+          <button
+            type="button"
+            className={step === 1 ? css('previous-button', 'hidden') : css('previous-button')}
+            onClick={this.handlePreviousClick}
+          >
+            <InlineSVG src={ArrowIcon} />
           </button>
           <button
             type="button"
-            onClick={() => this.props.dispatch(introDone())}
-            className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
-          >skip
+            className={step === final ? css('next-button', 'hidden') : css('next-button')}
+            onClick={this.handleNextClick}
+          >
+            <InlineSVG src={ArrowIcon} />
           </button>
-        </ReactModal>
-      </div>
+        </div>
+        <button
+          type="button"
+          className={step !== final ? css('hidden') : css('done-button')}
+          onClick={() => this.props.dispatch(introDone())}
+        >Close tutorial
+        </button>
+        <button
+          type="button"
+          onClick={() => this.props.dispatch(introDone())}
+          className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
+        >skip
+        </button>
+      </ReactModal>
     )
   }
 }

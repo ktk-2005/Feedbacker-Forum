@@ -14,6 +14,7 @@ const OpenSurveyPanelButton = ({ hidden, onClick }) => (
     type="button"
     className={hidden ? css('button', 'hidden') : css('button')}
     onClick={onClick}
+    data-introduction-step="2"
   >
     <InlineSVG src={OpenIcon} />
   </button>

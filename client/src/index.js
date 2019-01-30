@@ -142,7 +142,6 @@ class MainView extends React.Component {
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
-          id="target"
         />
         <Onboarding />
       </div>
