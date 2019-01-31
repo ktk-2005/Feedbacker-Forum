@@ -1,8 +1,8 @@
 import React from 'react'
+import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
 import Question from './question'
 import Answer from './answer'
-import classNames from 'classnames/bind'
 import styles from './survey.scss'
 
 const css = classNames.bind(styles)
@@ -46,12 +46,12 @@ class Survey extends React.Component {
     const { questions, currentIndex } = this.state
     return (
       <div>
-        {currentIndex > 0 ?
-          <button className={css('previous-question')} onClick={this.previousQuestion}>PREVIOUS</button> :
-          <div></div>}
-        {currentIndex < questions.length - 1 ?
-          <button className={css('next-question')} onClick={this.nextQuestion}>NEXT</button> :
-          <div></div>}
+        {currentIndex > 0
+          ? <button type="button" className={css('previous-question')} onClick={this.previousQuestion}>PREVIOUS</button>
+          : <div />}
+        {currentIndex < questions.length - 1
+          ? <button type="button" className={css('next-question')} onClick={this.nextQuestion}>NEXT</button>
+          : <div />}
       </div>
     )
   }

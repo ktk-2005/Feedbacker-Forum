@@ -27,7 +27,7 @@ class Answer extends React.Component {
     prevAnswer = prevAnswer.length === 0 ? {} : prevAnswer[0]
     if (prevAnswer.blob && prevAnswer.blob.text) {
       this.setState({ value: prevAnswer.blob.text })
-    } else if (prevAnswer.blob && prevAnswer.blob.option) {
+    } else if (prevAnswer.blob && prevAnswer.blob.option !== undefined) {
       this.setState({ option: { answered: true, answer: prevAnswer.blob.option } })
     }
     this.setState(state => ({
@@ -44,14 +44,15 @@ class Answer extends React.Component {
 
   async submit(blob) {
     const { prevAnswer } = this.state
-    console.log(prevAnswer.blob)
-    if (prevAnswer && prevAnswer.blob && (prevAnswer.blob.text || prevAnswer.blob.option !== undefined)) {
-      console.log('put')
+    if (
+      prevAnswer
+      && prevAnswer.blob
+      && (prevAnswer.blob.text || prevAnswer.blob.option !== undefined)
+    ) {
       await apiCall('PUT', `/answers/${this.props.question.id}`, {
         blob,
       })
     } else {
-      console.log('post')
       await apiCall('POST', '/answers', {
         questionId: this.props.question.id,
         blob,
@@ -80,7 +81,7 @@ class Answer extends React.Component {
       await this.submit(blob)
       this.setState(state => ({
         option,
-        prevAnswer: { ...state.prevAnswer, blob }
+        prevAnswer: { ...state.prevAnswer, blob },
       }))
     }
   }
@@ -118,7 +119,16 @@ class Answer extends React.Component {
       const { option } = this.state
       return (
         <div className={css('option')}>
-          {this.props.question.blob.options.map((value, index) => <button key={index} type="button" className={css('option-answer', option.answered && option.answer === index ? 'toggled' : '')} onClick={() => this.handleOptionSubmit(index)}>{value}</button>)}
+          {this.props.question.blob.options.map((value, index) => (
+            <button
+              key={value}
+              type="button"
+              className={css('option-answer', option.answered && option.answer === index ? 'toggled' : '')}
+              onClick={() => this.handleOptionSubmit(index)}
+            >
+              {value}
+            </button>
+          ))}
         </div>
       )
     } else {
