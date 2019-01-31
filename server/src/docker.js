@@ -1,7 +1,6 @@
 import Docker from 'dockerode'
 import {
   addContainer,
-  listContainers,
   listContainersByUser,
   removeContainer
 } from './database'

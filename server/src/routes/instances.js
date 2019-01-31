@@ -13,7 +13,7 @@ import { verifyUser, resolveContainer } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import HttpError from '../errors'
-import logger from '../logger';
+import logger from '../logger'
 
 const router = express.Router()
 

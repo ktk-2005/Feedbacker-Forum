@@ -9,11 +9,13 @@ import { HttpError } from './errors'
   and pass it along to our express middleware with next()
 */
 
-module.exports.catchErrors = fn => async (req, res, next) => {
-  try {
-    await fn(req, res, next)
-  } catch (error) {
-    await next(error)
+export function catchErrors(fn) {
+  return async (req, res, next) => {
+    try {
+      await fn(req, res, next)
+    } catch (error) {
+      await next(error)
+    }
   }
 }
 
@@ -23,7 +25,7 @@ module.exports.catchErrors = fn => async (req, res, next) => {
    we mark it as 404 and pass it along to
    the next error handler to display
 */
-module.exports.notFound = (req, res, next) => {
+export function notFound(req, res, next) {
   const err = new HttpError(404, 'Not Found')
   next(err)
 }
@@ -33,7 +35,7 @@ module.exports.notFound = (req, res, next) => {
   log error stack trace
 */
 // eslint-disable-next-line no-unused-vars
-module.exports.devErr = (err, req, res, next) => {
+export function devErr(err, req, res, next) {
   logger.error(err)
   const errorDetails = {
     message: err.message,
@@ -49,7 +51,7 @@ module.exports.devErr = (err, req, res, next) => {
   No stacktraces are leaked to user
 */
 // eslint-disable-next-line no-unused-vars
-module.exports.prodErr = (err, req, res, next) => {
+export function prodErr(err, req, res, next) {
   logger.error(err)
   res.status(err.status || 500)
   res.json({

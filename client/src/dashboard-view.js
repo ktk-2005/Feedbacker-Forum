@@ -49,6 +49,17 @@ class Dashboard extends React.Component {
   render() {
     const { instances } = this.state
 
+    function noInstances() {
+      if (instances.length === 0) {
+        return (
+          <p>
+            No instances created.
+            Go ahead and create one by clicking on the &quot;New instance&quot; button.
+          </p>
+        )
+      }
+    }
+
     return (
       <>
         <div className={css('top-section')}>
