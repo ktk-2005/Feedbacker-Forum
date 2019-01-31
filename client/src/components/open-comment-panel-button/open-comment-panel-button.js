@@ -14,7 +14,7 @@ const OpenCommentPanelButton = ({ hidden, onClick }) => (
     className={css('open-button', { hidden })}
     onClick={onClick}
     data-introduction-step="4"
-  >Show comments
+  >Open
   </button>
 )
 

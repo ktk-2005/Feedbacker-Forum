@@ -20,6 +20,7 @@
   @extend .panel-header;
   width: auto;
   border-bottom: none;
+  cursor: unset;
 }
 
 .step-buttons {
@@ -41,18 +42,14 @@
   }
 }
 
-.skip-button {
-  @include button();
-  font-weight: 600;
-}
-
 .next-button {
   transform: scaleX(-1);
 }
 
-.hidden {
-  visibility: hidden;
-  opacity: 0;
+.skip-button {
+  @include button($states: false);
+  font-weight: 600;
+  margin-bottom: 1em;
 }
 
 .done-button {
@@ -63,12 +60,17 @@
   align-self: center;
 }
 
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
 .modal-content {
   display: flex;
   flex-flow: column;
   justify-content: center;
   flex: 1;
-  padding: 2em;
+  padding: 1em 2em;
 }
 
 .overlay {
@@ -92,7 +94,7 @@
   }
 }
 
-[animation-pulse] {
+[animation-pulse="true"] {
   animation: pulse 1.5s infinite;
   box-shadow: 0 0 0 0 currentColor;
 }

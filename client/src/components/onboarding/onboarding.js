@@ -23,15 +23,34 @@ const mapStateToProps = (state) => {
   })
 }
 
-const togglePulseAnimation = (step) => {
-  shadowDocument().querySelector(`[data-introduction-step="${step}"]`)
-    .toggleAttribute('animation-pulse')
+const setPulseAnimation = (step) => {
+  const el = shadowDocument().querySelector(`[data-introduction-step="${step}"]`)
+
+  if (el) el.setAttribute('animation-pulse', 'true')
 }
 
-const clickElement = (step) => {
+const stopPulseAnimation = (step) => {
+  const el = shadowDocument().querySelector(`[data-introduction-step="${step}"]`)
+
+  if (el) el.removeAttribute('animation-pulse')
+}
+
+const clickElementClose = (step) => {
   shadowDocument().querySelector(`[data-introduction-step-close="${step}"]`)
     .click()
 }
+
+const clickElementOpen = (step) => {
+  shadowDocument().querySelector(`[data-introduction-step="${step}"]`)
+    .click()
+}
+
+const makeContent = (header, paragraph) => (
+    <>
+      <h2>{header}</h2>
+      <p>{paragraph}</p>
+    </>
+)
 
 class Onboarding extends React.Component {
   constructor(props) {
@@ -39,75 +58,111 @@ class Onboarding extends React.Component {
 
     this.state = {
       step: 1,
+      prev: 1,
     }
 
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
+    this.handleCloseIntro = this.handleCloseIntro.bind(this)
+    this.doStepActions = this.doStepActions.bind(this)
   }
 
   step() {
-    if (this.state.step === 1) {
+    const { step } = this.state
+
+    if (step === 1) {
       return (
-        <div>
-          <h2>Hello!</h2>
-          <p>
-            Welcome to use the Feedbacker Forum app.
-            This tutorial will guide you through the basic functions of the app.
-          </p>
-        </div>
+        makeContent(
+          'Welcome!',
+          'Welcome to use the Feedbacker Forum app.This tutorial will guide you through the basic functions of the app.'
+        )
       )
-    } else if (this.state.step === 2) {
-      // Start pulse animation
-      togglePulseAnimation(this.state.step)
+    } else if (step === 2) {
       return (
-        <div>
-          <h2>Survey Panel</h2>
-          <p>This button opens the survey panel.</p>
-        </div>
+        makeContent(
+          'Survey Panel',
+          'This button opens the survey panel.'
+        )
       )
-    } else if (this.state.step === 3) {
-      // Remove last animation
-      togglePulseAnimation(this.state.step - 1)
+    } else if (step === 3) {
       return (
-        <div>
-          <h2>Survey Panel</h2>
-          <p>This is the survey panel.</p>
-        </div>
+        makeContent(
+          'Survey Panel',
+          'This is the survey panel where you can aswer questions.'
+        )
       )
-    } else if (this.state.step === 4) {
+    } else if (step === 4) {
       return (
-        <div>
-          <h2>Commenting</h2>
-          <p>You can leave free form comments and view other people&#39;s comments here.</p>
-        </div>
+        makeContent(
+          'Commenting',
+          'This button opens the commenting panel.'
+        )
       )
-    } else if (this.state.step === 5) {
+    } else if (step === 5) {
       return (
-        <div>
-          <h2>Commenting</h2>
-          <p>You can tag and comment on a specific element by clicking this button.</p>
-        </div>
+        makeContent(
+          'Commenting',
+          'You can leave free form comments and view other people\'s comments here.'
+        )
       )
-    } else if (this.state.step === 6) {
+    } else if (step === 6) {
       return (
-        <div>
-          <h2>Done</h2>
-          <p>Now you&#39;re ready to start giving feedback!</p>
-        </div>
+        makeContent(
+          'Tagging elements',
+          'You can tag and comment on a specific element by clicking this button.'
+        )
       )
+    } else if (step === 7) {
+      return (
+        makeContent(
+          'Done',
+          'Now you\'re ready to start giving feedback!'
+        )
+      )
+    }
+  }
+
+  doStepActions() {
+    const { step, prev } = this.state
+    if (step === 1) {
+      stopPulseAnimation(step + 1)
+    } else if (step === 2) {
+      setPulseAnimation(step)
+      if (prev > step) clickElementClose(prev)
+    } else if (step === 3) {
+      clickElementOpen(step - 1)
+      stopPulseAnimation(prev)
+    } else if (step === 4) {
+      setPulseAnimation(step)
+      clickElementClose(prev)
+    } else if (step === 5) {
+      clickElementOpen(step - 1)
+      stopPulseAnimation(prev)
+    } else if (step === 6) {
+      setPulseAnimation(step)
+      if (prev < step) clickElementClose(prev)
+    } else if (step === 7) {
+      stopPulseAnimation(prev)
     }
   }
 
   handleNextClick() {
     this.setState(state => ({
+      prev: state.step,
       step: R.min(final, state.step + 1),
-    }))
+    }), this.doStepActions)
   }
 
   handlePreviousClick() {
     this.setState(state => ({
+      prev: state.step,
       step: R.max(1, state.step - 1),
-    }))
+    }), this.doStepActions)
+  }
+
+  handleCloseIntro() {
+    stopPulseAnimation(this.state.step)
+    this.props.dispatch(introDone())
   }
 
   render() {
@@ -155,7 +210,7 @@ class Onboarding extends React.Component {
         </button>
         <button
           type="button"
-          onClick={() => this.props.dispatch(introDone())}
+          onClick={this.handleCloseIntro}
           className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
         >skip
         </button>

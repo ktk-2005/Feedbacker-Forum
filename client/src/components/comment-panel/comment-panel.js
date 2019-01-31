@@ -109,7 +109,7 @@ class CommentPanel extends React.Component {
             type="button"
             className={css('close-button')}
             onClick={onClick}
-            data-introduction-step-close="3"
+            data-introduction-step-close="5"
           >
             <InlineSVG src={CloseIcon} />
           </button>
