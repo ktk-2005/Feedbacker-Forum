@@ -75,7 +75,9 @@ CREATE TABLE answers (
     question_id CHAR(8) NOT NULL,
     blob      TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (question_id) REFERENCES questions(id)
+    FOREIGN KEY (question_id) REFERENCES questions(id),
+
+    UNIQUE (user_id, question_id) ON CONFLICT ROLLBACK
 );
 
 

@@ -22,7 +22,7 @@ router.get('/', catchErrors(async (req, res) => {
     userID: r.user_id,
     containerID: r.container_id,
     type: r.type,
-    blob: r.blob,
+    blob: JSON.parse(r.blob),
   })))
 }))
 

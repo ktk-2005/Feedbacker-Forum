@@ -12,12 +12,12 @@ class Answer extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleTextSubmit = this.handleTextSubmit.bind(this)
     this.submit = this.submit.bind(this)
-    this.handleBinarySubmit = this.handleBinarySubmit.bind(this)
+    this.handleOptionSubmit = this.handleOptionSubmit.bind(this)
 
     this.state = {
       value: '',
       editText: false,
-      binary: { answered: false, answer: false },
+      option: { answered: false, answer: 0 },
       prevAnswer: {},
     }
   }
@@ -27,8 +27,8 @@ class Answer extends React.Component {
     prevAnswer = prevAnswer.length === 0 ? {} : prevAnswer[0]
     if (prevAnswer.blob && prevAnswer.blob.text) {
       this.setState({ value: prevAnswer.blob.text })
-    } else if (prevAnswer.blob && prevAnswer.blob.binary) {
-      this.setState({ binary: { answered: true, answer: prevAnswer.blob.binary.answer } })
+    } else if (prevAnswer.blob && prevAnswer.blob.option) {
+      this.setState({ option: { answered: true, answer: prevAnswer.blob.option } })
     }
     this.setState(state => ({
       ...state,
@@ -44,7 +44,7 @@ class Answer extends React.Component {
 
   async submit(blob) {
     const { prevAnswer } = this.state
-    if (prevAnswer && prevAnswer.blob && (prevAnswer.blob.text || prevAnswer.blob.binary)) {
+    if (prevAnswer && prevAnswer.blob && (prevAnswer.blob.text || prevAnswer.blob.option)) {
       await apiCall('PUT', `/answers/${this.props.question.id}`, {
         blob,
       })
@@ -68,16 +68,16 @@ class Answer extends React.Component {
       }))
   }
 
-  async handleBinarySubmit(answer) {
-    if (this.state.binary.answered && this.state.binary.answer === answer) {
-      // Do nothing
+  async handleOptionSubmit(answer) {
+    if (this.state.option.answered && this.state.option.answer === answer) {
+      // Do nothing, already answered and the answer hasn't changed
     } else {
-      const binary = { answered: true, answer }
-      const blob = { binary: { answer } }
+      const option = { answered: true, answer }
+      const blob = { option: answer }
       await this.submit(blob)
       this.setState(state => ({
-        binary,
-        prevAnswer: { ...state.prevAnswer, blob: { binary: { answer: binary.answer } } }
+        option,
+        prevAnswer: { ...state.prevAnswer, blob }
       }))
     }
   }
@@ -106,12 +106,13 @@ class Answer extends React.Component {
           }
         </div>
       )
-    } else if (this.props.question.type === 'binary') {
-      const { binary } = this.state
+    } else if (this.props.question.type === 'option') {
+      const { option } = this.state
       return (
-        <div className={css('binary')}>
-          <button type="button" className={css('binary-answer', binary.answered && binary.answer ? 'toggled' : '')} onClick={() => this.handleBinarySubmit(true)}>Yes</button>
-          <button type="button" className={css('binary-answer', binary.answered && !binary.answer ? 'toggled' : '')} onClick={() => this.handleBinarySubmit(false)}>No</button>
+        <div className={css('option')}>
+          {this.props.question.blob.options.map((value, index) =>
+            <button key={index} type="button" className={css('option-answer', option.answered && option.answer === index ? 'toggled' : '')} onClick={() => this.handleOptionSubmit(index)}>{value}</button>
+          )}
         </div>
       )
     } else {
