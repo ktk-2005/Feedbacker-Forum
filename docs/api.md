@@ -186,7 +186,7 @@ Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L66)
+### [POST /api/instances/new](../server/src/routes/instances.js#L65)
 
 Create a new container.
 
@@ -202,25 +202,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L42)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L41)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L107)
-
-Stop a running container.
-
-Example body
-```json
-{
- "name": "testapp-ab012"
-}
-```
-
-Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
-### [POST /api/instances/stop](../server/src/routes/instances.js#L121)
+### [POST /api/instances/start](../server/src/routes/instances.js#L120)
 
 Start a stopped container.
 
@@ -233,7 +221,20 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L135)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L106)
+
+Stop a running container.
+
+Example body
+```json
+{
+ "name": "testapp-ab012"
+}
+```
+
+Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
+
+### [POST /api/instances/delete](../server/src/routes/instances.js#L134)
 
 Delete a container
 

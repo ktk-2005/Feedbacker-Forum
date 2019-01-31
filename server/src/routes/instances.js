@@ -109,7 +109,7 @@ router.post('/stop', catchErrors(async (req, res) => {
   res.sendStatus(200)
 }))
 
-// @api POST /api/instances/stop
+// @api POST /api/instances/start
 // Start a stopped container.
 //
 // Example body @json {
