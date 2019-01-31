@@ -29,7 +29,7 @@ class Answer extends React.Component {
     prevAnswer = prevAnswer.length === 0 ? {} : prevAnswer[0]
     if (prevAnswer.blob && prevAnswer.blob.text) {
       this.setState({ value: prevAnswer.blob.text })
-    } else if (prevAnswer.blob && prevAnswer.blob.option) {
+    } else if (prevAnswer.blob && prevAnswer.blob.option !== undefined) {
       this.setState({ option: { answered: true, answer: prevAnswer.blob.option } })
     }
     this.setState(state => ({
@@ -46,14 +46,11 @@ class Answer extends React.Component {
 
   async submit(blob) {
     const { prevAnswer } = this.state
-    console.log(prevAnswer.blob)
-    // TODO: this if has to be refactored
     if (
-      prevAnswer && prevAnswer.blob
+      prevAnswer
+      && prevAnswer.blob
       && (prevAnswer.blob.text || prevAnswer.blob.option !== undefined)
     ) {
-      // TODO: remove logs
-      console.log('put')
       await apiCall('PUT', `/answers/${this.props.question.id}`, {
         blob,
       })
@@ -123,6 +120,7 @@ class Answer extends React.Component {
                   placeholder="Write answer..."
                 />
                 <input
+                  className={css('submit-text-answer')}
                   type="submit"
                   value={blob && blob.text ? 'Save' : 'Submit'}
                 />
@@ -134,23 +132,17 @@ class Answer extends React.Component {
     } else if (this.props.question.type === 'option') {
       const { option } = this.state
       return (
-        <div className={css('options')}>
-          {
-            this.props.question.blob.options.map(
-              // TODO: fix index
-              (value, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={
-                    css(option.answered && option.answer === index ? 'chosen' : '')
-                  }
-                  onClick={() => this.handleOptionSubmit(index)}
-                >
-                  { value }
-                </button>)
-            )
-          }
+        <div className={css('option')}>
+          {this.props.question.blob.options.map((value, index) => (
+            <button
+              key={value}
+              type="button"
+              className={css('chosen', option.answered && option.answer === index ? 'toggled' : '')}
+              onClick={() => this.handleOptionSubmit(index)}
+            >
+              {value}
+            </button>
+          ))}
         </div>
       )
     } else {
