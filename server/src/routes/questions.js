@@ -20,12 +20,23 @@ router.get('/', catchErrors(async (req, res) => {
     id: r.id,
     time: r.time,
     text: r.text,
-    userID: r.user_id,
-    containerID: r.container_id,
+    userId: r.user_id,
     type: r.type,
-    blob: r.blob,
+    ...JSON.parse(r.blob),
   })))
 }))
+
+function validateQuestion(question) {
+  if (question.text.match(/^\s*$/)) throw new HttpError(400, 'Empty question')
+  if (!['text', 'option', 'info'].includes(question.type)) throw new HttpError(400, 'Bad question type')
+}
+
+function extractBlob(question) {
+  const blob = { }
+  if (question.type === 'option')
+    blob.options = question.options
+  return blob
+}
 
 // @api POST /api/questions
 // adds question to database.
@@ -37,13 +48,16 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns `{ id }` of the created question
 router.post('/', catchErrors(async (req, res) => {
-  const { text, type, blob } = req.body || { }
+  const { text, type } = req.body || { }
   const { userId } = await reqUser(req)
   const { container, containerOwner } = await reqContainer(req)
 
   if (userId != containerOwner && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can create questions')
   }
+
+  validateQuestion(req.body)
+  const blob = extractBlob(req.body)
 
   await attempt(async () => {
     const id = uuid()
@@ -53,7 +67,7 @@ router.post('/', catchErrors(async (req, res) => {
       type: type || 'text',
       userId,
       container,
-      blob: JSON.stringify(blob || { }),
+      blob: JSON.stringify(blob),
     })
     res.json({ id })
   })
@@ -78,7 +92,7 @@ router.delete('/:id', catchErrors(async (req, res) => {
 // @api PUT /api/questions/:id
 // Update a previously posted question
 router.put('/:id', catchErrors(async (req, res) => {
-  const { text, type, blob } = req.body || { }
+  const { text, type } = req.body || { }
   const { id } = req.params
   const { userId } = await reqUser(req)
   const { container, containerOwner } = await reqContainer(req)
@@ -87,11 +101,14 @@ router.put('/:id', catchErrors(async (req, res) => {
     throw new HttpError(403, 'Only instance owner can edit questions')
   }
 
+  validateQuestion(req.body)
+  const blob = extractBlob(req.body)
+
   await editQuestion({
     id,
-    text: text || '',
-    type: type || 'text',
-    blob: JSON.stringify(blob || { }),
+    text: text,
+    type: type,
+    blob: JSON.stringify(blob),
   })
 
   res.json({ id })

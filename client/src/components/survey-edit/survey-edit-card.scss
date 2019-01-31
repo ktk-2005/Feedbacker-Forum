@@ -36,10 +36,19 @@
     text-decoration: underline;
     cursor: pointer;
     user-select: none;
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
   }
 
   .display-area {
     padding-left: 8px;
+  }
+
+  &.edit-commit {
+    background-color: #eee;
   }
 
   // (temp) Thanks https://codepen.io/zachariab/pen/wkrbc
