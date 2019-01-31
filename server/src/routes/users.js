@@ -1,5 +1,5 @@
 import express from 'express'
-import { uuid, attempt } from './helpers'
+import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { addUser } from '../database'
 import { catchErrors } from '../handlers'
 
@@ -33,5 +33,20 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
+// @api GET /api/users/role
+// Retrieve the role of the current user in the container.
+// Returns either `"dev"` or `"user"`
+//
+// Example body @json {
+//   "role": "user"
+// }
+router.get('/role', catchErrors(async (req, res) => {
+  const { userId } = await reqUser(req)
+  const { owner } = await reqContainer(req)
+
+  res.json({
+    role: userId === owner ? 'dev' : 'user',
+  })
+}))
 
 module.exports = router
