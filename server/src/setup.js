@@ -104,7 +104,7 @@ function overrideConfigFromEnv() {
 
   const databaseUrl = process.env.DATABASE_URL
   if (databaseUrl) {
-    config.databaseUrl = process.env.DATABASE_URL
+    config.databaseUrl = databaseUrl
   }
 
   const dockerUrl = process.env.DOCKER_HOST_URL
