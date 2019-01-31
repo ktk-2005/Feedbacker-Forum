@@ -103,16 +103,27 @@ export function setupPersist(loadPersist) {
 
   persistWindow = iframe.contentWindow || (iframe.contentDocument && iframe.contentDocument.window)
 
+  let allDataLoaded = false
+
   const timeout = window.setTimeout(() => {
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     loadPersist(state, true)
   }, 3000)
 
   iframe.addEventListener('error', () => {
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     loadPersist(state, true)
     window.clearTimeout(timeout)
   })
 
   window.addEventListener('message', (event) => {
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     if (event.source !== persistWindow) return
     const msg = event.data
     if (typeof msg !== 'object') return
