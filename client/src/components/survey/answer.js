@@ -1,7 +1,9 @@
 import React from 'react'
+// Helpers
 import classNames from 'classnames/bind'
-import styles from './survey.scss'
 import apiCall from '../../api-call'
+// Styles
+import styles from './survey.scss'
 
 const css = classNames.bind(styles)
 
@@ -45,7 +47,12 @@ class Answer extends React.Component {
   async submit(blob) {
     const { prevAnswer } = this.state
     console.log(prevAnswer.blob)
-    if (prevAnswer && prevAnswer.blob && (prevAnswer.blob.text || prevAnswer.blob.option !== undefined)) {
+    // TODO: this if has to be refactored
+    if (
+      prevAnswer && prevAnswer.blob
+      && (prevAnswer.blob.text || prevAnswer.blob.option !== undefined)
+    ) {
+      // TODO: remove logs
       console.log('put')
       await apiCall('PUT', `/answers/${this.props.question.id}`, {
         blob,
@@ -80,7 +87,7 @@ class Answer extends React.Component {
       await this.submit(blob)
       this.setState(state => ({
         option,
-        prevAnswer: { ...state.prevAnswer, blob }
+        prevAnswer: { ...state.prevAnswer, blob },
       }))
     }
   }
@@ -88,37 +95,62 @@ class Answer extends React.Component {
   render() {
     if (this.props.question.type === 'text') {
       const { blob } = this.state.prevAnswer
+      const hasAnswer = blob && blob.text && !this.state.editText
       return (
-        <div>
-          {blob && blob.text && !this.state.editText
-            ? (
-              <div>
-                <p>{this.state.value}</p>
-                <button type="button" onClick={() => this.setState({ editText: true })}>Edit answer</button>
+        <>
+          {
+            hasAnswer ? (
+              <div className={css('answer')}>
+                <button
+                  type="button"
+                  className={css('edit-container')}
+                  onClick={() => this.setState({ editText: true })}
+                  data-answer-text={this.state.value}
+                >
+                  <p>
+                    { this.state.value }
+                  </p>
+                </button>
               </div>
-            )
-            : (
-              <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
+            ) : (
+              <form
+                className={css('answer-form')}
+                onSubmit={this.handleTextSubmit}
+              >
                 <textarea
                   value={this.state.value}
                   onChange={this.handleChange}
                   placeholder="Write answer..."
                 />
                 <input
-                  className={css('submit-text-answer')}
                   type="submit"
                   value={blob && blob.text ? 'Save' : 'Submit'}
                 />
               </form>
             )
           }
-        </div>
+        </>
       )
     } else if (this.props.question.type === 'option') {
       const { option } = this.state
       return (
-        <div className={css('option')}>
-          {this.props.question.blob.options.map((value, index) => <button key={index} type="button" className={css('option-answer', option.answered && option.answer === index ? 'toggled' : '')} onClick={() => this.handleOptionSubmit(index)}>{value}</button>)}
+        <div className={css('options')}>
+          {
+            this.props.question.blob.options.map(
+              // TODO: fix index
+              (value, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={
+                    css(option.answered && option.answer === index ? 'chosen' : '')
+                  }
+                  onClick={() => this.handleOptionSubmit(index)}
+                >
+                  { value }
+                </button>)
+            )
+          }
         </div>
       )
     } else {

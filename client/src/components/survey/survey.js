@@ -1,8 +1,11 @@
 import React from 'react'
+// Helpers
+import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
+// Components
 import Question from './question'
 import Answer from './answer'
-import classNames from 'classnames/bind'
+// Styles
 import styles from './survey.scss'
 
 const css = classNames.bind(styles)
@@ -44,14 +47,24 @@ class Survey extends React.Component {
 
   buttons() {
     const { questions, currentIndex } = this.state
+    const hasNext = currentIndex < questions.length - 1
+    const hasPrevious = currentIndex > 0
     return (
-      <div>
-        {currentIndex > 0 ?
-          <button className={css('previous-question')} onClick={this.previousQuestion}>PREVIOUS</button> :
-          <div></div>}
-        {currentIndex < questions.length - 1 ?
-          <button className={css('next-question')} onClick={this.nextQuestion}>NEXT</button> :
-          <div></div>}
+      <div className={css('button-container')}>
+        {
+          hasPrevious ? (
+            <button type="button" className={css('previous-question')} onClick={this.previousQuestion}>
+              Previous
+            </button>
+          ) : null
+        }
+        {
+          hasNext ? (
+            <button type="button" className={css('next-question')} onClick={this.nextQuestion}>
+              Next
+            </button>
+          ) : null
+        }
       </div>
     )
   }
@@ -59,14 +72,10 @@ class Survey extends React.Component {
   render() {
     const { questions, currentIndex } = this.state
     if (this.state.questions.length < 1) {
-      return (
-        <div>
-          <h1>No survey available</h1>
-        </div>
-      )
+      return <h3>No survey available</h3>
     } else {
       return (
-        <div>
+        <div className={css('survey-container')}>
           <Question
             question={questions[currentIndex]}
             current={currentIndex}
@@ -75,7 +84,7 @@ class Survey extends React.Component {
             key={currentIndex}
             question={questions[currentIndex]}
           />
-          {this.buttons()}
+          { this.buttons() }
         </div>
       )
     }

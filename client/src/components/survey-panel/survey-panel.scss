@@ -1,8 +1,6 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
+
 @import '../../scss/atoms/button';
-@import '../../scss/typography';
 
 .panel-container {
   @include display-and-animate();
@@ -15,8 +13,8 @@
   position: fixed;
   display: flex;
   flex-flow: column;
-  width: 30vw;
-  height: 90vh;
+  width: 500px;
+  max-width: 80vw;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
   box-shadow: 0 2px 10px $palette-shadow-light;
