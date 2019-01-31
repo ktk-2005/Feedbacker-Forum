@@ -29,34 +29,22 @@ class CommentPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: '',
       currentThread: '',
       isHidden: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
-    this.writeNewComment = this.writeNewComment.bind(this)
-    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
-  handleChange(event) {
-    this.setState({ value: event.target.value })
-  }
-
   updateCurrentThread(threadId) {
     this.setState({ currentThread: threadId })
   }
 
-  writeNewComment(event) {
-    this.handleChange(event)
-    this.updateCurrentThread('')
-  }
-
-  async handleSubmit(event) {
+  async handleSubmit(event, value, threadId) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
 
@@ -74,13 +62,12 @@ class CommentPanel extends React.Component {
     }
 
     await apiCall('POST', '/comments', {
-      text: this.state.value,
+      text: value,
       blob: getBlob(),
-      threadId: this.state.currentThread || null,
+      threadId: threadId || null,
     })
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
-    this.setState({ value: '' })
     await this.fetchComments()
   }
 
@@ -112,6 +99,12 @@ class CommentPanel extends React.Component {
       }
     })
     const threadArray = groupByThread(Object.values(this.props.comments))
+    const sortbyTime = R.sortBy(([id, comments]) => R.reduce(
+      R.minBy(comment => comment.time),
+      { time: '9999-99-99 99:99:99' },
+      comments
+    ).time)
+    const sortedThreads = sortbyTime(R.toPairs(threadArray))
     return (
       <div className={css('thread-container')} id="thread--container">
         {
@@ -121,12 +114,12 @@ class CommentPanel extends React.Component {
                 key={id}
                 comments={comments}
                 id={id}
-                onSubmit={this.handleSubmit}
+                handleSubmit={this.handleSubmit}
                 onChange={this.handleChange}
                 updateCurrentThread={this.updateCurrentThread}
                 currentThread={this.state.currentThread}
               />),
-            R.toPairs(threadArray)
+            sortedThreads
           )
         }
       </div>
@@ -149,9 +142,8 @@ class CommentPanel extends React.Component {
         <div className={css('panel-body')}>
           { this.threadContainer() }
           <SubmitField
-            value={this.state.currentThread ? '' : this.state.value}
             onSubmit={this.handleSubmit}
-            onChange={this.writeNewComment}
+            threadId=""
           />
 
         </div>

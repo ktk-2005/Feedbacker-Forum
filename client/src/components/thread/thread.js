@@ -1,4 +1,5 @@
 import React from 'react'
+import * as R from 'ramda'
 
 import classNames from 'classnames/bind'
 
@@ -13,14 +14,8 @@ class Thread extends React.Component {
   constructor(props) {
     super(props)
 
-    this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.expandedThread = this.expandedThread.bind(this)
-  }
-
-  handleChange(event) {
-    this.props.onChange(event)
-    this.props.updateCurrentThread(this.props.id)
   }
 
   handleClick() {
@@ -37,22 +32,24 @@ class Thread extends React.Component {
   expandedThread() {
     if (this.props.currentThread !== this.props.id) { return }
     const threadComments = this.props.comments.slice(1)
+    const sortByTime = R.sortBy(comment => comment.time)
+    const sortedComments = sortByTime(threadComments)
     return (
       <>
-        {threadComments.map(
+        {sortedComments.map(
           comment => <Comment key={comment.id} comment={comment} id={comment.id} />,
         )}
         <SubmitField
-          value={this.props.value}
-          onSubmit={this.props.onSubmit}
-          onChange={this.handleChange}
+          handleSubmit={this.props.handleSubmit}
+          threadId={this.props.id}
         />
       </>
     )
   }
 
   render() {
-    const comment = this.props.comments[0]
+    const sortByTime = R.sortBy(comment => comment.time)
+    const comment = sortByTime(this.props.comments)[0]
     return (
       <div className={css('thread')}>
         <Comment key={comment.id} comment={comment} id={comment.id} />
