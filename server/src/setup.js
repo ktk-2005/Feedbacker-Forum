@@ -101,7 +101,11 @@ function overrideConfigFromEnv() {
   if (useTestData) {
     config.useTestData = useTestData !== '0'
   }
-  config.databaseUrl = process.env.DATABASE_URL
+
+  const databaseUrl = process.env.DATABASE_URL
+  if (databaseUrl) {
+    config.databaseUrl = process.env.DATABASE_URL
+  }
 
   const dockerUrl = process.env.DOCKER_HOST_URL
   if (dockerUrl) {
@@ -158,4 +162,3 @@ export async function startup() {
 }
 
 startup()
-
