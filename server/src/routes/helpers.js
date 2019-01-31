@@ -26,17 +26,27 @@ export function uuid(length) {
 }
 
 // Retry a function multiple times until it succeeds
-export async function attempt(fn, maxTries = 5) {
+export async function attempt(fn, maxTries = 20) {
+  function printFailures(failures) {
+    if (failures > 0) {
+      logger.error(`Failed ${failures}/${maxTries - 1} attempts ${fn.name ? `of ${fn.name}` : ''}`)
+    }
+  }
+
   // Do N attempts
+  let failures = 0
   for (let i = 0; i < maxTries - 1; i++) {
     try {
       const result = await fn()
+      printFailures()
       return result
     } catch (error) {
-      logger.error(`Failed on attempt #${i + 1}/${maxTries} ${fn.name ? `of ${fn.name}` : ''}`
-      + "(stack trace of the last attempt won't be omitted)")
+      // nop
+      failures += 1
     }
   }
+
+  printFailures(failures)
 
   // Do last try without try-catch
   return fn()

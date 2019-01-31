@@ -12,7 +12,7 @@ import {
 import { verifyUser, resolveContainer } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
-import HttpError from '../errors'
+import { HttpError } from '../errors'
 import logger from '../logger'
 
 const router = express.Router()
@@ -31,7 +31,6 @@ router.get('/', catchErrors(async (req, res) => {
       containers.push(...await getRunningContainersByUser([userId]))
     } catch (error) { /* ignore */ }
   }
-  // console.log(containers)
   res.send(containers)
 }))
 
