@@ -35,7 +35,7 @@
     "class-methods-use-this": "off",
     "no-continue": "off",
     "object-curly-newline": "off",
-    "no-else-return": "off",
+    "no-else-return": "off"
   },
 
   "globals": {
