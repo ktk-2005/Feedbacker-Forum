@@ -37,7 +37,7 @@ class SubmitField extends React.Component {
         <textarea
           value={this.state.value}
           onChange={this.handleChange}
-          placeholder="Write comment..."
+          placeholder={this.props.threadId ? 'Reply to thread...' : 'Write comment...'}
         />
         <input className={css('submit-comment')} type="submit" value="Comment" />
       </form>
