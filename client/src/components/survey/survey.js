@@ -72,6 +72,7 @@ class Survey extends React.Component {
   render() {
     const { questions, currentIndex } = this.state
     if (this.state.questions.length < 1) {
+      // TODO: unnecessary state as should not be openable if empty
       return <h3>No survey available</h3>
     } else {
       return (
