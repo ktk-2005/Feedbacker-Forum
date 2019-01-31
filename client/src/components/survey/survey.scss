@@ -90,6 +90,10 @@ form.answer-form {
   justify-content: space-between;
   margin-top: $spacer;
 
+  .answer-form + & {
+    margin-top: $baseline;
+  }
+
   button {
     @extend %anchor-button;
 
