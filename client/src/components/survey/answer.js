@@ -44,11 +44,14 @@ class Answer extends React.Component {
 
   async submit(blob) {
     const { prevAnswer } = this.state
-    if (prevAnswer && prevAnswer.blob && (prevAnswer.blob.text || prevAnswer.blob.option)) {
+    console.log(prevAnswer.blob)
+    if (prevAnswer && prevAnswer.blob && (prevAnswer.blob.text || prevAnswer.blob.option !== undefined)) {
+      console.log('put')
       await apiCall('PUT', `/answers/${this.props.question.id}`, {
         blob,
       })
     } else {
+      console.log('post')
       await apiCall('POST', '/answers', {
         questionId: this.props.question.id,
         blob,
@@ -62,10 +65,10 @@ class Answer extends React.Component {
     const blob = { text: this.state.value }
     await this.submit(blob)
     this.setState(state => ({
-       // value: '',
-       editText: false,
-       prevAnswer: { ...state.prevAnswer, blob },
-      }))
+      // value: '',
+      editText: false,
+      prevAnswer: { ...state.prevAnswer, blob },
+    }))
   }
 
   async handleOptionSubmit(answer) {
@@ -84,25 +87,30 @@ class Answer extends React.Component {
 
   render() {
     if (this.props.question.type === 'text') {
-      const blob = this.state.prevAnswer.blob
+      const { blob } = this.state.prevAnswer
       return (
         <div>
-          {blob && blob.text && !this.state.editText ?
-            <div>
-              <p>{this.state.value}</p>
-              <button onClick={() => this.setState({ editText: true })}>Edit answer</button>
-            </div> :
-            <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
-              <textarea
-                value={this.state.value}
-                onChange={this.handleChange}
-                placeholder="Write answer..."
-              />
-              <input
-                className={css('submit-text-answer')}
-                type="submit"
-                value={blob && blob.text ? "Save" : "Submit"} />
-            </form>
+          {blob && blob.text && !this.state.editText
+            ? (
+              <div>
+                <p>{this.state.value}</p>
+                <button type="button" onClick={() => this.setState({ editText: true })}>Edit answer</button>
+              </div>
+            )
+            : (
+              <form className={css('answer-text-form')} onSubmit={this.handleTextSubmit}>
+                <textarea
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  placeholder="Write answer..."
+                />
+                <input
+                  className={css('submit-text-answer')}
+                  type="submit"
+                  value={blob && blob.text ? 'Save' : 'Submit'}
+                />
+              </form>
+            )
           }
         </div>
       )
@@ -110,16 +118,12 @@ class Answer extends React.Component {
       const { option } = this.state
       return (
         <div className={css('option')}>
-          {this.props.question.blob.options.map((value, index) =>
-            <button key={index} type="button" className={css('option-answer', option.answered && option.answer === index ? 'toggled' : '')} onClick={() => this.handleOptionSubmit(index)}>{value}</button>
-          )}
+          {this.props.question.blob.options.map((value, index) => <button key={index} type="button" className={css('option-answer', option.answered && option.answer === index ? 'toggled' : '')} onClick={() => this.handleOptionSubmit(index)}>{value}</button>)}
         </div>
       )
     } else {
       return (
-        <div>
-
-        </div>
+        <div />
       )
     }
   }
