@@ -35,6 +35,7 @@ const SortableSurveyEditList = SortableContainer(({
   onEditChange,
   edit,
   openId,
+  busy,
 }) => {
   const openQuestion = openId ? questions.find(question => question.id === openId) : null
   const openIndex = questions.indexOf(openQuestion)
@@ -54,6 +55,8 @@ const SortableSurveyEditList = SortableContainer(({
           onEditEnd={badEditFunction}
           onEditChange={badEditFunction}
           opened={true}
+          disabled={busy}
+          busy={busy}
         />
       ) : (
         questions.map((question, index) => (
@@ -69,6 +72,8 @@ const SortableSurveyEditList = SortableContainer(({
             onEditChange={onEditChange}
             edit={edit}
             opened={false}
+            disabled={busy}
+            busy={busy}
           />
         ))
       )
@@ -109,7 +114,7 @@ export default class SurveyEditContainer extends React.Component {
 
   isBusy() {
     const { edit, pendingDelete } = this.state
-    return edit.commit || this.pendingDelete
+    return !!(edit.id || this.pendingDelete)
   }
 
   openCard(id) {
@@ -128,6 +133,7 @@ export default class SurveyEditContainer extends React.Component {
 
   editBegin(id) {
     if (this.isBusy()) return
+
     this.setState({ edit: { id } })
   }
 
@@ -207,7 +213,7 @@ export default class SurveyEditContainer extends React.Component {
   render() {
     const { openId, edit, questions, pendingDelete } = this.state
 
-    const disableAdd = !R.isNil(edit.id)
+    const busy = this.isBusy()
 
     return (
       <>
@@ -222,6 +228,7 @@ export default class SurveyEditContainer extends React.Component {
             onEditChange={this.editChange}
             edit={edit}
             openId={openId}
+            busy={busy}
 
             useDragHandle
             lockAxis="y"
@@ -232,11 +239,13 @@ export default class SurveyEditContainer extends React.Component {
           <h3>No questions yet</h3>
         )}
 
-        <div className={css('add-button-container')}>
-          <button disabled={disableAdd} className={css('add-button')} type="button" onClick={this.addTextQuestion}>Add text question</button>
-          <button disabled={disableAdd} className={css('add-button')} type="button" onClick={this.addOptionQuestion}>Add option question</button>
-          <button disabled={disableAdd} className={css('add-button')} type="button" onClick={this.addInfoQuestion}>Add explanation</button>
-        </div>
+        {!openId ? (
+          <div className={css('add-button-container')}>
+            <button disabled={busy} className={css('add-button')} type="button" onClick={this.addTextQuestion}>Add text question</button>
+            <button disabled={busy} className={css('add-button')} type="button" onClick={this.addOptionQuestion}>Add option question</button>
+            <button disabled={busy} className={css('add-button')} type="button" onClick={this.addInfoQuestion}>Add explanation</button>
+          </div>
+        ) : null}
 
         <ReactModal
           isOpen={!R.isNil(pendingDelete)}

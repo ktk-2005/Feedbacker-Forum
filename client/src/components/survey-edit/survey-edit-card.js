@@ -138,7 +138,7 @@ class SurveyEditCard extends React.Component {
   }
 
   render() {
-    const { question: originalQuestion, edit, onEditChange, opened } = this.props
+    const { question: originalQuestion, edit, onEditChange, opened, busy } = this.props
 
     const edited = edit.id === originalQuestion.id
     const question = edited ? R.mergeDeepRight(originalQuestion, edit) : originalQuestion
@@ -188,8 +188,8 @@ class SurveyEditCard extends React.Component {
               <Handle />
               <h4>{question.text}</h4>
               <div className={css('filler')} />
-              <button type="button" onClick={this.doEditBegin} >E</button>
-              <button type="button" onClick={this.doDelete}>X</button>
+              <button disabled={busy} type="button" onClick={this.doEditBegin} >E</button>
+              <button disabled={busy} type="button" onClick={this.doDelete}>X</button>
             </>
           ) : (
             <>
