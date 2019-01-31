@@ -166,6 +166,18 @@ Example response
 }
 ```
 
+### [GET /api/users/role](../server/src/routes/users.js#L43)
+
+Retrieve the role of the current user in the container.
+Returns either `"dev"` or `"user"`
+
+Example body
+```json
+{
+  "role": "user"
+}
+```
+
 ## Instances
 
 ### [GET /api/instances](../server/src/routes/instances.js#L25)
