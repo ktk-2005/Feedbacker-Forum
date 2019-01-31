@@ -41,11 +41,11 @@ router.post('/', catchErrors(async (req, res) => {
 //   "role": "user"
 // }
 router.get('/role', catchErrors(async (req, res) => {
-  const { userId } = await reqUser(req)
+  const { users } = await reqUser(req)
   const { owner } = await reqContainer(req)
 
   res.json({
-    role: userId === owner ? 'dev' : 'user',
+    role: users.hasOwnProperty(owner) ? 'dev' : 'user',
   })
 }))
 
