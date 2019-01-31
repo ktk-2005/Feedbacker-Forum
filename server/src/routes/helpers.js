@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid/v4'
 import { args } from '../globals'
-import { findContainerIdBySubdomain, verifyUser, resolveContainer } from '../database'
+import { verifyUser, resolveContainer } from '../database'
 import HttpError from '../http-error'
 
 function makeUuid(length = 8) {

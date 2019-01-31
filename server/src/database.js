@@ -102,5 +102,3 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
-
-export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }
