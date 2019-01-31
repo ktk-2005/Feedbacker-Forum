@@ -35,6 +35,8 @@ class CommentPanel extends React.Component {
       isHidden: false,
     }
 
+    this.updateCurrentThread = this.updateCurrentThread.bind(this)
+    this.writeNewComment = this.writeNewComment.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -42,11 +44,17 @@ class CommentPanel extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
-  handleChange(threadId, event) {
-    this.setState({
-      value: event.target.value,
-      currentThread: threadId || '',
-    })
+  handleChange(event) {
+    this.setState({ value: event.target.value })
+  }
+
+  updateCurrentThread(threadId) {
+    this.setState({ currentThread: threadId })
+  }
+
+  writeNewComment(event) {
+    this.handleChange(event)
+    this.updateCurrentThread('')
   }
 
   async handleSubmit(event) {
@@ -116,6 +124,8 @@ class CommentPanel extends React.Component {
                 id={id}
                 onSubmit={this.handleSubmit}
                 onChange={this.handleChange}
+                updateCurrentThread={this.updateCurrentThread}
+                currentThread={this.state.currentThread}
               />),
             R.toPairs(threadArray)
           )
@@ -142,7 +152,7 @@ class CommentPanel extends React.Component {
           <SubmitField
             value={this.state.currentThread ? '' : this.state.value}
             onSubmit={this.handleSubmit}
-            onChange={event => this.handleChange('', event)}
+            onChange={this.writeNewComment}
           />
         </div>
       </div>

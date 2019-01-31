@@ -12,10 +12,6 @@ const css = classNames.bind(styles)
 class Thread extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      isExpanded: false,
-      buttonText: this.props.comments.length > 1 ? 'Expand' : 'Reply',
-    }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -23,19 +19,23 @@ class Thread extends React.Component {
   }
 
   handleChange(event) {
-    this.props.onChange(this.props.id, event)
+    this.props.onChange(event)
+    this.props.updateCurrentThread(this.props.id)
   }
 
   handleClick() {
+    const isOpen = (this.props.currentThread === this.props.id)
+    this.props.updateCurrentThread(isOpen ? '' : this.props.id)
+  }
+
+  buttonText() {
     const openText = this.props.comments.length > 1 ? 'Expand' : 'Reply'
-    this.setState(prevState => ({
-      isExpanded: !prevState.isExpanded,
-      buttonText: prevState.isExpanded ? openText : 'Collapse',
-    }))
+    const isOpen = this.props.currentThread !== this.props.id
+    return isOpen ? openText : 'Collapse'
   }
 
   expandedThread() {
-    if (!this.state.isExpanded) { return }
+    if (this.props.currentThread !== this.props.id) { return }
     const threadComments = this.props.comments.slice(1)
     return (
       <>
@@ -53,7 +53,6 @@ class Thread extends React.Component {
 
   render() {
     const comment = this.props.comments[0]
-    const { buttonText } = this.state
     return (
       <div className={css('thread')}>
         <Comment key={comment.id} comment={comment} id={comment.id} />
@@ -62,7 +61,7 @@ class Thread extends React.Component {
             type="button"
             onClick={this.handleClick}
           >
-            { buttonText }
+            { this.buttonText() }
           </button>
         </div>
         <aside className={css('sub-thread')}>
