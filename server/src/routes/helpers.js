@@ -1,7 +1,8 @@
 import uuidv4 from 'uuid/v4'
 import { args } from '../globals'
+import { HttpError } from '../errors'
+import logger from '../logger'
 import { verifyUser, resolveContainer } from '../database'
-import HttpError from '../http-error'
 
 function makeUuid(length = 8) {
   return uuidv4().split('-').join('').slice(0, length)
@@ -26,15 +27,26 @@ export function uuid(length) {
 
 // Retry a function multiple times until it succeeds
 export async function attempt(fn, maxTries = 20) {
+  function printFailures(failures) {
+    if (failures > 0) {
+      logger.error(`Failed ${failures}/${maxTries - 1} attempts ${fn.name ? `of ${fn.name}` : ''}`)
+    }
+  }
+
   // Do N attempts
+  let failures = 0
   for (let i = 0; i < maxTries - 1; i++) {
     try {
       const result = await fn()
+      printFailures()
       return result
     } catch (error) {
-      // Nop
+      // nop
+      failures += 1
     }
   }
+
+  printFailures(failures)
 
   // Do last try without try-catch
   return fn()
@@ -84,4 +96,3 @@ export async function reqUser(req) {
     secret: verifiedUsers[keys[0]],
   }
 }
-

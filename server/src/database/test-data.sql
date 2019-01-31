@@ -22,4 +22,3 @@ INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('5eaafea3',
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('fb05d1a5', '2018-11-14 16:59:32', 'up', 'da776df3', '1bd8052b');
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06aee', '2018-11-14 23:20:11', 'down', 'da776df3', '1bd8052b');
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('cba06dw', '2018-11-14 23:20:11', 'fire', 'da776df3', '1bd8052b');
-
