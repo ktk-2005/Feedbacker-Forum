@@ -132,12 +132,12 @@ class Answer extends React.Component {
     } else if (this.props.question.type === 'option') {
       const { option } = this.state
       return (
-        <div className={css('option')}>
+        <div className={css('options')}>
           {this.props.question.blob.options.map((value, index) => (
             <button
               key={value}
               type="button"
-              className={css('chosen', option.answered && option.answer === index ? 'toggled' : '')}
+              className={css('option', option.answered && option.answer === index ? 'chosen' : '')}
               onClick={() => this.handleOptionSubmit(index)}
             >
               {value}
