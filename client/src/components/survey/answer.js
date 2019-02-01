@@ -55,7 +55,6 @@ class Answer extends React.Component {
         blob,
       })
     } else {
-      console.log('post')
       await apiCall('POST', '/answers', {
         questionId: this.props.question.id,
         blob,
@@ -66,13 +65,15 @@ class Answer extends React.Component {
   async handleTextSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    const blob = { text: this.state.value }
-    await this.submit(blob)
-    this.setState(state => ({
-      // value: '',
-      editText: false,
-      prevAnswer: { ...state.prevAnswer, blob },
-    }))
+    if (/\S/.test(this.state.value)) {
+      const blob = { text: this.state.value }
+      await this.submit(blob)
+      this.setState(state => ({
+        // value: '',
+        editText: false,
+        prevAnswer: { ...state.prevAnswer, blob },
+      }))
+    }
   }
 
   async handleOptionSubmit(answer) {
