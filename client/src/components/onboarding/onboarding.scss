@@ -96,7 +96,7 @@
 
 [animation-pulse="true"] {
   animation: pulse 1.5s infinite;
-  box-shadow: 0 0 0 0 currentColor;
+  box-shadow: 0 0 0 0 $palette-accent;
 }
 
 @keyframes pulse {
@@ -105,10 +105,10 @@
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 50px rgba(#5a99d4, 0);
+    box-shadow: 0 0 0 3em rgba($palette-accent, 0);
   }
   100% {
     transform: scale(.9);
-    box-shadow: 0 0 0 0 rgba(#5a99d4, 0);
+    box-shadow: 0 0 0 0 rgba($palette-accent, 0);
   }
 }
