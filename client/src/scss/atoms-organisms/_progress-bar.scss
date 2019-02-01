@@ -1,11 +1,12 @@
 @import '../../scss/compulsory';
 
 .progress-bar {
-  background: #DEE2E3;
-  border-radius: 99px;
-  width: 200px;
-  height: 5px;
-  position: relative;overflow: hidden;
+  position: relative;
+  height: $baseline;
+  width: 100%;
+  border-radius: $border-radius-default;
+  background: $palette-light;
+  overflow: hidden;
 
   &:before {
     content: '';
@@ -22,5 +23,5 @@ $start: 1;
 $end: 100;
 
 @for $i from $start through $end {
-  .progress-bar-#{$i}:before { width: $i * 1% }
+  .progress-bar[data-progress-percents="#{$i}"]:before { width: $i * 1% }
 }

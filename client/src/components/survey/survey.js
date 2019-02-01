@@ -77,6 +77,9 @@ class Survey extends React.Component {
     } else {
       return (
         <div className={css('survey-container')}>
+          <div className={css('progress-container')}>
+            <div className={css('progress-bar')} data-progress-percents="23" />
+          </div>
           <Question
             question={questions[currentIndex]}
             current={currentIndex}

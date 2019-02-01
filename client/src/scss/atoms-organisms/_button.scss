@@ -51,7 +51,8 @@
     }
 
     &:disabled {
-      background: salmon;
+      background: $palette-light;
+      cursor: not-allowed;
     }
   }
 }
