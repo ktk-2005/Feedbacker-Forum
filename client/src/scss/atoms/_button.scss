@@ -49,6 +49,10 @@
         transition: $transition-default-all;
       }
     }
+
+    &:disabled {
+      background: salmon;
+    }
   }
 }
 

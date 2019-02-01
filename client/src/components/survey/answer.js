@@ -97,6 +97,7 @@ class Answer extends React.Component {
     if (this.props.question.type === 'text') {
       const { blob } = this.state.prevAnswer
       const hasAnswer = blob && blob.text && !this.state.editText
+      const isDisabled = !/\S/.test(this.state.value)
       return (
         <>
           {
@@ -126,6 +127,7 @@ class Answer extends React.Component {
                 <input
                   className={css('submit-text-answer')}
                   type="submit"
+                  disabled={isDisabled}
                   value={blob && blob.text ? 'Save' : 'Submit'}
                 />
               </form>
