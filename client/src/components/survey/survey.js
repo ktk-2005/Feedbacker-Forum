@@ -72,7 +72,9 @@ class Survey extends React.Component {
   render() {
     const { questions, currentIndex } = this.state
     if (this.state.questions.length < 1) {
-      // TODO: unnecessary state as should not be openable if empty
+      // TODO: 1. unnecessary state as should not be openable if empty
+      // TODO: 2. make progress bar dynamic (real number)
+      // TODO: 3. make progress bar hover to show tooltip with percent progress and steps
       return <h3>No survey available</h3>
     } else {
       return (
