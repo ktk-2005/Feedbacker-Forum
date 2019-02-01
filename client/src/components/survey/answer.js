@@ -73,6 +73,9 @@ class Answer extends React.Component {
         editText: false,
         prevAnswer: { ...state.prevAnswer, blob },
       }))
+    } else {
+      const { prevAnswer } = this.state
+      this.setState({ value: prevAnswer && prevAnswer.blob && prevAnswer.blob.text ? prevAnswer.blob.text : '' })
     }
   }
 
