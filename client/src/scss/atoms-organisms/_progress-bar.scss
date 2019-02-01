@@ -1,0 +1,26 @@
+@import '../../scss/compulsory';
+
+.progress-bar {
+  background: #DEE2E3;
+  border-radius: 99px;
+  width: 200px;
+  height: 5px;
+  position: relative;overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    height: $baseline;
+    width: 0;
+    background: $palette-accent;
+    border-radius: $border-radius-default;
+    transition: $transition-default-all;
+  }
+}
+
+$start: 1;
+$end: 100;
+
+@for $i from $start through $end {
+  .progress-bar-#{$i}:before { width: $i * 1% }
+}

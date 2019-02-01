@@ -1,7 +1,8 @@
 @import '../../scss/compulsory';
 // Atoms
-@import '../../scss/atoms/button';
-@import '../../scss/atoms/forms';
+@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms-organisms/forms';
+@import '../../scss/atoms-organisms/progress-bar';
 
 @import '../reactions/reactions';
 
