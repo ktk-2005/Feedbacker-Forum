@@ -74,49 +74,64 @@ class Onboarding extends React.Component {
       return (
         makeContent(
           'Welcome!',
-          'Welcome to use the Feedbacker Forum app.This tutorial will guide you through the basic functions of the app.'
+          `
+            Welcome to use the Feedbacker Forum app. 
+            This tutorial will guide you through the basic functions of the app.
+          `
         )
       )
     } else if (step === 2) {
       return (
         makeContent(
           'Survey Panel',
-          'This button opens the survey panel.'
+          `
+            This button opens the survey panel.
+          `
         )
       )
     } else if (step === 3) {
       return (
         makeContent(
           'Survey Panel',
-          'This is the survey panel where you can aswer questions.'
+          `
+            This is the survey panel where you can aswer questions.
+          `
         )
       )
     } else if (step === 4) {
       return (
         makeContent(
           'Commenting',
-          'This button opens the commenting panel.'
+          `
+            This button opens the commenting panel.
+          `
         )
       )
     } else if (step === 5) {
       return (
         makeContent(
           'Commenting',
-          'You can leave free form comments and view other people\'s comments here.'
+          `
+            You can leave free form comments and view other people's comments here.
+          `
         )
       )
     } else if (step === 6) {
       return (
         makeContent(
           'Tagging elements',
-          'You can tag and comment on a specific element by clicking this button.'
+          `
+            You can tag and comment on a specific element by clicking this button.
+          `
         )
       )
     } else if (step === 7) {
       return (
         makeContent(
           'Done',
-          'Now you\'re ready to start giving feedback!'
+          `
+            Now you're ready to start giving feedback!
+          `
         )
       )
     }
