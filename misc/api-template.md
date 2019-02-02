@@ -45,6 +45,8 @@ Authentication is done using the standard `Authorization` header with a non-stan
 
 @api /api/users
 
+@api /api/users/role
+
 ## Instances
 
 @api /api/instances
@@ -52,6 +54,8 @@ Authentication is done using the standard `Authorization` header with a non-stan
 @api /api/instances/new
 
 @api /api/instances/logs/:name
+
+@api /api/instances/start
 
 @api /api/instances/stop
 

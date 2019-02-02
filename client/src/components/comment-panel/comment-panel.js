@@ -22,6 +22,7 @@ const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = state => ({
   comments: state.comments,
+  role: state.role,
 })
 
 class CommentPanel extends React.Component {
@@ -81,13 +82,14 @@ class CommentPanel extends React.Component {
 
   commentContainer() {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
+    const { role } = this.props
     const sortByTime = R.sortBy(arr => arr[1].time)
     const sortedCommentArray = sortByTime(R.toPairs(this.props.comments))
     return (
       <div className={css('comment-container')} id="comment-container">
         {
           R.map(
-            ([id, comment]) => <Comment key={id} comment={comment} id={id} />,
+            ([id, comment]) => <Comment key={id} comment={comment} id={id} role={role} />,
             sortedCommentArray
           )
         }

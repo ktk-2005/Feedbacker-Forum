@@ -20,7 +20,7 @@ import TagElementButton from './components/tag-element-button/tag-element-button
 import Onboarding from './components/onboarding/onboarding'
 // Internal js
 import { setupPersist } from './persist'
-import { loadPersistData, setPersistData, loadComments } from './actions'
+import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
 import styles from './scss/_base.scss'
 
@@ -30,6 +30,7 @@ const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
 const INTRO_DONE = 'INTRO_DONE'
+const UPDATE_ROLE = 'UPDATE_ROLE'
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -66,9 +67,19 @@ function commentsReducer(state = {}, action) {
   }
 }
 
+function roleReducer(state = '', action) {
+  switch (action.type) {
+    case UPDATE_ROLE:
+      return action.role
+    default:
+      return state
+  }
+}
+
 const reducer = combineReducers({
   persist: persistReducer,
   comments: commentsReducer,
+  role: roleReducer,
 })
 
 const store = createStore(reducer)
@@ -198,6 +209,10 @@ const initialize = () => {
       } else {
         console.log('Loaded user from persistent storage', state.users)
       }
+
+      const { role } = await apiCall('GET', '/users/role')
+      console.log('User role:', role)
+      store.dispatch(updateRole(role))
     }
   }
 

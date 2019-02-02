@@ -20,6 +20,7 @@ const mapStateToProps = (state) => {
   const persist = state.persist || {}
   return ({
     onboarding: !R.isEmpty(persist.users) && !persist.introDone,
+    dev: !R.isEmpty(persist.users) && persist.role === 'dev',
   })
 }
 
@@ -69,13 +70,14 @@ class Onboarding extends React.Component {
 
   step() {
     const { step } = this.state
+    const { dev } = this.props
 
     if (step === 1) {
       return (
         makeContent(
           'Welcome!',
           `
-            Welcome to use the Feedbacker Forum app. 
+            Welcome to use the Feedbacker Forum app.
             This tutorial will guide you through the basic functions of the app.
           `
         )
@@ -93,9 +95,13 @@ class Onboarding extends React.Component {
       return (
         makeContent(
           'Survey Panel',
-          `
-            This is the survey panel where you can aswer questions.
-          `
+          dev
+            ? `
+              This is the survey panel where you can aswer questions.
+            `
+            : `
+            This is the survey panel where the users can aswer your questions.
+            `
         )
       )
     } else if (step === 4) {
@@ -111,9 +117,13 @@ class Onboarding extends React.Component {
       return (
         makeContent(
           'Commenting',
-          `
-            You can leave free form comments and view other people's comments here.
-          `
+          dev
+            ? `
+              You can leave free form comments and view other people's comments here.
+            `
+            : `
+            Here you can view the comments and participate in the conversation.
+            `
         )
       )
     } else if (step === 6) {

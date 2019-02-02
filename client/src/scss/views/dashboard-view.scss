@@ -71,12 +71,29 @@
   border-radius: $border-radius-default;
   box-shadow: 0 0 10px $palette-shadow-default;
 
-  h5 {
-    text-transform: capitalize;
-    align-self: start;
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row-reverse wrap;
+
+
+    h5 {
+      text-transform: capitalize;
+      margin-right: auto;
+    }
+
+    .header-button-container {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        @extend %icon-button;
+      }
+    }
   }
 
-  a, button {
+
+  a {
     @extend %anchor-button;
 
     &.accent {

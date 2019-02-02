@@ -6,8 +6,7 @@ const shadowRoot = () => document
 const shadowDocument = () => document
   .querySelector('[data-feedback-shadow-root]').shadowRoot
 
-const shadowModalRoot = () => document
-  .querySelector('[data-feedback-shadow-root]').shadowRoot
+const shadowModalRoot = () => shadowDocument()
   .querySelector('[data-feedback-modal-root]')
 
 const prepareReactRoot = () => {

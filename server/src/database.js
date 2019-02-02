@@ -1,6 +1,7 @@
 import SQLiteDatabase from './database/database-sqlite'
 import PostgresDatabase from './database/database-postgres'
 import { config, args } from './globals'
+import { HttpError } from './errors'
 
 let db = null
 
@@ -80,7 +81,7 @@ export async function listContainers() {
 
 export async function resolveContainer(subdomain) {
   const rows = await db.query('SELECT id, user_id FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
-  if (!rows || rows.length === 0) throw new Error(`Invalid container ${subdomain}`)
+  if (!rows || rows.length === 0) throw new HttpError(400, `Invalid container ${subdomain}`)
   return {
     id: rows[0].id,
     userId: rows[0].user_id,
@@ -101,5 +102,3 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
-
-export async function findContainerIdBySubdomain(subdomain) { return db.query('SELECT id FROM containers WHERE subdomain=? LIMIT 1', [subdomain]) }

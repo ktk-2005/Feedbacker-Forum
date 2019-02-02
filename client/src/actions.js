@@ -1,8 +1,9 @@
 export const LOAD_PERSIST = 'LOAD_PERSIST'
 export const SET_PERSIST = 'SET_PERSIST'
 export const LOAD_ALL = 'LOAD_ALL'
+export const UPDATE_ROLE = 'UPDATE_ROLE'
 export const INTRO_DONE = 'INTRO_DONE'
-export const GET_STEP = 'GET_STEP'
+
 
 const createAction = (type, data = {}) => ({ type, ...data })
 
@@ -20,4 +21,8 @@ export function loadComments(comments) {
 
 export function introDone() {
   return createAction(INTRO_DONE)
+}
+
+export function updateRole(role) {
+  return createAction(UPDATE_ROLE, { role })
 }
