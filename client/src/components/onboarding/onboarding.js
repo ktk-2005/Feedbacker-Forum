@@ -47,7 +47,7 @@ const clickElementOpen = (step) => {
 
 const makeContent = (header, paragraph) => (
     <>
-      <h2>{header}</h2>
+      <h3>{header}</h3>
       <p>{paragraph}</p>
     </>
 )
@@ -182,7 +182,7 @@ class Onboarding extends React.Component {
           <button
             type="button"
             className={css('close-button')}
-            onClick={() => this.props.dispatch(introDone())}
+            onClick={this.handleCloseIntro}
           >
             <InlineSVG src={CloseIcon} />
           </button>
@@ -209,7 +209,7 @@ class Onboarding extends React.Component {
         <button
           type="button"
           className={step !== final ? css('hidden') : css('done-button')}
-          onClick={() => this.props.dispatch(introDone())}
+          onClick={this.handleCloseIntro}
         >Close tutorial
         </button>
         <button

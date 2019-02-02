@@ -148,13 +148,13 @@ class MainView extends React.Component {
           hidden={surveyButtonIsHidden}
           onClick={this.handleSurveyPanelClick}
         />
-        <SurveyPanel
-          hidden={surveyPanelIsHidden}
-          onClick={this.handleSurveyPanelClick}
-        />
         <OpenCommentPanelButton
           hidden={commentPanelButtonIsHidden}
           onClick={this.handleCommentPanelClick}
+        />
+        <SurveyPanel
+          hidden={surveyPanelIsHidden}
+          onClick={this.handleSurveyPanelClick}
         />
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}

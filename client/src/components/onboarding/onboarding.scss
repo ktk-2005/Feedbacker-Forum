@@ -10,10 +10,16 @@
   display: flex;
   flex-flow: column;
   justify-content: space-around;
-  width: 40vw;
+  width: 35vw;
   height: 40vh;
+  border: solid $palette-light 1px;
+  border-radius: $border-radius-default;
   background-color: $palette-lighter;
-  border: solid 2px $palette-light;
+  cursor: default;
+  &:focus {
+    outline: none;
+    box-shadow: 0 2px 10px $palette-shadow-default;
+  }
 }
 
 .modal-header {
@@ -30,14 +36,15 @@
   flex: 0;
 
   button {
-    @include button($states: false);
-    background: transparent;
+    @include reset-button();
 
-    i {
-      display: block;
-      width: $icon-dimension-default;
-      height: $icon-dimension-default;
-
+    svg {
+      $icon-dimension: 21px;
+      width: $icon-dimension;
+      height: $icon-dimension;
+      margin-left: auto;
+      margin-right: auto;
+      fill: $palette-dark;
     }
   }
 }
@@ -50,6 +57,7 @@
   @include button($states: false);
   font-weight: 600;
   margin-bottom: 1em;
+  color: $palette-medium;
 }
 
 .done-button {
@@ -82,6 +90,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: not-allowed;
   @include z-level(2);
   &.first {
     top: 0;
