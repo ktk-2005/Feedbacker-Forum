@@ -35,12 +35,21 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
+// @api PUT /api/users
+// Change username of existing user.
+// The request requires the id, the secret and the new username for the user,
+// eg. @json {
+//    "name": "Testuser2",
+//    "id": "d6ac55e9",
+//    "secret": "ea2ca2565f484906bfd5096126816a"
+// }
+// Returns 'ok' if the change was successful.
+//
 router.put('/', catchErrors(async (req, res) => {
   const { name, id, secret } = req.body
 
   await attempt(async () => {
     const updated = await addUsername({ name, id, secret })
-    console.log('UPDATED: ', updated)
     res.json('ok')
   })
 }))
