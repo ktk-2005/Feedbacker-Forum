@@ -47,6 +47,7 @@ router.get('/', catchErrors(async (req, res) => {
         time: comment.comment_time,
         text: comment.comment_text,
         userId: comment.comment_user_id,
+        username: comment.username,
         threadId: comment.thread_id,
         blob: JSON.parse(comment.comment_blob) || {},
         reactions: [],
