@@ -191,6 +191,20 @@ Example body
   "role": "user"
 }
 ```
+### [PUT /api/users](../server/src/routes/users.js#L46)
+
+Change username of existing user.
+The request requires the id, the secret and the new username for the user,
+eg.
+```json
+{
+   "name": "Testuser2",
+   "id": "d6ac55e9",
+   "secret": "ea2ca2565f484906bfd5096126816a"
+}
+```
+Returns 'ok' if the change was successful.
+
 
 ## Instances
 
