@@ -145,7 +145,7 @@ Returns JSON indicating whether deletion was successful or not
 
 ## Users
 
-### [POST /api/users](../server/src/routes/users.js#L21)
+### [POST /api/users](../server/src/routes/users.js#L23)
 
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
@@ -165,7 +165,7 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-### [PUT /api/users](../server/src/routes/users.js#L46)
+### [PUT /api/users](../server/src/routes/users.js#L48)
 
 Change username of existing user.
 The request requires the id, the secret and the new username for the user,
@@ -180,7 +180,7 @@ eg.
 Returns 'ok' if the change was successful.
 
 
-### [GET /api/users/role](../server/src/routes/users.js#L43)
+### [GET /api/users/role](../server/src/routes/users.js#L63)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
