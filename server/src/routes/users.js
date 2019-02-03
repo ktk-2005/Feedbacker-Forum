@@ -1,8 +1,7 @@
 import express from 'express'
-import { uuid, attempt } from './helpers'
 import { addUser, addUsername } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
-import { addUser, addUsername } from '../database'
+
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -49,7 +48,7 @@ router.put('/', catchErrors(async (req, res) => {
   const { name, id, secret } = req.body
 
   await attempt(async () => {
-    const updated = await addUsername({ name, id, secret })
+    await addUsername({ name, id, secret })
     res.json('ok')
   })
 }))
