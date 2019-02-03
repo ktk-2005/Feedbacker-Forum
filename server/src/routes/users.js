@@ -1,6 +1,6 @@
 import express from 'express'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
-import { addUser } from '../database'
+import { addUser, addUsername } from '../database'
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -46,6 +46,16 @@ router.get('/role', catchErrors(async (req, res) => {
 
   res.json({
     role: users.hasOwnProperty(owner) ? 'dev' : 'user',
+  })
+}))
+
+router.put('/', catchErrors(async (req, res) => {
+  const { name, id, secret } = req.body
+
+  await attempt(async () => {
+    const updated = await addUsername({ name, id, secret })
+    console.log('UPDATED: ', updated)
+    res.json('ok')
   })
 }))
 
