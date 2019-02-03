@@ -3,15 +3,18 @@
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
 
-@import '../survey-panel/survey-panel.scss';
+@import '../comment/comment.scss';
 
 .username-modal {
   @include z-level(3);
   display: flex;
   flex-flow: column;
   justify-content: space-around;
+  position: fixed;
+  right: $baseline;
+  bottom: $baseline;
   width: 35vw;
-  height: 40vh;
+  height: 15vh;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
   background-color: $palette-lighter;
@@ -22,63 +25,28 @@
   }
 }
 
-.modal-header {
-  @extend .panel-header;
-  width: auto;
-  border-bottom: none;
-  cursor: unset;
-}
-
-.step-buttons {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-around;
-  flex: 0;
-
-  button {
-    @include reset-button();
-
-    svg {
-      $icon-dimension: 21px;
-      width: $icon-dimension;
-      height: $icon-dimension;
-      margin-left: auto;
-      margin-right: auto;
-      fill: $palette-dark;
-    }
-  }
-}
-
-.next-button {
-  transform: scaleX(-1);
-}
-
-.skip-button {
-  @include button($states: false);
-  font-weight: 600;
-  margin-bottom: 1em;
-  color: $palette-medium;
-}
-
-.done-button {
-  @include button(2px);
+.add-button {
+  @include button();
+  align-self: flex-end;
+  margin-top: $baseline;
+  padding: $baseline $spacer;
   background: $palette-accent;
   color: $palette-lighter;
-  width: fit-content;
-  align-self: center;
-}
-
-.hidden {
-  visibility: hidden;
-  opacity: 0;
 }
 
 .modal-content {
+  align-items: center;
   display: flex;
   flex-flow: column;
-  justify-content: center;
   flex: 1;
+  justify-content: center;
   padding: 1em 2em;
+  input[type="text"] {
+    @extend .comment;
+    display: block;
+    min-width: 100%;
+    border: none;
+  }
 }
 
 .username-overlay {
@@ -90,16 +58,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: not-allowed;
   @include z-level(2);
-  &.first {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.3);
-  }
+  background-color: rgba(0, 0, 0, 0.1);
 }
 

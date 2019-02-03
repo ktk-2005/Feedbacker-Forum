@@ -58,14 +58,15 @@ class UsernameModal extends React.Component {
         isOpen={this.props.isOpen}
         parentSelector={shadowModalRoot}
         overlayClassName={css('username-overlay')}
+        onRequestClose={this.props.toggle}
+        shouldFocusAfterRender
+        shouldCloseOnOverlayClick
+        shouldCloseOnEsc
       >
-        <div className={css('modal-content')}>
-          <form className="" onSubmit={this.handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input type="text" onChange={this.handleChange} name="name" id="name" />
-            <input className={css('done-button')} type="submit" value="Add name" />
-          </form>
-        </div>
+        <form className={css('modal-content')} onSubmit={this.handleSubmit}>
+          <input type="text" onChange={this.handleChange} name="name" id="name" placeholder="New username..." />
+          <input className={css('add-button')} type="submit" value="Add username" />
+        </form>
       </ReactModal>
     )
   }
