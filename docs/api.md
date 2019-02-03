@@ -73,7 +73,7 @@ returns JSON array of all comments grouped with reactions in database
     }
 }
 ```
-### [POST /api/comments](../server/src/routes/comments.js#L84)
+### [POST /api/comments](../server/src/routes/comments.js#L85)
 
 Adds comment to the current container instance.
 
@@ -95,7 +95,7 @@ comments can be linked to a thread with
 
 Returns `{ id, threadId }` of the new comment
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L110)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L111)
 
 Get comments by `threadId`
 
@@ -165,6 +165,20 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
+### [PUT /api/users](../server/src/routes/users.js#L46)
+
+Change username of existing user.
+The request requires the id, the secret and the new username for the user,
+eg.
+```json
+{
+   "name": "Testuser2",
+   "id": "d6ac55e9",
+   "secret": "ea2ca2565f484906bfd5096126816a"
+}
+```
+Returns 'ok' if the change was successful.
+
 
 ### [GET /api/users/role](../server/src/routes/users.js#L43)
 
