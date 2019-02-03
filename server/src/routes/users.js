@@ -1,4 +1,6 @@
 import express from 'express'
+import { uuid, attempt } from './helpers'
+import { addUser, addUsername } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { addUser } from '../database'
 import { catchErrors } from '../handlers'
@@ -33,6 +35,15 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
+router.put('/', catchErrors(async (req, res) => {
+  const { name, id, secret } = req.body
+
+  await attempt(async () => {
+    const updated = await addUsername({ name, id, secret })
+    console.log('UPDATED: ', updated)
+    res.json('ok')
+  })
+}))
 // @api GET /api/users/role
 // Retrieve the role of the current user in the container.
 // Returns either `"dev"` or `"user"`
