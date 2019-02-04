@@ -13,11 +13,13 @@
   position: fixed;
   right: $baseline;
   bottom: $baseline;
-  width: 35vw;
-  height: 15vh;
+  min-width: 35vw;
+  min-height: 15vh;
+  max-height: 40vh;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
   background-color: $palette-lighter;
+  margin: 0 0 $baseline;
   cursor: default;
   &:focus {
     outline: none;
@@ -25,7 +27,7 @@
   }
 }
 
-.add-button {
+input[type="submit"] {
   @include button();
   align-self: flex-end;
   margin-top: $baseline;
