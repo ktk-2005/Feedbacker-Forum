@@ -30,11 +30,7 @@ export async function getComments(container) {
     reactions.emoji     AS reaction_emoji,
     reactions.user_id   AS reaction_user_id,
     reactions.comment_id AS reaction_comment_id,
-    users.id            AS user_id,
-    users.time          AS user_time,
-    users.name          AS username,
-    users.secret        AS user_secret,
-    users.blob          AS user_blob
+    users.name          AS username
     FROM comments
     LEFT JOIN reactions
     ON comments.id = reactions.comment_id
