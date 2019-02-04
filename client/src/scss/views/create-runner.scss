@@ -1,0 +1,12 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+
+table {
+  border-collapse: collapse;
+
+  th, td {
+    border: 1px solid black;
+    padding: $spacer;
+  }
+}
