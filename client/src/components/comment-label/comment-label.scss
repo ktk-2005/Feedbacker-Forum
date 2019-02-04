@@ -1,0 +1,20 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+.comment-label {
+  padding: .5 * $baseline;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  color: $palette-white;
+  @include shadow-outline(1px);
+}
+
+.dev {
+  background-color: green;
+}
+
+.op {
+  background-color: dodgerblue;
+}

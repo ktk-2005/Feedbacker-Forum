@@ -115,6 +115,7 @@ class CommentPanel extends React.Component {
                 key={id}
                 comments={comments}
                 id={id}
+                role={this.props.role}
                 handleSubmit={this.handleSubmit}
                 onChange={this.handleChange}
                 updateCurrentThread={this.updateCurrentThread}
@@ -143,7 +144,7 @@ class CommentPanel extends React.Component {
         <div className={css('panel-body')}>
           { this.threadContainer() }
           <SubmitField
-            onSubmit={this.handleSubmit}
+            handleSubmit={this.handleSubmit}
             threadId=""
           />
         </div>

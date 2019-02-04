@@ -29,7 +29,7 @@ class Thread extends React.Component {
     return isOpen ? openText : 'Collapse'
   }
 
-  expandedThread() {
+  expandedThread(op) {
     if (this.props.currentThread !== this.props.id) { return }
     const threadComments = this.props.comments.slice(1)
     const sortByTime = R.sortBy(comment => comment.time)
@@ -37,7 +37,15 @@ class Thread extends React.Component {
     return (
       <>
         {sortedComments.map(
-          comment => <Comment key={comment.id} comment={comment} id={comment.id} />,
+          comment => (
+            <Comment
+              key={comment.id}
+              comment={comment}
+              id={comment.id}
+              role={this.props.role}
+              op={op}
+            />
+          ),
         )}
         <SubmitField
           handleSubmit={this.props.handleSubmit}
@@ -48,11 +56,17 @@ class Thread extends React.Component {
   }
 
   render() {
+    const { role } = this.props
     const sortByTime = R.sortBy(comment => comment.time)
-    const comment = sortByTime(this.props.comments)[0]
+    const firstComment = sortByTime(this.props.comments)[0]
     return (
       <div className={css('thread')}>
-        <Comment key={comment.id} comment={comment} id={comment.id} />
+        <Comment
+          key={firstComment.id}
+          comment={firstComment}
+          id={firstComment.id}
+          role={role}
+        />
         <div className={css('expand-button-container')}>
           <button
             type="button"
@@ -62,7 +76,7 @@ class Thread extends React.Component {
           </button>
         </div>
         <aside className={css('sub-thread')}>
-          { this.expandedThread() }
+          { this.expandedThread(firstComment.userId) }
         </aside>
       </div>
     )
