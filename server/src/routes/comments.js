@@ -17,6 +17,9 @@ const router = express.Router()
 //         "time": "2018-11-14 16:35:27",
 //         "text": "skrattia",
 //         "userId": "da776df3",
+//         "username": "jaba",
+//         "threadId": "3blkj3ad",
+//         "blob": "",
 //         "reactions": [
 //             {
 //                 "id": "1ddb07c8",
@@ -32,6 +35,9 @@ const router = express.Router()
 //         "time": "2018-11-14 17:10:42",
 //         "text": "tröttistä",
 //         "userId": "da776df3",
+//         "username": "jaba",
+//         "threadId": "3blkj3ad",
+//         "blob": "",
 //         "reactions": []
 //     }
 // }

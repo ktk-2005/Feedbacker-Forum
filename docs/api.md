@@ -42,7 +42,7 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L38)
+### [GET /api/comments](../server/src/routes/comments.js#L44)
 
 Retrieve all comments of the current container instance.
 
@@ -54,6 +54,9 @@ returns JSON array of all comments grouped with reactions in database
         "time": "2018-11-14 16:35:27",
         "text": "skrattia",
         "userId": "da776df3",
+        "username": "jaba",
+        "threadId": "3blkj3ad",
+        "blob": "",
         "reactions": [
             {
                 "id": "1ddb07c8",
@@ -69,11 +72,14 @@ returns JSON array of all comments grouped with reactions in database
         "time": "2018-11-14 17:10:42",
         "text": "tröttistä",
         "userId": "da776df3",
+        "username": "jaba",
+        "threadId": "3blkj3ad",
+        "blob": "",
         "reactions": []
     }
 }
 ```
-### [POST /api/comments](../server/src/routes/comments.js#L85)
+### [POST /api/comments](../server/src/routes/comments.js#L91)
 
 Adds comment to the current container instance.
 
@@ -95,7 +101,7 @@ comments can be linked to a thread with
 
 Returns `{ id, threadId }` of the new comment
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L111)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L117)
 
 Get comments by `threadId`
 
