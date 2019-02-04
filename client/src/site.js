@@ -18,6 +18,7 @@ import { setUsers } from './globals'
 import apiCall from './api-call'
 // Styles
 import styles from './scss/_base.scss'
+import CreateRunner from './create-runner'
 
 const css = classNames.bind(styles)
 
@@ -90,6 +91,7 @@ const initialize = () => {
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/create" component={Create} />
+            <Route exact path="/create-runner" component={CreateRunner} />
             <Route exact path="/logs/:name" component={Build} />
           </Switch>
         </div>

@@ -64,13 +64,22 @@ class Dashboard extends React.Component {
       <>
         <div className={css('top-section')}>
           <h2>Dashboard</h2>
-          <Link to="/create">
-            <button
-              className={css('create-button')}
-              type="button"
-            >New instance
-            </button>
-          </Link>
+          <div className={css('top-button-section')}>
+            <Link to="/create-runner">
+              <button
+                className={css('create-button')}
+                type="button"
+              >New runner
+              </button>
+            </Link>
+            <Link to="/create">
+              <button
+                className={css('create-button')}
+                type="button"
+              >New instance
+              </button>
+            </Link>
+          </div>
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>

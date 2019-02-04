@@ -9,7 +9,7 @@ import {
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser, resolveContainer } from '../database'
+import { resolveContainer } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -25,9 +25,8 @@ const router = express.Router()
 router.get('/', catchErrors(async (req, res) => {
   const { users } = await reqUser(req)
   const containers = []
-  for (const [userId, secret] of R.toPairs(users)) {
+  for (const [userId] of R.toPairs(users)) {
     try {
-      await verifyUser(userId, secret)
       containers.push(...await getRunningContainersByUser([userId]))
     } catch (error) { /* ignore */ }
   }

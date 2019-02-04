@@ -1,8 +1,13 @@
 import Docker from 'dockerode'
+import fs from 'fs'
+import os from 'os'
 import {
   addContainer,
   listContainersByUser,
-  removeContainer
+  removeContainer,
+  setInstanceRunnerStatusSuccess,
+  setInstanceRunnerStatusFail,
+  createNewInstanceRunner
 } from './database'
 import { config } from './globals'
 import logger from './logger'
@@ -21,7 +26,17 @@ export function initializeDocker() {
     opts.host = url
     opts.port = parseInt(port, 10)
   } else if (/^win/.test(process.platform)) {
-    opts.socketPath = '//./pipe/docker_engine'
+    if (config.dockerWindows) {
+      opts.socketPath = '//./pipe/docker_engine'
+    } else {
+      const basePath = `${os.homedir()}/.docker/machine/machines/default`
+      opts.host = '192.168.99.100'
+      opts.protocol = 'https'
+      opts.ca = fs.readFileSync(`${basePath}/ca.pem`)
+      opts.cert = fs.readFileSync(`${basePath}/cert.pem`)
+      opts.key = fs.readFileSync(`${basePath}/key.pem`)
+      opts.port = 2376
+    }
   } else {
     opts.socketPath = '/var/run/docker.sock'
   }
@@ -138,4 +153,23 @@ export async function deleteContainer(id) {
     force: true,
   })
   await removeContainer(id)
+}
+
+export async function createNewRunner(userId, dockerTag, name) {
+  // todo: size check
+  logger.info(`Creating new instance logger: userId=${userId}, dockerTag=${dockerTag}, name=${name}`)
+
+  // We won't wait for the promise to resolve because
+  // especially with larger images it can take a while to download.
+  // Instead, we update the download's status in the database.
+
+  await createNewInstanceRunner(userId, dockerTag, name)
+
+  docker.pull(dockerTag).then(async () => {
+    await setInstanceRunnerStatusSuccess(dockerTag)
+  }).catch(async (error) => {
+    // update db with error status
+    await setInstanceRunnerStatusFail(dockerTag)
+    throw new NestedError('Unable to pull docker image', error, { functionArguments: { userId, dockerTag } })
+  })
 }

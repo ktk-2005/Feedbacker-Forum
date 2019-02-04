@@ -102,3 +102,20 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
+
+export async function getInstanceRunnersForUser(user) {
+  return db.query('SELECT * FROM instance_runners WHERE user_id=?', [user])
+}
+
+export async function createNewInstanceRunner(user, dockerTag, name) {
+  return db.run('INSERT INTO instance_runners(id, name, user_id, status) VALUES (?, ?, ?, ?)', [dockerTag, name, user, 'pending'])
+}
+
+async function updateInstanceRunnerStatus(dockerTag, status) {
+  return db.run('UPDATE instance_runners SET status=? WHERE id=?', [status, dockerTag])
+}
+
+export async function setInstanceRunnerStatusSuccess(dockerTag) { updateInstanceRunnerStatus(dockerTag, 'success') }
+
+export async function setInstanceRunnerStatusFail(dockerTag) { updateInstanceRunnerStatus(dockerTag, 'fail') }
+

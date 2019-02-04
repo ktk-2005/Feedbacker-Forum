@@ -36,6 +36,18 @@
   box-shadow: 0 0 10px $palette-shadow-light;
 }
 
+.top-button-section {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+
+  margin: 0 -$spacer/2;
+
+  &>* {
+    margin: 0 $spacer/2;
+  }
+}
+
 .create-button {
   @extend %anchor-button-accent;
   align-self: flex-end;
