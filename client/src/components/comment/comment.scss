@@ -55,7 +55,7 @@
 
 .expand-button-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 
   button {
     @include button();
@@ -64,5 +64,9 @@
     position: relative;
     top: $baseline;
     margin-right: $spacer;
+
+    &.hidden {
+      display: none;
+    }
   }
 }

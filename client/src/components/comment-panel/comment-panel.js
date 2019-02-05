@@ -23,6 +23,7 @@ const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = state => ({
   comments: state.comments,
+  users: (state.persist || {}).users || {},
   role: state.role,
 })
 
@@ -38,6 +39,7 @@ class CommentPanel extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
+    this.deleteComment = this.deleteComment.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
@@ -83,7 +85,14 @@ class CommentPanel extends React.Component {
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
     this.props.dispatch(loadComments(comments))
-    this.scrollToBottom()
+    await this.scrollToBottom()
+  }
+
+  async deleteComment(comment) {
+    if (Object.keys(this.props.users)[0] === comment.userId) {
+      await apiCall('DELETE', '/comments', { commentId: comment.id })
+      await this.fetchComments()
+    }
   }
 
   scrollToBottom() {
@@ -117,11 +126,12 @@ class CommentPanel extends React.Component {
                 key={id}
                 comments={comments}
                 id={id}
+                users={this.props.users}
                 role={this.props.role}
                 handleSubmit={this.handleSubmit}
-                onChange={this.handleChange}
                 updateCurrentThread={this.updateCurrentThread}
                 currentThread={this.state.currentThread}
+                deleteComment={this.deleteComment}
               />),
             sortedThreads
           )

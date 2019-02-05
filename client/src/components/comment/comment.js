@@ -1,9 +1,9 @@
 import React from 'react'
-// Helpers
-import * as R from 'ramda'
-import classNames from 'classnames/bind'
-import InlineSVG from 'svg-inline-react'
 import Moment from 'react-moment'
+import * as R from 'ramda'
+import InlineSVG from 'svg-inline-react'
+// Helpers
+import classNames from 'classnames/bind'
 import * as DomTagging from '../../dom-tagging'
 // Components
 import Reactions from '../reactions/reactions'
@@ -47,7 +47,7 @@ const chooseLabel = (op, userId) => {
   return null
 }
 
-const Comment = ({ id, comment, role, op, onClick, buttonText }) => (
+const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, deleteComment }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
       <div className={css('name')}>Anonymous user</div>
@@ -62,7 +62,7 @@ const Comment = ({ id, comment, role, op, onClick, buttonText }) => (
     </div>
     <Reactions reactions={comment.reactions} commentId={id} />
     <div className={css('expand-button-container')}>
-      <button type="button">Delete</button>
+      <button className={css('delete-button', { hidden: !canDelete })} type="button" onClick={() => deleteComment(comment)}>Delete</button>
       <button type="button" onClick={onClick}>{buttonText}</button>
     </div>
   </div>

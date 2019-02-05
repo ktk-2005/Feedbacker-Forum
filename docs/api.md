@@ -94,6 +94,20 @@ comments can be linked to a thread with
 ```
 
 Returns `{ id, threadId }` of the new comment
+### [DELETE /api/comments](../server/src/routes/comments.js#L130)
+
+Tries to delete a comment. Only successful if the userId of the comment is the same
+as the user trying to delete the comment, or if the user is a dev.
+
+Returns the numbers of rows affected,
+one if the comment was deleted and 0 if it was not successful.
+
+e.g.
+```json
+{
+  "delRows": 1
+}
+```
 
 ### [GET /api/comments/:threadId](../server/src/routes/comments.js#L110)
 

@@ -11,7 +11,7 @@
   }
 
   > *:first-of-type {
-    margin-top: -$spacer;
+    margin-top: $spacer;
   }
 
   > div:first-of-type ~ form {
@@ -19,16 +19,3 @@
   }
 }
 
-.expand-button-container {
-  display: flex;
-  justify-content: flex-end;
-
-  button {
-    @include button();
-    background: white;
-    @include shadow-outline(1px);
-    position: relative;
-    top: -$baseline;
-    margin-right: $spacer;
-  }
-}

@@ -17,6 +17,7 @@ class Thread extends React.Component {
     this.handleClick = this.handleClick.bind(this)
     this.buttonText = this.buttonText.bind(this)
     this.expandedThread = this.expandedThread.bind(this)
+    this.canDelete = this.canDelete.bind(this)
     this.replyField = React.createRef()
   }
 
@@ -48,6 +49,8 @@ class Thread extends React.Component {
               op={op}
               onClick={() => this.replyField.current.focus()}
               buttonText="Reply"
+              canDelete={this.canDelete(comment.userId)}
+              deleteComment={this.props.deleteComment}
             />
           ),
         )}
@@ -58,6 +61,11 @@ class Thread extends React.Component {
         />
       </>
     )
+  }
+
+  canDelete(commentUserId) {
+    const [currentUser] = Object.keys(this.props.users)
+    return currentUser === commentUserId
   }
 
   render() {
@@ -73,6 +81,8 @@ class Thread extends React.Component {
           role={role}
           onClick={this.handleClick}
           buttonText={this.buttonText()}
+          canDelete={this.canDelete(firstComment.userId)}
+          deleteComment={this.props.deleteComment}
         />
         <aside className={css('sub-thread')}>
           {this.expandedThread(firstComment.userId)}

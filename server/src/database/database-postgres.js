@@ -127,6 +127,16 @@ class PostgresDatabase {
     const preparedString = prepStatement(str)
     return this.db.multi(preparedString, values)
   }
+  /*
+  For using delete statements. Returns the number of rows affected.
+  Will return an empty array if DELETE was unsuccessful.
+   */
+
+  async del(str, values) {
+    const preparedString = prepStatement(str)
+    const res = await this.db.result(preparedString, values)
+    return res.rowCount
+  }
 }
 
 
