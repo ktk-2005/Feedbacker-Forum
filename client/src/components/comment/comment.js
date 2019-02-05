@@ -47,7 +47,7 @@ const chooseLabel = (op, userId) => {
   return null
 }
 
-const Comment = ({ id, comment, role, op }) => (
+const Comment = ({ id, comment, role, op, onClick, buttonText }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
       <div className={css('name')}>Anonymous user</div>
@@ -61,6 +61,10 @@ const Comment = ({ id, comment, role, op }) => (
       </div>
     </div>
     <Reactions reactions={comment.reactions} commentId={id} />
+    <div className={css('expand-button-container')}>
+      <button type="button">Delete</button>
+      <button type="button" onClick={onClick}>{buttonText}</button>
+    </div>
   </div>
 )
 

@@ -15,7 +15,9 @@ class Thread extends React.Component {
     super(props)
 
     this.handleClick = this.handleClick.bind(this)
+    this.buttonText = this.buttonText.bind(this)
     this.expandedThread = this.expandedThread.bind(this)
+    this.replyField = React.createRef()
   }
 
   handleClick() {
@@ -44,12 +46,15 @@ class Thread extends React.Component {
               id={comment.id}
               role={this.props.role}
               op={op}
+              onClick={() => this.replyField.current.focus()}
+              buttonText="Reply"
             />
           ),
         )}
         <SubmitField
           handleSubmit={this.props.handleSubmit}
           threadId={this.props.id}
+          inputRef={this.replyField}
         />
       </>
     )
@@ -66,17 +71,11 @@ class Thread extends React.Component {
           comment={firstComment}
           id={firstComment.id}
           role={role}
+          onClick={this.handleClick}
+          buttonText={this.buttonText()}
         />
-        <div className={css('expand-button-container')}>
-          <button
-            type="button"
-            onClick={this.handleClick}
-          >
-            { this.buttonText() }
-          </button>
-        </div>
         <aside className={css('sub-thread')}>
-          { this.expandedThread(firstComment.userId) }
+          {this.expandedThread(firstComment.userId)}
         </aside>
       </div>
     )

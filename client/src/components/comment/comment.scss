@@ -52,3 +52,17 @@
     font-size: $font-size-small;
   }
 }
+
+.expand-button-container {
+  display: flex;
+  justify-content: center;
+
+  button {
+    @include button();
+    background: white;
+    @include shadow-outline(1px);
+    position: relative;
+    top: $baseline;
+    margin-right: $spacer;
+  }
+}

@@ -38,6 +38,7 @@ class SubmitField extends React.Component {
           value={this.state.value}
           onChange={this.handleChange}
           placeholder={this.props.threadId ? 'Reply to thread...' : 'Write comment...'}
+          ref={this.props.inputRef}
         />
         <input className={css('submit-comment')} type="submit" value="Comment" />
       </form>
