@@ -69,6 +69,9 @@ export async function getCommentReactions(values = []) { return db.query('SELECT
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
+
+// Containers/Instances
+
 export async function addContainer({
   id, subdomain, userId, blob, url,
 }) {
@@ -103,19 +106,68 @@ export async function verifyUser(user, secret) {
   }
 }
 
+
+// Instance runners
+
 export async function getInstanceRunnersForUser(user) {
   return db.query('SELECT * FROM instance_runners WHERE user_id=?', [user])
 }
 
+export async function listInstanceRunnerOwnersByTag(tag) {
+  return db.query('SELECT user_id FROM instance_runners WHERE tag=?', [tag])
+}
+
+export async function getInstanceRunnerTagsForUser(userId) {
+  return db.query('SELECT id FROM instance_runners WHERE user_tag=?', [userId])
+}
+
+export async function deleteInstanceRunnerForUser(userId, tag) {
+  return db.query('DELETE FROM instance_runners WHERE user_id=? AND tag=?', [userId, tag])
+}
+
 export async function createNewInstanceRunner(user, dockerTag, name) {
-  return db.run('INSERT INTO instance_runners(id, name, user_id, status) VALUES (?, ?, ?, ?)', [dockerTag, name, user, 'pending'])
+  return db.run('INSERT INTO instance_runners(tag, name, user_id, status) VALUES (?, ?, ?, ?)', [dockerTag, name, user, 'pending'])
 }
 
 async function updateInstanceRunnerStatus(dockerTag, status) {
-  return db.run('UPDATE instance_runners SET status=? WHERE id=?', [status, dockerTag])
+  return db.run('UPDATE instance_runners SET status=? WHERE tag=?', [status, dockerTag])
 }
 
 export async function setInstanceRunnerStatusSuccess(dockerTag) { updateInstanceRunnerStatus(dockerTag, 'success') }
 
 export async function setInstanceRunnerStatusFail(dockerTag) { updateInstanceRunnerStatus(dockerTag, 'fail') }
 
+
+// Authentication stuff
+
+// This function assumes that the authenticity of claimed userIds are already verified.
+// Returns false if the user doesn't own the claimed container, or the owener id elsewise.
+export async function confirmContainerOwnership(name, users) {
+  console.log(name, users)
+  const rows = await db.query('SELECT user_id FROM containers WHERE subdomain=? LIMIT 1', [name])
+  if (!rows || rows.length === 0) {
+    return false
+  }
+
+  const ownerUserId = rows[0].user_id
+  if (users.hasOwnProperty(ownerUserId)) {
+    return ownerUserId
+  }
+  return false
+}
+
+// This function assumes that the authenticity of claimed userIds are already verified.
+// Returns false if the user doesn't own the claimed instance runner, or the owner id elsewise.
+export async function confirmInstanceRunnerOwnership(tag, users) {
+  const rows = await db.query('SELECT user_id FROM instance_runners WHERE tag=? LIMIT 1', [tag])
+  if (!rows || rows.length === 0) {
+    return false
+  }
+
+  const ownerUserId = rows[0].user_id
+  if (users.hasOwnProperty(ownerUserId)) {
+    return ownerUserId
+  }
+
+  return false
+}

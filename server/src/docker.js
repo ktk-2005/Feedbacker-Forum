@@ -1,13 +1,17 @@
 import Docker from 'dockerode'
 import fs from 'fs'
 import os from 'os'
+import R from 'ramda'
 import {
   addContainer,
   listContainersByUser,
   removeContainer,
   setInstanceRunnerStatusSuccess,
   setInstanceRunnerStatusFail,
-  createNewInstanceRunner
+  createNewInstanceRunner,
+  listInstanceRunnerOwnersByTag,
+  deleteInstanceRunnerForUser,
+  confirmInstanceRunnerOwnership
 } from './database'
 import { config } from './globals'
 import logger from './logger'
@@ -29,6 +33,7 @@ export function initializeDocker() {
     if (config.dockerWindows) {
       opts.socketPath = '//./pipe/docker_engine'
     } else {
+      // TODO: be able to define these from the config file
       const basePath = `${os.homedir()}/.docker/machine/machines/default`
       opts.host = '192.168.99.100'
       opts.protocol = 'https'
@@ -75,8 +80,20 @@ export async function getContainerLogs(id) {
 /* Operational methods */
 
 export async function createNewContainer(url, version, type, name, port, userId) {
-  if (type !== 'node') {
-    throw Error(`createNewContainer: expected type 'node', was ${type}.`)
+  // Check if the specified instance runner exists AND if it's a custom runner, that
+  // the user has created it themselves.
+
+  if (R.none(runner => runner.tag === type, config.runners)) {
+    // Caveat: this check only considers the `userId` passed to this method.
+    // It's possible the user would own the runner on some other userId than the
+    // one that was selected to be used on this method. Better to just remove multi-user support?
+    const dummyUserObject = {}
+    dummyUserObject[userId] = null
+    const ownerId = await confirmInstanceRunnerOwnership(type, dummyUserObject)
+
+    if (!ownerId) {
+      throw new HttpError(400, `Invalid runner type: "${type}"`)
+    }
   }
 
   // Chooses a random port for the instance between the range [20 000 - 29 999].
@@ -84,9 +101,11 @@ export async function createNewContainer(url, version, type, name, port, userId)
   // don't support connecting directly to different container IPs.
   const hostPort = Math.floor(20000 + Math.random() * 9999) || 0
 
+  // Caveat: this binds the port on *all* interfaces. This is a security risk, because
+  // you can get access to all containers by just bruteforcing the port on the host.
   const opts = {
     name,
-    Image: 'node-runner',
+    Image: type,
     ExposedPorts: { [`${port}/tcp`]: {} },
     HostConfig: {
       PortBindings: {
@@ -99,8 +118,9 @@ export async function createNewContainer(url, version, type, name, port, userId)
     ],
   }
 
+  // Create the container and start it. We'll get the unique id
+  // only after the container has started.
   const container = await docker.createContainer(opts)
-
   await container.start()
   const containerInfo = await getContainerInfoFromDocker(container.id)
 
@@ -114,6 +134,8 @@ export async function createNewContainer(url, version, type, name, port, userId)
 
   logger.info(`Container created and started. Id: ${containerData.id}`)
 
+  // This try-catch construction is meant to try to revert both docker and database
+  // to a clean state if something goes wrong.
   try {
     await addContainer(containerData)
   } catch (error) {
@@ -159,11 +181,14 @@ export async function createNewRunner(userId, dockerTag, name) {
   // todo: size check
   logger.info(`Creating new instance logger: userId=${userId}, dockerTag=${dockerTag}, name=${name}`)
 
+  await createNewInstanceRunner(userId, dockerTag, name)
+
   // We won't wait for the promise to resolve because
   // especially with larger images it can take a while to download.
   // Instead, we update the download's status in the database.
 
-  await createNewInstanceRunner(userId, dockerTag, name)
+  // It should also be noted that this updates the image for all other
+  // users too if they use the same tag.
 
   docker.pull(dockerTag).then(async () => {
     await setInstanceRunnerStatusSuccess(dockerTag)
@@ -172,4 +197,16 @@ export async function createNewRunner(userId, dockerTag, name) {
     await setInstanceRunnerStatusFail(dockerTag)
     throw new NestedError('Unable to pull docker image', error, { functionArguments: { userId, dockerTag } })
   })
+}
+
+export async function deleteRunner(dockerTag, userId) {
+  // Determine if other users are using the image. Only delete it from disk if
+  // the last user deletes it.
+
+  deleteInstanceRunnerForUser(userId, dockerTag)
+  const duplicateOwners = await listInstanceRunnerOwnersByTag(dockerTag)
+  if (duplicateOwners.length === 0) {
+    const image = docker.getImage(dockerTag)
+    image.remove({ f: true })
+  }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import R from 'ramda'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
@@ -18,6 +19,7 @@ class CreateRunner extends React.Component {
     }
 
     this.getInstanceRunnersFromServer = this.getInstanceRunnersFromServer.bind(this)
+    this.deleteRunner = this.deleteRunner.bind(this)
   }
 
   componentDidMount() {
@@ -43,6 +45,16 @@ class CreateRunner extends React.Component {
     await apiCall('POST', '/instanceRunners/new', { tag: inputValue('tag'), name: inputValue('name') })
   }
 
+  async deleteRunner(tag) {
+    await apiCall('POST', '/instanceRunners/delete', { tag })
+    this.setState((prevState) => {
+      const instancesWithoutDeletedOne = R.reject(
+        runner => runner.id === tag, prevState.instanceRunners
+      )
+      return instancesWithoutDeletedOne
+    })
+  }
+
   render() {
     return (
       <>
@@ -55,12 +67,14 @@ class CreateRunner extends React.Component {
               <th>User</th>
               <th>Created</th>
               <th>Status</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {this.state.instanceRunners.map(runner => (<RunnerRow
-              key={runner.id}
+              key={runner.tag}
               runner={runner}
+              deleteRunnerCallback={this.deleteRunner}
             />
             )) }
           </tbody>
@@ -77,15 +91,16 @@ class CreateRunner extends React.Component {
 }
 
 function RunnerRow(props) {
-  const { runner } = props
+  const { runner, deleteRunnerCallback } = props
   return (
     <tr>
-      <td>{runner.id}</td>
+      <td>{runner.tag}</td>
       <td>{runner.name}</td>
       <td>{runner.size}</td>
       <td>{runner.user_id}</td>
       <td>{runner.date}</td>
       <td>{runner.status}</td>
+      <td><button type="button" onClick={() => deleteRunnerCallback(runner.tag)}>Delete</button></td>
     </tr>
   )
 }

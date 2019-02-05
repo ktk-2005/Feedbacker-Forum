@@ -4,8 +4,8 @@
   "useTestData": true,
   "runners": [
     {
-      "name": "Nodejs",
-      "id": "node-runner"
+      "name": "npm run start",
+      "tag": "node-runner"
     }
   ]
 }

@@ -9,7 +9,7 @@ import {
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { resolveContainer } from '../database'
+import { confirmContainerOwnership } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -38,14 +38,16 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 router.get('/logs/:name', catchErrors(async (req, res) => {
+  const { name } = req.params
   const { users } = await reqUser(req)
-  const { id, userId } = await resolveContainer(req.params.name)
 
-  if (!users.hasOwnProperty(userId)) {
-    throw new HttpError(403, 'Only instance owner can see logs')
+  const ownerId = await confirmContainerOwnership(name, users)
+
+  if (!ownerId) {
+    throw new HttpError(400, 'Invalid id')
   }
 
-  const logs = await getContainerLogs(id)
+  const logs = await getContainerLogs(name)
   res.type('txt')
   res.send(logs)
 }))
@@ -81,17 +83,13 @@ router.post('/new', catchErrors(async (req, res) => {
     throw new HttpError(400, `Bad container name: ${name}`)
   }
 
-  if (type === 'node') {
-    await attempt(async () => {
-      const suffixedName = `${name}-${uuid(5)}`
-      const containerInfo = await createNewContainer(
-        url, version, type, suffixedName, port, userId
-      )
-      res.json({ containerInfo })
-    })
-  } else {
-    throw new HttpError(501, `Expected type 'node', but got '${type}'`)
-  }
+  await attempt(async () => {
+    const suffixedName = `${name}-${uuid(5)}`
+    const containerInfo = await createNewContainer(
+      url, version, type, suffixedName, port, userId
+    )
+    res.json({ containerInfo })
+  })
 }))
 
 // @api POST /api/instances/stop
@@ -103,8 +101,17 @@ router.post('/new', catchErrors(async (req, res) => {
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/stop', catchErrors(async (req, res) => {
-  await stopContainer(req.body.name)
-  logger.info(`Stopped container with name ${req.body.name}`)
+  const { name } = req.body
+  const { users } = await reqUser(req)
+
+  const ownerId = await confirmContainerOwnership(name, users)
+
+  if (!ownerId) {
+    throw new HttpError(400, 'Invalid id')
+  }
+
+  await stopContainer(name)
+  logger.info(`Stopped container with name ${name}`)
   res.sendStatus(200)
 }))
 
@@ -117,8 +124,17 @@ router.post('/stop', catchErrors(async (req, res) => {
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/start', catchErrors(async (req, res) => {
-  await startContainer(req.body.name)
-  logger.info(`Started container with name ${req.body.name}`)
+  const { name } = req.body
+  const { users } = await reqUser(req)
+
+  const ownerId = await confirmContainerOwnership(name, users)
+
+  if (!ownerId) {
+    throw new HttpError(400, 'Invalid id')
+  }
+
+  await startContainer(name)
+  logger.info(`Started container with name ${name}`)
   res.sendStatus(200)
 }))
 
@@ -131,8 +147,17 @@ router.post('/start', catchErrors(async (req, res) => {
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/delete', catchErrors(async (req, res) => {
-  await deleteContainer(req.body.name)
-  logger.info(`Deleted container with name ${req.body.name}`)
+  const { name } = req.body
+  const { users } = await reqUser(req)
+
+  const ownerId = await confirmContainerOwnership(name, users)
+
+  if (!ownerId) {
+    throw new HttpError(400, 'Invalid id')
+  }
+
+  await deleteContainer(name)
+  logger.info(`Deleted container with name ${name}`)
   res.send(200)
 }))
 

@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { shadowDocument } from './shadowDomHelper'
 import apiCall from './api-call'
+import { subscribeUsers, unsubscribeUsers } from './globals'
 // Styles
 import styles from './scss/views/create.scss'
 
@@ -14,10 +15,26 @@ class Create extends React.Component {
     super(props)
 
     this.postContainer = this.postContainer.bind(this)
+    this.getInstanceRunnersFromServer = this.getInstanceRunnersFromServer.bind(this)
 
     this.state = {
       redirect: false,
+      instanceRunners: [],
     }
+  }
+
+  componentDidMount() {
+    this.userSub = subscribeUsers(this.getInstanceRunnersFromServer)
+  }
+
+  componentWillUnmount() {
+    unsubscribeUsers(this.userSub)
+  }
+
+  async getInstanceRunnersFromServer() {
+    const response = await apiCall('GET', '/instanceRunners')
+
+    this.setState({ instanceRunners: response })
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
@@ -31,7 +48,7 @@ class Create extends React.Component {
     const json = await apiCall('POST', '/instances/new', {
       url: inputValue('url'),
       version: inputValue('version'),
-      type: 'node',
+      type: inputValue('application'),
       port: inputValue('port'),
       name: inputValue('name').toLowerCase(),
     })
@@ -66,7 +83,9 @@ class Create extends React.Component {
             <label htmlFor="application">
               Application type
               <select name="application" id="application" form="form" required>
-                <option value="node">Node.js</option>
+                {this.state.instanceRunners.map(runner => (
+                  <option key={runner.tag} value={runner.tag}>{runner.name}</option>
+                ))}
               </select>
             </label>
             <label htmlFor="url">
