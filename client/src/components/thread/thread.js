@@ -58,6 +58,7 @@ class Thread extends React.Component {
           handleSubmit={this.props.handleSubmit}
           threadId={this.props.id}
           inputRef={this.replyField}
+          toggleTagElementState={this.props.toggleTagElementState}
         />
       </>
     )

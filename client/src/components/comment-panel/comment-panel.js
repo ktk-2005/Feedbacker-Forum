@@ -47,14 +47,14 @@ class CommentPanel extends React.Component {
     this.setState({ currentThread: threadId })
   }
 
-  async handleSubmit(event, value, threadId) {
+  async handleSubmit(event, taggedElementXPath, value, threadId) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
 
     if (value === '') return // Don't post empty comment
 
     const getBlob = () => {
-      const xPath = this.props.taggedElementXPath
+      const xPath = taggedElementXPath
       if (xPath) {
         return { xPath }
       }
@@ -132,6 +132,7 @@ class CommentPanel extends React.Component {
                 updateCurrentThread={this.updateCurrentThread}
                 currentThread={this.state.currentThread}
                 deleteComment={this.deleteComment}
+                toggleTagElementState={this.props.toggleTagElementState}
               />),
             sortedThreads
           )
@@ -158,6 +159,7 @@ class CommentPanel extends React.Component {
           <SubmitField
             handleSubmit={this.handleSubmit}
             threadId=""
+            toggleTagElementState={this.props.toggleTagElementState}
           />
         </div>
       </div>
