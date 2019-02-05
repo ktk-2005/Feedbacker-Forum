@@ -65,7 +65,7 @@ class Thread extends React.Component {
 
   canDelete(commentUserId) {
     const [currentUser] = Object.keys(this.props.users)
-    return currentUser === commentUserId
+    return currentUser === commentUserId || this.props.role === 'dev'
   }
 
   render() {
