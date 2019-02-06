@@ -42,7 +42,7 @@ const targetElement = (comment) => {
 
 const chooseLabel = (op, userId) => {
   if (userId === op) {
-    return <CommentLabel posterRole="OP" />
+    return <CommentLabel posterRole="op" />
   }
   return null
 }
