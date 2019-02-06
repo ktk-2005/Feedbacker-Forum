@@ -1,11 +1,17 @@
 import React from 'react'
+import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
+import UsernameModal from '../add-username-modal/add-username-modal'
 // Styles
 import styles from './survey.scss'
 
 const css = classNames.bind(styles)
+
+const mapStateToProps = state => ({
+  users: (state.persist || {}).users || {},
+})
 
 class Answer extends React.Component {
   constructor(props) {
@@ -15,8 +21,10 @@ class Answer extends React.Component {
     this.handleTextSubmit = this.handleTextSubmit.bind(this)
     this.submit = this.submit.bind(this)
     this.handleOptionSubmit = this.handleOptionSubmit.bind(this)
+    this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
 
     this.state = {
+      usernameModalIsOpen: false,
       value: '',
       editText: false,
       option: { answered: false, answer: 0 },
@@ -60,6 +68,9 @@ class Answer extends React.Component {
         blob,
       })
     }
+    if (!this.props.users.name) {
+      this.toggleUsernameModal()
+    }
   }
 
   async handleTextSubmit(event) {
@@ -91,6 +102,10 @@ class Answer extends React.Component {
         prevAnswer: { ...state.prevAnswer, blob },
       }))
     }
+  }
+
+  toggleUsernameModal() {
+    this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
   render() {
@@ -133,6 +148,14 @@ class Answer extends React.Component {
               </form>
             )
           }
+          {!this.props.users.name
+            ? (
+              <UsernameModal
+                isOpen={this.state.usernameModalIsOpen}
+                toggle={this.toggleUsernameModal}
+              />
+            )
+            : null}
         </>
       )
     } else if (this.props.question.type === 'option') {
@@ -149,6 +172,14 @@ class Answer extends React.Component {
               {value}
             </button>
           ))}
+          {!this.props.users.name
+            ? (
+              <UsernameModal
+                isOpen={this.state.usernameModalIsOpen}
+                toggle={this.toggleUsernameModal}
+              />
+            )
+            : null}
         </div>
       )
     } else {
@@ -159,4 +190,4 @@ class Answer extends React.Component {
   }
 }
 
-export default Answer
+export default connect(mapStateToProps)(Answer)
