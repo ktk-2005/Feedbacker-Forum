@@ -74,8 +74,6 @@ function Answer({ answer }) {
   const { blob, name, time } = answer
   const { text } = blob
 
-  console.log(answer)
-
   return (
     <div>
       <p>{text}</p>
