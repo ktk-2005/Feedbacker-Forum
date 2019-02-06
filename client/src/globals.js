@@ -32,7 +32,7 @@ export function getUsers() {
 }
 
 export function waitForUsers() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!R.isEmpty(users)) resolve(users)
     else {
       const token = subscribeUsers((users) => {

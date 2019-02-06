@@ -9,12 +9,13 @@ import styles from './survey-edit-card.scss'
 
 const css = classNames.bind(styles)
 
+
 function TextDisplay({ question, onOpen }) {
   const answers = question.answers || []
-  const answersText = `Show ${answers.length} answer${answers.length == 1 ? '' : 's'}`
+  const answersText = `Show ${answers.length} answer${answers.length === 1 ? '' : 's'}`
 
   return (
-    <button className={css('answer-text')} onClick={onOpen}>{answersText}</button>
+    <button type="button" className={css('answer-text')} onClick={onOpen}>{answersText}</button>
   )
 }
 
@@ -30,12 +31,6 @@ function OptionDisplay({ question }) {
     }
     </ul>
   )
-}
-
-function focusTextEnd(event) {
-  const temp = event.target.value
-  event.target.value = ''
-  event.target.value = temp
 }
 
 function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
@@ -56,7 +51,6 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
             type="text"
             value={option}
             placeholder={`Option ${index + 1}`}
-            tabIndex="2"
             onChange={handleChange(index)}
             onKeyPress={onKeyPress}
             disabled={commit}
@@ -140,7 +134,7 @@ class SurveyEditCard extends React.Component {
   }
 
   handleKeyPress(event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       // Enter: End edit
       this.doEditEnd()
     }
@@ -163,7 +157,14 @@ class SurveyEditCard extends React.Component {
 
     const dataEdit = {
       text: () => (<div />),
-      option: () => (<OptionEdit question={question} onEditChange={onEditChange} onKeyPress={this.handleKeyPress} commit={commit} />),
+      option: () => (
+        <OptionEdit
+          question={question}
+          onEditChange={onEditChange}
+          onKeyPress={this.handleKeyPress}
+          commit={commit}
+        />
+      ),
       info: () => (<div />),
     }
 
@@ -181,14 +182,13 @@ class SurveyEditCard extends React.Component {
                 onChange={this.handleTextEdit}
                 placeholder="Write a question..."
                 autoFocus
-                tabIndex="1"
                 onKeyPress={this.handleKeyPress}
                 disabled={commit}
               />
               <button
                 type="button"
                 onClick={this.doEditEnd}
-                tabIndex="4"
+                tabIndex="-1"
                 disabled={commit}
               >OK
               </button>
