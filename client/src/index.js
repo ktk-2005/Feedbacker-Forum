@@ -68,7 +68,7 @@ function roleReducer(state = '', action) {
   }
 }
 
-function questionReducer(state = {}, action) {
+function questionReducer(state = [], action) {
   switch (action.type) {
     case LOAD_QUESTIONS:
       return action.questions

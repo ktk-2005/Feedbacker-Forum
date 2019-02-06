@@ -24,7 +24,6 @@ class Survey extends React.Component {
     this.previousQuestion = this.previousQuestion.bind(this)
 
     this.state = {
-      questions: [],
       currentIndex: 0,
     }
   }
@@ -32,16 +31,12 @@ class Survey extends React.Component {
   async componentDidMount() {
     const questions = await apiCall('GET', '/questions')
     this.props.dispatch(loadQuestions(questions))
-    this.setState(state => ({
-      ...state,
-      questions,
-    }))
   }
 
   nextQuestion() {
     this.setState(state => ({
       ...state,
-      currentIndex: Math.min(state.questions.length - 1, state.currentIndex + 1),
+      currentIndex: Math.min(this.props.questions.length - 1, state.currentIndex + 1),
     }))
   }
 
@@ -53,7 +48,8 @@ class Survey extends React.Component {
   }
 
   buttons() {
-    const { questions, currentIndex } = this.state
+    const { currentIndex } = this.state
+    const { questions } = this.props
     const hasNext = currentIndex < questions.length - 1
     const hasPrevious = currentIndex > 0
     return (
@@ -77,10 +73,10 @@ class Survey extends React.Component {
   }
 
   render() {
-    const { questions, currentIndex } = this.state
-    if (this.state.questions.length < 1) {
-      // TODO: 1. unnecessary state as should not be openable if empty (remove empty state)
-      // TODO: 2. make progress bar dynamic (real number)
+    const { currentIndex } = this.state
+    const { questions } = this.props
+    if (questions.length < 1) {
+      // NOT UNNECESSARY STATE
       // TODO: 3. make progress bar hover to show tooltip with percent progress and steps
       return <h3>No survey available</h3>
     } else {
