@@ -96,7 +96,7 @@ class CommentPanel extends React.Component {
   }
 
   scrollToBottom() {
-    const el = shadowDocument().getElementById('thread--container')
+    const el = shadowDocument().getElementById('thread-container')
     if (el) el.scrollTop = el.scrollHeight
   }
 
@@ -118,7 +118,7 @@ class CommentPanel extends React.Component {
     ).time)
     const sortedThreads = sortbyTime(R.toPairs(threadArray))
     return (
-      <div className={css('thread-container')} id="thread--container">
+      <div className={css('thread-container')} id="thread-container">
         {
           R.map(
             ([id, comments]) => (

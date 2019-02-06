@@ -1,8 +1,8 @@
 import React from 'react'
+// Helpers
 import Moment from 'react-moment'
 import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
-// Helpers
 import classNames from 'classnames/bind'
 import * as DomTagging from '../../dom-tagging'
 // Components
@@ -42,7 +42,7 @@ const targetElement = (comment) => {
 
 const chooseLabel = (op, userId) => {
   if (userId === op) {
-    return <CommentLabel posterRole="op" />
+    return <CommentLabel posterRole="OP" />
   }
   return null
 }
@@ -62,7 +62,13 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
     </div>
     <Reactions reactions={comment.reactions} commentId={id} />
     <div className={css('expand-button-container')}>
-      <button className={css('delete-button', { hidden: !canDelete })} type="button" onClick={() => deleteComment(comment)}>Delete</button>
+      <button
+        className={css('delete-button', { hidden: !canDelete })}
+        type="button"
+        onClick={() => deleteComment(comment)}
+      >
+        Delete
+      </button>
       <button type="button" onClick={onClick}>{buttonText}</button>
     </div>
   </div>

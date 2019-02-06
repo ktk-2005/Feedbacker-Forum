@@ -12,9 +12,11 @@
 }
 
 .dev {
-  background-color: green;
+  color: $palette-white;
+  background-color: $palette-dark;
 }
 
 .op {
-  background-color: dodgerblue;
+  color: $palette-white;
+  background-color: $palette-accent;
 }
