@@ -55,10 +55,11 @@ class CommentPanel extends React.Component {
 
     const getBlob = () => {
       const xPath = taggedElementXPath
+      const route = window.location.pathname
       if (xPath) {
-        return { xPath }
+        return { xPath, route }
       }
-      return {}
+      return { route }
     }
 
     const unhighlightTaggedElement = () => {
