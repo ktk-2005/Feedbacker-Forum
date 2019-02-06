@@ -45,7 +45,7 @@ class Build extends React.Component {
 
   render() {
     const { name } = this.props.match.params
-    const url = `https://${name}.${window.location.host}`
+    const url = `//${name}.${window.location.host}`
 
     return (
       <div className={css('center-center-block')}>
@@ -66,7 +66,7 @@ class Build extends React.Component {
             </Link>
             <label>
               Feedbackable UI:
-              <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url}</a>
+              <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url.replace(/^(https?:)?\/\//, '')}</a>
             </label>
           </div>
         </div>
