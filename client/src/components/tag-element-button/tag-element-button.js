@@ -37,13 +37,17 @@ class TagElementButton extends React.Component {
   }
 
   render() {
-    const { active, selected } = this.props
+    const { active, selected, elementTagged, toggleTagElementState } = this.props
 
     return (
       <button
         type="button"
         className={css('button', { active }, { selected })}
-        onClick={DomTagging.toggleMarkingMode}
+        onClick={() => {
+          DomTagging.setElementTaggedCallback(event => elementTagged(event))
+          DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
+          DomTagging.toggleMarkingMode()
+        }}
       >
         {active ? 'Cancel' : <InlineSVG src={TargetIcon} raw />}
       </button>

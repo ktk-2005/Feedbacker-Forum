@@ -32,7 +32,10 @@ class SubmitField extends React.Component {
   passSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    this.setState({ value: '' })
+    this.setState({
+      value: '',
+      taggedElementXPath: '',
+    })
 
     this.props.handleSubmit(event,
       this.state.taggedElementXPath,
