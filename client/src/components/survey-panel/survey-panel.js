@@ -1,5 +1,6 @@
 import React from 'react'
 import Draggable from 'react-draggable'
+import { connect } from 'react-redux'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import styles from './survey-panel.scss'
@@ -9,10 +10,12 @@ import SurveyEditContainer from '../survey-edit/survey-edit-container'
 
 const css = classNames.bind(styles)
 
+const mapStateToProps = state => ({ role: state.role })
+
 // eslint-disable-next-line react/prefer-stateless-function
 class SurveyPanel extends React.Component {
   render() {
-    const { hidden, onClick } = this.props
+    const { hidden, onClick, role } = this.props
 
     // TODO: make survey decision on dev type or not, size depends on dev or not
     return (
@@ -36,12 +39,15 @@ class SurveyPanel extends React.Component {
                 <InlineSVG src={CloseIcon} />
               </button>
             </div>
-            <div className={css('edit-container')}>
-              <SurveyEditContainer />
-            </div>
-            <div className={css('panel-body')}>
-              <Survey />
-            </div>
+            {role === 'dev' ? (
+              <div className={css('edit-container')}>
+                <SurveyEditContainer />
+              </div>
+            ) : (
+              <div className={css('panel-body')}>
+                <Survey />
+              </div>
+            )}
           </div>
         </Draggable>
       </div>
@@ -49,4 +55,4 @@ class SurveyPanel extends React.Component {
   }
 }
 
-export default SurveyPanel
+export default connect(mapStateToProps)(SurveyPanel)
