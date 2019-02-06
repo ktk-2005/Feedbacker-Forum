@@ -108,7 +108,11 @@ function overrideConfigFromEnv() {
   if (useTestData) {
     config.useTestData = useTestData !== '0'
   }
-  config.databaseUrl = process.env.DATABASE_URL
+
+  const databaseUrl = process.env.DATABASE_URL
+  if (databaseUrl) {
+    config.databaseUrl = databaseUrl
+  }
 
   const dockerUrl = process.env.DOCKER_HOST_URL
   if (dockerUrl) {
@@ -149,6 +153,7 @@ export async function startup() {
     childProcess.spawn(path.resolve(proxyPath, proxyExecutable), [], {
       cwd: proxyPath,
       stdio: 'inherit',
+      env: process.env,
     })
   }
 
@@ -158,6 +163,7 @@ export async function startup() {
     childProcess.spawn(npmExecutable, ['run', 'watch'], {
       cwd: '../client/',
       stdio: 'inherit',
+      env: process.env,
     })
   }
 
@@ -165,4 +171,3 @@ export async function startup() {
 }
 
 startup()
-

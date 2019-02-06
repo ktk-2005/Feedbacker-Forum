@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
+import UsernameModal from '../add-username-modal/add-username-modal'
 
 // Components
 import Comment from '../comment/comment'
@@ -20,6 +21,7 @@ const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = state => ({
   comments: state.comments,
+  users: (state.persist || {}).users || {},
   role: state.role,
 })
 
@@ -27,12 +29,14 @@ class CommentPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      usernameModalIsOpen: false,
       value: '',
       isHidden: false,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
@@ -63,10 +67,21 @@ class CommentPanel extends React.Component {
       text: this.state.value,
       blob: getBlob(),
     })
+
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
     this.setState({ value: '' })
-    await this.fetchComments()
+
+    if (!this.props.users.name) {
+      await this.toggleUsernameModal()
+    } else {
+      await this.fetchComments()
+    }
+  }
+
+  async toggleUsernameModal() {
+    if (this.state.usernameModalIsOpen) await this.fetchComments()
+    this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
   handleClick() {
@@ -95,7 +110,13 @@ class CommentPanel extends React.Component {
       <div className={css('comment-container')} id="comment-container">
         {
           R.map(
-            ([id, comment]) => <Comment key={id} comment={comment} id={id} role={role} />,
+            ([id, comment]) => (
+              <Comment
+                key={id}
+                comment={comment}
+                id={id}
+                role={role}
+              />),
             sortedCommentArray
           )
         }
@@ -126,6 +147,14 @@ class CommentPanel extends React.Component {
             />
             <input className={css('submit-comment')} type="submit" value="Comment" />
           </form>
+          {!this.props.users.name
+            ? (
+              <UsernameModal
+                isOpen={this.state.usernameModalIsOpen}
+                toggle={this.toggleUsernameModal}
+              />
+            )
+            : null}
         </div>
       </div>
     )
