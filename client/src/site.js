@@ -4,11 +4,13 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 // Helpers
+import { ToastContainer, toast } from 'react-toastify'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import {
   BrowserRouter as Router, Route, Switch
 } from 'react-router-dom'
+
 import { setupPersist } from './persist'
 import Dashboard from './dashboard-view'
 import Create from './create'
@@ -19,6 +21,7 @@ import apiCall from './api-call'
 // Styles
 import styles from './scss/_base.scss'
 import CreateRunner from './create-runner'
+import 'react-toastify/dist/ReactToastify.css'
 
 const css = classNames.bind(styles)
 
@@ -85,18 +88,31 @@ const initialize = () => {
   })
 
   ReactDOM.render(
-    <Provider store={store}>
-      <Router>
-        <div className={css('feedback-app-container', 'site-views')}>
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/create" component={Create} />
-            <Route exact path="/create-runner" component={CreateRunner} />
-            <Route exact path="/logs/:name" component={Build} />
-          </Switch>
-        </div>
-      </Router>
-    </Provider>,
+    <>
+      <Provider store={store}>
+        <Router>
+          <div className={css('feedback-app-container', 'site-views')}>
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/create" component={Create} />
+              <Route exact path="/create-runner" component={CreateRunner} />
+              <Route exact path="/logs/:name" component={Build} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover
+      />
+    </>,
     prepareReactRoot()
   )
 }

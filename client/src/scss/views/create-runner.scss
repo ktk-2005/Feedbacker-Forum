@@ -2,11 +2,81 @@
 @import '../../scss/colors';
 @import '../../scss/mixins';
 
-table {
-  border-collapse: collapse;
+@import './create.scss';
 
-  th, td {
-    border: 1px solid black;
-    padding: $spacer;
+.runner-view-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.form-create-runner {
+  @extend .form-create;
+}
+
+.create-form-container {
+  @extend .create-view;
+  max-width: 400px;
+}
+
+.runner-table {
+  display: flex;
+  flex-flow: column;
+  min-width: 30vw;
+  border-radius: $border-radius-default;
+
+  h2 {
+    margin-bottom: $spacer * 2;
+    align-self: center;
   }
+  //box-shadow: 0 2px 10px $palette-shadow-default;
+}
+
+.table-body {
+  display: flex;
+  flex-flow: column-reverse;
+}
+
+.row {
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  box-shadow: 0 2px 10px $palette-shadow-default;
+  margin-bottom: $baseline;
+
+  &.table-header {
+    background: $palette-medium;
+    color: $palette-lighter;
+    font-weight: 600;
+  }
+
+  &.default {
+    background: $palette-light;
+  }
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  width: 25%;
+  padding: $spacer;
+
+  &.status-fail {
+    color: red;
+  }
+}
+
+.delete-button {
+  @extend %anchor-button;
+
+  &.hidden {
+    @include hide-and-animate();
+  }
+}
+
+.timestamp {
+  font-size: $font-size-small;
 }

@@ -6,11 +6,13 @@ import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 // External libraries & helpers
 import * as R from 'ramda'
+import { ToastContainer, toast } from 'react-toastify'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
 import { setUsers } from './globals'
 import { prepareReactRoot } from './shadowDomHelper'
+
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
@@ -20,6 +22,7 @@ import TagElementButton from './components/tag-element-button/tag-element-button
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
+import 'react-toastify/dist/ReactToastify.css'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
@@ -145,6 +148,17 @@ class MainView extends React.Component {
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
+        />
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover
         />
       </div>
     )
