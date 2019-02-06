@@ -283,20 +283,23 @@ Returns 200 OK if the operation completed successfully and 500 ISE if an error o
 
 ## Instance runners
 
-### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L20)
+### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L22)
 
-Retrieve all instance runners in the database and configured system default runners.
+Retrieve all instance runners in the database and configured system default
+runners.
 
-Fields present in the instance objects are: tag, time, name, use_id, size, status
+Fields present in the instance objects are: tag, time, use_id, size, status
 
-Returns 200 OK and a JSON array of all instance runners or the system runners if
+Returns 200 OK and a JSON array of all instance runners or the system runners
+if
   a) the user doesn't have any custom runners or
   b) the user isn't authenticated properly
 
-### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L45)
+### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L48)
 
-Create a new instance runner for the user. The image is pulled from the Docker Hub.
-There is currently no limitations on how large or many images a user can pull.
+Create a new instance runner for the user. The image is pulled from the
+Docker Hub. There is currently no limitations on how large or many images a
+user can pull.
 
 Example request body:
 
@@ -309,7 +312,7 @@ Example request body:
 Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
 in the `status` field.
 
-### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L63)
+### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L66)
 
 Deletes an instance runner. This will also cleanup space used on disk, so
 if per-user quotas are implemented later, this is the way instance runner
