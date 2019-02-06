@@ -12,3 +12,4 @@ environment variables. You can specify the configuration file to use with the `-
 | `dev` | `Boolean` | If set to true the server runs in development mode serving also static content. |
 | `dockerWindows` | `Boolean` | Set this to true if you're using Docker for Windows (Only Win10 Pro/Education). If you're using Docker Toolbox (other Windows versions), leave this to false. Default is false. |
 | `runners` | `List` | List of objects that describe the system-provided runners. For example `[{"name": "npm run start","tag": "node-runner"}]` |
+| `imageMaxSize` | `Integer` | Maximum size of images in bytes. |

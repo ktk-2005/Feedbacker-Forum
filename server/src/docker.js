@@ -178,8 +178,7 @@ export async function deleteContainer(id) {
 }
 
 export async function createNewRunner(userId, dockerTag, name) {
-  // todo: size check
-  logger.info(`Creating new instance logger: userId=${userId}, dockerTag=${dockerTag}, name=${name}`)
+  logger.info(`Creating new instance runner ${dockerTag}`)
 
   await createNewInstanceRunner(userId, dockerTag, name)
 
@@ -191,11 +190,25 @@ export async function createNewRunner(userId, dockerTag, name) {
   // users too if they use the same tag.
 
   docker.pull(dockerTag).then(async () => {
+    logger.info(`Pulled or updated image ${dockerTag} successfully.`)
+    // Not the best place for the size check but it kinda works
+    // TODO: check before pulling
+    const image = await docker.getImage(dockerTag)
+    console.log(image)
+    const imageInfo = await image.inspect()
+    console.log(imageInfo)
+    const imageSize = imageInfo.Size
+    logger.info(`Pulled image, size is ${imageSize}`)
+    if (imageSize > config.imageMaxSize) {
+      image.remove({ f: true })
+      throw new NestedError(`Image size is ${imageSize} (over ${config.imageMaxSize})`)
+    }
+
     await setInstanceRunnerStatusSuccess(dockerTag)
   }).catch(async (error) => {
     // update db with error status
     await setInstanceRunnerStatusFail(dockerTag)
-    throw new NestedError('Unable to pull docker image', error, { functionArguments: { userId, dockerTag } })
+    logger.error(new NestedError('Unable to pull docker image', error, { functionArguments: { userId, dockerTag } }))
   })
 }
 
