@@ -32,6 +32,7 @@ const SortableSurveyEditList = SortableContainer(({
   onDelete,
   onEditBegin,
   onEditEnd,
+  onEditCancel,
   onEditChange,
   edit,
   openId,
@@ -53,6 +54,7 @@ const SortableSurveyEditList = SortableContainer(({
           onDelete={badDeleteFunction}
           onEditBegin={badEditFunction}
           onEditEnd={badEditFunction}
+          onEditCancel={badEditFunction}
           onEditChange={badEditFunction}
           opened
           disabled={busy}
@@ -69,6 +71,7 @@ const SortableSurveyEditList = SortableContainer(({
             onDelete={onDelete}
             onEditBegin={onEditBegin}
             onEditEnd={onEditEnd}
+            onEditCancel={onEditCancel}
             onEditChange={onEditChange}
             edit={edit}
             opened={false}
@@ -93,6 +96,7 @@ export default class SurveyEditContainer extends React.Component {
     this.commitDelete = this.commitDelete.bind(this)
     this.editBegin = this.editBegin.bind(this)
     this.editEnd = this.editEnd.bind(this)
+    this.editCancel = this.editCancel.bind(this)
     this.editChange = this.editChange.bind(this)
     this.sortEnd = this.sortEnd.bind(this)
 
@@ -168,6 +172,13 @@ export default class SurveyEditContainer extends React.Component {
         edit: { },
       })
     }
+  }
+
+  editCancel(id) {
+    this.setState(({ questions }) => ({
+      questions: questions.filter(question => question.id !== PENDING_ID),
+      edit: { },
+    }))
   }
 
   editChange(id, change) {
@@ -249,6 +260,7 @@ export default class SurveyEditContainer extends React.Component {
             onDelete={this.startDelete}
             onEditBegin={this.editBegin}
             onEditEnd={this.editEnd}
+            onEditCancel={this.editCancel}
             onEditChange={this.editChange}
             edit={edit}
             openId={openId}
