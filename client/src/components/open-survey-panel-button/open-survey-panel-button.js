@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 // Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
@@ -9,14 +10,23 @@ import styles from './open-survey-panel-button.scss'
 
 const css = classNames.bind(styles)
 
-const OpenSurveyPanelButton = ({ hidden, onClick }) => (
-  <button
-    type="button"
-    className={hidden ? css('button', 'hidden') : css('button')}
-    onClick={onClick}
-  >
-    <InlineSVG src={OpenIcon} />
-  </button>
-)
+const mapStateToProps = state => ({
+  questions: state.questions,
+  role: state.role,
+})
 
-export default OpenSurveyPanelButton
+const OpenSurveyPanelButton = (props) => {
+  const { hidden, onClick, questions, role } = props
+  return (
+    <button
+      type="button"
+      className={hidden ? css('button', 'hidden') : css('button')}
+      onClick={onClick}
+      disabled={role !== 'dev' && questions.length < 1}
+    >
+      <InlineSVG src={OpenIcon} />
+    </button>
+  )
+}
+
+export default connect(mapStateToProps)(OpenSurveyPanelButton)

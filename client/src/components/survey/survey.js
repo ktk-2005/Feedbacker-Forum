@@ -1,7 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
+import { loadQuestions } from '../../actions'
 // Components
 import Question from './question'
 import Answer from './answer'
@@ -9,6 +11,10 @@ import Answer from './answer'
 import styles from './survey.scss'
 
 const css = classNames.bind(styles)
+
+const mapStateToProps = state => ({
+  questions: state.questions,
+})
 
 class Survey extends React.Component {
   constructor(props) {
@@ -25,6 +31,7 @@ class Survey extends React.Component {
 
   async componentDidMount() {
     const questions = await apiCall('GET', '/questions')
+    this.props.dispatch(loadQuestions(questions))
     this.setState(state => ({
       ...state,
       questions,
@@ -97,4 +104,4 @@ class Survey extends React.Component {
   }
 }
 
-export default Survey
+export default connect(mapStateToProps)(Survey)
