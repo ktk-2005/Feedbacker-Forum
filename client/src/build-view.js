@@ -45,7 +45,7 @@ class Build extends React.Component {
 
   render() {
     const { name } = this.props.match.params
-    const url = `http://${name}.localhost:8080`
+    const url = `http://${name}.${window.location.host}`
 
     return (
       <div className={css('center-center-block')}>

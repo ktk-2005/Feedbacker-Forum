@@ -121,9 +121,6 @@ export function setupPersist(loadPersist) {
   })
 
   window.addEventListener('message', (event) => {
-    if (allDataLoaded) return
-    allDataLoaded = true
-
     if (event.source !== persistWindow) return
     const msg = event.data
     if (typeof msg !== 'object') return
@@ -136,10 +133,12 @@ export function setupPersist(loadPersist) {
     saveLocalState(json)
     saveGlobalState(json)
 
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     loadPersist(state, true)
     window.clearTimeout(timeout)
   })
 
   return savePersist
 }
-

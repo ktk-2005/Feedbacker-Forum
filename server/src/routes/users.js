@@ -1,6 +1,7 @@
 import express from 'express'
+import { addUser, addUsername } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
-import { addUser } from '../database'
+
 import { catchErrors } from '../handlers'
 
 const router = express.Router()
@@ -33,6 +34,24 @@ router.post('/', catchErrors(async (req, res) => {
   })
 }))
 
+// @api PUT /api/users
+// Change username of existing user.
+// The request requires the id, the secret and the new username for the user,
+// eg. @json {
+//    "name": "Testuser2",
+//    "id": "d6ac55e9",
+//    "secret": "ea2ca2565f484906bfd5096126816a"
+// }
+// Returns 'ok' if the change was successful.
+//
+router.put('/', catchErrors(async (req, res) => {
+  const { name, id, secret } = req.body
+
+  await attempt(async () => {
+    await addUsername({ name, id, secret })
+    res.json('ok')
+  })
+}))
 // @api GET /api/users/role
 // Retrieve the role of the current user in the container.
 // Returns either `"dev"` or `"user"`
@@ -46,6 +65,25 @@ router.get('/role', catchErrors(async (req, res) => {
 
   res.json({
     role: users.hasOwnProperty(owner) ? 'dev' : 'user',
+  })
+}))
+
+// @api PUT /api/users
+// Change username of existing user.
+// The request requires the id, the secret and the new username for the user,
+// eg. @json {
+//    "name": "Testuser2",
+//    "id": "d6ac55e9",
+//    "secret": "ea2ca2565f484906bfd5096126816a"
+// }
+// Returns 'ok' if the change was successful.
+//
+router.put('/', catchErrors(async (req, res) => {
+  const { name, id, secret } = req.body
+
+  await attempt(async () => {
+    await addUsername({ name, id, secret })
+    res.json('ok')
   })
 }))
 

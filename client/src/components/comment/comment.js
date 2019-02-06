@@ -43,7 +43,7 @@ const targetElement = (comment) => {
 const Comment = ({ id, comment, role }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
-      <div className={css('name')}>Anonymous user</div>
+      <div className={css('name')}>{comment.username || 'Anonymous user'}</div>
       <Moment
         className={css('timestamp')}
         date={comment.time}
