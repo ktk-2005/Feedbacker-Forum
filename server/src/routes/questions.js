@@ -23,9 +23,9 @@ router.get('/', catchErrors(async (req, res) => {
   const { container, owner } = await reqContainer(req)
   const { users } = await reqUser(req)
 
-  const owner = users.hasOwnProperty(owner) || container.includes('-')
+  const isOwner = users.hasOwnProperty(owner) || container.includes('-')
 
-  const questions = (owner ? await getQuestionsWithAnswers(container)
+  const questions = (isOwner ? await getQuestionsWithAnswers(container)
     : await getQuestions(container))
 
   res.json(questions)
