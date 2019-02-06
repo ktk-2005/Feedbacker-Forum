@@ -1,9 +1,19 @@
 import React from 'react'
+// Helpers
+import classNames from 'classnames/bind'
+// Styles
+import styles from './survey.scss'
 
-const Question = ({ question, current, length }) => (
-  <div>
-    <h1>QUESTION {current + 1}</h1>
-    {question.text}
+const css = classNames.bind(styles)
+
+const Question = ({ question, current }) => (
+  <div className={css('question')}>
+    <h3>
+      Question { current + 1 }
+    </h3>
+    <p>
+      { question.text }
+    </p>
   </div>
 )
 

@@ -1,8 +1,6 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
-@import '../../scss/typography';
+@import '../../scss/compulsory';
+
+@import '../atoms-organisms/button';
 
 @import './dashboard-view.scss';
 

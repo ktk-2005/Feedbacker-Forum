@@ -2,6 +2,8 @@ import React from 'react'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import { SortableElement, SortableHandle } from 'react-sortable-hoc'
+import Moment from 'react-moment'
+import moment from 'moment-timezone'
 
 import styles from './survey-edit-card.scss'
 
@@ -30,7 +32,6 @@ function OptionDisplay({ question }) {
 }
 
 function focusTextEnd(event) {
-  console.log('ASD')
   const temp = event.target.value
   event.target.value = ''
   event.target.value = temp
@@ -70,19 +71,28 @@ const Handle = SortableHandle(() => (
 ))
 
 function Answer({ answer }) {
-  const { text, name } = answer
+  const { blob, name, time } = answer
+  const { text } = blob
+
+  console.log(answer)
 
   return (
     <div>
       <p>{text}</p>
-      <p>{name ? name : 'Anonymous'}</p>
+      <p>{name ? name : 'Anonymous user'}</p>
+      <Moment
+        className={css('timestamp')}
+        date={time}
+        format="D.MM.YYYY HH:mm"
+        tz={moment.tz.guess()}
+      />
       <hr />
     </div>
   )
 }
 
 function AnswerDisplay({ answers }) {
-  return answers.map(answer => <Answer answer={answer} />)
+  return answers.map(answer => <Answer key={answer.id} answer={answer} />)
 }
 
 class SurveyEditCard extends React.Component {

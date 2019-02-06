@@ -1,0 +1,39 @@
+@import '../../scss/compulsory';
+
+%textarea {
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+  display: block;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 3em;
+  border: none;
+}
+
+%form {
+  display: flex;
+  flex-flow: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  justify-content: center;
+
+  textarea {
+    @extend %textarea;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 2px 10px $palette-shadow-default;
+    }
+  }
+
+  input[type="submit"] {
+    @include button();
+    align-self: flex-end;
+    margin-top: $baseline;
+    padding: $baseline $spacer;
+    background: $palette-accent;
+    color: $palette-lighter;
+  }
+}

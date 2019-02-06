@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import SQLiteDatabase from './database/database-sqlite'
 import PostgresDatabase from './database/database-postgres'
 import HttpError from './http-error'
@@ -39,7 +40,64 @@ export async function getComments(container) {
     `, [container])
 }
 
-export async function getQuestions(container) { return db.query('SELECT * FROM questions WHERE container_id = ? ORDER BY order_id ASC', [container]) }
+export async function getQuestions(container) {
+  const rows = await db.query('SELECT * FROM questions WHERE container_id = ? ORDER BY order_id, id', [container])
+  return rows.map(r => ({
+    id: r.id,
+    time: r.time,
+    text: r.text,
+    userId: r.user_id,
+    type: r.type,
+    ...JSON.parse(r.blob),
+  }))
+}
+
+function formatAnswer(r) {
+  return {
+    id: r.answer_id,
+    time: r.answer_time,
+    user: r.answer_user,
+    blob: JSON.parse(r.answer_blob),
+  }
+}
+
+function formatQuestion(rows) {
+  const r = rows[0]
+  const answers = r.answer_id ? rows.map(formatAnswer) : []
+  return {
+    id: r.question_id,
+    time: r.question_time,
+    text: r.question_text,
+    userId: r.question_user,
+    type: r.question_type,
+    order: r.question_order,
+    ...JSON.parse(r.question_blob),
+    answers,
+  }
+}
+
+export async function getQuestionsWithAnswers(container) {
+  const rows = await db.query(`
+    SELECT
+    questions.id AS question_id,
+    questions.time AS question_time,
+    questions.text AS question_text,
+    questions.user_id AS question_user,
+    questions.type AS question_type,
+    questions.blob AS question_blob,
+    answers.id AS answer_id,
+    answers.time AS answer_time,
+    answers.user_id AS answer_user,
+    answers.blob AS answer_blob
+    FROM questions
+    LEFT JOIN answers
+    ON questions.id = answers.question_id
+    WHERE container_id = ?
+    ORDER BY questions.order_id, questions.id
+  `, [container])
+
+  return R.groupWith(R.eqProps('question_id'))(rows).map(formatQuestion)
+}
 
 export async function addQuestion({
   id, text, type, userId, container, blob, order
@@ -92,6 +150,14 @@ export async function addComment({
 export async function addAnswer({
   id, userId, questionId, blob,
 }) { return db.run('INSERT INTO answers(id, user_id, question_id, blob) VALUES (?, ?, ?, ?)', [id, userId, questionId, blob]) }
+
+export async function getAnswer({
+  userId, questionId,
+}) { return db.query('SELECT * FROM answers WHERE user_id=? AND question_id=?', [userId, questionId]) }
+
+export async function editAnswer({
+  userId, questionId, blob,
+}) { return db.query('UPDATE answers SET blob=? WHERE user_id=? AND question_id=?', [blob, userId, questionId]) }
 
 export async function addThread({
   id, container, blob,

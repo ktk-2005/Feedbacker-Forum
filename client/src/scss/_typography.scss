@@ -7,13 +7,21 @@ $font-default: 'Source Sans Pro', sans-serif;
 .feedback-app-container, .feedback-app-modal-root {
   font-family: $font-default;
   font-size: $font-size-default;
-  line-height: 100%;
+  line-height: 130%;
   color: $palette-darker;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: $palette-dark;
   margin: 0;
+}
+
+h1, h2, h3 {
+  font-weight: 500;
+}
+
+p {
+  margin: 1em 0;
 }
 
 *::placeholder {

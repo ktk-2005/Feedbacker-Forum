@@ -14,6 +14,7 @@ class SurveyPanel extends React.Component {
   render() {
     const { hidden, onClick } = this.props
 
+    // TODO: make survey decision on dev type or not, size depends on dev or not
     return (
       <div className={css('panel-container', { hidden })}>
         <Draggable
@@ -37,6 +38,9 @@ class SurveyPanel extends React.Component {
             </div>
             <div className={css('edit-container')}>
               <SurveyEditContainer />
+            </div>
+            <div className={css('panel-body')}>
+              <Survey />
             </div>
           </div>
         </Draggable>

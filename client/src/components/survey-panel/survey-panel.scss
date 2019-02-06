@@ -1,8 +1,6 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
-@import '../../scss/typography';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms-organisms/button';
 
 .panel-container {
   @include display-and-animate();

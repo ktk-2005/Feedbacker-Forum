@@ -1,7 +1,109 @@
-.next-question {
-  float: right;
+@import '../../scss/compulsory';
+// Atoms
+@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms-organisms/forms';
+@import '../../scss/atoms-organisms/progress-bar';
+
+@import '../reactions/reactions';
+
+.survey-container {
+  padding: $baseline 0;
 }
 
-.previous-question {
-  float: left;
+.question {
+  p {
+    color: $palette-grey;
+  }
+}
+
+.options {
+  @extend .reactions;
+  button {
+    @extend .reaction;
+  }
+
+  // Options cannot be toggled off
+  .chosen {
+    @extend .toggled;
+  }
+}
+
+form.answer-form {
+  @extend %form;
+
+  textarea {
+    height: 6em;
+  }
+}
+
+.answer {
+  .edit-container {
+    @include reset-button();
+    position: relative;
+    width: 100%;
+    text-align: left;
+
+    p {
+      margin: 0;
+    }
+
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      transition: opacity $transition-default-tail;
+    }
+
+    &:hover {
+      &:before, &:after {
+        opacity: 1;
+        transition: opacity $transition-default-tail;
+      }
+
+      &:before {
+        content: attr(data-answer-text);
+        box-sizing: content-box;
+        $border: 5px;
+        top: -$border;
+        left: -$border;
+        border: $border solid $palette-lighter;
+        background: $palette-lighter;
+        filter: blur(2px);
+      }
+
+      &:after {
+        content: 'Edit answer';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-shadow: 0 0 $baseline $palette-white;
+      }
+    }
+  }
+}
+
+.progress-container {
+  margin-bottom: $spacer;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacer;
+
+  .answer-form + & {
+    margin-top: $baseline;
+  }
+
+  button {
+    @extend %anchor-button;
+
+    &:only-child:not(.previous-question) {
+      margin-left: auto;
+    }
+  }
 }

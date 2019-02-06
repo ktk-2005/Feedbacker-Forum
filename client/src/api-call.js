@@ -1,5 +1,5 @@
 import { apiUrl } from './meta/env.meta'
-import { getUsers } from './globals'
+import { waitForUsers } from './globals'
 
 // API call wrapper, use this to communicate with the API server. This wrapper
 // adds `Authentication` and `X-Feedback-Host` headers to provide context for the server.
@@ -11,12 +11,13 @@ import { getUsers } from './globals'
 // opts: Extra options for the function
 //   - rawResponse: Return the raw response from `fetch()` with no JSON conversion or
 //                  automatic error handling
+//   - noUser: If set don't attach user header
 //
 // Example usage:
 //   const { id } = await apiCall('POST', '/comments', { text: 'My comment!' })
 export default async function (method, endpoint, body = null, opts = { }) {
   const url = apiUrl + endpoint
-  const users = getUsers()
+  const users = opts.noUser ? {} : await waitForUsers()
   const authToken = btoa(JSON.stringify(users))
 
   const args = {
@@ -38,6 +39,7 @@ export default async function (method, endpoint, body = null, opts = { }) {
   if (opts.rawResponse) return response
 
   const json = await response.json()
+
   if (response.status >= 400 && response.status <= 599) {
     const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
     console.error(message)
