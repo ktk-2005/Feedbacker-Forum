@@ -1,7 +1,8 @@
 import Docker from 'dockerode'
 import fs from 'fs'
 import os from 'os'
-import R from 'ramda'
+import * as R from 'ramda'
+import { parseRepositoryTag } from 'dockerode/lib/util'
 import {
   addContainer,
   listContainersByUser,
@@ -177,11 +178,18 @@ export async function deleteContainer(id) {
   await removeContainer(id)
 }
 
-export async function createNewRunner(userId, dockerTag, name) {
-  // todo: size check
-  logger.info(`Creating new instance logger: userId=${userId}, dockerTag=${dockerTag}, name=${name}`)
+export async function createNewRunner(userId, dockerTag) {
+  logger.info(`Creating new instance runner ${dockerTag}`)
 
-  await createNewInstanceRunner(userId, dockerTag, name)
+  // Verify that dockerode parses the tag to be something sensible before
+  // pulling the image. The Docker daemon pulls *all* available tags if one
+  // isn't specified. So we verify that the tag isn't empty.
+  const tagParse = parseRepositoryTag(dockerTag)
+  if (!tagParse.hasOwnProperty('tag')) {
+    throw new HttpError(400, 'No tag version specified')
+  }
+
+  await createNewInstanceRunner(userId, dockerTag)
 
   // We won't wait for the promise to resolve because
   // especially with larger images it can take a while to download.
@@ -190,12 +198,32 @@ export async function createNewRunner(userId, dockerTag, name) {
   // It should also be noted that this updates the image for all other
   // users too if they use the same tag.
 
-  docker.pull(dockerTag).then(async () => {
-    await setInstanceRunnerStatusSuccess(dockerTag)
+  docker.pull(dockerTag).then(async (stream) => {
+    logger.info(`Pulling image ${dockerTag}...`)
+    // eslint-disable-next-line no-unused-vars
+    docker.modem.followProgress(stream, async (error, output) => {
+      try {
+        if (error) {
+          throw new NestedError(`Unable to pull docker image: ${error}`)
+        }
+        const image = await docker.getImage(dockerTag)
+        const imageInfo = await image.inspect()
+        const imageSize = imageInfo.Size
+        logger.info(`Pulled image, size is ${imageSize}`)
+        if (imageSize > config.imageMaxSize) {
+          image.remove({ f: true })
+          throw new NestedError(`Image size is ${imageSize} (over ${config.imageMaxSize})`)
+        }
+        await setInstanceRunnerStatusSuccess(dockerTag)
+      } catch (error) {
+        await setInstanceRunnerStatusFail(dockerTag)
+        logger.error(error)
+      }
+    })
   }).catch(async (error) => {
     // update db with error status
     await setInstanceRunnerStatusFail(dockerTag)
-    throw new NestedError('Unable to pull docker image', error, { functionArguments: { userId, dockerTag } })
+    logger.error(new NestedError('Unable to connect to docker', error, { functionArguments: { userId, dockerTag } }))
   })
 }
 

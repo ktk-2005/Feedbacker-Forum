@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import R from 'ramda'
+import * as R from 'ramda'
 // Helpers
 import Moment from 'react-moment'
 import moment from 'moment-timezone'
@@ -23,6 +23,7 @@ class CreateRunner extends React.Component {
 
     this.getInstanceRunnersFromServer = this.getInstanceRunnersFromServer.bind(this)
     this.deleteRunner = this.deleteRunner.bind(this)
+    this.postNewInstanceRunner = this.postNewInstanceRunner.bind(this)
   }
 
   componentDidMount() {
@@ -55,6 +56,7 @@ class CreateRunner extends React.Component {
       const instancesWithoutDeletedOne = R.reject(
         runner => runner.id === tag, prevState.instanceRunners
       )
+      this.getInstanceRunnersFromServer()
       return instancesWithoutDeletedOne
     })
   }

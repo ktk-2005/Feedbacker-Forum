@@ -29,12 +29,15 @@ export async function getComments(container) {
     reactions.time      AS reaction_time,
     reactions.emoji     AS reaction_emoji,
     reactions.user_id   AS reaction_user_id,
-    reactions.comment_id AS reaction_comment_id
+    reactions.comment_id AS reaction_comment_id,
+    users.name          AS username
     FROM comments
     LEFT JOIN reactions
     ON comments.id = reactions.comment_id
     INNER JOIN threads
     ON comments.thread_id = threads.id
+    INNER JOIN users
+    ON comments.user_id = users.id
     WHERE threads.container_id = ?
     `, [container])
 }
@@ -69,6 +72,7 @@ export async function getCommentReactions(values = []) { return db.query('SELECT
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
+export async function addUsername({ id, name, secret }) { return db.query('UPDATE users SET name=? WHERE id=? AND secret=?', [name, id, secret]) }
 
 // Containers/Instances
 
@@ -125,8 +129,8 @@ export async function deleteInstanceRunnerForUser(userId, tag) {
   return db.query('DELETE FROM instance_runners WHERE user_id=? AND tag=?', [userId, tag])
 }
 
-export async function createNewInstanceRunner(user, dockerTag, name) {
-  return db.run('INSERT INTO instance_runners(tag, name, user_id, status) VALUES (?, ?, ?, ?)', [dockerTag, name, user, 'pending'])
+export async function createNewInstanceRunner(user, dockerTag) {
+  return db.run('INSERT INTO instance_runners(tag, user_id, status) VALUES (?, ?, ?)', [dockerTag, user, 'pending'])
 }
 
 async function updateInstanceRunnerStatus(dockerTag, status) {
