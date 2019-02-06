@@ -19,7 +19,7 @@
   }
 }
 
-.dashboard-button {
+.dashboard-button, .new-runner-button {
   @extend %anchor-button;
 }
 

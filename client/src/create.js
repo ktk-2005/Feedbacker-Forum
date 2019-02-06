@@ -87,6 +87,13 @@ class Create extends React.Component {
                   <option key={runner.tag} value={runner.tag}>{runner.name}</option>
                 ))}
               </select>
+              <Link to="/create-runner">
+                <button
+                  className={css('new-runner-button')}
+                  type="button"
+                >New runner
+                </button>
+              </Link>
             </label>
             <label htmlFor="url">
               Git URL

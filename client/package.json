@@ -58,7 +58,9 @@
     "webpack-cli": "^3.1.2",
     "whatwg-fetch": "^3.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-toastify": "^4.5.2"
+  },
   "browserslist": [
     "last 2 versions",
     "IE 11",
