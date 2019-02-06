@@ -20,7 +20,7 @@ function TextDisplay({ question, onOpen }) {
 
 function OptionDisplay({ question }) {
   const { answers, options } = question
-  const counts = R.countBy(R.prop('option'))(answers || [])
+  const counts = R.countBy(R.path(['blob', 'option']))(answers || [])
 
   return (
     <ul>{
