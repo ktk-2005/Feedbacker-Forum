@@ -25,7 +25,6 @@ const mapStateToProps = state => ({
   comments: state.comments,
   users: (state.persist || {}).users || {},
   role: state.role,
-  users: (state.persist || {}).users || {},
 })
 
 class CommentPanel extends React.Component {
