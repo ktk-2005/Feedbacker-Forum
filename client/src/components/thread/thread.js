@@ -32,28 +32,34 @@ class Thread extends React.Component {
     return isOpen ? openText : 'Collapse'
   }
 
+  threadIsExpanded() {
+    return this.props.currentThread !== this.props.id
+  }
+
   expandedThread(op) {
-    if (this.props.currentThread !== this.props.id) { return }
+    if (this.threadIsExpanded()) { return }
     const threadComments = this.props.comments.slice(1)
     const sortByTime = R.sortBy(comment => comment.time)
     const sortedComments = sortByTime(threadComments)
     return (
       <>
-        {sortedComments.map(
-          comment => (
-            <Comment
-              key={comment.id}
-              comment={comment}
-              id={comment.id}
-              role={this.props.role}
-              op={op}
-              onClick={() => this.replyField.current.focus()}
-              buttonText="Reply"
-              canDelete={this.canDelete(comment.userId)}
-              deleteComment={this.props.deleteComment}
-            />
-          ),
-        )}
+        {
+          sortedComments.map(
+            comment => (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                id={comment.id}
+                role={this.props.role}
+                op={op}
+                onClick={() => this.replyField.current.focus()}
+                buttonText="Reply"
+                canDelete={this.canDelete(comment.userId)}
+                deleteComment={this.props.deleteComment}
+              />
+            ),
+          )
+        }
         <SubmitField
           handleSubmit={this.props.handleSubmit}
           threadId={this.props.id}
@@ -85,7 +91,7 @@ class Thread extends React.Component {
           canDelete={this.canDelete(firstComment.userId)}
           deleteComment={this.props.deleteComment}
         />
-        <aside className={css('sub-thread')}>
+        <aside className={css('sub-thread', { 'expanded-thread': this.threadIsExpanded() })}>
           {this.expandedThread(firstComment.userId)}
         </aside>
       </div>

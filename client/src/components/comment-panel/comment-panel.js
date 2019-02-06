@@ -181,14 +181,14 @@ class CommentPanel extends React.Component {
             threadId=""
             toggleTagElementState={this.props.toggleTagElementState}
           />
-          {!this.props.users.name
-            ? (
+          {
+            !this.props.users.name ? (
               <UsernameModal
                 isOpen={this.state.usernameModalIsOpen}
                 toggle={this.toggleUsernameModal}
               />
-            )
-            : null}
+            ) : null
+          }
         </div>
       </div>
     )
