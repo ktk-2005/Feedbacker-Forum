@@ -214,15 +214,16 @@ export async function createNewRunner(userId, dockerTag) {
           image.remove({ f: true })
           throw new NestedError(`Image size is ${imageSize} (over ${config.imageMaxSize})`)
         }
-        await setInstanceRunnerStatusSuccess(dockerTag)
+        await setInstanceRunnerStatusSuccess(dockerTag, imageSize, userId)
+        logger.info('Updated success to db')
       } catch (error) {
-        await setInstanceRunnerStatusFail(dockerTag)
+        await setInstanceRunnerStatusFail(dockerTag, userId)
         logger.error(error)
       }
     })
   }).catch(async (error) => {
     // update db with error status
-    await setInstanceRunnerStatusFail(dockerTag)
+    await setInstanceRunnerStatusFail(dockerTag, userId)
     logger.error(new NestedError('Unable to connect to docker', error, { functionArguments: { userId, dockerTag } }))
   })
 }

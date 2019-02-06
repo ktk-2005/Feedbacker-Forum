@@ -133,13 +133,13 @@ export async function createNewInstanceRunner(user, dockerTag) {
   return db.run('INSERT INTO instance_runners(tag, user_id, status) VALUES (?, ?, ?)', [dockerTag, user, 'pending'])
 }
 
-async function updateInstanceRunnerStatus(dockerTag, status) {
-  return db.run('UPDATE instance_runners SET status=? WHERE tag=?', [status, dockerTag])
+export async function setInstanceRunnerStatusSuccess(dockerTag, size, userId) {
+  return db.run('UPDATE instance_runners SET status=?, size=? WHERE tag=? AND user_id=?', ['success', size, dockerTag, userId])
 }
 
-export async function setInstanceRunnerStatusSuccess(dockerTag) { updateInstanceRunnerStatus(dockerTag, 'success') }
-
-export async function setInstanceRunnerStatusFail(dockerTag) { updateInstanceRunnerStatus(dockerTag, 'fail') }
+export async function setInstanceRunnerStatusFail(dockerTag, userId) {
+  return db.run('UPDATE instance_runners SET status=? WHERE tag=? AND user_id=?', ['fail', dockerTag, userId])
+}
 
 
 // Authentication stuff
