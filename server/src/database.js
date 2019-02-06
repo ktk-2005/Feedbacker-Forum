@@ -3,7 +3,6 @@ import SQLiteDatabase from './database/database-sqlite'
 import PostgresDatabase from './database/database-postgres'
 import { HttpError } from './errors'
 import { config, args } from './globals'
-import { HttpError } from './errors'
 
 let db = null
 
