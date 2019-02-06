@@ -93,7 +93,7 @@ export async function getQuestionsWithAnswers(container) {
     LEFT JOIN answers
     ON questions.id = answers.question_id
     WHERE container_id = ?
-    ORDER BY questions.order_id, questions.id
+    ORDER BY questions.order_id, questions.id, answers.time, answers.id
   `, [container])
 
   return R.groupWith(R.eqProps('question_id'))(rows).map(formatQuestion)
