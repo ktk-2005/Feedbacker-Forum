@@ -185,7 +185,12 @@ const initialize = () => {
         console.log('Loaded user from persistent storage', state.users)
       }
 
-      const { role } = await apiCall('GET', '/users/role')
+      let { role } = await apiCall('GET', '/users/role')
+
+      if (DEV) {
+        if (window.location.host.includes('.dev.')) role = 'dev'
+      }
+
       console.log('User role:', role)
       store.dispatch(updateRole(role))
     }
