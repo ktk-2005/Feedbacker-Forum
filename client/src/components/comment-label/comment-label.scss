@@ -3,19 +3,32 @@
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
 
-.comment-label {
-  padding: .5 * $baseline;
+%label {
+  display: inline-block;
+  margin-right: $spacer;
+}
+
+.dev-label {
+  @include shadow-outline(0px);
+  @extend %label;
+  padding: .5 * $baseline $spacer;
   border-radius: $border-radius-default;
-  color: $palette-white;
-  @include shadow-outline(1px);
+  font-size: $font-size-small;
+  background-color: $palette-white;
+  color: $palette-accent;
 }
 
-.dev {
-  color: $palette-white;
-  background-color: $palette-dark;
-}
+$rotation: 30;
 
-.op {
-  color: $palette-white;
-  background-color: $palette-accent;
+.badge-container {
+  @extend %label;
+
+  .badge {
+    $dimension: $baseline * 1.5;
+    width: $dimension;
+    height: $dimension;
+    background: $palette-accent;
+    border-radius: 1px;
+    transform: rotate(#{ $rotation }deg);
+  }
 }

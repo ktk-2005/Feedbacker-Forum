@@ -42,7 +42,11 @@ const targetElement = (comment) => {
 
 const chooseLabel = (op, userId) => {
   if (userId === op) {
-    return <CommentLabel posterRole="op" />
+    return (
+      <div className={css('label-container')}>
+        <CommentLabel posterRole="op" />
+      </div>
+    )
   }
   return null
 }
@@ -50,10 +54,16 @@ const chooseLabel = (op, userId) => {
 const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, deleteComment }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
-      <div className={css('name')}>Anonymous user</div>
-      {chooseLabel(op, comment.userId)}
-      <Moment className={css('timestamp')} fromNow>{comment.time}</Moment>
-      { targetElement(comment) }
+      <div className={css('name-label-container')}>
+        <div className={css('name')}>
+          Anonymous user
+        </div>
+        {chooseLabel(op, comment.userId)}
+      </div>
+      <div className={css('time-target-container')}>
+        <Moment className={css('timestamp')} fromNow>{comment.time}</Moment>
+        {targetElement(comment)}
+      </div>
     </div>
     <div className={css('body')}>
       <div className={css('text')}>
