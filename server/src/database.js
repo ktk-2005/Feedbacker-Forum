@@ -147,31 +147,29 @@ export async function setInstanceRunnerStatusFail(dockerTag, userId) {
 // This function assumes that the authenticity of claimed userIds are already verified.
 // Returns false if the user doesn't own the claimed container, or the owener id elsewise.
 export async function confirmContainerOwnership(name, users) {
-  console.log(name, users)
   const rows = await db.query('SELECT user_id FROM containers WHERE subdomain=? LIMIT 1', [name])
-  if (!rows || rows.length === 0) {
-    return false
+
+  if (rows && rows.length > 0) {
+    const ownerUserId = rows[0].user_id
+    if (users.hasOwnProperty(ownerUserId)) {
+      return ownerUserId
+    }
   }
 
-  const ownerUserId = rows[0].user_id
-  if (users.hasOwnProperty(ownerUserId)) {
-    return ownerUserId
-  }
-  return false
+  throw new HttpError(400, 'Invalid id')
 }
 
 // This function assumes that the authenticity of claimed userIds are already verified.
 // Returns false if the user doesn't own the claimed instance runner, or the owner id elsewise.
 export async function confirmInstanceRunnerOwnership(tag, users) {
   const rows = await db.query('SELECT user_id FROM instance_runners WHERE tag=? LIMIT 1', [tag])
-  if (!rows || rows.length === 0) {
-    return false
+
+  if (rows && rows.length > 0) {
+    const ownerUserId = rows[0].user_id
+    if (users.hasOwnProperty(ownerUserId)) {
+      return ownerUserId
+    }
   }
 
-  const ownerUserId = rows[0].user_id
-  if (users.hasOwnProperty(ownerUserId)) {
-    return ownerUserId
-  }
-
-  return false
+  throw new HttpError(400, 'Invalid tag')
 }

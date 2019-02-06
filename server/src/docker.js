@@ -90,11 +90,7 @@ export async function createNewContainer(url, version, type, name, port, userId)
     // one that was selected to be used on this method. Better to just remove multi-user support?
     const dummyUserObject = {}
     dummyUserObject[userId] = null
-    const ownerId = await confirmInstanceRunnerOwnership(type, dummyUserObject)
-
-    if (!ownerId) {
-      throw new HttpError(400, `Invalid runner type: "${type}"`)
-    }
+    await confirmInstanceRunnerOwnership(type, dummyUserObject)
   }
 
   // Chooses a random port for the instance between the range [20 000 - 29 999].

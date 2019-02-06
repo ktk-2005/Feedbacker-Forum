@@ -41,11 +41,7 @@ router.get('/logs/:name', catchErrors(async (req, res) => {
   const { name } = req.params
   const { users } = await reqUser(req)
 
-  const ownerId = await confirmContainerOwnership(name, users)
-
-  if (!ownerId) {
-    throw new HttpError(400, 'Invalid id')
-  }
+  await confirmContainerOwnership(name, users)
 
   const logs = await getContainerLogs(name)
   res.type('txt')
@@ -104,15 +100,11 @@ router.post('/stop', catchErrors(async (req, res) => {
   const { name } = req.body
   const { users } = await reqUser(req)
 
-  const ownerId = await confirmContainerOwnership(name, users)
-
-  if (!ownerId) {
-    throw new HttpError(400, 'Invalid id')
-  }
+  await confirmContainerOwnership(name, users)
 
   await stopContainer(name)
   logger.info(`Stopped container with name ${name}`)
-  res.sendStatus(200)
+  res.send({})
 }))
 
 // @api POST /api/instances/start
@@ -127,15 +119,11 @@ router.post('/start', catchErrors(async (req, res) => {
   const { name } = req.body
   const { users } = await reqUser(req)
 
-  const ownerId = await confirmContainerOwnership(name, users)
-
-  if (!ownerId) {
-    throw new HttpError(400, 'Invalid id')
-  }
+  await confirmContainerOwnership(name, users)
 
   await startContainer(name)
   logger.info(`Started container with name ${name}`)
-  res.sendStatus(200)
+  res.send({})
 }))
 
 // @api POST /api/instances/delete
@@ -150,15 +138,11 @@ router.post('/delete', catchErrors(async (req, res) => {
   const { name } = req.body
   const { users } = await reqUser(req)
 
-  const ownerId = await confirmContainerOwnership(name, users)
-
-  if (!ownerId) {
-    throw new HttpError(400, 'Invalid id')
-  }
+  await confirmContainerOwnership(name, users)
 
   await deleteContainer(name)
   logger.info(`Deleted container with name ${name}`)
-  res.send(200)
+  res.send({})
 }))
 
 module.exports = router

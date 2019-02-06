@@ -69,10 +69,6 @@ router.post('/delete', catchErrors(async (req, res) => {
 
   const userId = await confirmInstanceRunnerOwnership(tag, users)
 
-  if (!userId) {
-    throw new HttpError(400, 'Invalid id')
-  }
-
   await deleteRunner(tag, userId)
 
   res.send({})
