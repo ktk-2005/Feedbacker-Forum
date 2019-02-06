@@ -1,7 +1,7 @@
 import Docker from 'dockerode'
 import fs from 'fs'
 import os from 'os'
-import R from 'ramda'
+import * as R from 'ramda'
 import { parseRepositoryTag } from 'dockerode/lib/util'
 import {
   addContainer,
