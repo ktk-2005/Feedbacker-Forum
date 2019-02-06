@@ -52,3 +52,28 @@
     }
   }
 }
+
+%icon-button {
+  @include button($states: false, $transition: false);
+  background: transparent;
+  padding: 0;
+  margin-right: -$baseline;
+  margin-top: -$baseline;
+  margin-left: $baseline;
+
+  i {
+    display: block;
+    width: $icon-dimension-default;
+    height: $icon-dimension-default;
+    fill: $palette-medium;
+
+  }
+
+  &:disabled i {
+    fill: $palette-light;
+  }
+
+  &:enabled:hover i {
+    fill: $palette-dark;
+  }
+}

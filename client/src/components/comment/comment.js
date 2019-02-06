@@ -40,8 +40,8 @@ const targetElement = (comment) => {
   }
 }
 
-const Comment = ({ id, comment }) => (
-  <div className={css('comment')} key={id}>
+const Comment = ({ id, comment, role }) => (
+  <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
       <div className={css('name')}>Anonymous user</div>
       <Moment

@@ -41,25 +41,7 @@
   }
 
   button {
-    @include button($states: false, $transition: false);
-    background: transparent;
-    padding: 0;
-    margin-right: -$baseline;
-
-    i {
-      display: block;
-      width: $icon-dimension-default;
-      height: $icon-dimension-default;
-      fill: $palette-medium;
-    }
-
-    &:hover i {
-      fill: $palette-dark;
-    }
-
-    &:focus i {
-      fill: $palette-darker;
-    }
+    @extend %icon-button;
   }
 }
 

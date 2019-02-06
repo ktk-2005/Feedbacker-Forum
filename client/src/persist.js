@@ -103,11 +103,19 @@ export function setupPersist(loadPersist) {
 
   persistWindow = iframe.contentWindow || (iframe.contentDocument && iframe.contentDocument.window)
 
+  let allDataLoaded = false
+
   const timeout = window.setTimeout(() => {
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     loadPersist(state, true)
   }, 3000)
 
   iframe.addEventListener('error', () => {
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     loadPersist(state, true)
     window.clearTimeout(timeout)
   })
@@ -125,10 +133,12 @@ export function setupPersist(loadPersist) {
     saveLocalState(json)
     saveGlobalState(json)
 
+    if (allDataLoaded) return
+    allDataLoaded = true
+
     loadPersist(state, true)
     window.clearTimeout(timeout)
   })
 
   return savePersist
 }
-
