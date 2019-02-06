@@ -56,6 +56,5 @@ export default class Mutex {
     if (index < 0) return
     this.listenersImp.splice(index, 1)
   }
-
 }
 

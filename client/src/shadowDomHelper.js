@@ -1,6 +1,6 @@
 import retargetEvents from 'react-shadow-dom-retarget-events'
-import styles from './scss/_base.scss'
 import classNames from 'classnames/bind'
+import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
 
