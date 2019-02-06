@@ -9,12 +9,13 @@ import styles from './survey-edit-card.scss'
 
 const css = classNames.bind(styles)
 
+
 function TextDisplay({ question, onOpen }) {
   const answers = question.answers || []
-  const answersText = 'Show ' + answers.length + ' answer' + (answers.length == 1 ? '' : 's')
+  const answersText = `Show ${answers.length} answer${answers.length === 1 ? '' : 's'}`
 
   return (
-    <button className={css('answer-text')} onClick={onOpen}>{answersText}</button>
+    <button type="button" className={css('answer-text')} onClick={onOpen}>{answersText}</button>
   )
 }
 
@@ -27,14 +28,9 @@ function OptionDisplay({ question }) {
       options.map((option, index) => (
         <li key={index}>{option}: {counts[index] || 0}</li>
       ))
-    }</ul>
+    }
+    </ul>
   )
-}
-
-function focusTextEnd(event) {
-  const temp = event.target.value
-  event.target.value = ''
-  event.target.value = temp
 }
 
 function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
@@ -43,26 +39,26 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
   const handleChange = index => (event) => {
     const text = event.target.value.replace(/[\r\n\t]/g, '')
     onEditChange(question.id, {
-      options: R.update(index, text, options)
+      options: R.update(index, text, options),
     })
   }
 
   return (
     <ul>{
       options.map((option, index) => (
-        <li key={index} >
+        <li key={index}>
           <input
             type="text"
             value={option}
             placeholder={`Option ${index + 1}`}
-            tabIndex="2"
             onChange={handleChange(index)}
             onKeyPress={onKeyPress}
             disabled={commit}
           />
         </li>
       ))
-    }</ul>
+    }
+    </ul>
   )
 }
 
@@ -77,7 +73,7 @@ function Answer({ answer }) {
   return (
     <div>
       <p>{text}</p>
-      <p>{name ? name : 'Anonymous user'}</p>
+      <p>{name || 'Anonymous user'}</p>
       <Moment
         className={css('timestamp')}
         date={time}
@@ -94,7 +90,6 @@ function AnswerDisplay({ answers }) {
 }
 
 class SurveyEditCard extends React.Component {
-
   constructor(props) {
     super(props)
 
@@ -139,7 +134,7 @@ class SurveyEditCard extends React.Component {
   }
 
   handleKeyPress(event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       // Enter: End edit
       this.doEditEnd()
     }
@@ -155,21 +150,28 @@ class SurveyEditCard extends React.Component {
     const commit = edited && edit.commit
 
     const dataDisplay = {
-      text: () => ( <TextDisplay question={question} onOpen={this.doOpen} /> ),
-      option: () => ( <OptionDisplay question={question} /> ),
-      info: () => ( <div /> ),
+      text: () => (<TextDisplay question={question} onOpen={this.doOpen} />),
+      option: () => (<OptionDisplay question={question} />),
+      info: () => (<div />),
     }
 
     const dataEdit = {
-      text: () => ( <div /> ),
-      option: () => ( <OptionEdit question={question} onEditChange={onEditChange} onKeyPress={this.handleKeyPress} commit={commit} /> ),
-      info: () => ( <div /> ),
+      text: () => (<div />),
+      option: () => (
+        <OptionEdit
+          question={question}
+          onEditChange={onEditChange}
+          onKeyPress={this.handleKeyPress}
+          commit={commit}
+        />
+      ),
+      info: () => (<div />),
     }
 
     const display = edited ? dataEdit[question.type]() : dataDisplay[question.type]()
 
     return (
-      <div className={css('survey-edit-card', { 'edit-commit': commit } )}>
+      <div className={css('survey-edit-card', { 'edit-commit': commit })}>
 
         <div className={css('header')}>
 
@@ -180,23 +182,23 @@ class SurveyEditCard extends React.Component {
                 onChange={this.handleTextEdit}
                 placeholder="Write a question..."
                 autoFocus
-                tabIndex="1"
                 onKeyPress={this.handleKeyPress}
                 disabled={commit}
               />
               <button
                 type="button"
                 onClick={this.doEditEnd}
-                tabIndex="4"
+                tabIndex="-1"
                 disabled={commit}
-              >OK</button>
+              >OK
+              </button>
             </>
           ) : !opened ? (
             <>
               <Handle />
               <h4>{question.text}</h4>
               <div className={css('filler')} />
-              <button disabled={busy} type="button" onClick={this.doEditBegin} >E</button>
+              <button disabled={busy} type="button" onClick={this.doEditBegin}>E</button>
               <button disabled={busy} type="button" onClick={this.doDelete}>X</button>
             </>
           ) : (

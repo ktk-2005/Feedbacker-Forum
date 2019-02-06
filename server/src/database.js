@@ -99,15 +99,14 @@ export async function getQuestionsWithAnswers(container) {
 }
 
 export async function addQuestion({
-  id, text, type, userId, container, blob, order
+  id, text, type, userId, container, blob, order,
 }) { return db.run('INSERT INTO questions(id, text, type, user_id, container_id, order_id, blob) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, text, type, userId, container, order, blob]) }
 
 export async function editQuestion({
-  id, text, type, blob
+  id, text, type, blob,
 }) { return db.run('UPDATE questions SET text=?, type=?, blob=? WHERE id=? ', [text, type, blob, id]) }
 
-export async function removeQuestion({ id })
-{ return db.run('DELETE FROM questions WHERE id = ?', [id]) }
+export async function removeQuestion({ id }) { return db.run('DELETE FROM questions WHERE id = ?', [id]) }
 
 export async function getQuestionHighestOrder(container) {
   const row = await db.query('SELECT MAX(order_id) FROM questions WHERE container_id = ?', [container])

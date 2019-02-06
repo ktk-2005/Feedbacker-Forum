@@ -41,8 +41,7 @@ function anySubdomain(fn) {
 export function startServer() {
   const app = express()
 
-  if (args.delay)
-    app.use(delay(args.delay))
+  if (args.delay) app.use(delay(args.delay))
 
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')

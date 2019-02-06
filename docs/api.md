@@ -103,12 +103,12 @@ returns JSON array of all comments in thread
 
 ## Questions
 
-### [GET /api/questions](../server/src/routes/questions.js#L15)
+### [GET /api/questions](../server/src/routes/questions.js#L22)
 
 Retrieve all questions in the current container instance.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L36)
+### [POST /api/questions](../server/src/routes/questions.js#L54)
 
 adds question to database.
 
@@ -121,6 +121,37 @@ Example body
 ```
 
 Returns `{ id }` of the created question
+
+### [DELETE /api/questions/:id](../server/src/routes/questions.js#L85)
+
+Delete a previously posted question
+### [PUT /api/questions/:id](../server/src/routes/questions.js#L101)
+
+Update a previously posted question
+
+### [POST /api/questions/order](../server/src/routes/questions.js#L128)
+
+Re-order questions, accepts a body like
+```json
+{
+  order: ['id-1', 'id-2', 'id-3']
+}
+```
+
+### Answers
+
+### [POST /api/answers](../server/src/routes/answers.js#L14)
+
+adds answer to database
+
+Returns `{ id }` of the added answer
+
+### [GET /api/answers/:questionId](../server/src/routes/answers.js#L29)
+
+Returns answer of a user for specific question
+### [PUT /api/answers/:questionId](../server/src/routes/answers.js#L47)
+
+Edits an answer of a user for specific question
 
 ## Reactions
 

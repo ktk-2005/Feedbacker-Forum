@@ -11,7 +11,7 @@ import {
 } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { catchErrors } from '../handlers'
-import { HttpError } from '../errors.js'
+import { HttpError } from '../errors'
 
 const router = express.Router()
 
@@ -21,7 +21,7 @@ const router = express.Router()
 // returns JSON array of all questions in database
 router.get('/', catchErrors(async (req, res) => {
   const { container, containerOwner } = await reqContainer(req)
-  const { userId, users } = await reqUser(req)
+  const { users } = await reqUser(req)
 
   const owner = users.hasOwnProperty(containerOwner) || container.includes('-')
 
@@ -38,8 +38,7 @@ function validateQuestion(question) {
 
 function extractBlob(question) {
   const blob = { }
-  if (question.type === 'option')
-    blob.options = question.options
+  if (question.type === 'option') blob.options = question.options
   return blob
 }
 
@@ -114,8 +113,8 @@ router.put('/:id', catchErrors(async (req, res) => {
 
   await editQuestion({
     id,
-    text: text,
-    type: type,
+    text,
+    type,
     blob: JSON.stringify(blob),
   })
 

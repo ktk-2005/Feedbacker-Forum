@@ -54,7 +54,7 @@ const SortableSurveyEditList = SortableContainer(({
           onEditBegin={badEditFunction}
           onEditEnd={badEditFunction}
           onEditChange={badEditFunction}
-          opened={true}
+          opened
           disabled={busy}
           busy={busy}
         />
@@ -77,12 +77,12 @@ const SortableSurveyEditList = SortableContainer(({
           />
         ))
       )
-    }</div>
+    }
+    </div>
   )
 })
 
 export default class SurveyEditContainer extends React.Component {
-
   constructor(props) {
     super(props)
 
@@ -124,7 +124,7 @@ export default class SurveyEditContainer extends React.Component {
   }
 
   closeCard(id) {
-    this.setState(({ openId }) => id == openId ? { openId: null } : { })
+    this.setState(({ openId }) => (id === openId ? { openId: null } : { }))
   }
 
   startDelete(id) {
@@ -171,8 +171,8 @@ export default class SurveyEditContainer extends React.Component {
   }
 
   editChange(id, change) {
-    this.setState(({ edit }) => id === edit.id ?
-      { edit: R.mergeDeepRight(edit, change) } : { })
+    this.setState(({ edit }) => (id === edit.id
+      ? { edit: R.mergeDeepRight(edit, change) } : { }))
   }
 
   async sortEnd({ oldIndex, newIndex }) {
@@ -180,6 +180,7 @@ export default class SurveyEditContainer extends React.Component {
     if (oldIndex === newIndex) return
 
     try {
+      // eslint-disable-next-line react/no-access-state-in-setstate
       const orderedQuestions = arrayMove(this.state.questions, oldIndex, newIndex)
 
       this.setState({ previewQuestions: orderedQuestions })
@@ -202,7 +203,7 @@ export default class SurveyEditContainer extends React.Component {
     const id = PENDING_ID
     const question = { id, text: '', type }
 
-    if (type == 'option') {
+    if (type === 'option') {
       question.options = ['Yes', 'No']
     }
 
