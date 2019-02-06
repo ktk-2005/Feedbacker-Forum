@@ -1,7 +1,8 @@
 import uuidv4 from 'uuid/v4'
 import { args } from '../globals'
+import { HttpError } from '../errors'
+import logger from '../logger'
 import { verifyUser, resolveContainer } from '../database'
-import HttpError from '../http-error'
 
 function makeUuid(length = 8) {
   return uuidv4().split('-').join('').slice(0, length)
@@ -26,33 +27,44 @@ export function uuid(length) {
 
 // Retry a function multiple times until it succeeds
 export async function attempt(fn, maxTries = 20) {
+  function printFailures(failures) {
+    if (failures > 0) {
+      logger.error(`Failed ${failures}/${maxTries - 1} attempts ${fn.name ? `of ${fn.name}` : ''}`)
+    }
+  }
+
   // Do N attempts
+  let failures = 0
   for (let i = 0; i < maxTries - 1; i++) {
     try {
       const result = await fn()
+      printFailures()
       return result
     } catch (error) {
-      // Nop
+      // nop
+      failures += 1
     }
   }
+
+  printFailures(failures)
 
   // Do last try without try-catch
   return fn()
 }
-
-// Find a container ID from a hostname
-export async function resolveContainerFromHost(host) {
+//
+// Find a container subdomain from a hostname
+export function resolveSubdomainFromHost(host) {
   const parts = host.split('.', 2)
   if (parts.length <= 1) throw new HttpError(400, 'Failed to extract subdomain from hostname')
-  const subdomain = parts[0]
-  return await resolveContainer(subdomain)
+  return parts[0]
 }
 
 export async function reqContainer(req) {
   const host = req.get('X-Feedback-Host')
   if (!host) throw new HttpError(400, 'No X-Feedback-Host header')
-  const { id, userId } = await resolveContainerFromHost(host)
-  return { container: id, containerOwner: userId }
+  const subdomain = resolveSubdomainFromHost(host)
+  const { id, userId } = await resolveContainer(subdomain)
+  return { container: id, owner: userId }
 }
 
 export async function reqUser(req) {
@@ -84,4 +96,3 @@ export async function reqUser(req) {
     secret: verifiedUsers[keys[0]],
   }
 }
-

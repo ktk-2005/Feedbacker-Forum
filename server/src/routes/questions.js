@@ -11,7 +11,7 @@ import {
 } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { catchErrors } from '../handlers'
-import HttpError from '../http-error.js'
+import { HttpError } from '../errors.js'
 
 const router = express.Router()
 
