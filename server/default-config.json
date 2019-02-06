@@ -8,5 +8,5 @@
       "tag": "node-runner"
     }
   ],
-  "imageMaxSize": 524288000
+  "imageMaxSize": 52428800
 }

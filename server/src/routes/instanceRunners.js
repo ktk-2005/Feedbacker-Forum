@@ -10,11 +10,13 @@ import { HttpError } from '../errors'
 const router = express.Router()
 
 // @api GET /api/instanceRunners
-// Retrieve all instance runners in the database and configured system default runners.
+// Retrieve all instance runners in the database and configured system default
+// runners.
 //
-// Fields present in the instance objects are: tag, time, name, use_id, size, status
+// Fields present in the instance objects are: tag, time, use_id, size, status
 //
-// Returns 200 OK and a JSON array of all instance runners or the system runners if
+// Returns 200 OK and a JSON array of all instance runners or the system runners
+// if
 //   a) the user doesn't have any custom runners or
 //   b) the user isn't authenticated properly
 router.get('/', catchErrors(async (req, res) => {
@@ -32,8 +34,9 @@ router.get('/', catchErrors(async (req, res) => {
 }))
 
 // @api POST /api/instanceRunners/new
-// Create a new instance runner for the user. The image is pulled from the Docker Hub.
-// There is currently no limitations on how large or many images a user can pull.
+// Create a new instance runner for the user. The image is pulled from the
+// Docker Hub. There is currently no limitations on how large or many images a
+// user can pull.
 //
 // Example request body:
 // @json {
@@ -44,8 +47,8 @@ router.get('/', catchErrors(async (req, res) => {
 // in the `status` field.
 router.post('/new', catchErrors(async (req, res) => {
   const user = await reqUser(req)
-  await createNewRunner(user.userId, req.body.tag, req.body.name)
-  res.sendStatus(200)
+  await createNewRunner(user.userId, req.body.tag)
+  res.send({})
 }))
 
 // @api POST /api/instanceRunners/delete
@@ -72,7 +75,7 @@ router.post('/delete', catchErrors(async (req, res) => {
 
   await deleteRunner(tag, userId)
 
-  res.sendStatus(200)
+  res.send({})
 }))
 
 module.exports = router

@@ -72,9 +72,8 @@ CREATE TABLE migrations (id INTEGER PRIMARY KEY, file VARCHAR(255) UNIQUE);
 
 -- Table: Instance runners
 CREATE TABLE instance_runners (
-  tag       VARCHAR(32) NOT NULL,
+  tag       VARCHAR(128) NOT NULL,
   time     VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-  name     VARCHAR(32) NOT NULL,
   user_id  CHAR(8) NOT NULL,
   size     INT,
   status   CHAR(16) NOT NULL,

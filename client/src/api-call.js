@@ -47,4 +47,3 @@ export default async function (method, endpoint, body = null, opts = { }) {
     return json
   }
 }
-

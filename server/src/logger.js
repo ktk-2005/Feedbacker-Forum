@@ -10,7 +10,7 @@ function devFormat() {
     }
 
     function appendNestedInfo(error, base) {
-      const newBase = `${base}\n-----\nCaused by:\n${getDataString(error)}\n\n${error.stack}`
+      const newBase = `${base}\n-----\n${getDataString(error)}Caused by:\n\n${error.stack}`
 
       if (!error.cause) {
         return `${newBase}\n-------------------------------------`

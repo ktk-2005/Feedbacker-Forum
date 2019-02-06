@@ -129,8 +129,8 @@ export async function deleteInstanceRunnerForUser(userId, tag) {
   return db.query('DELETE FROM instance_runners WHERE user_id=? AND tag=?', [userId, tag])
 }
 
-export async function createNewInstanceRunner(user, dockerTag, name) {
-  return db.run('INSERT INTO instance_runners(tag, name, user_id, status) VALUES (?, ?, ?, ?)', [dockerTag, name, user, 'pending'])
+export async function createNewInstanceRunner(user, dockerTag) {
+  return db.run('INSERT INTO instance_runners(tag, user_id, status) VALUES (?, ?, ?)', [dockerTag, user, 'pending'])
 }
 
 async function updateInstanceRunnerStatus(dockerTag, status) {
