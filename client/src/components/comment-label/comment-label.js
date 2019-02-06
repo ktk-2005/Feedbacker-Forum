@@ -11,7 +11,7 @@ const css = classNames.bind(submitFieldStyles)
 
 const CommentLabel = ({ posterRole }) => (
   <div className={css('comment-label', posterRole)}>
-    {posterRole}
+    {posterRole.toUpperCase()}
   </div>
 )
 

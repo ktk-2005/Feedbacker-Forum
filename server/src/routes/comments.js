@@ -128,16 +128,28 @@ router.get('/:threadId', catchErrors(async (req, res) => {
 //   "delRows": 1
 // }
 router.delete('/', catchErrors(async (req, res) => {
-  const { commentId } = req.body
-  console.log('CommentId: ', req.body)
+  const { commentId, commentUser } = req.body
   const { users } = await reqUser(req)
+  const { owner } = await reqContainer(req)
   let delRows = {}
-  for (const userId in users) {
-    if (users.hasOwnProperty(userId)) {
-      try {
-        delRows = await deleteComment({ commentId, userId })
-        console.log(delRows)
-      } catch (err) { /* ignore */ }
+  if (users.hasOwnProperty(owner)) {
+    try {
+      delRows = await deleteComment({
+        commentId,
+        userId: commentUser,
+      })
+    } catch (err) { /* ignore */ }
+  } else {
+    for (const userId in users) {
+      if (users.hasOwnProperty(userId)) {
+        try {
+          delRows = await deleteComment({
+            commentId,
+            userId,
+          })
+        } catch (err) { /* ignore */
+        }
+      }
     }
   }
   res.json({ delRows })

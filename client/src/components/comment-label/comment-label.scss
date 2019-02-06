@@ -6,7 +6,6 @@
 .comment-label {
   padding: .5 * $baseline;
   border-radius: $border-radius-default;
-  background: $palette-white;
   color: $palette-white;
   @include shadow-outline(1px);
 }

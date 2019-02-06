@@ -89,8 +89,12 @@ class CommentPanel extends React.Component {
   }
 
   async deleteComment(comment) {
-    if (Object.keys(this.props.users)[0] === comment.userId) {
-      await apiCall('DELETE', '/comments', { commentId: comment.id })
+    if (Object.keys(this.props.users)[0] === comment.userId || this.props.role === 'dev') {
+      await apiCall(
+        'DELETE',
+        '/comments',
+        { commentId: comment.id, commentUser: comment.userId }
+      )
       await this.fetchComments()
     }
   }
