@@ -98,6 +98,7 @@ class SurveyEditCard extends React.Component {
     this.doDelete = this.doDelete.bind(this)
     this.doEditBegin = this.doEditBegin.bind(this)
     this.doEditEnd = this.doEditEnd.bind(this)
+    this.doEditCancel = this.doEditCancel.bind(this)
     this.handleTextEdit = this.handleTextEdit.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
   }
@@ -125,6 +126,11 @@ class SurveyEditCard extends React.Component {
   doEditEnd() {
     const { onEditEnd, question } = this.props
     onEditEnd(question.id)
+  }
+
+  doEditCancel() {
+    const { onEditCancel, question } = this.props
+    onEditCancel(question.id)
   }
 
   handleTextEdit(event) {
@@ -191,6 +197,13 @@ class SurveyEditCard extends React.Component {
                 tabIndex="-1"
                 disabled={commit}
               >OK
+              </button>
+              <button
+                type="button"
+                onClick={this.doEditCancel}
+                tabIndex="-1"
+                disabled={commit}
+              >Cancel
               </button>
             </>
           ) : !opened ? (
