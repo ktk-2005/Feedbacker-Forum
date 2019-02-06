@@ -28,6 +28,7 @@ const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
 const UPDATE_ROLE = 'UPDATE_ROLE'
+const LOAD_QUESTIONS = 'LOAD_QUESTIONS'
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -67,10 +68,20 @@ function roleReducer(state = '', action) {
   }
 }
 
+function questionReducer(state = {}, action) {
+  switch (action.type) {
+    case LOAD_QUESTIONS:
+      return action.questions
+    default:
+      return state
+  }
+}
+
 const reducer = combineReducers({
   persist: persistReducer,
   comments: commentsReducer,
   role: roleReducer,
+  questions: questionReducer,
 })
 
 const store = createStore(reducer)
