@@ -40,8 +40,21 @@
 
   .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+
+    .name-label-container {
+      .label-container {
+        display: flex;
+        margin-top: $baseline;
+        align-items: center;
+      }
+    }
+
+    .time-target-container {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
   }
 
   .target-icon {
@@ -53,7 +66,7 @@
   }
 
   .timestamp {
-    align-self: flex-end;
+    margin-right: $baseline;
     font-size: $font-size-small;
   }
 }
