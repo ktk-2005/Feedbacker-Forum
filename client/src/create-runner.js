@@ -1,5 +1,5 @@
 import React from 'react'
-import R from 'ramda'
+import * as R from 'ramda'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
