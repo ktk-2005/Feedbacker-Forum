@@ -17,6 +17,9 @@ const router = express.Router()
 //         "time": "2018-11-14 16:35:27",
 //         "text": "skrattia",
 //         "userId": "da776df3",
+//         "username": "jaba",
+//         "threadId": "3blkj3ad",
+//         "blob": "",
 //         "reactions": [
 //             {
 //                 "id": "1ddb07c8",
@@ -32,6 +35,9 @@ const router = express.Router()
 //         "time": "2018-11-14 17:10:42",
 //         "text": "tröttistä",
 //         "userId": "da776df3",
+//         "username": "jaba",
+//         "threadId": "3blkj3ad",
+//         "blob": "",
 //         "reactions": []
 //     }
 // }
@@ -47,6 +53,7 @@ router.get('/', catchErrors(async (req, res) => {
         time: comment.comment_time,
         text: comment.comment_text,
         userId: comment.comment_user_id,
+        username: comment.username,
         threadId: comment.comment_thread_id,
         blob: JSON.parse(comment.comment_blob) || {},
         reactions: [],

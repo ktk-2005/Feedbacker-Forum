@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
+import UsernameModal from '../add-username-modal/add-username-modal'
 
 // Components
 import Thread from '../thread/thread'
@@ -31,12 +32,15 @@ class CommentPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      usernameModalIsOpen: false,
+      value: '',
       currentThread: '',
       isHidden: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
@@ -71,9 +75,21 @@ class CommentPanel extends React.Component {
       blob: getBlob(),
       threadId: threadId || null,
     })
+
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
     await this.fetchComments()
+
+    if (!this.props.users.name) {
+      await this.toggleUsernameModal()
+    } else {
+      await this.fetchComments()
+    }
+  }
+
+  async toggleUsernameModal() {
+    if (this.state.usernameModalIsOpen) await this.fetchComments()
+    this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
   handleClick() {
@@ -165,6 +181,14 @@ class CommentPanel extends React.Component {
             threadId=""
             toggleTagElementState={this.props.toggleTagElementState}
           />
+          {!this.props.users.name
+            ? (
+              <UsernameModal
+                isOpen={this.state.usernameModalIsOpen}
+                toggle={this.toggleUsernameModal}
+              />
+            )
+            : null}
         </div>
       </div>
     )
