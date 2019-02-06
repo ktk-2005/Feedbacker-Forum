@@ -20,7 +20,7 @@ const mapStateToProps = (state) => {
   const persist = state.persist || {}
   return ({
     onboarding: !R.isEmpty(persist.users) && !persist.introDone,
-    dev: !R.isEmpty(persist.users) && persist.role === 'dev',
+    dev: !R.isEmpty(persist.users) && state.role === 'dev',
   })
 }
 
@@ -64,6 +64,7 @@ class Onboarding extends React.Component {
 
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleCloseIntro = this.handleCloseIntro.bind(this)
     this.doStepActions = this.doStepActions.bind(this)
   }
@@ -97,10 +98,10 @@ class Onboarding extends React.Component {
           'Survey Panel',
           dev
             ? `
-              This is the survey panel where you can aswer questions.
+            This is the survey panel where the users can aswer your questions.
             `
             : `
-            This is the survey panel where the users can aswer your questions.
+            This is the survey panel where you can aswer questions.
             `
         )
       )
@@ -119,10 +120,10 @@ class Onboarding extends React.Component {
           'Commenting',
           dev
             ? `
-              You can leave free form comments and view other people's comments here.
+            Here you can view the comments and participate in the conversation.
             `
             : `
-            Here you can view the comments and participate in the conversation.
+            You can leave free form comments and view other people's comments here.
             `
         )
       )
@@ -202,6 +203,7 @@ class Onboarding extends React.Component {
         isOpen={this.props.onboarding}
         parentSelector={shadowModalRoot}
         overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
+
       >
         <div className={css('modal-header')}>
           <button

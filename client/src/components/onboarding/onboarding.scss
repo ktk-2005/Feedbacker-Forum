@@ -5,6 +5,8 @@
 
 @import '../survey-panel/survey-panel.scss';
 
+$padding: $spacer * 2;
+
 .intro-modal {
   @include z-level(3);
   display: flex;
@@ -25,33 +27,36 @@
 .modal-header {
   @extend .panel-header;
   width: auto;
+  margin-top: $spacer;
   border-bottom: none;
+  padding: 0 $padding;
   cursor: unset;
-}
-
-.step-buttons {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-around;
-  flex: 0;
 
   button {
-    @include reset-button();
-
-    svg {
-      $icon-dimension: 21px;
-      width: $icon-dimension;
-      height: $icon-dimension;
-      margin-left: auto;
-      margin-right: auto;
-      fill: $palette-dark;
-    }
+    margin: 0;
   }
 }
 
-.next-button {
-  transform: scaleX(-1);
+.step-buttons {
+  width: auto;
+  height: fit-content;
+  display: flex;
+  flex-flow: row;
+  flex: 0;
+  padding: 0 $padding;
+
+  button {
+    @extend %icon-button;
+    padding: 0;
+    margin: 0;
+  }
+
+  .next-button {
+    transform: scaleX(-1);
+    margin-left: auto;
+  }
 }
+
 
 .skip-button {
   @include button($states: false);
@@ -78,7 +83,7 @@
   flex-flow: column;
   justify-content: center;
   flex: 1;
-  padding: 1em 2em;
+  padding: 0 $padding;
 }
 
 .overlay {
