@@ -28,6 +28,7 @@
 }
 
 .comment {
+  position: relative; // For labels
   margin-top: $spacer;
   padding: $spacer;
   border-radius: $border-radius-default;
@@ -42,14 +43,14 @@
     display: flex;
     align-items: flex-start;
 
-    .name-label-container {
-      .label-container {
-        display: flex;
-        margin-top: $baseline;
-        align-items: center;
-      }
+    // For labels
+    .name {
+      position: relative;
+      margin-bottom: $baseline;
+      z-index: 2;
     }
 
+    // When name wraps => still at top but time & target centered
     .time-target-container {
       display: flex;
       align-items: center;
@@ -71,21 +72,21 @@
   }
 }
 
-.expand-button-container {
+.actions-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   button {
-    @include button();
-    background: white;
-    @include shadow-outline(1px);
-    position: relative;
-    top: $baseline;
-    margin-left: $baseline;
-    margin-right: 1px; // Shadow-outline fix
+    @include reset-button();
+    margin: $spacer 1px 0 0; // 1px for shadow-outline fix
+    color: $palette-medium;
 
     &.hidden {
       display: none;
+    }
+
+    &:only-of-type {
+      margin-left: auto;
     }
   }
 }

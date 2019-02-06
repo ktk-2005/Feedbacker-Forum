@@ -3,31 +3,31 @@
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
 
-%label {
-  display: inline-block;
-  margin-right: $spacer;
-}
 
-.dev-label {
-  @include shadow-outline(0px);
-  @extend %label;
-  padding: .5 * $baseline $spacer;
-  border-radius: $border-radius-default;
+.developer-label {
+  position: absolute;
+  left: -$baseline;
   font-size: $font-size-small;
-  background-color: $palette-white;
+  writing-mode: tb;
   color: $palette-accent;
 }
 
 $rotation: 30;
 
 .badge-container {
-  @extend %label;
+  $dimension: $baseline * 3;
+
+  position: absolute;
+  top: $baseline * 1.5;
+  left: $baseline * 1.5;
+  display: flex;
+  margin-right: $spacer;
+  z-index: 1;
 
   .badge {
-    $dimension: $baseline * 1.5;
     width: $dimension;
     height: $dimension;
-    background: $palette-accent;
+    background: $palette-badge-background;
     border-radius: 1px;
     transform: rotate(#{ $rotation }deg);
   }

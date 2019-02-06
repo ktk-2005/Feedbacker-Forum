@@ -9,9 +9,6 @@ const css = classNames.bind(submitFieldStyles)
 const CommentLabel = ({ posterRole }) => (
   posterRole === 'op' ? (
     <>
-      <div className={css('dev-label')}>
-        DEV
-      </div>
       <div className={css('badge-container')}>
         <div className={css('badge')}>
           <div className={css('badge')}>
@@ -20,8 +17,8 @@ const CommentLabel = ({ posterRole }) => (
         </div>
       </div>
     </>
-  ) : (
-    <div className={css('dev-label', posterRole)}>
+  ) : ( // TODO: check if dev, not just else
+    <div className={css('developer-label')}>
       {posterRole.toUpperCase()}
     </div>
   )

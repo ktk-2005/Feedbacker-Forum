@@ -40,13 +40,17 @@ const targetElement = (comment) => {
   }
 }
 
-const chooseLabel = (op, userId) => {
+const opLabel = (op, userId) => {
   if (userId === op) {
-    return (
-      <div className={css('label-container')}>
-        <CommentLabel posterRole="op" />
-      </div>
-    )
+    return <CommentLabel posterRole="op" />
+  }
+  return null
+}
+
+// TODO: refactor
+const devLabel = () => {
+  if (true) {
+    return <CommentLabel posterRole="Developer" />
   }
   return null
 }
@@ -55,10 +59,11 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
       <div className={css('name-label-container')}>
+        {devLabel()}
         <div className={css('name')}>
           {comment.username || 'Anonymous user'}
         </div>
-        {chooseLabel(op, comment.userId)}
+        {opLabel(op, comment.userId)}
       </div>
       <div className={css('time-target-container')}>
         <Moment className={css('timestamp')} fromNow>{comment.time}</Moment>
@@ -71,14 +76,18 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
       </div>
     </div>
     <Reactions reactions={comment.reactions} commentId={id} />
-    <div className={css('expand-button-container')}>
-      <button
-        className={css('delete-button', { hidden: !canDelete })}
-        type="button"
-        onClick={() => deleteComment(comment)}
-      >
-        Delete
-      </button>
+    <div className={css('actions-container')}>
+      {
+        canDelete ? (
+          <button
+            className={css('delete-button')}
+            type="button"
+            onClick={() => deleteComment(comment)}
+          >
+            Delete
+          </button>
+        ) : null
+      }
       <button type="button" onClick={onClick}>{buttonText}</button>
     </div>
   </div>
