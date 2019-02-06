@@ -20,12 +20,12 @@ const router = express.Router()
 //
 // returns JSON array of all questions in database
 router.get('/', catchErrors(async (req, res) => {
-  const { container, containerOwner } = await reqContainer(req)
+  const { container, owner } = await reqContainer(req)
   const { users } = await reqUser(req)
 
-  const owner = users.hasOwnProperty(containerOwner) || container.includes('-')
+  const isOwner = users.hasOwnProperty(owner) || container.includes('-')
 
-  const questions = (owner ? await getQuestionsWithAnswers(container)
+  const questions = (isOwner ? await getQuestionsWithAnswers(container)
     : await getQuestions(container))
 
   res.json(questions)
@@ -54,9 +54,9 @@ function extractBlob(question) {
 router.post('/', catchErrors(async (req, res) => {
   const { text, type } = req.body || { }
   const { userId, users } = await reqUser(req)
-  const { container, containerOwner } = await reqContainer(req)
+  const { container, owner } = await reqContainer(req)
 
-  if (!users.hasOwnProperty(containerOwner) && !container.includes('-')) {
+  if (!users.hasOwnProperty(owner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can create questions')
   }
 
@@ -85,9 +85,9 @@ router.post('/', catchErrors(async (req, res) => {
 router.delete('/:id', catchErrors(async (req, res) => {
   const { id } = req.params
   const { users } = await reqUser(req)
-  const { container, containerOwner } = await reqContainer(req)
+  const { container, owner } = await reqContainer(req)
 
-  if (!users.hasOwnProperty(containerOwner) && !container.includes('-')) {
+  if (!users.hasOwnProperty(owner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can delete questions')
   }
 
@@ -102,9 +102,9 @@ router.put('/:id', catchErrors(async (req, res) => {
   const { text, type } = req.body || { }
   const { id } = req.params
   const { users } = await reqUser(req)
-  const { container, containerOwner } = await reqContainer(req)
+  const { container, owner } = await reqContainer(req)
 
-  if (!users.hasOwnProperty(containerOwner) && !container.includes('-')) {
+  if (!users.hasOwnProperty(owner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can edit questions')
   }
 
@@ -128,9 +128,9 @@ router.put('/:id', catchErrors(async (req, res) => {
 router.post('/order', catchErrors(async (req, res) => {
   const { order } = req.body || { }
   const { users } = await reqUser(req)
-  const { container, containerOwner } = await reqContainer(req)
+  const { container, owner } = await reqContainer(req)
 
-  if (!users.hasOwnProperty(containerOwner) && !container.includes('-')) {
+  if (!users.hasOwnProperty(owner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can edit questions')
   }
   if (!Array.isArray(order)) throw new HttpError(400, 'Expected order array')
