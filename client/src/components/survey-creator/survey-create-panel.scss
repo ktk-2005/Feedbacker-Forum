@@ -1,6 +1,8 @@
-@import '../../scss/compulsory';
-
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
 @import '../../scss/atoms-organisms/button';
+@import '../../scss/typography';
 
 .panel-container {
   @include display-and-animate();
@@ -13,7 +15,7 @@
   position: fixed;
   display: flex;
   flex-flow: column;
-  width: 40vw;
+  width: 60vw;
   height: 90vh;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
@@ -71,9 +73,7 @@
   min-height: 0; // Firefox shrink bug
 }
 
-.edit-container {
-  // SAMULI HAX
-  padding: 14px;
-  margin: 0 (-$baseline);
+.drag-helper {
+  @include z-level(1);
 }
 

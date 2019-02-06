@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid/v4'
 import { args } from '../globals'
-import { findContainerIdBySubdomain, verifyUser } from '../database'
+import { verifyUser, resolveContainer } from '../database'
 import HttpError from '../http-error'
 
 function makeUuid(length = 8) {
@@ -45,16 +45,14 @@ export async function resolveContainerFromHost(host) {
   const parts = host.split('.', 2)
   if (parts.length <= 1) throw new HttpError(400, 'Failed to extract subdomain from hostname')
   const subdomain = parts[0]
-  const row = await findContainerIdBySubdomain(subdomain) || []
-  if (row.length < 1) throw new HttpError(400, `No container exists for subdomain ${subdomain}`)
-  return row[0].id
+  return await resolveContainer(subdomain)
 }
 
 export async function reqContainer(req) {
   const host = req.get('X-Feedback-Host')
   if (!host) throw new HttpError(400, 'No X-Feedback-Host header')
-  const container = await resolveContainerFromHost(host)
-  return { container }
+  const { id, userId } = await resolveContainerFromHost(host)
+  return { container: id, containerOwner: userId }
 }
 
 export async function reqUser(req) {

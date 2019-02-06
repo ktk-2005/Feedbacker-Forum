@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import styles from './survey-panel.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 import Survey from '../survey/survey'
+import SurveyEditContainer from '../survey-edit/survey-edit-container'
 
 const css = classNames.bind(styles)
 
@@ -34,6 +35,9 @@ class SurveyPanel extends React.Component {
               >
                 <InlineSVG src={CloseIcon} />
               </button>
+            </div>
+            <div className={css('edit-container')}>
+              <SurveyEditContainer />
             </div>
             <div className={css('panel-body')}>
               <Survey />

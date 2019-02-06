@@ -139,7 +139,7 @@ class Answer extends React.Component {
       const { option } = this.state
       return (
         <div className={css('options')}>
-          {this.props.question.blob.options.map((value, index) => (
+          {this.props.question.options.map((value, index) => (
             <button
               key={value}
               type="button"

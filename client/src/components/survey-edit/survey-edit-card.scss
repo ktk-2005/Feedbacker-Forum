@@ -1,0 +1,92 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms-organisms/button';
+
+.survey-edit-card {
+  margin-top: $spacer;
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .filler {
+    flex-grow: 1;
+  }
+
+  .target-icon {
+    @include reset-button();
+    cursor: pointer;
+  }
+
+  .answer-text {
+    display: inline-block;
+    margin-top: $baseline;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+  }
+
+  .display-area {
+    padding-left: 8px;
+  }
+
+  &.edit-commit {
+    background-color: #eee;
+  }
+
+  // (temp) Thanks https://codepen.io/zachariab/pen/wkrbc
+  span.grippy {
+    content: '....';
+    width: 10px;
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 5px;
+    padding: 3px 4px;
+    cursor: move;
+    vertical-align: middle;
+    margin-top: -.7em;
+    margin-right: .8em;
+    font-size: 12px;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+    color: #cccccc;
+    text-shadow: 1px 0 1px black;
+    user-select: none;
+  }
+  span.grippy::after {
+    content: '.. .. .. ..';
+    user-select: none;
+  }
+
+  h4 {
+    display: inline-block;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  li {
+    margin-top: $baseline;
+  }
+}
+

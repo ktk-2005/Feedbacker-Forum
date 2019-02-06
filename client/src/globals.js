@@ -31,3 +31,15 @@ export function getUsers() {
   return users
 }
 
+export function waitForUsers() {
+  return new Promise((resolve, reject) => {
+    if (!R.isEmpty(users)) resolve(users)
+    else {
+      const token = subscribeUsers((users) => {
+        unsubscribeUsers(token)
+        resolve(users)
+      })
+    }
+  })
+}
+
