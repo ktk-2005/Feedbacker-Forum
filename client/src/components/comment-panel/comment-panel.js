@@ -142,6 +142,21 @@ class CommentPanel extends React.Component {
     )
   }
 
+  routeContainer() {
+    const groupByRoute = R.groupBy(comment => comment.blob.route)
+    const commentsByRoute = R.toPairs(groupByRoute(Object.values(this.props.comments)))
+    const amountsByRoute = commentsByRoute.map(route => [route[0], route[1].length])
+    return (
+      <div>
+        {amountsByRoute.map(route => (
+          <a href={route[0]}>
+            <p>{route[0]} {route[1]}</p>
+          </a>
+        ))}
+      </div>
+    )
+  }
+
   render() {
     return (
       <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
@@ -156,6 +171,7 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
+          { this.routeContainer() }
           { this.threadContainer() }
           <SubmitField
             handleSubmit={this.handleSubmit}
