@@ -60,3 +60,11 @@ Authentication is done using the standard `Authorization` header with a non-stan
 @api /api/instances/stop
 
 @api /api/instances/delete
+
+## Instance runners
+
+@api /api/instanceRunners
+
+@api /api/instanceRunners/new
+
+@api /api/instanceRunners/delete

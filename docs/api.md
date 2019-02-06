@@ -186,7 +186,7 @@ Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L65)
+### [POST /api/instances/new](../server/src/routes/instances.js#L66)
 
 Create a new container.
 
@@ -202,13 +202,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L41)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L40)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L120)
+### [POST /api/instances/start](../server/src/routes/instances.js#L126)
 
 Start a stopped container.
 
@@ -221,7 +221,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L106)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L103)
 
 Stop a running container.
 
@@ -234,7 +234,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L134)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L149)
 
 Delete a container
 
@@ -246,3 +246,48 @@ Example body
 ```
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
+
+## Instance runners
+
+### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L20)
+
+Retrieve all instance runners in the database and configured system default runners.
+
+Fields present in the instance objects are: tag, time, name, use_id, size, status
+
+Returns 200 OK and a JSON array of all instance runners or the system runners if
+  a) the user doesn't have any custom runners or
+  b) the user isn't authenticated properly
+
+### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L45)
+
+Create a new instance runner for the user. The image is pulled from the Docker Hub.
+There is currently no limitations on how large or many images a user can pull.
+
+Example request body:
+
+```json
+{
+ "tag": "nginx:latest"
+}
+```
+
+Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
+in the `status` field.
+
+### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L63)
+
+Deletes an instance runner. This will also cleanup space used on disk, so
+if per-user quotas are implemented later, this is the way instance runner
+management can be done.
+
+Example request body:
+
+```json
+{
+ "tag": "nginx:latest"
+}
+```
+
+Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
+in the `status` field.
