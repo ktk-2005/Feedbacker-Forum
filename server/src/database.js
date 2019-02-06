@@ -1,5 +1,6 @@
 import SQLiteDatabase from './database/database-sqlite'
 import PostgresDatabase from './database/database-postgres'
+import HttpError from './http-error'
 import { config, args } from './globals'
 
 let db = null
@@ -38,7 +39,41 @@ export async function getComments(container) {
     `, [container])
 }
 
-export async function getQuestions(container) { return db.query('SELECT * FROM questions WHERE container_id = ?', [container]) }
+export async function getQuestions(container) { return db.query('SELECT * FROM questions WHERE container_id = ? ORDER BY order_id ASC', [container]) }
+
+export async function addQuestion({
+  id, text, type, userId, container, blob, order
+}) { return db.run('INSERT INTO questions(id, text, type, user_id, container_id, order_id, blob) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, text, type, userId, container, order, blob]) }
+
+export async function editQuestion({
+  id, text, type, blob
+}) { return db.run('UPDATE questions SET text=?, type=?, blob=? WHERE id=? ', [text, type, blob, id]) }
+
+export async function removeQuestion({ id })
+{ return db.run('DELETE FROM questions WHERE id = ?', [id]) }
+
+export async function getQuestionHighestOrder(container) {
+  const row = await db.query('SELECT MAX(order_id) FROM questions WHERE container_id = ?', [container])
+  return row[0]['MAX(order_id)'] || 0
+}
+
+export async function reorderQuestions(order) {
+  const valid = id => id.match(/[a-zA-Z0-9]/)
+  if (!order.every(valid)) throw new HttpError(400, 'Bad order format')
+
+  const whenCases = order.map((id, ix) => `  WHEN "${id}" THEN ${ix}`).join('\n')
+  const inExpr = order.map(id => `"${id}"`).join(', ')
+  const query = `
+UPDATE questions
+SET order_id = CASE id
+${whenCases}
+ELSE 1000
+END WHERE id IN (${inExpr})
+`
+
+  return db.run(query)
+}
+
 
 export async function getReactions() { return db.query('SELECT * FROM reactions') }
 
@@ -53,17 +88,6 @@ export async function deleteReaction({
 export async function addComment({
   id, text, userId, threadId, blob,
 }) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId, blob]) }
-
-export async function addQuestion({
-  id, text, type, userId, container, blob,
-}) { return db.run('INSERT INTO questions(id, text, type, user_id, container_id, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, text, type, userId, container, blob]) }
-
-export async function editQuestion({
-  id, text, type, blob
-}) { return db.run('UPDATE questions SET text=?, type=?, blob=? WHERE id=? ', [text, type, blob, id]) }
-
-export async function removeQuestion({ id })
-{ return db.run('DELETE FROM questions WHERE id = ?', [id]) }
 
 export async function addAnswer({
   id, userId, questionId, blob,

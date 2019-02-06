@@ -94,6 +94,7 @@ export default class SurveyEditContainer extends React.Component {
     this.editBegin = this.editBegin.bind(this)
     this.editEnd = this.editEnd.bind(this)
     this.editChange = this.editChange.bind(this)
+    this.sortEnd = this.sortEnd.bind(this)
 
     this.addTextQuestion = () => this.addQuestion('text')
     this.addOptionQuestion = () => this.addQuestion('option')
@@ -113,8 +114,8 @@ export default class SurveyEditContainer extends React.Component {
   }
 
   isBusy() {
-    const { edit, pendingDelete } = this.state
-    return !!(edit.id || this.pendingDelete)
+    const { edit, pendingDelete, previewQuestions } = this.state
+    return !!(edit.id || pendingDelete || previewQuestions)
   }
 
   openCard(id) {
@@ -174,6 +175,27 @@ export default class SurveyEditContainer extends React.Component {
       { edit: R.mergeDeepRight(edit, change) } : { })
   }
 
+  async sortEnd({ oldIndex, newIndex }) {
+    if (this.isBusy()) return
+    if (oldIndex === newIndex) return
+
+    try {
+      const orderedQuestions = arrayMove(this.state.questions, oldIndex, newIndex)
+
+      this.setState({ previewQuestions: orderedQuestions })
+
+      const order = orderedQuestions.map(q => q.id)
+      await apiCall('POST', '/questions/order', { order })
+
+      const questions = await apiCall('GET', '/questions')
+
+      this.setState({ previewQuestions: null, questions })
+    } catch (error) {
+      console.error('Failed to sort questions', error)
+      this.setState({ previewQuestions: null })
+    }
+  }
+
   addQuestion(type) {
     if (this.isBusy()) return
 
@@ -211,7 +233,8 @@ export default class SurveyEditContainer extends React.Component {
   }
 
   render() {
-    const { openId, edit, questions, pendingDelete } = this.state
+    const { openId, edit, pendingDelete } = this.state
+    const questions = this.state.previewQuestions || this.state.questions
 
     const busy = this.isBusy()
 
@@ -234,6 +257,7 @@ export default class SurveyEditContainer extends React.Component {
             lockAxis="y"
             helperContainer={shadowModalRoot}
             helperClass={css('drag-helper')}
+            onSortEnd={this.sortEnd}
           />
         ) : (
           <h3>No questions yet</h3>

@@ -1,7 +1,12 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getQuestions, addQuestion, editQuestion, addThread, removeQuestion
+  getQuestions,
+  addQuestion,
+  editQuestion,
+  removeQuestion,
+  reorderQuestions,
+  getQuestionHighestOrder,
 } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { catchErrors } from '../handlers'
@@ -49,12 +54,16 @@ function extractBlob(question) {
 // Returns `{ id }` of the created question
 router.post('/', catchErrors(async (req, res) => {
   const { text, type } = req.body || { }
-  const { userId } = await reqUser(req)
+  const { userId, users } = await reqUser(req)
   const { container, containerOwner } = await reqContainer(req)
 
-  if (userId != containerOwner && !container.includes('-')) {
+  if (users.hasOwnProperty(containerOwner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can create questions')
   }
+
+  const order = await getQuestionHighestOrder(container) + 1
+
+  console.log(order)
 
   validateQuestion(req.body)
   const blob = extractBlob(req.body)
@@ -67,6 +76,7 @@ router.post('/', catchErrors(async (req, res) => {
       type: type || 'text',
       userId,
       container,
+      order,
       blob: JSON.stringify(blob),
     })
     res.json({ id })
@@ -77,10 +87,10 @@ router.post('/', catchErrors(async (req, res) => {
 // Delete a previously posted question
 router.delete('/:id', catchErrors(async (req, res) => {
   const { id } = req.params
-  const { userId } = await reqUser(req)
+  const { users } = await reqUser(req)
   const { container, containerOwner } = await reqContainer(req)
 
-  if (userId != containerOwner && !container.includes('-')) {
+  if (users.hasOwnProperty(containerOwner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can delete questions')
   }
 
@@ -94,10 +104,10 @@ router.delete('/:id', catchErrors(async (req, res) => {
 router.put('/:id', catchErrors(async (req, res) => {
   const { text, type } = req.body || { }
   const { id } = req.params
-  const { userId } = await reqUser(req)
+  const { users } = await reqUser(req)
   const { container, containerOwner } = await reqContainer(req)
 
-  if (userId != containerOwner && !container.includes('-')) {
+  if (users.hasOwnProperty(containerOwner) && !container.includes('-')) {
     throw new HttpError(403, 'Only instance owner can edit questions')
   }
 
@@ -113,5 +123,25 @@ router.put('/:id', catchErrors(async (req, res) => {
 
   res.json({ id })
 }))
+
+// @api POST /api/questions/order
+// Re-order questions, accepts a body like @json {
+//   order: ['id-1', 'id-2', 'id-3']
+// }
+router.post('/order', catchErrors(async (req, res) => {
+  const { order } = req.body || { }
+  const { users } = await reqUser(req)
+  const { container, containerOwner } = await reqContainer(req)
+
+  if (users.hasOwnProperty(containerOwner) && !container.includes('-')) {
+    throw new HttpError(403, 'Only instance owner can edit questions')
+  }
+  if (!Array.isArray(order)) throw new HttpError(400, 'Expected order array')
+
+  await reorderQuestions(order)
+
+  res.json({ })
+}))
+
 
 module.exports = router
