@@ -146,6 +146,7 @@ export async function startup() {
     childProcess.spawn(path.resolve(proxyPath, proxyExecutable), [], {
       cwd: proxyPath,
       stdio: 'inherit',
+      env: process.env,
     })
   }
 
@@ -155,6 +156,7 @@ export async function startup() {
     childProcess.spawn(npmExecutable, ['run', 'watch'], {
       cwd: '../client/',
       stdio: 'inherit',
+      env: process.env,
     })
   }
 
