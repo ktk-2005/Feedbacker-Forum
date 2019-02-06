@@ -102,8 +102,10 @@ class CommentPanel extends React.Component {
   }
 
   threadContainer() {
-    if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
-    const threadIds = new Set(Object.values(this.props.comments).map(comment => comment.threadId))
+    const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
+      this.props.comments)
+    if (R.isEmpty(commentsOfRoute)) return (<p>No comments fetched.</p>)
+    const threadIds = new Set(Object.values(commentsOfRoute).map(comment => comment.threadId))
     const groupByThread = R.groupBy((comment) => {
       for (const id of threadIds) {
         if (comment.threadId === id) {
@@ -111,7 +113,7 @@ class CommentPanel extends React.Component {
         }
       }
     })
-    const threadArray = groupByThread(Object.values(this.props.comments))
+    const threadArray = groupByThread(Object.values(commentsOfRoute))
     const sortbyTime = R.sortBy(([id, comments]) => R.reduce(
       R.minBy(comment => comment.time),
       { time: '9999-99-99 99:99:99' },
