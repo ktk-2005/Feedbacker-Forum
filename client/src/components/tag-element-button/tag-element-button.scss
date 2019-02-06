@@ -11,12 +11,14 @@
   padding: $baseline;
   border-radius: 100%;
   background: $palette-white;
+  color: transparent;
   cursor: pointer;
 
   &.active {
     @include button(2px);
     visibility: visible;
     box-shadow: 0 3px 5px $palette-light;
+    padding: $baseline $spacer;
     background: $palette-accent;
     color: $palette-white;
   }
