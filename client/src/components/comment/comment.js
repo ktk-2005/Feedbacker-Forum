@@ -50,7 +50,7 @@ const chooseLabel = (op, userId) => {
 const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, deleteComment }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
-      <div className={css('name')}>Anonymous user</div>
+      <div className={css('name')}>{comment.username || 'Anonymous user'}</div>
       {chooseLabel(op, comment.userId)}
       <Moment className={css('timestamp')} fromNow>{comment.time}</Moment>
       { targetElement(comment) }

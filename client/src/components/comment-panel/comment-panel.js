@@ -33,7 +33,6 @@ class CommentPanel extends React.Component {
     super(props)
     this.state = {
       usernameModalIsOpen: false,
-      value: '',
       currentThread: '',
       isHidden: false,
     }
@@ -162,6 +161,7 @@ class CommentPanel extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
         <div className={css('panel-header')}>

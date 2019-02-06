@@ -11,11 +11,11 @@
   flex-flow: column;
   justify-content: space-around;
   position: fixed;
-  right: $baseline;
-  bottom: $baseline;
-  min-width: 35vw;
-  min-height: 15vh;
-  max-height: 40vh;
+  min-width: 20 * $baseline;
+  max-width: 400px;
+  min-height: 2 * $baseline;
+  max-height: 300px;
+  padding: $spacer;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
   background-color: $palette-lighter;
@@ -25,31 +25,34 @@
     outline: none;
     box-shadow: 0 2px 10px $palette-shadow-default;
   }
-}
-
-input[type="submit"] {
-  @include button();
-  align-self: flex-end;
-  margin-top: $baseline;
-  padding: $baseline $spacer;
-  background: $palette-accent;
-  color: $palette-lighter;
-}
-
-.modal-content {
-  align-items: center;
-  display: flex;
-  flex-flow: column;
-  flex: 1;
-  justify-content: center;
-  padding: 1em 2em;
-  input[type="text"] {
-    @extend .comment;
-    display: block;
-    min-width: 100%;
-    border: none;
+  .header {
+    text-align: center;
+  }
+  .modal-form {
+    align-items: center;
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    justify-content: center;
+    padding: 1em 2em;
+    input[type="text"] {
+      @extend .comment;
+      display: block;
+      min-width: 100%;
+      border: none;
+    }
+    input[type="submit"] {
+      @include button();
+      align-self: flex-end;
+      margin-top: $baseline;
+      padding: $baseline $spacer;
+      background: $palette-accent;
+      color: $palette-lighter;
+    }
   }
 }
+
+
 
 .username-overlay {
   position: fixed;

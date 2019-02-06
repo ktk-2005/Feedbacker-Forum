@@ -133,7 +133,6 @@ class PostgresDatabase {
    */
 
   async del(str, values) {
-    console.log(str, values)
     const preparedString = prepStatement(str)
     const res = await this.db.result(preparedString, values)
     return res.rowCount
