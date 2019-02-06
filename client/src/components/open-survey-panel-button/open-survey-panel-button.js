@@ -16,13 +16,14 @@ const mapStateToProps = state => ({
 })
 
 const OpenSurveyPanelButton = (props) => {
-  const { hidden, onClick, questions, role } = props
+  const { hidden, onClick, role, questions } = props
+  const disabled = role !== 'dev' && questions.length < 1
   return (
     <button
       type="button"
       className={hidden ? css('button', 'hidden') : css('button')}
-      onClick={onClick}
-      disabled={role !== 'dev' && questions.length < 1}
+      onClick={() => { if (!disabled) onClick() }}
+      disabled={disabled}
     >
       <InlineSVG src={OpenIcon} />
     </button>
