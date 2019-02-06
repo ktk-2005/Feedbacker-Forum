@@ -118,7 +118,7 @@ function RunnerRow(props) {
       <div className={css('cell')}>
         <Moment
           className={css('timestamp')}
-          date={runner.date}
+          date={runner.time}
           format="DD.MM.YYYY HH:mm"
         />
       </div>
