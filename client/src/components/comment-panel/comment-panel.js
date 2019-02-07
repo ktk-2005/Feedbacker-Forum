@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
+import RouteContainer from '../route-container/route-container'
 
 // Components
 import Thread from '../thread/thread'
@@ -144,21 +145,6 @@ class CommentPanel extends React.Component {
     )
   }
 
-  routeContainer() {
-    const groupByRoute = R.groupBy(comment => comment.blob.route)
-    const commentsByRoute = R.toPairs(groupByRoute(Object.values(this.props.comments)))
-    const amountsByRoute = commentsByRoute.map(route => [route[0], route[1].length])
-    return (
-      <div>
-        {amountsByRoute.map(route => (
-          <a key={route[0]} href={route[0]}>
-            <p>{route[1]} comments at {route[0]}</p>
-          </a>
-        ))}
-      </div>
-    )
-  }
-
   render() {
     return (
       <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
@@ -173,7 +159,7 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
-          { this.routeContainer() }
+          { RouteContainer({ hidden: false, comments: this.props.comments }) }
           { this.threadContainer() }
           <SubmitField
             handleSubmit={this.handleSubmit}
