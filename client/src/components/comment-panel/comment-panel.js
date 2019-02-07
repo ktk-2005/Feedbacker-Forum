@@ -13,6 +13,7 @@ import UsernameModal from '../add-username-modal/add-username-modal'
 import Thread from '../thread/thread'
 import apiCall from '../../api-call'
 import SubmitField from '../submit-field/submit-field'
+import ConfirmModal from '../confirm-modal/confirm-modal'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -33,6 +34,7 @@ class CommentPanel extends React.Component {
     super(props)
     this.state = {
       usernameModalIsOpen: false,
+      commentToDelete: {},
       currentThread: '',
       isHidden: false,
     }
@@ -42,6 +44,7 @@ class CommentPanel extends React.Component {
     this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
+    this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
@@ -103,7 +106,20 @@ class CommentPanel extends React.Component {
     await this.scrollToBottom()
   }
 
-  async deleteComment(comment) {
+  toggleDeleteModal(comment) {
+    console.log('TOGGLING: ', comment)
+    this.setState((prevState) => {
+      if (R.isEmpty(prevState.commentToDelete)) {
+        console.log('yes')
+        return { commentToDelete: comment }
+      }
+      return { commentToDelete: {} }
+    })
+    console.log('STATE: ', this.state.commentToDelete)
+  }
+
+  async deleteComment() {
+    const { commentToDelete: comment } = this.state
     if (Object.keys(this.props.users)[0] === comment.userId || this.props.role === 'dev') {
       await apiCall(
         'DELETE',
@@ -150,7 +166,7 @@ class CommentPanel extends React.Component {
                 handleSubmit={this.handleSubmit}
                 updateCurrentThread={this.updateCurrentThread}
                 currentThread={this.state.currentThread}
-                deleteComment={this.deleteComment}
+                deleteComment={this.toggleDeleteModal}
                 toggleTagElementState={this.props.toggleTagElementState}
               />),
             sortedThreads
@@ -187,8 +203,15 @@ class CommentPanel extends React.Component {
                 isOpen={this.state.usernameModalIsOpen}
                 toggle={this.toggleUsernameModal}
               />
-            ) : null
+            )
+              : null
           }
+          <ConfirmModal
+            text="Are you sure you want to delete this comment?"
+            action={this.deleteComment}
+            isOpen={!R.isEmpty(this.state.commentToDelete)}
+            toggle={this.toggleDeleteModal}
+          />
         </div>
       </div>
     )
