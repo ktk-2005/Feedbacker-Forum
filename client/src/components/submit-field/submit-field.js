@@ -3,6 +3,7 @@ import React from 'react'
 // Helpers
 import classNames from 'classnames/bind'
 import * as DomTagging from '../../dom-tagging'
+import { keyPressSubmit } from '../../globals'
 // Components
 import TagElementButton from '../tag-element-button/tag-element-button'
 // Styles
@@ -70,6 +71,7 @@ class SubmitField extends React.Component {
           onChange={this.handleChange}
           placeholder={this.props.threadId ? 'Reply to thread...' : 'Write comment...'}
           ref={this.props.inputRef}
+          onKeyDown={keyPressSubmit}
         />
         <div className={css('button-container')}>
           <TagElementButton
