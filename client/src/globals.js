@@ -31,6 +31,8 @@ export function getUsers() {
   return users
 }
 
+// Gets called onKeyDown from textArea of form element, if keys pressed are ctrl+enter or
+//  metaKey+enter, clicks parentelements input element which has attribute type="submit"
 export function keyPressSubmit(e) {
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
     e.path[1].querySelector('input[type="submit"]').click()
