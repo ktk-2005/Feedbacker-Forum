@@ -10,6 +10,7 @@ function RouteContainer(props) {
   const { hidden, comments } = props
   const groupByRoute = R.groupBy(comment => comment.blob.route)
   const commentsByRoute = R.toPairs(groupByRoute(Object.values(comments)))
+    .filter(route => route[0] !== window.location.pathname)
   const amountsByRoute = commentsByRoute.map(route => [route[0], route[1].length])
   return (
     <div className={css('panel-container', { hidden })}>
