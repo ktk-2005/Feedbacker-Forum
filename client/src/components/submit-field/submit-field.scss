@@ -1,0 +1,50 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+@import '../survey-panel/survey-panel.scss';
+@import '../comment/comment.scss';
+@import '../comment-panel/comment-panel.scss';
+
+.comment-form {
+  display: flex;
+  flex-flow: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  justify-content: center;
+  margin-top: $baseline;
+
+  textarea {
+    @extend .comment;
+    display: block;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 3em;
+    max-height: $panel-min-width;
+    border: none;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 2px 10px $palette-shadow-default;
+    }
+  }
+
+  .button-container {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-top: $baseline;
+  }
+
+  .submit-comment {
+    @include button();
+    align-self: flex-end;
+    margin-left: $baseline;
+    padding: $baseline $spacer;
+    background: $palette-accent;
+    color: $palette-lighter;
+  }
+}

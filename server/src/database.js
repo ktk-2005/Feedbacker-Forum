@@ -142,7 +142,11 @@ export async function addReaction({
 
 export async function deleteReaction({
   emoji, userId, commentId,
-}) { return db.query('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
+}) { return db.del('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
+
+export async function deleteComment({
+  userId, commentId,
+}) { return db.del('DELETE FROM comments WHERE user_id=? AND id=?', [userId, commentId]) }
 
 export async function addComment({
   id, text, userId, threadId, blob,
@@ -197,7 +201,7 @@ export async function listContainersByUser(values = []) {
 
 export async function removeContainer({
   id,
-}) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
+}) { return db.run('DELETE FROM containers WHERE subdomain=?', [id]) }
 
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])

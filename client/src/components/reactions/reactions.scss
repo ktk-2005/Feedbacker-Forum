@@ -26,6 +26,10 @@ $reaction-border: 1px solid $palette-light;
   overflow: visible;
   transition: $transition-default-all;
   transition-property: box-shadow;
+
+  &:focus {
+    background-color: rgba($palette-light, 0.3);
+  }
 }
 
 .reaction:first-of-type {

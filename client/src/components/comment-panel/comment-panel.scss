@@ -10,7 +10,7 @@ $panel-min-width: 300px;
 
 .comment-panel {
   min-width: $panel-min-width;
-  max-width: 50%;
+  max-width: $panel-min-width;
   height: 100%;
 
   position: fixed;
@@ -38,7 +38,7 @@ $panel-min-width: 300px;
   justify-content: flex-start;
 }
 
-.comment-container {
+.thread-container {
   display: flex;
   flex-flow: column;
   flex-grow: 1;
