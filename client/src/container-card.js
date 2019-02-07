@@ -17,7 +17,7 @@ class ContainerCard extends React.Component {
   constructor(props) {
     super(props)
     this.instance = this.props.instance
-    this.instance.url = `http://${this.instance.subdomain}.${window.location.host}`
+    this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
 
     this.state = {
