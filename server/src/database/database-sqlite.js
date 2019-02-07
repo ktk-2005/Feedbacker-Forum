@@ -129,5 +129,22 @@ class SQLiteDatabase {
       })
     })
   }
+  /*
+  For using delete statements. Returns the number of rows affected.
+  Will return an empty array if DELETE was unsuccessful.
+   */
+
+  async del(...args) {
+    return new Promise((resolve, reject) => {
+      this.db.run(...args, function (err) {
+        if (err) {
+          verboseError(`DELERROR: ${err} on query ${args}`)
+          reject(err)
+        } else {
+          resolve(this.changes)
+        }
+      })
+    })
+  }
 }
 export default SQLiteDatabase
