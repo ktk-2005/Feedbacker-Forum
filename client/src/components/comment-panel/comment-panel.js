@@ -8,6 +8,7 @@ import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
 import UsernameModal from '../add-username-modal/add-username-modal'
+import { keyPressSubmit } from '../../globals'
 
 // Components
 import Comment from '../comment/comment'
@@ -141,11 +142,12 @@ class CommentPanel extends React.Component {
         </div>
         <div className={css('panel-body')}>
           { this.commentContainer() }
-          <form className={css('comment-form')} onSubmit={this.handleSubmit}>
+          <form className={css('comment-form')} form="formie" onSubmit={this.handleSubmit}>
             <textarea
               value={this.state.value}
               onChange={this.handleChange}
               placeholder="Write comment..."
+              onKeyDown={keyPressSubmit}
             />
             <input className={css('submit-comment')} type="submit" value="Comment" />
           </form>

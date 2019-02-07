@@ -31,3 +31,8 @@ export function getUsers() {
   return users
 }
 
+export function keyPressSubmit(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.path[1].querySelector('input[type="submit"]').click()
+  }
+}
