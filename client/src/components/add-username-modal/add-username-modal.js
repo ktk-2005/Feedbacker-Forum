@@ -63,7 +63,14 @@ class UsernameModal extends React.Component {
         shouldCloseOnOverlayClick
         shouldCloseOnEsc
       >
-        <form className={css('modal-content')} onSubmit={this.handleSubmit}>
+        <h4 className={css('header')}>Add Username</h4>
+        <div className={css('body')}>
+          <div className={css('text')}>
+              Add a username to be associated with your account on Feedbacker Forum.
+              Your name will be visible above all of your comments.
+          </div>
+        </div>
+        <form className={css('modal-form')} onSubmit={this.handleSubmit}>
           <input type="text" onChange={this.handleChange} name="name" id="name" placeholder="New username..." />
           <input className={css('add-button')} type="submit" value="Add username" />
         </form>
