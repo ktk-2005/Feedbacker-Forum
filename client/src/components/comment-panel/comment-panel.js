@@ -8,7 +8,6 @@ import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
 import UsernameModal from '../add-username-modal/add-username-modal'
-import { keyPressSubmit } from '../../globals'
 
 // Components
 import Thread from '../thread/thread'
