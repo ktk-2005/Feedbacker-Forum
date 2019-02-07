@@ -1,16 +1,20 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+
 @import '../../scss/atoms-organisms/button';
 
+@import '../../scss/views/dashboard-view';
+@import '../../scss/atoms-organisms/forms';
+
 .survey-edit-card {
-  margin-top: $spacer;
+  margin-bottom: $spacer;
   padding: $spacer;
   border-radius: $border-radius-default;
   background: $palette-white;
   @include shadow-outline(1px);
 
-  &:first-of-type {
+  &:last-of-type {
     margin-top: 0;
   }
 
@@ -18,75 +22,82 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    & textarea + .actions {
+      align-self: flex-start;
+    }
   }
 
-  .filler {
+  button {
+    @extend %anchor-button;
+  }
+
+  .actions {
+    margin-left: auto;
+
+    button {
+      margin-left: $baseline;
+    }
+  }
+
+  textarea {
+    @extend %textarea;
+    min-width: unset;
     flex-grow: 1;
+    flex-shrink: 1;
   }
 
-  .target-icon {
-    @include reset-button();
-    cursor: pointer;
+  input {
+    @extend %generic-input;
   }
 
-  .answer-text {
-    display: inline-block;
-    margin-top: $baseline;
-    color: #555;
-    text-decoration: underline;
-    cursor: pointer;
-    user-select: none;
-    padding: 0;
-    border: none;
-    font: inherit;
-    color: inherit;
-    background-color: transparent;
+  .options-container {
+    display: flex;
+
+    input {
+      display: inline-flex;
+      width: unset;
+      margin-right: $baseline;
+      flex-grow: 1;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
   }
 
-  .display-area {
-    padding-left: 8px;
+  .show-answers {
+    margin-top: $spacer;
   }
 
   &.edit-commit {
-    background-color: #eee;
+    background-color: $palette-white;
   }
 
-  // (temp) Thanks https://codepen.io/zachariab/pen/wkrbc
-  span.grippy {
-    content: '....';
-    width: 10px;
-    height: 20px;
-    display: inline-block;
-    overflow: hidden;
-    line-height: 5px;
-    padding: 3px 4px;
+  .reorder-handle {
+    $size-y: $font-size-default * 2;
+    $size-x: 4px;
+    display: flex;
+    height: $size-y;
+    width: 4px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: $spacer;
     cursor: move;
-    vertical-align: middle;
-    margin-top: -.7em;
-    margin-right: .8em;
-    font-size: 12px;
-    font-family: sans-serif;
-    letter-spacing: 2px;
-    color: #cccccc;
-    text-shadow: 1px 0 1px black;
     user-select: none;
-  }
-  span.grippy::after {
-    content: '.. .. .. ..';
-    user-select: none;
+
+    &:after {
+      content: '\2807';
+      position: relative;
+      left: -$size-x; // Character has some spacing
+      font-size: $size-y;
+      color: $palette-dark;
+      user-select: none;
+    }
   }
 
   h4 {
     display: inline-block;
-  }
-
-  ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-
-  li {
-    margin-top: $baseline;
   }
 }
 

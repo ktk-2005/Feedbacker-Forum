@@ -14,22 +14,15 @@ function TextDisplay({ question, onOpen }) {
   const answers = question.answers || []
   const answersText = `Show ${answers.length} answer${answers.length === 1 ? '' : 's'}`
 
-  return (
-    <button type="button" className={css('answer-text')} onClick={onOpen}>{answersText}</button>
-  )
+  return <button type="button" className={css('show-answers')} onClick={onOpen}>{answersText}</button>
 }
 
 function OptionDisplay({ question }) {
   const { answers, options } = question
   const counts = R.countBy(R.path(['blob', 'option']))(answers || [])
 
-  return (
-    <ul>{
-      options.map((option, index) => (
-        <li key={index}>{option}: {counts[index] || 0}</li>
-      ))
-    }
-    </ul>
+  return options.map(
+    (option, index) => <div key={index}>{option}: {counts[index] || 0}</div>
   )
 }
 
@@ -44,27 +37,27 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
   }
 
   return (
-    <ul>{
-      options.map((option, index) => (
-        <li key={index}>
-          <input
-            type="text"
-            value={option}
-            placeholder={`Option ${index + 1}`}
-            onChange={handleChange(index)}
-            onKeyPress={onKeyPress}
-            disabled={commit}
-          />
-        </li>
-      ))
-    }
-    </ul>
+    <div className={css('options-container')}>
+      {
+        options.map(
+          (option, index) => (
+            <input
+              type="text"
+              key={index}
+              value={option}
+              placeholder={`Option ${index + 1}`}
+              onChange={handleChange(index)}
+              onKeyPress={onKeyPress}
+              disabled={commit}
+            />
+          )
+        )
+      }
+    </div>
   )
 }
 
-const Handle = SortableHandle(() => (
-  <span className={css('grippy')}>........</span>
-))
+const Handle = SortableHandle(() => <div className={css('reorder-handle')} />)
 
 function Answer({ answer }) {
   const { blob, name, time } = answer
@@ -181,7 +174,8 @@ class SurveyEditCard extends React.Component {
 
         <div className={css('header')}>
 
-          {edited ? (
+          {
+            edited ? (
             <>
               <textarea
                 value={question.text}
@@ -191,36 +185,38 @@ class SurveyEditCard extends React.Component {
                 onKeyPress={this.handleKeyPress}
                 disabled={commit}
               />
-              <button
-                type="button"
-                onClick={this.doEditEnd}
-                tabIndex="-1"
-                disabled={commit}
-              >OK
-              </button>
-              <button
-                type="button"
-                onClick={this.doEditCancel}
-                tabIndex="-1"
-                disabled={commit}
-              >Cancel
-              </button>
+              <div className={css('actions')}>
+                <button
+                  type="button"
+                  onClick={this.doEditEnd}
+                  tabIndex="-1"
+                  disabled={commit}
+                >Save
+                </button>
+                <button
+                  type="button"
+                  onClick={this.doEditCancel}
+                  tabIndex="-1"
+                  disabled={commit}
+                >Cancel
+                </button>
+              </div>
             </>
-          ) : !opened ? (
-            <>
-              <Handle />
-              <h4>{question.text}</h4>
-              <div className={css('filler')} />
-              <button disabled={busy} type="button" onClick={this.doEditBegin}>E</button>
-              <button disabled={busy} type="button" onClick={this.doDelete}>X</button>
-            </>
-          ) : (
-            <>
-              <h4>{question.text}</h4>
-              <div className={css('filler')} />
-              <button type="button" onClick={this.doClose}>Close</button>
-            </>
-          )
+            ) : !opened ? (
+              <>
+                <Handle />
+                <h4>{question.text}</h4>
+                <div className={css('actions')}>
+                  <button disabled={busy} type="button" onClick={this.doEditBegin}>Edit</button>
+                  <button disabled={busy} type="button" onClick={this.doDelete}>Remove</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h4>{question.text}</h4>
+                <button type="button" onClick={this.doClose}>Close</button>
+              </>
+            )
           }
         </div>
 

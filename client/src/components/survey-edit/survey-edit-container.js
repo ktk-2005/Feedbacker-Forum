@@ -267,6 +267,7 @@ export default class SurveyEditContainer extends React.Component {
             busy={busy}
 
             useDragHandle
+            lockToContainerEdges
             lockAxis="y"
             helperContainer={shadowModalRoot}
             helperClass={css('drag-helper')}
@@ -291,7 +292,7 @@ export default class SurveyEditContainer extends React.Component {
           overlayClassName={css('overlay')}
         >
           <h1>Are you sure you want to delete this question?</h1>
-          <button type="button" onClick={this.commitDelete}>DELETE</button>
+          <button type="button" onClick={this.commitDelete}>Delete</button>
           <button type="button" onClick={this.cancelDelete}>Cancel</button>
         </ReactModal>
       </>
