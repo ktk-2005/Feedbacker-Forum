@@ -82,18 +82,20 @@ class Create extends React.Component {
           >
             <label htmlFor="application">
               Application type
-              <select name="application" id="application" form="form" required>
-                {this.state.instanceRunners.map(runner => (
-                  <option key={runner.tag} value={runner.tag}>{runner.name}</option>
-                ))}
-              </select>
-              <Link to="/create-runner">
-                <button
-                  className={css('new-runner-button')}
-                  type="button"
-                >New runner
-                </button>
-              </Link>
+              <div className={css('inline-button')}>
+                <select name="application" id="application" form="form" required>
+                  {this.state.instanceRunners.map(runner => (
+                    <option key={runner.tag} value={runner.tag}>{runner.name}</option>
+                  ))}
+                </select>
+                <Link to="/create-runner">
+                  <button
+                    className={css('new-runner-button')}
+                    type="button"
+                  >New runner
+                  </button>
+                </Link>
+              </div>
             </label>
             <label htmlFor="url">
               Git URL

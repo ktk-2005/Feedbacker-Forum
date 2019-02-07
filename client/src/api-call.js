@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import { apiUrl } from './meta/env.meta'
 import { getUsers } from './globals'
 
@@ -43,7 +42,7 @@ export default async function (method, endpoint, body = null, opts = { }) {
   if (response.status >= 400 && response.status <= 599) {
     const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
     console.error(message)
-    toast(message)
+    toast.error(json.message)
     if (json.stack) console.error(json.stack)
     throw new Error(message)
   } else {

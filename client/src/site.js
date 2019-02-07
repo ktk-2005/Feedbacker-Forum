@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 // Helpers
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import {
@@ -20,8 +20,8 @@ import { setUsers } from './globals'
 import apiCall from './api-call'
 // Styles
 import styles from './scss/_base.scss'
+import './scss/atoms/_toast.scss'
 import CreateRunner from './create-runner'
-import 'react-toastify/dist/ReactToastify.css'
 
 const css = classNames.bind(styles)
 
@@ -88,7 +88,21 @@ const initialize = () => {
   })
 
   ReactDOM.render(
-    <>
+    <div className={css('management-container')}>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable={false}
+        pauseOnHover
+        className={css('toast-container')}
+        toastClassName={css('toast')}
+        progressClassName={css('toast-progress')}
+      />
       <Provider store={store}>
         <Router>
           <div className={css('feedback-app-container', 'site-views')}>
@@ -101,18 +115,7 @@ const initialize = () => {
           </div>
         </Router>
       </Provider>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnVisibilityChange
-        draggable
-        pauseOnHover
-      />
-    </>,
+    </div>,
     prepareReactRoot()
   )
 }

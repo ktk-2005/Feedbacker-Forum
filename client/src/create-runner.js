@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 // Helpers
+import { toast } from 'react-toastify'
 import Moment from 'react-moment'
 import moment from 'moment-timezone'
 import classNames from 'classnames/bind'
@@ -19,6 +20,7 @@ class CreateRunner extends React.Component {
 
     this.state = {
       instanceRunners: [],
+      defaultRunners: [],
     }
 
     this.getInstanceRunnersFromServer = this.getInstanceRunnersFromServer.bind(this)
@@ -36,8 +38,9 @@ class CreateRunner extends React.Component {
 
   async getInstanceRunnersFromServer() {
     const response = await apiCall('GET', '/instanceRunners')
-
-    this.setState({ instanceRunners: response })
+    const defaultRunners = R.filter(runner => !runner.user_id, response)
+    const instanceRunners = R.filter(runner => runner.user_id, response)
+    this.setState({ instanceRunners, defaultRunners })
   }
 
   async postNewInstanceRunner(event) {
@@ -64,7 +67,32 @@ class CreateRunner extends React.Component {
   render() {
     return (
       <div className={css('runner-view-container')}>
-        <div className={css('create-form-container')}>
+        <div className={css('inner-container')}>
+          <div className={css('default-runner-container')}>
+            <h2>Default runners</h2>
+            {this.state.defaultRunners.map(runner => (<DefaultRunnerRow
+              key={runner.tag}
+              runner={runner}
+            />
+            )) }
+          </div>
+          <div className={css('runner-table')}>
+            <h2>Your runners</h2>
+            <div className={css('table-header', 'row')}>
+              <div className={css('cell')}>Tag</div>
+              <div className={css('cell')}>Created</div>
+              <div className={css('cell')}>Status</div>
+              <div className={css('cell')} />
+            </div>
+            <div className={css('table-body')}>
+              {this.state.instanceRunners.map(runner => (<RunnerRow
+                key={runner.tag}
+                runner={runner}
+                deleteRunnerCallback={this.deleteRunner}
+              />
+              )) }
+            </div>
+          </div>
           <h2>Create a runner</h2>
           <p>This is some useful instructions. Tag should contain the version.</p>
           <form
@@ -87,23 +115,6 @@ class CreateRunner extends React.Component {
             </div>
           </form>
         </div>
-        <div className={css('runner-table')}>
-          <h2>Your runners</h2>
-          <div className={css('table-header', 'row')}>
-            <div className={css('cell')}>Tag</div>
-            <div className={css('cell')}>Created</div>
-            <div className={css('cell')}>Status</div>
-            <div className={css('cell')} />
-          </div>
-          <div className={css('table-body')}>
-            {this.state.instanceRunners.map(runner => (<RunnerRow
-              key={runner.tag}
-              runner={runner}
-              deleteRunnerCallback={this.deleteRunner}
-            />
-            )) }
-          </div>
-        </div>
       </div>
     )
   }
@@ -111,9 +122,8 @@ class CreateRunner extends React.Component {
 
 function RunnerRow(props) {
   const { runner, deleteRunnerCallback } = props
-  const hasUser = runner.user_id
   return (
-    <div className={css('row', hasUser ? '' : 'default')}>
+    <div className={css('row')}>
       <span className={css('cell')}>{runner.tag}</span>
       <div className={css('cell')}>
         <Moment
@@ -127,13 +137,22 @@ function RunnerRow(props) {
       </div>
       <div className={css('cell')}>
         <button
-          className={css('delete-button', hasUser ? '' : 'hidden')}
+          className={css('delete-button')}
           type="button"
           onClick={() => deleteRunnerCallback(runner.tag)}
         >
         Delete
         </button>
       </div>
+    </div>
+  )
+}
+
+function DefaultRunnerRow(props) {
+  const { runner } = props
+  return (
+    <div className={css('default', 'row')}>
+      <span className={css('cell')}>{runner.tag}</span>
     </div>
   )
 }

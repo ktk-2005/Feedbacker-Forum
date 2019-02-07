@@ -22,7 +22,6 @@ import TagElementButton from './components/tag-element-button/tag-element-button
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
-import 'react-toastify/dist/ReactToastify.css'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
