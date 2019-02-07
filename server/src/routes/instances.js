@@ -26,9 +26,7 @@ router.get('/', catchErrors(async (req, res) => {
   const { users } = await reqUser(req)
   const containers = []
   for (const [userId] of R.toPairs(users)) {
-    try {
-      containers.push(...await getRunningContainersByUser([userId]))
-    } catch (error) { /* ignore */ }
+    containers.push(...await getRunningContainersByUser([userId]))
   }
   res.send(containers)
 }))
