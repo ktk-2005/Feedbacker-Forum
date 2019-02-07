@@ -212,20 +212,15 @@ const initialize = () => {
   )
 }
 
-// everytime a node is added or removed update comments
-// TODO: reliable way to update?
-const mutationObserver = new MutationObserver(((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0) {
-      getComments()
-    }
-  })
-}))
+let route = window.location.pathname
+const updateComments = () => {
+  if (route !== window.location.pathname) {
+    getComments()
+  }
+  route = window.location.pathname
+}
 
-mutationObserver.observe(document.documentElement, {
-  childList: true,
-  subtree: true,
-})
+setInterval(updateComments, 100)
 
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
