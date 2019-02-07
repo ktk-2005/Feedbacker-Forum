@@ -213,10 +213,10 @@ const initialize = () => {
 }
 
 // everytime a node is added or removed update comments
-// TODO: get comments by route? reliable way to update?
+// TODO: reliable way to update?
 const mutationObserver = new MutationObserver(((mutations) => {
   mutations.forEach((mutation) => {
-    if (mutation.addedNodes.length > 0 || mutation.addedNodes.length > 0) {
+    if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0) {
       getComments()
     }
   })
