@@ -42,7 +42,7 @@ class TagElementButton extends React.Component {
     return (
       <button
         type="button"
-        className={css('button', { active }, { selected })}
+        className={css('button', { active, selected })}
         onClick={() => {
           DomTagging.setElementTaggedCallback(event => elementTagged(event))
           DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())

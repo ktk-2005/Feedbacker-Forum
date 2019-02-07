@@ -146,7 +146,7 @@ class CommentPanel extends React.Component {
       }
     })
     const threadArray = groupByThread(Object.values(this.props.comments))
-    const sortbyTime = R.sortBy(([id, comments]) => R.reduce(
+    const sortbyTime = R.sortBy(([comments]) => R.reduce(
       R.minBy(comment => comment.time),
       { time: '9999-99-99 99:99:99' },
       comments
@@ -177,7 +177,6 @@ class CommentPanel extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
         <div className={css('panel-header')}>

@@ -27,7 +27,11 @@ class Thread extends React.Component {
   }
 
   buttonText() {
-    const openText = this.props.comments.length > 1 ? 'Expand' : 'Reply'
+    let openText = 'Reply'
+    const replyAmount = this.props.comments.length - 1
+    if (replyAmount > 0) {
+      openText = `Show ${replyAmount} Repl${replyAmount === 1 ? 'y' : 'ies'}`
+    }
     const isOpen = this.props.currentThread !== this.props.id
     return isOpen ? openText : 'Collapse'
   }
@@ -71,8 +75,8 @@ class Thread extends React.Component {
   }
 
   canDelete(commentUserId) {
-    const [currentUser] = Object.keys(this.props.users)
-    return currentUser === commentUserId || this.props.role === 'dev'
+    const { users } = this.props
+    return users.hasOwnProperty(commentUserId) || this.props.role === 'dev'
   }
 
   render() {
