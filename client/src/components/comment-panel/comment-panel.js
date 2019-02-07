@@ -151,7 +151,7 @@ class CommentPanel extends React.Component {
     return (
       <div>
         {amountsByRoute.map(route => (
-          <a href={route[0]}>
+          <a key={route[0]} href={route[0]}>
             <p>{route[1]} comments at {route[0]}</p>
           </a>
         ))}
