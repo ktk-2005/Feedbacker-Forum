@@ -146,6 +146,13 @@ class MainView extends React.Component {
   }
 }
 
+const getComments = () => {
+  apiCall('GET', '/comments')
+    .then((comments) => {
+      store.dispatch(loadComments(comments))
+    })
+}
+
 const initializedKey = '!!feedbacker_forum_initialized!!'
 
 const initialize = () => {
@@ -185,10 +192,7 @@ const initialize = () => {
 
   const savePersist = setupPersist(loadPersist)
 
-  apiCall('GET', '/comments')
-    .then((comments) => {
-      store.dispatch(loadComments(comments))
-    })
+  getComments()
 
   store.subscribe(() => {
     const persist = store.getState().persist || { }
@@ -207,6 +211,21 @@ const initialize = () => {
     root
   )
 }
+
+// everytime a node is added or removed update comments
+// TODO: get comments by route? reliable way to update?
+const mutationObserver = new MutationObserver(((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.addedNodes.length > 0 || mutation.addedNodes.length > 0) {
+      getComments()
+    }
+  })
+}))
+
+mutationObserver.observe(document.documentElement, {
+  childList: true,
+  subtree: true,
+})
 
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
