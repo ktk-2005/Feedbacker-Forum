@@ -13,11 +13,14 @@ function RouteContainer(props) {
     .filter(route => route[0] !== window.location.pathname)
   const amountsByRoute = commentsByRoute.map(route => [route[0], route[1].length])
   return (
-    <div className={css('panel-container', { hidden })}>
+    <div className={css('route-container', 'hidden', { hidden })}>
       {amountsByRoute.map(route => (
-        <a key={route[0]} href={route[0]}>
-          <p>{route[1]} comments at {route[0]}</p>
-        </a>
+        <p key={route[0]}>
+          {route[1]} comments at
+          <a href={route[0]}>
+            {route[0]}
+          </a>
+        </p>
       ))}
     </div>
   )
