@@ -18,7 +18,8 @@ class RouteContainer extends React.Component {
   const groupByRoute = R.groupBy(comment => comment.blob.route)
   const commentsByRoute = R.toPairs(groupByRoute(Object.values(comments)))
     .filter(route => route[0] !== window.location.pathname)
-  const amountsByRoute = commentsByRoute.map(route => [route[0], route[1].length])
+	const amountsByRoute = commentsByRoute.map(route => [route[0], route[1].length])
+	const pluralize = (word, amount) => { amount === 1 : word : word.concat('s') }
   return (
     <div className={css('route-container', { hidden })}>
       <button
@@ -27,9 +28,9 @@ class RouteContainer extends React.Component {
         onClick={onClick}
       />
       {amountsByRoute.map(route => (
-        <a key={route[0]} href={route[0]}>
-          <p>{route[1]} comments at {route[0]}</p>
-        </a>
+        <p key={route[0]}>
+          {route[1]} comments at <a href={route[0]}>{route[0]}</a>
+        </p>
       ))}
     </div>
   )

@@ -1,12 +1,17 @@
+// TODO: refactor to new import style
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+
 @import '../../scss/atoms/button';
-@import '../../scss/typography';
+@import '../../scss/atoms/anchor';
 
 .route-container {
-  @include display-and-animate();
+  max-height: 500px; // Some hardcoded value needed
+  transition: $transition-default-all;
+
   &.hidden {
-    @include hide-and-animate();
+    max-height: 0;
+    transition: $transition-default-all;
   }
 }
