@@ -53,10 +53,12 @@
 
   .options-container {
     display: flex;
+    margin-top: -$baseline;
 
     input {
       display: inline-flex;
       width: unset;
+      margin-top: 0;
       margin-right: $baseline;
       flex-grow: 1;
 
@@ -66,7 +68,7 @@
     }
   }
 
-  .show-answers {
+  .display-area:not(:empty) {
     margin-top: $spacer;
   }
 

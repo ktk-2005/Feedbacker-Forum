@@ -60,6 +60,7 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
 const Handle = SortableHandle(() => <div className={css('reorder-handle')} />)
 
 function Answer({ answer }) {
+  // TODO: name unnecessary?
   const { blob, name, time } = answer
   const { text } = blob
 
@@ -155,11 +156,11 @@ class SurveyEditCard extends React.Component {
     const dataDisplay = {
       text: () => (<TextDisplay question={question} onOpen={this.doOpen} />),
       option: () => (<OptionDisplay question={question} />),
-      info: () => (<div />),
+      info: () => null,
     }
 
     const dataEdit = {
-      text: () => (<div />),
+      text: () => null,
       option: () => (
         <OptionEdit
           question={question}
@@ -168,7 +169,7 @@ class SurveyEditCard extends React.Component {
           commit={commit}
         />
       ),
-      info: () => (<div />),
+      info: () => null,
     }
 
     const display = edited ? dataEdit[question.type]() : dataDisplay[question.type]()
