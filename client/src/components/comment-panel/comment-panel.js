@@ -102,6 +102,10 @@ class CommentPanel extends React.Component {
     if (el) el.scrollTop = el.scrollHeight
   }
 
+  handleRouteContainerClick() {
+
+  }
+
   threadContainer() {
     const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
       this.props.comments)
@@ -159,7 +163,7 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
-          { RouteContainer({ hidden: false, comments: this.props.comments }) }
+          { RouteContainer({ comments: this.props.comments }) }
           { this.threadContainer() }
           <SubmitField
             handleSubmit={this.handleSubmit}

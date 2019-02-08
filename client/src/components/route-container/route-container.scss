@@ -1,0 +1,12 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+@import '../../scss/typography';
+
+.route-container {
+  @include display-and-animate();
+  &.hidden {
+    @include hide-and-animate();
+  }
+}
