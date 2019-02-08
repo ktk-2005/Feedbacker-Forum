@@ -9,6 +9,10 @@
   }
 }
 
+.survey-panel {
+  max-height: 80vh;
+}
+
 .panel {
   position: fixed;
   display: flex;
@@ -51,6 +55,7 @@
 .panel-body {
   flex: 1;
   min-height: 0; // Firefox shrink bug
+  overflow-y: scroll;
 }
 
 .edit-container {

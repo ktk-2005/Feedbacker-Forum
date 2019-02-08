@@ -63,17 +63,21 @@ function Answer({ answer }) {
   const { blob, name, time } = answer
   const { text } = blob
 
+  // TODO: name away?
+  // <h3>{name || 'Anonymous user'}</h3>
   return (
-    <div>
-      <p>{text}</p>
-      <p>{name || 'Anonymous user'}</p>
-      <Moment
-        className={css('timestamp')}
-        date={time}
-        format="D.MM.YYYY HH:mm"
-        tz={moment.tz.guess()}
-      />
-      <hr />
+    <div className={css('answer')}>
+      <div className={css('answer-meta')}>
+        <Moment
+          className={css('timestamp')}
+          date={time}
+          format="D.MM.YYYY HH:mm"
+          tz={moment.tz.guess()}
+        />
+      </div>
+      <div className={css('answer-content')}>
+        <p>{text}</p>
+      </div>
     </div>
   )
 }

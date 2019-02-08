@@ -101,3 +101,26 @@
   }
 }
 
+.answer {
+  $spacer-x: -$spacer - 1px; // 1px for border
+  margin-left: $spacer-x;
+  margin-right: $spacer-x;
+  padding: -$spacer-x; // -- => +
+  border-bottom: 1px solid rgba($palette-light, 0.4);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  .answer-meta {
+    margin-bottom: $baseline;
+    font-size: $font-size-small;
+  }
+
+  .answer-content {
+    p {
+      margin: 0;
+    }
+  }
+}
+
