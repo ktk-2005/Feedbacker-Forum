@@ -2,7 +2,9 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+
 @import '../../scss/atoms/button';
+@import '../../scss/atoms/anchor';
 
 .route-container {
   max-height: 500px; // Some hardcoded value needed
