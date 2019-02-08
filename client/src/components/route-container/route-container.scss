@@ -11,7 +11,23 @@
   transition: $transition-default-all;
 
   &.hidden {
-    max-height: 0;
+    position: relative;
+    max-height: $spacer * 3; // 2 for padding, 1 for line
     transition: $transition-default-all;
+
+    &:after {
+      // TODO: make backdrop blur effect when surveys merged
+      content: 'See comments on other pages';
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      background-color: $palette-lighter;
+      cursor: pointer;
+    }
   }
 }
