@@ -25,7 +25,7 @@ class SurveyPanel extends React.Component {
           position={null}
           handle="[data-dragarea]"
         >
-          <div className={css('panel')}>
+          <div className={css('panel', 'survey-panel')}>
             <div
               data-dragarea="true"
               className={css('panel-header')}
@@ -40,7 +40,7 @@ class SurveyPanel extends React.Component {
               </button>
             </div>
             {role === 'dev' ? (
-              <div className={css('edit-container')}>
+              <div className={css('panel-body', 'edit-container')}>
                 <SurveyEditContainer />
               </div>
             ) : (
