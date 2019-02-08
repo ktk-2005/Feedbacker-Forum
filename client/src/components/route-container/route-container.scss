@@ -7,11 +7,38 @@
 @import '../../scss/atoms/anchor';
 
 .route-container {
+  position: relative;
   max-height: 500px; // Some hardcoded value needed
   transition: $transition-default-all;
+  overflow: scroll;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 0;
+    height: 0;
+    background-color: $palette-lighter;
+    transition: opacity $transition-default-tail;
+    opacity: 0;
+  }
 
   &.hidden {
-    max-height: 0;
+    max-height: $spacer * 3; // 2 for padding, 1 for line
     transition: $transition-default-all;
+
+    &:after {
+      // TODO: make backdrop blur effect when surveys merged
+      content: 'See comments on other pages';
+      height: 100%;
+      width: 100%;
+      transition: opacity $transition-default-tail;
+      opacity: 1;
+      cursor: pointer;
+    }
   }
 }

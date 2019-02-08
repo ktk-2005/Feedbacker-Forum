@@ -27,6 +27,7 @@ class RouteContainer extends React.Component {
         className={css('close-button')}
         onClick={onClick}
       />
+    <div className={css('route-container', 'hidden', { hidden })}>
       {amountsByRoute.map(route => (
         <p key={route[0]}>
           {route[1]} comments at <a href={route[0]}>{route[0]}</a>
