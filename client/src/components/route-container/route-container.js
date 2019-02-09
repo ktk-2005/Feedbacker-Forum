@@ -15,11 +15,7 @@ class RouteContainer extends React.Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-  handleClick() {
-    this.setState(state => ({ hidden: !state.hidden }))
-  }
-
-  render() {
+  getRouteComments() {
     const groupByRoute = R.groupBy(comment => comment.blob.route)
     const commentsByRoute = R.toPairs(
       groupByRoute(Object.values(this.props.comments))
@@ -28,12 +24,22 @@ class RouteContainer extends React.Component {
       route[0],
       route[1].length,
     ])
-    const pluralize = (word, amount) => {
-      if (amount === 1) {
-        return word
-      }
-      return word.concat('s')
+    return amountsByRoute
+  }
+
+  pluralize(word, amount) {
+    if (amount === 1) {
+      return word
     }
+    return word.concat('s')
+  }
+
+  handleClick() {
+    this.setState(state => ({ hidden: !state.hidden }))
+  }
+
+  render() {
+    const amountsByRoute = this.getRouteComments()
     return (
       <div>
         <button type="button" onClick={this.handleClick}>
@@ -42,7 +48,7 @@ class RouteContainer extends React.Component {
         <div className={css('route-container', { hidden: this.state.hidden })}>
           {amountsByRoute.map(route => (
             <p key={route[0]}>
-              {route[1]} {pluralize('comment', route[1])} at{' '}
+              {route[1]} {this.pluralize('comment', route[1])} at{' '}
               <a href={route[0]}>{route[0]}</a>
             </p>
           ))}
