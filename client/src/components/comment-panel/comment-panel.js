@@ -163,7 +163,7 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
-          { RouteContainer({ comments: this.props.comments }) }
+          <RouteContainer comments={this.props.comments} />
           { this.threadContainer() }
           <SubmitField
             handleSubmit={this.handleSubmit}
