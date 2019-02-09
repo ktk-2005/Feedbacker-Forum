@@ -22,3 +22,6 @@ dev_db.sqlite
 
 # Proxy on mac and linux
 proxy/proxy
+
+# Vim binaries on mac
+*.swp
