@@ -64,7 +64,6 @@ class Onboarding extends React.Component {
 
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleCloseIntro = this.handleCloseIntro.bind(this)
     this.doStepActions = this.doStepActions.bind(this)
   }

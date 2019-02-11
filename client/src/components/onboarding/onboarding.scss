@@ -12,7 +12,7 @@ $padding: $spacer * 2;
   display: flex;
   flex-flow: column;
   justify-content: space-around;
-  width: 35vw;
+  width: 30vw;
   height: 40vh;
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
@@ -25,29 +25,29 @@ $padding: $spacer * 2;
 }
 
 .modal-header {
-  @extend .panel-header;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   width: auto;
-  margin-top: $spacer;
-  border-bottom: none;
-  padding: 0 $padding;
-  cursor: unset;
+  border-top-right-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
+  background-color: $palette-lighter;
+  padding: $baseline;
 
   button {
+    @extend %icon-button;
     margin: 0;
   }
 }
 
 .step-buttons {
   width: auto;
-  height: fit-content;
   display: flex;
-  flex-flow: row;
   flex: 0;
   padding: 0 $padding;
 
   button {
     @extend %icon-button;
-    padding: 0;
     margin: 0;
   }
 
@@ -59,10 +59,10 @@ $padding: $spacer * 2;
 
 
 .skip-button {
-  @include button($states: false);
-  font-weight: 600;
-  margin-bottom: 1em;
+  @include button();
+  margin-bottom: $spacer;
   color: $palette-medium;
+  font-weight: 600;
 }
 
 .done-button {
