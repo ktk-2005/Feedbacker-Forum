@@ -81,8 +81,7 @@ class CreateRunner extends React.Component {
             <div className={css('table-header', 'row')}>
               <div className={css('cell')}>Tag</div>
               <div className={css('cell')}>Created</div>
-              <div className={css('cell')}>Status</div>
-              <div className={css('cell')} />
+              <div className={css('cell', 'status')}>Status</div>
             </div>
             <div className={css('table-body')}>
               {this.state.instanceRunners.map(runner => (<RunnerRow

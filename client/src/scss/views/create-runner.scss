@@ -39,7 +39,7 @@
 
 .row {
   display: flex;
-  flex-flow: row;
+  align-items: center;
   width: 100%;
   box-shadow: 0 2px 10px $palette-shadow-default;
   margin-bottom: $baseline;
@@ -55,9 +55,12 @@
 
 .cell {
   display: flex;
-  align-items: center;
   flex-grow: 1;
   padding: $spacer;
+
+  &.status {
+    flex-grow: 2;
+  }
 
   &.status-fail {
     color: $palette-error;
