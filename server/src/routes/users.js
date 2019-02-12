@@ -37,8 +37,8 @@ router.post('/', catchErrors(async (req, res) => {
 
 // @api PUT /api/users
 // Change username of existing user.
-// The request requires the id, the secret and the new username for the user,
-// eg. @json {
+// The user is specified using the Authorization header as with other endpoints
+// and the body should contain the new name eg. @json {
 //    "name": "Testuser2",
 // }
 router.put('/', catchErrors(async (req, res) => {

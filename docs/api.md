@@ -188,8 +188,8 @@ Example response
 ### [PUT /api/users](../server/src/routes/users.js#L44)
 
 Change username of existing user.
-The request requires the id, the secret and the new username for the user,
-eg.
+The user is specified using the Authorization header as with other endpoints
+and the body should contain the new name eg.
 ```json
 {
    "name": "Testuser2",
