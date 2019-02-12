@@ -18,6 +18,7 @@ import OpenCommentPanelButton from './components/open-comment-panel-button/open-
 import CommentPanel from './components/comment-panel/comment-panel'
 import TagElementButton from './components/tag-element-button/tag-element-button'
 import Onboarding from './components/onboarding/onboarding'
+
 // Internal js
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
@@ -150,11 +151,6 @@ class MainView extends React.Component {
       <div
         className={css('feedback-app-container', { 'tagging-mode-active': taggingModeActive })}
       >
-        <TagElementButton
-          active={taggingModeActive}
-          elementTagged={this.handleElementTagged}
-          toggleTagElementState={this.toggleTagElementState}
-        />
         <OpenSurveyPanelButton
           hidden={surveyButtonIsHidden}
           onClick={this.handleSurveyPanelClick}
@@ -170,6 +166,7 @@ class MainView extends React.Component {
         <CommentPanel
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
+          toggleTagElementState={this.toggleTagElementState}
           hidden={commentPanelIsHidden}
           onClick={this.handleCommentPanelClick}
         />

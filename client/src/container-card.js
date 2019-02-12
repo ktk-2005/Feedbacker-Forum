@@ -17,7 +17,7 @@ class ContainerCard extends React.Component {
   constructor(props) {
     super(props)
     this.instance = this.props.instance
-    this.instance.url = `http://${this.instance.subdomain}.${window.location.host}`
+    this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
 
     this.state = {
@@ -83,6 +83,7 @@ class ContainerCard extends React.Component {
               type="button"
               disabled={this.state.containerRunning || this.isOperationPending()}
               onClick={this.startContainer}
+              data-tooltip="Start"
             >
               {<InlineSVG src={StartIcon} />}
             </button>
@@ -90,6 +91,7 @@ class ContainerCard extends React.Component {
               type="button"
               disabled={!this.state.containerRunning || this.isOperationPending()}
               onClick={this.stopContainer}
+              data-tooltip="Stop"
             >
               <InlineSVG src={StopIcon} />
             </button>
@@ -97,6 +99,7 @@ class ContainerCard extends React.Component {
               type="button"
               disabled={this.isOperationPending()}
               onClick={this.removeContainer}
+              data-tooltip="Remove"
             >
               <InlineSVG src={CloseIcon} />
             </button>

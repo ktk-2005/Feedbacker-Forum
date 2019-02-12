@@ -11,7 +11,7 @@ $panel-min-width: 300px;
 .comment-panel {
   @include display-and-animate;
   min-width: $panel-min-width;
-  max-width: 50%;
+  max-width: $panel-min-width;
   height: 100%;
 
   position: fixed;
@@ -42,7 +42,7 @@ $panel-min-width: 300px;
   justify-content: flex-start;
 }
 
-.comment-container {
+.thread-container {
   display: flex;
   flex-flow: column;
   flex-grow: 1;
@@ -52,36 +52,4 @@ $panel-min-width: 300px;
   // Make sure box-shadow is not cut-off
   padding: $baseline;
   margin: 0 (-$baseline);
-}
-
-.comment-form {
-  display: flex;
-  flex-flow: column;
-  flex-shrink: 0;
-  flex-grow: 0;
-  justify-content: center;
-  margin-top: $baseline;
-
-  textarea {
-    @extend .comment;
-    display: block;
-    max-width: 100%;
-    min-width: $panel-min-width;
-    min-height: 3em;
-    border: none;
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 2px 10px $palette-shadow-default;
-    }
-  }
-
-  .submit-comment {
-    @include button();
-    align-self: flex-end;
-    margin-top: $baseline;
-    padding: $baseline $spacer;
-    background: $palette-accent;
-    color: $palette-lighter;
-  }
 }
