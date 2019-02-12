@@ -24,6 +24,7 @@ export async function getComments(container) {
     comments.text       AS comment_text,
     comments.user_id    AS comment_user_id,
     comments.thread_id  AS comment_thread_id,
+    comments.anonymous  AS comment_hide_name,
     comments.blob       AS comment_blob,
     reactions.id        AS reaction_id,
     reactions.time      AS reaction_time,
@@ -59,8 +60,8 @@ export async function deleteComment({
 }) { return db.del('DELETE FROM comments WHERE user_id=? AND id=?', [userId, commentId]) }
 
 export async function addComment({
-  id, text, userId, threadId, blob,
-}) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, blob) VALUES (?, ?, ?, ?, ?)', [id, text, userId, threadId, blob]) }
+  id, text, userId, threadId, anonymous, blob,
+}) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, anonymous, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, text, userId, threadId, anonymous ? '1' : '0', blob]) }
 
 export async function addQuestion({
   id, text, userId, threadId, blob,

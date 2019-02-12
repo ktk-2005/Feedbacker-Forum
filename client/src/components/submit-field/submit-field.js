@@ -16,10 +16,12 @@ class SubmitField extends React.Component {
     super(props)
     this.state = {
       value: '',
+      hideName: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleClick = this.handleClick.bind(this)
     this.passSubmit = this.passSubmit.bind(this)
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
@@ -28,6 +30,13 @@ class SubmitField extends React.Component {
 
   handleChange(event) {
     this.setState({ value: event.target.value })
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      hideName: !prevState.hideName,
+    }))
+    console.log(this.state.hideName)
   }
 
   passSubmit(event) {
@@ -41,6 +50,7 @@ class SubmitField extends React.Component {
     this.props.handleSubmit(event,
       this.state.taggedElementXPath,
       this.state.value,
+      this.state.hideName,
       this.props.threadId)
   }
 
@@ -63,7 +73,7 @@ class SubmitField extends React.Component {
   }
 
   render() {
-    const { value, taggingModeActive, taggedElementXPath } = this.state
+    const { value, hideName, taggingModeActive, taggedElementXPath } = this.state
     return (
       <form className={css('comment-form')} onSubmit={this.passSubmit}>
         <textarea
@@ -73,6 +83,15 @@ class SubmitField extends React.Component {
           ref={this.props.inputRef}
           onKeyDown={keyPressSubmit}
         />
+        <input
+          type="checkbox"
+          className={css('hideNameymous-check')}
+          id="hideName"
+          name="hideNameymous"
+          checked={hideName}
+          onClick={this.handleClick}
+        />
+        <label htmlFor="hideName">Comment Anonymously</label>
         <div className={css('button-container')}>
           <TagElementButton
             active={taggingModeActive}
