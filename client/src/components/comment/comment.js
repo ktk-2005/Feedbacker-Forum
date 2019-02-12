@@ -48,8 +48,8 @@ const opLabel = (op, userId) => {
 }
 
 // TODO: refactor
-const devLabel = () => {
-  if (true) {
+const devLabel = (blob) => {
+  if (blob.dev) {
     return <CommentLabel posterRole="Developer" />
   }
   return null
@@ -59,7 +59,7 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
       <div className={css('name-label-container')}>
-        {devLabel()}
+        {devLabel(comment.blob)}
         <div className={css('name')}>
           {comment.hideName ? 'Anonymous user' : (comment.username || 'Anonymous user')}
         </div>
