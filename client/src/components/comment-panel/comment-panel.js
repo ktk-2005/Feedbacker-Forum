@@ -108,15 +108,12 @@ class CommentPanel extends React.Component {
   }
 
   toggleDeleteModal(comment) {
-    console.log('TOGGLING: ', comment)
     this.setState((prevState) => {
       if (R.isEmpty(prevState.commentToDelete)) {
-        console.log('yes')
         return { commentToDelete: comment }
       }
       return { commentToDelete: {} }
     })
-    console.log('STATE: ', this.state.commentToDelete)
   }
 
   async deleteComment() {
