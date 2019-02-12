@@ -21,7 +21,7 @@ class SubmitField extends React.Component {
       taggedElementXPath: '',
     }
     this.handleChange = this.handleChange.bind(this)
-    this.toggleHide = this.toggleHide.bind(this)
+    this.handleClick = this.handleClick.bind(this)
     this.passSubmit = this.passSubmit.bind(this)
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
@@ -32,10 +32,11 @@ class SubmitField extends React.Component {
     this.setState({ value: event.target.value })
   }
 
-  toggleHide() {
+  handleClick() {
     this.setState(prevState => ({
       hideName: !prevState.hideName,
     }))
+    console.log(this.state.hideName)
   }
 
   passSubmit(event) {
@@ -82,25 +83,21 @@ class SubmitField extends React.Component {
           ref={this.props.inputRef}
           onKeyDown={keyPressSubmit}
         />
+        <input
+          type="checkbox"
+          className={css('hideNameymous-check')}
+          id="hideName"
+          name="hideNameymous"
+          checked={hideName}
+          onClick={this.handleClick}
+        />
+        <label htmlFor="hideName">Comment Anonymously</label>
         <div className={css('button-container')}>
-          <label className={css('anonymous-check')}>
-            <input
-              type="checkbox"
-              id="hideName"
-              className={css('hidden')}
-              name="anonymous"
-              checked={hideName}
-              onChange={() => {}}
-              onClick={this.toggleHide}
-            />
-            <span className={css('check-text')}>Hide name</span>
-          </label>
           <TagElementButton
             active={taggingModeActive}
             elementTagged={this.handleElementTagged}
             toggleTagElementState={this.toggleTagElementState}
             selected={taggedElementXPath !== ''}
-            data-introduction-step="6"
           />
           <input className={css('submit-comment')} type="submit" value="Comment" />
         </div>
