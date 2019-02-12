@@ -14,7 +14,7 @@ import Dashboard from './dashboard-view'
 import Create from './create'
 import Build from './build-view'
 import { prepareReactRoot } from './shadowDomHelper'
-import { setUsers } from './globals'
+import { setUsers, subscribeUpdateUsers } from './globals'
 import apiCall from './api-call'
 // Styles
 import styles from './scss/_base.scss'
@@ -81,6 +81,10 @@ const initialize = () => {
     const persist = store.getState().persist || { }
     savePersist(persist)
     setUsers(persist.users || { })
+  })
+
+  subscribeUpdateUsers((newUsers) => {
+    store.dispatch(setPersistData({ users: newUsers }))
   })
 
   ReactDOM.render(

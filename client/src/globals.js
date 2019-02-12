@@ -4,6 +4,8 @@ let users = { }
 let userCallbackCounter = 0
 const userChangeCallbacks = new Map()
 
+let userUpdateCallback = null
+
 // Subscribe `func(users)` to be called when users are loaded or created
 // Returns an unsubscribe token
 export function subscribeUsers(func) {
@@ -18,6 +20,14 @@ export function subscribeUsers(func) {
 // Cancel a previous user subscription, called with the return value of `subscribeUsers()`
 export function unsubscribeUsers(token) {
   userChangeCallbacks.delete(token)
+}
+
+export function subscribeUpdateUsers(func) {
+  userUpdateCallback = func
+}
+
+export function updateUsers(users) {
+  userUpdateCallback(users)
 }
 
 export function setUsers(value) {

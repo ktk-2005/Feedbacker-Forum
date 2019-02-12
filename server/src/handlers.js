@@ -30,12 +30,31 @@ export function notFound(req, res, next) {
   next(err)
 }
 
+// Some errors set headers for the API call to handle
+// - X-Feedback-Retry-Auth: Defined if the message (or any cause) has
+//   `data: { shouldRetryAuth }`
+function setHeadersFromError(res, err) {
+  let shouldRetryAuth = false
+  let currentErr = err
+  while (currentErr) {
+    if (currentErr.data && currentErr.data.shouldRetryAuth) {
+      shouldRetryAuth = true
+    }
+    currentErr = currentErr.cause
+  }
+
+  if (shouldRetryAuth) {
+    res.setHeader('X-Feedback-Retry-Auth', '1')
+  }
+}
+
 /*
   Development Error Hanlder
   log error stack trace
 */
 // eslint-disable-next-line no-unused-vars
 export function devErr(err, req, res, next) {
+  setHeadersFromError(res, err)
   logger.error(err)
   const errorDetails = {
     message: err.message,
@@ -52,6 +71,7 @@ export function devErr(err, req, res, next) {
 */
 // eslint-disable-next-line no-unused-vars
 export function prodErr(err, req, res, next) {
+  setHeadersFromError(res, err)
   logger.error(err)
   res.status(err.status || 500)
   res.json({
