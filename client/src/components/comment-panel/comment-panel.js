@@ -61,12 +61,17 @@ class CommentPanel extends React.Component {
     if (value.trim() === '') return // Don't post empty comment
 
     const getBlob = () => {
+      const blob = {}
       const xPath = taggedElementXPath
-      if (xPath) {
-        return { xPath }
+      if (this.props.role === 'dev') {
+        blob.dev = true
       }
-      return {}
+      if (xPath) {
+        blob.xPath = xPath
+      }
+      return blob
     }
+
 
     const unhighlightTaggedElement = () => {
       const { xPath } = getBlob()
