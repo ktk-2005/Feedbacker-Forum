@@ -54,7 +54,7 @@ class CommentPanel extends React.Component {
     this.setState({ currentThread: threadId })
   }
 
-  async handleSubmit(event, taggedElementXPath, value, threadId) {
+  async handleSubmit(event, taggedElementXPath, value, hideName, threadId) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
 
@@ -75,6 +75,7 @@ class CommentPanel extends React.Component {
 
     await apiCall('POST', '/comments', {
       text: value,
+      hideName,
       blob: getBlob(),
       threadId: threadId || null,
     })

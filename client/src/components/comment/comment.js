@@ -61,7 +61,7 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
       <div className={css('name-label-container')}>
         {devLabel()}
         <div className={css('name')}>
-          {comment.username || 'Anonymous user'}
+          {comment.hideName ? 'Anonymous user' : (comment.username || 'Anonymous user')}
         </div>
         {opLabel(op, comment.userId)}
       </div>
