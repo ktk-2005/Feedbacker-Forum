@@ -1,6 +1,7 @@
 import express from 'express'
 import { addUser, addUsername } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
+import { HttpError } from '../errors'
 
 import { catchErrors } from '../handlers'
 
@@ -26,7 +27,7 @@ router.post('/', catchErrors(async (req, res) => {
     const id = uuid()
     const secret = uuid(30)
 
-    await addUser({ id, name, secret })
+    await addUser({ id, secret, name: name || null })
     res.json({
       id,
       secret,
@@ -39,19 +40,22 @@ router.post('/', catchErrors(async (req, res) => {
 // The request requires the id, the secret and the new username for the user,
 // eg. @json {
 //    "name": "Testuser2",
-//    "id": "d6ac55e9",
-//    "secret": "ea2ca2565f484906bfd5096126816a"
 // }
-// Returns 'ok' if the change was successful.
-//
 router.put('/', catchErrors(async (req, res) => {
-  const { name, id, secret } = req.body
+  const { users } = await reqUser(req)
+  const name = req.body.name.trim()
+  if (!name) throw new HttpError(400, 'Empty username')
 
-  await attempt(async () => {
-    await addUsername({ name, id, secret })
-    res.json('ok')
-  })
+  for (const id in users) {
+    const secret = users[id]
+    await attempt(async () => {
+      await addUsername({ name, id, secret })
+    })
+  }
+
+  res.json({ })
 }))
+
 // @api GET /api/users/role
 // Retrieve the role of the current user in the container.
 // Returns either `"dev"` or `"user"`
@@ -65,25 +69,6 @@ router.get('/role', catchErrors(async (req, res) => {
 
   res.json({
     role: users.hasOwnProperty(owner) ? 'dev' : 'user',
-  })
-}))
-
-// @api PUT /api/users
-// Change username of existing user.
-// The request requires the id, the secret and the new username for the user,
-// eg. @json {
-//    "name": "Testuser2",
-//    "id": "d6ac55e9",
-//    "secret": "ea2ca2565f484906bfd5096126816a"
-// }
-// Returns 'ok' if the change was successful.
-//
-router.put('/', catchErrors(async (req, res) => {
-  const { name, id, secret } = req.body
-
-  await attempt(async () => {
-    await addUsername({ name, id, secret })
-    res.json('ok')
   })
 }))
 
