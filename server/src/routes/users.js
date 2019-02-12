@@ -46,12 +46,20 @@ router.put('/', catchErrors(async (req, res) => {
   const name = req.body.name.trim()
   if (!name) throw new HttpError(400, 'Empty username')
 
+  let anySuccess = false
   for (const id in users) {
     const secret = users[id]
-    await attempt(async () => {
-      await addUsername({ name, id, secret })
-    })
+    try {
+      await attempt(async () => {
+        await addUsername({ name, id, secret })
+      })
+      anySuccess = true
+    } catch (error) {
+      console.error(`Failed to change username for ${id}`, error)
+    }
   }
+
+  if (!anySuccess) throw new HttpError(500, 'Failed to change username')
 
   res.json({ })
 }))
