@@ -36,13 +36,11 @@ class CommentPanel extends React.Component {
       usernameModalIsOpen: false,
       commentToDelete: {},
       currentThread: '',
-      isHidden: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
-    this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)

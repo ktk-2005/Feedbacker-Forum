@@ -1,6 +1,5 @@
 import React from 'react'
 // Helpers
-import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 
 // Styles

@@ -161,12 +161,13 @@ class Onboarding extends React.Component {
       setPulseAnimation(step)
       clickElementClose(prev)
     } else if (step === 5) {
-      clickElementOpen(step - 1)
+      if (prev < step) clickElementOpen(step - 1)
       stopPulseAnimation(prev)
     } else if (step === 6) {
+      if (prev > step) clickElementOpen(4)
       setPulseAnimation(step)
-      if (prev < step) clickElementClose(prev)
     } else if (step === 7) {
+      clickElementClose(5)
       stopPulseAnimation(prev)
     }
   }
@@ -187,7 +188,7 @@ class Onboarding extends React.Component {
 
   handleCloseIntro() {
     stopPulseAnimation(this.state.step)
-    if (this.state.step === 3 || this.state.step === 5) {
+    if (this.state.step === 3 || this.state.step === 5 || this.state.step === 6) {
       const el = shadowDocument().querySelector(`[data-introduction-step-close="${this.state.step}"]`)
       if (!el.classList.contains('hidden')) clickElementClose(this.state.step)
     }

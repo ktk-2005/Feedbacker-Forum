@@ -16,7 +16,6 @@ import OpenSurveyPanelButton from './components/open-survey-panel-button/open-su
 import SurveyPanel from './components/survey-panel/survey-panel'
 import OpenCommentPanelButton from './components/open-comment-panel-button/open-comment-panel-button'
 import CommentPanel from './components/comment-panel/comment-panel'
-import TagElementButton from './components/tag-element-button/tag-element-button'
 import Onboarding from './components/onboarding/onboarding'
 
 // Internal js
@@ -30,7 +29,7 @@ const css = classNames.bind(styles)
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
-const INTRO_COMPLETED = 'INTRO_COMPLETED'
+const INTRO_DONE = 'INTRO_DONE'
 const UPDATE_ROLE = 'UPDATE_ROLE'
 
 function persistReducer(state = { }, action) {
@@ -41,10 +40,10 @@ function persistReducer(state = { }, action) {
     case SET_PERSIST:
       return R.mergeDeepRight(state, action.data)
 
-    case INTRO_COMPLETED:
+    case INTRO_DONE:
       return {
         ...state,
-        introCompleted: true,
+        introDone: true,
       }
 
     default:
