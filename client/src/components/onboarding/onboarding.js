@@ -5,7 +5,7 @@ import ReactModal from 'react-modal'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
-import { introDone } from '../../actions'
+import { introCompleted } from '../../actions'
 import { shadowModalRoot, shadowDocument } from '../../shadowDomHelper'
 // Styles
 import styles from './onboarding.scss'
@@ -19,7 +19,7 @@ const final = 7
 const mapStateToProps = (state) => {
   const persist = state.persist || {}
   return ({
-    onboarding: !R.isEmpty(persist.users) && !persist.introDone,
+    onboarding: !R.isEmpty(persist.users) && !persist.introCompleted,
     dev: !R.isEmpty(persist.users) && state.role === 'dev',
   })
 }
@@ -97,10 +97,10 @@ class Onboarding extends React.Component {
           'Survey Panel',
           dev
             ? `
-            This is the survey panel where the users can aswer your questions.
+            This is the survey panel where the users can answer your questions.
             `
             : `
-            This is the survey panel where you can aswer questions.
+            This is the survey panel where you can answer questions.
             `
         )
       )
@@ -191,7 +191,7 @@ class Onboarding extends React.Component {
       const el = shadowDocument().querySelector(`[data-introduction-step-close="${this.state.step}"]`)
       if (!el.classList.contains('hidden')) clickElementClose(this.state.step)
     }
-    this.props.dispatch(introDone())
+    this.props.dispatch(introCompleted())
   }
 
   render() {

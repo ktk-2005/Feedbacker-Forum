@@ -30,7 +30,7 @@ const css = classNames.bind(styles)
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
-const INTRO_DONE = 'INTRO_DONE'
+const INTRO_COMPLETED = 'INTRO_COMPLETED'
 const UPDATE_ROLE = 'UPDATE_ROLE'
 
 function persistReducer(state = { }, action) {
@@ -41,10 +41,10 @@ function persistReducer(state = { }, action) {
     case SET_PERSIST:
       return R.mergeDeepRight(state, action.data)
 
-    case INTRO_DONE:
+    case INTRO_COMPLETED:
       return {
         ...state,
-        introDone: true,
+        introCompleted: true,
       }
 
     default:
