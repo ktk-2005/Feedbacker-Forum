@@ -18,7 +18,7 @@ CREATE TABLE containers (
   url           VARCHAR(255) NOT NULL,
   user_id       CHAR(8) NOT NULL,
   blob          TEXT,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Table: threads
