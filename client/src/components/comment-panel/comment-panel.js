@@ -54,7 +54,7 @@ class CommentPanel extends React.Component {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
 
-    if (value === '') return // Don't post empty comment
+    if (value.trim() === '') return // Don't post empty comment
 
     const getBlob = () => {
       const xPath = taggedElementXPath
