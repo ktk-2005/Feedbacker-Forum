@@ -50,15 +50,10 @@ CREATE TABLE questions (
     container_id VARCHAR(8) NOT NULL,
     type      VARCHAR(16) NOT NULL,
     blob      TEXT,
-<<<<<<< HEAD
     order_id  INTEGER NOT NULL,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE CASCADE
-=======
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (thread_id) REFERENCES threads(id) ON DELETE CASCADE
->>>>>>> develop
 );
 
 -- Table: reactions
