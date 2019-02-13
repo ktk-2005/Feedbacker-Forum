@@ -196,7 +196,7 @@ and the body should contain the new name eg.
 }
 ```
 
-### [GET /api/users/role](../server/src/routes/users.js#L72)
+### [GET /api/users/role](../server/src/routes/users.js#L74)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
