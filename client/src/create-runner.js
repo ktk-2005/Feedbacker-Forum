@@ -2,9 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 // Helpers
-import { toast } from 'react-toastify'
 import Moment from 'react-moment'
-import moment from 'moment-timezone'
 import classNames from 'classnames/bind'
 import apiCall from './api-call'
 import { subscribeUsers, unsubscribeUsers } from './globals'
@@ -49,7 +47,8 @@ class CreateRunner extends React.Component {
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
-    await apiCall('POST', '/instanceRunners/new', { tag: inputValue('tag'), name: 'jee' })
+    await apiCall('POST', '/instanceRunners/new', { tag: inputValue('tag') })
+    doc.getElementById('tag').value = ''
     this.getInstanceRunnersFromServer()
   }
 
@@ -65,6 +64,7 @@ class CreateRunner extends React.Component {
   }
 
   render() {
+    const { instanceRunners } = this.state
     return (
       <div className={css('runner-view-container')}>
         <div className={css('inner-container')}>
@@ -76,20 +76,20 @@ class CreateRunner extends React.Component {
             />
             )) }
           </div>
-          <div className={css('runner-table')}>
+          <div className={css('runner-container')}>
             <h2>Your runners</h2>
-            <div className={css('table-header', 'row')}>
-              <div className={css('cell')}>Tag</div>
-              <div className={css('cell')}>Created</div>
-              <div className={css('cell', 'status')}>Status</div>
-            </div>
-            <div className={css('table-body')}>
-              {this.state.instanceRunners.map(runner => (<RunnerRow
+            <div className={css('runners')}>
+              {instanceRunners.map(runner => (<RunnerRow
                 key={runner.tag}
                 runner={runner}
                 deleteRunnerCallback={this.deleteRunner}
               />
               )) }
+              { instanceRunners.length < 1 ? (
+                <p>
+                  Your haven&#39;t added any custom runners yet.
+                </p>
+              ) : null }
             </div>
           </div>
           <h2>Create a runner</h2>
@@ -122,23 +122,23 @@ class CreateRunner extends React.Component {
 function RunnerRow(props) {
   const { runner, deleteRunnerCallback } = props
   return (
-    <div className={css('row')}>
-      <span className={css('cell')}>{runner.tag}</span>
-      <div className={css('cell')}>
+    <div className={css('runner', runner.status)}>
+      <div className={css('runner-content')}>
+        {runner.tag}
+      </div>
+      <div className={css('runner-content')}>
         <Moment
           className={css('timestamp')}
           date={runner.time}
           format="DD.MM.YYYY HH:mm"
         />
       </div>
-      <div className={runner.status === 'fail' ? css('cell', 'status-fail') : css('cell')}>
-        {runner.status}
-      </div>
-      <div className={css('cell')}>
+      <div className={css('runner-content', 'delete')}>
         <button
           className={css('delete-button')}
           type="button"
           onClick={() => deleteRunnerCallback(runner.tag)}
+          disabled={runner.status === 'pending'}
         >
         Delete
         </button>
@@ -150,8 +150,8 @@ function RunnerRow(props) {
 function DefaultRunnerRow(props) {
   const { runner } = props
   return (
-    <div className={css('default', 'row')}>
-      <span className={css('cell')}>{runner.tag}</span>
+    <div className={css('runner', 'default')}>
+      {runner.tag}
     </div>
   )
 }

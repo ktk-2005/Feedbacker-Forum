@@ -11,68 +11,78 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-
-  h2 {
-    margin-top: $spacer * 3;
-  }
-}
-
-.form-create-runner {
-  @extend .form-create;
 }
 
 .inner-container {
   @extend .create-view;
 }
 
-.runner-table {
+.default-runner-container {
+  display: flex;
+  flex-flow: column;
+  margin-bottom: $spacer * 2;
+}
+
+.form-create-runner {
+  @extend .form-create;
+}
+
+.runner-container {
   display: flex;
   flex-flow: column;
   width: 100%;
-  border-radius: $border-radius-default;
+  margin-bottom: $spacer * 2;
 }
 
-.table-body {
-  display: flex;
-  flex-flow: column-reverse;
+.runners {
+    display: flex;
+    flex-flow: column-reverse;
 }
 
-.row {
+.runner {
   display: flex;
   align-items: center;
   width: 100%;
   box-shadow: 0 2px 10px $palette-shadow-default;
   margin-bottom: $baseline;
 
-  &.table-header {
-    font-weight: 600;
+  &.fail {
+    background: $palette-error-light;
+  }
+
+  &.pending {
+    background: $palette-light;
+    cursor: progress;
   }
 
   &.default {
-    background: $palette-lighter;
+    padding: $spacer,
   }
 }
 
-.cell {
+.runner-content {
   display: flex;
-  flex-grow: 1;
   padding: $spacer;
+  flex: 1;
 
-  &.status {
-    flex-grow: 2;
-  }
-
-  &.status-fail {
-    color: $palette-error;
+  &.delete {
+    flex: 0;
+    justify-content: flex-end;
   }
 }
 
 .delete-button {
-  @extend %anchor-button;
+  @include button();
+  box-shadow: none;
+
+  &:enabled:hover {
+    box-shadow: 0 2px 10px $palette-shadow-default;
+  }
 
   &.hidden {
     display: none;
   }
+
 }
 
 .timestamp {

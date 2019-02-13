@@ -1,4 +1,8 @@
+@import '../variables';
+@import '../colors';
+@import '../typography';
 
-$rt-z-index: 999999999999;
+$rt-z-index: map-get($z-index-levels, 3);
+$rt-color-error: $palette-error-dark;
 
 @import '../../../node_modules/react-toastify/scss/main.scss';
