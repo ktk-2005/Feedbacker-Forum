@@ -45,7 +45,7 @@ export default function apiRequest(method, path, body, optsArg) {
     da776df3: 'sf8a7s',
   }
 
-  const container = opts.container || 'one'
+  const container = opts.container || 'test'
 
   const authToken = btoa(JSON.stringify(users))
 

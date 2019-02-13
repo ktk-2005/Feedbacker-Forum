@@ -10,8 +10,10 @@ import { loadComments } from '../../actions'
 import UsernameModal from '../add-username-modal/add-username-modal'
 
 // Components
-import Comment from '../comment/comment'
+import Thread from '../thread/thread'
 import apiCall from '../../api-call'
+import SubmitField from '../submit-field/submit-field'
+import ConfirmModal from '../confirm-modal/confirm-modal'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -32,28 +34,33 @@ class CommentPanel extends React.Component {
     super(props)
     this.state = {
       usernameModalIsOpen: false,
-      value: '',
+      commentToDelete: {},
+      currentThread: '',
       isHidden: false,
     }
 
-    this.handleChange = this.handleChange.bind(this)
+    this.updateCurrentThread = this.updateCurrentThread.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
+    this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
+    this.deleteComment = this.deleteComment.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
-  handleChange(event) {
-    this.setState({ value: event.target.value })
+  updateCurrentThread(threadId) {
+    this.setState({ currentThread: threadId })
   }
 
-  async handleSubmit(event) {
+  async handleSubmit(event, taggedElementXPath, value, threadId) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
 
+    if (value === '') return // Don't post empty comment
+
     const getBlob = () => {
-      const xPath = this.props.taggedElementXPath
+      const xPath = taggedElementXPath
       if (xPath) {
         return { xPath }
       }
@@ -66,13 +73,14 @@ class CommentPanel extends React.Component {
     }
 
     await apiCall('POST', '/comments', {
-      text: this.state.value,
+      text: value,
       blob: getBlob(),
+      threadId: threadId || null,
     })
 
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
-    this.setState({ value: '' })
+    await this.fetchComments()
 
     if (!this.props.users.name) {
       await this.toggleUsernameModal()
@@ -95,31 +103,73 @@ class CommentPanel extends React.Component {
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
     this.props.dispatch(loadComments(comments))
-    this.scrollToBottom()
+    await this.scrollToBottom()
+  }
+
+  toggleDeleteModal(comment) {
+    console.log('TOGGLING: ', comment)
+    this.setState((prevState) => {
+      if (R.isEmpty(prevState.commentToDelete)) {
+        console.log('yes')
+        return { commentToDelete: comment }
+      }
+      return { commentToDelete: {} }
+    })
+    console.log('STATE: ', this.state.commentToDelete)
+  }
+
+  async deleteComment() {
+    const { commentToDelete: comment } = this.state
+    if (Object.keys(this.props.users)[0] === comment.userId || this.props.role === 'dev') {
+      await apiCall(
+        'DELETE',
+        '/comments',
+        { commentId: comment.id, commentUser: comment.userId }
+      )
+      await this.fetchComments()
+    }
   }
 
   scrollToBottom() {
-    const el = shadowDocument().getElementById('comment-container')
+    const el = shadowDocument().getElementById('thread-container')
     if (el) el.scrollTop = el.scrollHeight
   }
 
-  commentContainer() {
+  threadContainer() {
     if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
-    const { role } = this.props
-    const sortByTime = R.sortBy(arr => arr[1].time)
-    const sortedCommentArray = sortByTime(R.toPairs(this.props.comments))
+    const threadIds = new Set(Object.values(this.props.comments).map(comment => comment.threadId))
+    const groupByThread = R.groupBy((comment) => {
+      for (const id of threadIds) {
+        if (comment.threadId === id) {
+          return id
+        }
+      }
+    })
+    const threadArray = groupByThread(Object.values(this.props.comments))
+    const sortbyTime = R.sortBy(([comments]) => R.reduce(
+      R.minBy(comment => comment.time),
+      { time: '9999-99-99 99:99:99' },
+      comments
+    ).time)
+    const sortedThreads = sortbyTime(R.toPairs(threadArray))
     return (
-      <div className={css('comment-container')} id="comment-container">
+      <div className={css('thread-container')} id="thread-container">
         {
           R.map(
-            ([id, comment]) => (
-              <Comment
+            ([id, comments]) => (
+              <Thread
                 key={id}
-                comment={comment}
+                comments={comments}
                 id={id}
-                role={role}
+                users={this.props.users}
+                role={this.props.role}
+                handleSubmit={this.handleSubmit}
+                updateCurrentThread={this.updateCurrentThread}
+                currentThread={this.state.currentThread}
+                deleteComment={this.toggleDeleteModal}
+                toggleTagElementState={this.props.toggleTagElementState}
               />),
-            sortedCommentArray
+            sortedThreads
           )
         }
       </div>
@@ -140,23 +190,27 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
-          { this.commentContainer() }
-          <form className={css('comment-form')} onSubmit={this.handleSubmit}>
-            <textarea
-              value={this.state.value}
-              onChange={this.handleChange}
-              placeholder="Write comment..."
-            />
-            <input className={css('submit-comment')} type="submit" value="Comment" />
-          </form>
-          {!this.props.users.name
-            ? (
+          { this.threadContainer() }
+          <SubmitField
+            handleSubmit={this.handleSubmit}
+            threadId=""
+            toggleTagElementState={this.props.toggleTagElementState}
+          />
+          {
+            !this.props.users.name ? (
               <UsernameModal
                 isOpen={this.state.usernameModalIsOpen}
                 toggle={this.toggleUsernameModal}
               />
             )
-            : null}
+              : null
+          }
+          <ConfirmModal
+            text="Are you sure you want to delete this comment?"
+            action={this.deleteComment}
+            isOpen={!R.isEmpty(this.state.commentToDelete)}
+            toggle={this.toggleDeleteModal}
+          />
         </div>
       </div>
     )
