@@ -48,12 +48,14 @@ router.put('/', catchErrors(async (req, res) => {
 
   let anySuccess = false
   for (const id in users) {
-    const secret = users[id]
-    try {
-      await addUsername({ name, id, secret })
-      anySuccess = true
-    } catch (error) {
-      console.error(`Failed to change username for ${id}`, error)
+    if (users.hasOwnProperty(id)) {
+      const secret = users[id]
+      try {
+        await addUsername({ name, id, secret })
+        anySuccess = true
+      } catch (error) {
+        console.error(`Failed to change username for ${id}`, error)
+      }
     }
   }
 
