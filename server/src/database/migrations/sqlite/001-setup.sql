@@ -26,7 +26,7 @@ CREATE TABLE threads (
   id            CHAR(8) UNIQUE NOT NULL,
   container_id  CHAR(8) NOT NULL,
   blob          TEXT,
-  FOREIGN KEY (container_id) REFERENCES containers(id)
+  FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE CASCADE
 );
 
 -- Table: comments
@@ -37,8 +37,8 @@ CREATE TABLE comments (
     user_id   CHAR(8) NOT NULL,
     thread_id CHAR(8) NOT NULL,
     blob      TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (thread_id) REFERENCES threads(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (thread_id) REFERENCES threads(id) ON DELETE CASCADE
 );
 
 -- Table: questions
@@ -49,8 +49,8 @@ CREATE TABLE questions (
     user_id   CHAR(8) NOT NULL,
     thread_id VARCHAR(8) NOT NULL,
     blob      TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (thread_id) REFERENCES threads(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (thread_id) REFERENCES threads(id) ON DELETE CASCADE
 );
 
 -- Table: reactions
