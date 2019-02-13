@@ -42,7 +42,7 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L44)
+### [GET /api/comments](../server/src/routes/comments.js#L45)
 
 Retrieve all comments of the current container instance.
 
@@ -56,6 +56,7 @@ returns JSON array of all comments grouped with reactions in database
         "userId": "da776df3",
         "username": "jaba",
         "threadId": "3blkj3ad",
+        "hideName": false,
         "blob": "",
         "reactions": [
             {
@@ -79,7 +80,7 @@ returns JSON array of all comments grouped with reactions in database
     }
 }
 ```
-### [POST /api/comments](../server/src/routes/comments.js#L91)
+### [POST /api/comments](../server/src/routes/comments.js#L93)
 
 Adds comment to the current container instance.
 
@@ -100,7 +101,7 @@ comments can be linked to a thread with
 ```
 
 Returns `{ id, threadId }` of the new comment
-### [DELETE /api/comments](../server/src/routes/comments.js#L137)
+### [DELETE /api/comments](../server/src/routes/comments.js#L139)
 
 Tries to delete a comment. Only successful if the userId of the comment is the same
 as the user trying to delete the comment, or if the user is a dev.
@@ -115,7 +116,7 @@ e.g.
 }
 ```
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L117)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L119)
 
 Get comments by `threadId`
 

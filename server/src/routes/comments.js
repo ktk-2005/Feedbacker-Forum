@@ -19,6 +19,7 @@ const router = express.Router()
 //         "userId": "da776df3",
 //         "username": "jaba",
 //         "threadId": "3blkj3ad",
+//         "hideName": false,
 //         "blob": "",
 //         "reactions": [
 //             {
