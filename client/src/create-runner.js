@@ -122,7 +122,10 @@ class CreateRunner extends React.Component {
 function RunnerRow(props) {
   const { runner, deleteRunnerCallback } = props
   return (
-    <div className={css('runner', runner.status)}>
+    <div
+      className={css('runner', runner.status)}
+      data-tooltip={runner.status}
+    >
       <div className={css('runner-content')}>
         {runner.tag}
       </div>
