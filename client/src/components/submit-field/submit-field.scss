@@ -37,6 +37,25 @@
     flex-shrink: 0;
     flex-grow: 0;
     margin-top: $baseline;
+
+    .anonymous-check {
+      margin-right: auto;
+
+      .check-text {
+        @include button();
+        padding: $baseline $spacer;
+        background: $palette-light;
+        color: $palette-medium;
+      }
+
+      .hidden {
+        display: none;
+        &:checked + span {
+          background: $palette-accent;
+          color: $palette-lighter;
+        }
+      }
+    }
   }
 
   .submit-comment {
