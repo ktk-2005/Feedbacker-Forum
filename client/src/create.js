@@ -139,6 +139,7 @@ class Create extends React.Component {
   }
 
   siteForm() {
+    // TODO: Add tooltip to warn about live url redirection
     return (
       <form
         className={css('form-create')}
@@ -210,12 +211,22 @@ class Create extends React.Component {
       <div className={css('center-center-block')}>
         <div className={css('create-view')}>
           <h2>Create an instance</h2>
-          <button type="button" onClick={this.activateContainerForm}>
-            Container
-          </button>
-          <button type="button" onClick={this.activateSiteForm}>
-            External Site
-          </button>
+          <div className={css('selection-tabs')}>
+            <button
+              type="button"
+              onClick={this.activateContainerForm}
+              className={css({ 'current': this.state.containerForm })}
+            >
+              From git repository
+            </button>
+            <button
+              type="button"
+              onClick={this.activateSiteForm}
+              className={css({ 'current': !this.state.containerForm })}
+            >
+              External live site
+            </button>
+          </div>
           {this.form()}
         </div>
       </div>
