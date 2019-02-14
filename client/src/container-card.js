@@ -100,6 +100,7 @@ class ContainerCard extends React.Component {
               disabled={this.isOperationPending()}
               onClick={this.removeContainer}
               data-tooltip="Remove"
+              data-tooltip-width="100px"
             >
               <InlineSVG src={CloseIcon} />
             </button>
