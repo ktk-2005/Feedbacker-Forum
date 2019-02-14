@@ -52,17 +52,14 @@ class UsernameModal extends React.Component {
         isOpen={this.props.isOpen}
         parentSelector={shadowModalRoot}
         overlayClassName={css('username-overlay')}
-        onRequestClose={this.props.toggle}
         shouldFocusAfterRender
-        shouldCloseOnOverlayClick
-        shouldCloseOnEsc
       >
-        <h4 className={css('header')}>Add Username</h4>
-        <div className={css('body')}>
-          <div className={css('text')}>
-              Add a username to be associated with your account on Feedbacker Forum.
-              Your name will be visible above all of your comments.
-          </div>
+        <div className={css('content')}>
+          <h3 className={css('header')}>Add Username</h3>
+          <p className={css('text')}>
+              Your name will be visible above all of your comments and survey answers.
+              You can also later decide to comment anonymously.
+          </p>
         </div>
         <form className={css('modal-form')} onSubmit={this.handleSubmit}>
           <input

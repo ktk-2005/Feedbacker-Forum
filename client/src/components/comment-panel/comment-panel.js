@@ -51,20 +51,25 @@ class CommentPanel extends React.Component {
     this.setState({ currentThread: threadId })
   }
 
-  async handleSubmit(event, taggedElementXPath, value, threadId) {
+  async handleSubmit(event, taggedElementXPath, value, hideName, threadId) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
 
-    if (value === '') return // Don't post empty comment
+    if (value.trim() === '') return // Don't post empty comment
 
     const getBlob = () => {
+      const blob = {}
       const xPath = taggedElementXPath
-      const route = window.location.pathname
-      if (xPath) {
-        return { xPath, route }
+      if (this.props.role === 'dev') {
+        blob.dev = true
       }
-      return { route }
+      if (xPath) {
+        blob.xPath = xPath
+      }
+      blob.route = window.location.pathname
+      return blob
     }
+
 
     const unhighlightTaggedElement = () => {
       const { xPath } = getBlob()
@@ -73,6 +78,7 @@ class CommentPanel extends React.Component {
 
     await apiCall('POST', '/comments', {
       text: value,
+      hideName,
       blob: getBlob(),
       threadId: threadId || null,
     })
