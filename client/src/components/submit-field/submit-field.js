@@ -79,6 +79,7 @@ class SubmitField extends React.Component {
             elementTagged={this.handleElementTagged}
             toggleTagElementState={this.toggleTagElementState}
             selected={taggedElementXPath !== ''}
+            data-introduction-step="6"
           />
           <input className={css('submit-comment')} type="submit" value="Comment" />
         </div>
