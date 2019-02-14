@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowModalRoot } from '../../shadowDomHelper'
 import apiCall from '../../api-call'
 import { setPersistData } from '../../actions'
+import { keyPressSubmit } from '../../globals'
 
 import styles from './add-username-modal.scss'
 
@@ -64,7 +65,14 @@ class UsernameModal extends React.Component {
           </div>
         </div>
         <form className={css('modal-form')} onSubmit={this.handleSubmit}>
-          <input type="text" onChange={this.handleChange} name="name" id="name" placeholder="New username..." />
+          <input
+            type="text"
+            onChange={this.handleChange}
+            name="name"
+            id="name"
+            placeholder="New username..."
+            onKeyDown={keyPressSubmit}
+          />
           <input className={css('add-button')} type="submit" value="Add username" />
         </form>
       </ReactModal>
