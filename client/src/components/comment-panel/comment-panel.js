@@ -26,6 +26,7 @@ const css = classNames.bind(commentPanelStyles)
 const mapStateToProps = state => ({
   comments: state.comments,
   users: (state.persist || {}).users || {},
+  name: (state.persist || {}).name,
   role: state.role,
 })
 
@@ -82,7 +83,7 @@ class CommentPanel extends React.Component {
     this.props.unsetTaggedElement()
     await this.fetchComments()
 
-    if (!this.props.users.name) {
+    if (!this.props.name) {
       await this.toggleUsernameModal()
     } else {
       await this.fetchComments()
@@ -107,15 +108,12 @@ class CommentPanel extends React.Component {
   }
 
   toggleDeleteModal(comment) {
-    console.log('TOGGLING: ', comment)
     this.setState((prevState) => {
       if (R.isEmpty(prevState.commentToDelete)) {
-        console.log('yes')
         return { commentToDelete: comment }
       }
       return { commentToDelete: {} }
     })
-    console.log('STATE: ', this.state.commentToDelete)
   }
 
   async deleteComment() {
@@ -197,7 +195,7 @@ class CommentPanel extends React.Component {
             toggleTagElementState={this.props.toggleTagElementState}
           />
           {
-            !this.props.users.name ? (
+            !this.props.name ? (
               <UsernameModal
                 isOpen={this.state.usernameModalIsOpen}
                 toggle={this.toggleUsernameModal}
