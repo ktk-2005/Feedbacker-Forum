@@ -9,7 +9,7 @@ import {
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser, resolveContainer, addSite } from '../database'
+import { verifyUser, resolveContainer, addSite, listContainersByUser } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -23,14 +23,8 @@ const router = express.Router()
 //
 // Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 router.get('/', catchErrors(async (req, res) => {
-  const { users } = await reqUser(req)
-  const containers = []
-  for (const [userId, secret] of R.toPairs(users)) {
-    try {
-      await verifyUser(userId, secret)
-      containers.push(...await getRunningContainersByUser([userId]))
-    } catch (error) { /* ignore */ }
-  }
+  const { userId } = await reqUser(req)
+  const containers = await listContainersByUser([userId])
   res.send(containers)
 }))
 
@@ -72,9 +66,9 @@ router.post('/new', catchErrors(async (req, res) => {
   if (!url) {
     throw new HttpError(400, 'No git url given')
   }
-  // if (!version) {
-  //   throw new HttpError(400, 'No git version given')
-  // }
+  if (!version && type !== 'site') {
+    throw new HttpError(400, 'No git version given')
+  }
   if (name.length < 3 || name.length > 20) {
     throw new HttpError(400, `Name too short or long: ${name}`)
   }
@@ -92,8 +86,7 @@ router.post('/new', catchErrors(async (req, res) => {
     })
   } else if (type === 'site') {
     const subdomain = `${name}-${uuid(5)}`
-    const id = 'aaaabbbb'
-    console.log(id, subdomain, userId, url)
+    const id = uuid(8)
     const containerInfo = await addSite({
       id, subdomain, userId, url,
     })

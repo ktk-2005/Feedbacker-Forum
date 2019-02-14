@@ -110,6 +110,8 @@ export async function verifyUser(user, secret) {
 export async function addSite({
   id, subdomain, userId, url, blob,
 }) {
-  console.log(id)
-  return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
+  db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
+  return {
+    subdomain,
+  }
 }
