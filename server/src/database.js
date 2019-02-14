@@ -206,7 +206,8 @@ export async function listContainersByUser(values = []) {
 }
 
 export async function removeContainer(name) {
-  return db.run('DELETE FROM containers WHERE subdomain=?', [name]) }
+  return db.run('DELETE FROM containers WHERE subdomain=?', [name])
+}
 
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
