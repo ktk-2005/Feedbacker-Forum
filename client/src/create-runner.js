@@ -93,7 +93,11 @@ class CreateRunner extends React.Component {
             </div>
           </div>
           <h2>Create a runner</h2>
-          <p>This is some useful instructions. Tag should contain the version.</p>
+          <p>
+            Enter an image name discoverable on <a href="https://hub.docker.com/">Docker Hub</a>.
+            The name must container the image version too (for example <code>latest</code>).
+            The default image size limit is 50 MiB.
+          </p>
           <form
             className={css('form-create-runner')}
             onSubmit={this.postNewInstanceRunner}

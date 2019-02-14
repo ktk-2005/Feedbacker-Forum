@@ -16,6 +16,8 @@
 
 .inner-container {
   @extend .create-view;
+
+  line-height: 1.5;
 }
 
 .default-runner-container {
