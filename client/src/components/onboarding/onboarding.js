@@ -212,18 +212,18 @@ class Onboarding extends React.Component {
 
   render() {
     const { step } = this.state
-    let myEl = null
+    let element = null
     return (
       <ReactModal
         className={css('intro-modal')}
         isOpen={this.props.onboarding}
         parentSelector={shadowModalRoot}
         overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
-        onAfterOpen={() => myEl && myEl.focus()}
+        onAfterOpen={() => element && element.focus()}
       >
         <div
           className={css('full-modal')}
-          ref={(el) => { myEl = el }}
+          ref={(el) => { element = el }}
           tabIndex="-1"
           onKeyDown={this.keyTraverse}
         >
@@ -259,7 +259,8 @@ class Onboarding extends React.Component {
             type="button"
             className={step !== final ? css('hidden') : css('done-button')}
             onClick={this.handleCloseIntro}
-          >Close tutorial
+          >
+            Close tutorial
           </button>
           <div className={css('skip-button-container')}>
             <button
