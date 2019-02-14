@@ -1,12 +1,13 @@
-@import '../../scss/compulsory';
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
 
-@import '../../scss/atoms-organisms/button';
-
-.button {
+.open-button {
   @include button(2px);
   @include display-and-animate();
   position: fixed;
-  bottom: 5%;
+  bottom: 12%;
   left: 3%;
   padding: $baseline $spacer;
   box-shadow: 0 2px 5px $palette-medium;

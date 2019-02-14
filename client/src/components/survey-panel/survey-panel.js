@@ -25,7 +25,10 @@ class SurveyPanel extends React.Component {
           position={null}
           handle="[data-dragarea]"
         >
-          <div className={css('panel', 'survey-panel')}>
+          <div
+            className={css('panel', 'survey-panel')}
+            data-introduction-step="3"
+          >
             <div
               data-dragarea="true"
               className={css('panel-header')}
@@ -35,6 +38,7 @@ class SurveyPanel extends React.Component {
                 type="button"
                 className={css('close-button')}
                 onClick={onClick}
+                data-introduction-step-close="3"
               >
                 <InlineSVG src={CloseIcon} />
               </button>

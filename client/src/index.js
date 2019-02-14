@@ -14,7 +14,10 @@ import { prepareReactRoot } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
 import SurveyPanel from './components/survey-panel/survey-panel'
+import OpenCommentPanelButton from './components/open-comment-panel-button/open-comment-panel-button'
 import CommentPanel from './components/comment-panel/comment-panel'
+import Onboarding from './components/onboarding/onboarding'
+
 // Internal js
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
@@ -26,6 +29,7 @@ const css = classNames.bind(styles)
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
+const INTRO_COMPLETED = 'INTRO_COMPLETED'
 const UPDATE_ROLE = 'UPDATE_ROLE'
 const LOAD_QUESTIONS = 'LOAD_QUESTIONS'
 
@@ -36,6 +40,12 @@ function persistReducer(state = { }, action) {
 
     case SET_PERSIST:
       return R.mergeDeepRight(state, action.data)
+
+    case INTRO_COMPLETED:
+      return {
+        ...state,
+        introCompleted: true,
+      }
 
     default:
       return state
@@ -90,13 +100,14 @@ class MainView extends React.Component {
     super(props)
 
     this.handleSurveyPanelClick = this.handleSurveyPanelClick.bind(this)
+    this.handleCommentPanelClick = this.handleCommentPanelClick.bind(this)
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
 
     this.state = {
       surveyPanelIsHidden: true,
-      surveyButtonIsHidden: false,
+      commentPanelIsHidden: true,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
@@ -105,7 +116,12 @@ class MainView extends React.Component {
   handleSurveyPanelClick() {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
-      surveyButtonIsHidden: !state.surveyButtonIsHidden,
+    }))
+  }
+
+  handleCommentPanelClick() {
+    this.setState(state => ({
+      commentPanelIsHidden: !state.commentPanelIsHidden,
     }))
   }
 
@@ -130,8 +146,8 @@ class MainView extends React.Component {
 
   render() {
     const {
-      surveyButtonIsHidden,
       surveyPanelIsHidden,
+      commentPanelIsHidden,
       taggingModeActive,
     } = this.state
 
@@ -140,8 +156,12 @@ class MainView extends React.Component {
         className={css('feedback-app-container', { 'tagging-mode-active': taggingModeActive })}
       >
         <OpenSurveyPanelButton
-          hidden={surveyButtonIsHidden}
+          hidden={!surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
+        />
+        <OpenCommentPanelButton
+          hidden={!commentPanelIsHidden}
+          onClick={this.handleCommentPanelClick}
         />
         <SurveyPanel
           hidden={surveyPanelIsHidden}
@@ -151,8 +171,10 @@ class MainView extends React.Component {
           taggedElementXPath={this.state.taggedElementXPath}
           unsetTaggedElement={this.unsetTaggedElement}
           toggleTagElementState={this.toggleTagElementState}
+          hidden={commentPanelIsHidden}
+          onClick={this.handleCommentPanelClick}
         />
-
+        <Onboarding />
       </div>
     )
   }

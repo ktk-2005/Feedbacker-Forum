@@ -24,6 +24,7 @@
     "no-plusplus": ["off"],
     "no-nested-ternary": ["off"],
     "no-param-reassign": ["error", { "props": false }],
+    "no-else-return": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",

@@ -1,10 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 // Helpers
-import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
-// Assets
-import OpenIcon from '../../assets/svg/baseline-add-24px.svg'
+
 // Styles
 import styles from './open-survey-panel-button.scss'
 
@@ -23,9 +21,10 @@ const OpenSurveyPanelButton = (props) => {
       type="button"
       className={css('button', { hidden })}
       onClick={() => { if (!disabled) onClick() }}
+      data-introduction-step="2"
       disabled={disabled}
     >
-      <InlineSVG src={OpenIcon} />
+      Survey
     </button>
   )
 }

@@ -20,9 +20,9 @@ $z-index-levels: (
   1: 100000,
   2: 200000,
   3: 300000,
+  4: 400000,
 );
 
 @function static-url($path) {
   @return url($static-url + $path);
 }
-

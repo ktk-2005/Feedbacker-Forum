@@ -3,6 +3,8 @@ export const SET_PERSIST = 'SET_PERSIST'
 export const LOAD_ALL = 'LOAD_ALL'
 export const UPDATE_ROLE = 'UPDATE_ROLE'
 export const LOAD_QUESTIONS = 'LOAD_QUESTIONS'
+export const INTRO_COMPLETED = 'INTRO_COMPLETED'
+
 
 const createAction = (type, data = {}) => ({ type, ...data })
 
@@ -20,6 +22,10 @@ export function loadComments(comments) {
 
 export function loadQuestions(questions) {
   return createAction(LOAD_QUESTIONS, { questions })
+}
+
+export function introCompleted() {
+  return createAction(INTRO_COMPLETED)
 }
 
 export function updateRole(role) {
