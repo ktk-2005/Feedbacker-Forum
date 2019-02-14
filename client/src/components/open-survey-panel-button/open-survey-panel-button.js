@@ -21,7 +21,7 @@ const OpenSurveyPanelButton = (props) => {
   return (
     <button
       type="button"
-      className={hidden ? css('button', 'hidden') : css('button')}
+      className={css('button', { hidden })}
       onClick={() => { if (!disabled) onClick() }}
       disabled={disabled}
     >
