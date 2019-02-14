@@ -282,7 +282,6 @@ class Create extends React.Component {
               </button>
             </div>
           </form>
-=======
           <div className={css('selection-tabs')}>
             <button
               type="button"
@@ -300,7 +299,6 @@ class Create extends React.Component {
             </button>
           </div>
           {this.form()}
->>>>>>> develop:client/src/create.js
         </div>
       </div>
     )
