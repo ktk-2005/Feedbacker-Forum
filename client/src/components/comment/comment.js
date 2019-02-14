@@ -67,7 +67,11 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
       </div>
       <div className={css('time-target-container')}>
         <Moment className={css('timestamp')} fromNow data-tooltip={comment.time} data-tooltip-west>{comment.time}</Moment>
-        <div data-tooltip="This comment has a element tagged with it" data-tooltip-west>
+        <div
+          data-tooltip="This comment has a element tagged with it"
+          data-tooltip-west
+          data-tooltip-width="200px"
+        >
           {targetElement(comment)}
         </div>
       </div>
