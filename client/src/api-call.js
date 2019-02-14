@@ -1,11 +1,13 @@
 import { apiUrl } from './meta/env.meta'
-import { waitForUsers , subscribeUsers, unsubscribeUsers, updateUsers } from './globals'
+import { waitForUsers, subscribeUsers, unsubscribeUsers, updateUsers, getUserName } from './globals'
 
 let retryAuthPromise = null
 
 async function retryAuth() {
+  const name = getUserName()
   // eslint-disable-next-line no-use-before-define
-  const { id, secret } = await apiCall('POST', '/users')
+  const { id, secret } = await apiCall('POST', '/users',
+    { name: name }, { noRetryAuth: true, noUser: true })
   console.log('Regenerated new token from API', { [id]: secret })
   return { id, secret }
 }

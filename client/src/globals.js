@@ -2,6 +2,7 @@ import * as R from 'ramda'
 
 let users = { }
 let userCallbackCounter = 0
+let userName = null
 const userChangeCallbacks = new Map()
 
 let userUpdateCallback = null
@@ -24,6 +25,14 @@ export function unsubscribeUsers(token) {
 
 export function subscribeUpdateUsers(func) {
   userUpdateCallback = func
+}
+
+export function setUserName(name) {
+  userName = name
+}
+
+export function getUserName(name) {
+  return userName
 }
 
 export function updateUsers(users) {
