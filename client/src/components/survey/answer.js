@@ -12,6 +12,7 @@ const css = classNames.bind(styles)
 
 const mapStateToProps = state => ({
   users: (state.persist || {}).users || {},
+  name: (state.persist || {}).name,
 })
 
 class Answer extends React.Component {
@@ -69,7 +70,7 @@ class Answer extends React.Component {
         blob,
       })
     }
-    if (!this.props.users.name) {
+    if (!this.props.name) {
       this.toggleUsernameModal()
     }
   }
