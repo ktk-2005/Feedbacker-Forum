@@ -278,13 +278,36 @@ export default class SurveyEditContainer extends React.Component {
           <h3>No questions yet</h3>
         )}
 
-        {!openId ? (
-          <div className={css('add-button-container')}>
-            <button disabled={busy} className={css('add-button')} type="button" onClick={this.addTextQuestion}>Add text question</button>
-            <button disabled={busy} className={css('add-button')} type="button" onClick={this.addOptionQuestion}>Add option question</button>
-            <button disabled={busy} className={css('add-button')} type="button" onClick={this.addInfoQuestion}>Add explanation</button>
-          </div>
-        ) : null}
+        {
+          !openId ? (
+            <div className={css('add-button-container')}>
+              <button
+                disabled={busy}
+                className={css('add-button')}
+                type="button"
+                onClick={this.addTextQuestion}
+              >
+                Add text question
+              </button>
+              <button
+                disabled={busy}
+                className={css('add-button')}
+                type="button"
+                onClick={this.addOptionQuestion}
+              >
+                Add option question
+              </button>
+              <button
+                disabled={busy}
+                className={css('add-button')}
+                type="button"
+                onClick={this.addInfoQuestion}
+              >
+                Add explanation
+              </button>
+            </div>
+          ) : null
+        }
 
         <ReactModal
           isOpen={!R.isNil(pendingDelete)}
