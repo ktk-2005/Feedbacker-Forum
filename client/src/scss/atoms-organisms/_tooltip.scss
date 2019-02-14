@@ -25,13 +25,14 @@ $tooltip-background: $palette-dark;
 // Tooltip body
 [data-tooltip]:before {
   content: attr(data-tooltip);
+  width: 70px;
   margin: $spacer 0 0 0;
   padding: $baseline $spacer;
   border-radius: $border-radius-default;
   background: $tooltip-background;
   color: $palette-white;
-  white-space: pre;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 // Tooltip pointer
@@ -114,4 +115,16 @@ $tooltip-background: $palette-dark;
 
 [data-tooltip-west]:after {
   border-left-color: $tooltip-background;
+}
+
+// Max widths for tooltips:
+
+$start: 5;
+$end: 35;
+
+@for $i from $start through $end {
+  $width: $i * 10;
+  [data-tooltip-width="#{ $width }px"][data-tooltip]:before {
+    width: #{ $width }px;
+  }
 }
