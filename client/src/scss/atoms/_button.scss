@@ -57,9 +57,7 @@
   @include button($states: false, $transition: false);
   background: transparent;
   padding: 0;
-  margin-right: -$baseline;
-  margin-top: -$baseline;
-  margin-left: $baseline;
+  margin-right: -5px; // As icon is not right aligned, align it correctly to right
 
   i {
     display: block;
