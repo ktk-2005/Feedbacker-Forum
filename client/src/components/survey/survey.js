@@ -75,11 +75,7 @@ class Survey extends React.Component {
   render() {
     const { currentIndex } = this.state
     const { questions } = this.props
-    if (questions.length < 1) {
-      // NOT UNNECESSARY STATE
-      // TODO: 3. make progress bar hover to show tooltip with percent progress and steps
-      return <h3>No survey available</h3>
-    } else {
+    if (questions.length > 0) {
       return (
         <div className={css('survey-container')}>
           <div className={css('progress-container')}>
@@ -96,6 +92,8 @@ class Survey extends React.Component {
           { this.buttons() }
         </div>
       )
+    } else {
+      return null
     }
   }
 }
