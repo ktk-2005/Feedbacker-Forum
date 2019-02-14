@@ -19,12 +19,10 @@ class Create extends React.Component {
     this.postSite = this.postSite.bind(this)
     this.containerForm = this.containerForm.bind(this)
     this.siteForm = this.siteForm.bind(this)
-    this.form = this.form.bind(this)
     this.activateContainerForm = this.activateContainerForm.bind(this)
     this.activateSiteForm = this.activateSiteForm.bind(this)
 
     this.state = {
-      redirect: false,
       instanceRunners: [],
       redirectContainer: false,
       containerForm: true,
@@ -43,6 +41,14 @@ class Create extends React.Component {
     const response = await apiCall('GET', '/instanceRunners')
 
     this.setState({ instanceRunners: response })
+  }
+
+  activateContainerForm() {
+    this.setState({ containerForm: true })
+  }
+
+  activateSiteForm() {
+    this.setState({ containerForm: false })
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
@@ -86,72 +92,53 @@ class Create extends React.Component {
     return (
       <form
         className={css('form-create')}
-        id="containerForm"
+        id="form"
         onSubmit={this.postContainer}
       >
         <label htmlFor="application">
           Application type
-          <select
-            name="application"
-            id="application"
-            form="containerForm"
-            required
-          >
-            <option value="node-runner">Node.js</option>
-          </select>
+          <div className={css('inline-button')}>
+            <select name="application" id="application" form="form" required>
+              {this.state.instanceRunners.map(runner => (
+                <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
+              ))}
+            </select>
+            <Link to="/create-runner">
+              <button
+                className={css('new-runner-button')}
+                type="button"
+              >New runner
+              </button>
+            </Link>
+          </div>
         </label>
         <label htmlFor="url">
           Git URL
-          <input
-            type="text"
-            name="url"
-            id="url"
-            placeholder="https://github.com/ui-router/sample-app-react"
-            required
-          />
+          <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
         </label>
         <label htmlFor="version">
           Git Hash
-          <input
-            type="text"
-            id="version"
-            name="version"
-            placeholder="master or commit hash"
-            required
-          />
+          <input type="text" id="version" name="version" placeholder="master or commit hash" required />
         </label>
         <label htmlFor="name">
           Name
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="new-feature"
-            pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*"
-            minLength="3"
-            maxLength="20"
-            required
-          />
+          <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
         </label>
         <label htmlFor="port">
           Port
-          <input
-            type="number"
-            id="port"
-            min="1"
-            max="65535"
-            name="port"
-            defaultValue="3000"
-            required
-          />
+          <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
         </label>
         <div className={css('button-container')}>
           <Link to="/">
-            <button className={css('dashboard-button')} type="button">
-              Back to dashboard
+            <button
+              className={css('dashboard-button')}
+              type="button"
+            >Back to dashboard
             </button>
           </Link>
-          <button type="submit">Create</button>
+          <button type="submit">
+            Create
+          </button>
         </div>
       </form>
     )
@@ -200,28 +187,12 @@ class Create extends React.Component {
     )
   }
 
-  form() {
-    if (this.state.containerForm) {
-      return this.containerForm()
-    }
-    return this.siteForm()
-  }
-
-  activateContainerForm() {
-    this.setState({ containerForm: true })
-  }
-
-  activateSiteForm() {
-    this.setState({ containerForm: false })
-  }
-
   render() {
     if (this.state.redirectContainer) {
       return (
-        <Redirect
-          to={{
-            pathname: `/logs/${this.state.containerName}`,
-          }}
+        <Redirect to={{
+          pathname: `/logs/${this.state.containerName}`,
+        }}
         />
       )
     }
@@ -246,7 +217,7 @@ class Create extends React.Component {
               External live site
             </button>
           </div>
-          {this.form()}
+          {this.state.containerForm ? this.containerForm() : this.siteForm()}
         </div>
       </div>
     )
