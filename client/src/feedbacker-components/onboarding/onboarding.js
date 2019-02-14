@@ -70,6 +70,7 @@ class Onboarding extends React.Component {
     this.handleCloseIntro = this.handleCloseIntro.bind(this)
     this.doStepActions = this.doStepActions.bind(this)
     this.modalClosed = this.modalClosed.bind(this)
+    this.keyTraverse = this.keyTraverse.bind(this)
   }
 
   step() {
@@ -208,8 +209,22 @@ class Onboarding extends React.Component {
     }
   }
 
+  keyTraverse(e) {
+    const { step } = this.state
+    switch (e.key) {
+      case 'ArrowRight': if (step < final) this.handleNextClick()
+        break
+      case 'ArrowLeft': if (step > 1) this.handlePreviousClick()
+        break
+      case 'Escape': this.handleCloseIntro()
+        break
+      default: break
+    }
+  }
+
   render() {
     const { step } = this.state
+    let element = null
     return (
       <ReactModal
         className={css('intro-modal')}
@@ -217,49 +232,57 @@ class Onboarding extends React.Component {
         onRequestClose={this.modalClosed}
         parentSelector={shadowModalRoot}
         overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
-
+        onAfterOpen={() => element && element.focus()}
       >
-        <div className={css('modal-header')}>
+        <div
+          className={css('event-modal')}
+          ref={(el) => { element = el }}
+          tabIndex="-1"
+          onKeyDown={this.keyTraverse}
+        >
+          <div className={css('modal-header')}>
+            <button
+              type="button"
+              className={css('close-button')}
+              onClick={this.handleCloseIntro}
+            >
+              <InlineSVG src={CloseIcon} />
+            </button>
+          </div>
+          <div className={css('modal-content')}>
+            { this.step() }
+          </div>
+          <div className={css('step-buttons')}>
+            <button
+              type="button"
+              className={step === 1 ? css('previous-button', 'hidden') : css('previous-button')}
+              onClick={this.handlePreviousClick}
+            >
+              <InlineSVG src={ArrowIcon} />
+            </button>
+            <button
+              type="button"
+              className={step === final ? css('next-button', 'hidden') : css('next-button')}
+              onClick={this.handleNextClick}
+            >
+              <InlineSVG src={ArrowIcon} />
+            </button>
+          </div>
           <button
             type="button"
-            className={css('close-button')}
+            className={step !== final ? css('hidden') : css('done-button')}
             onClick={this.handleCloseIntro}
           >
-            <InlineSVG src={CloseIcon} />
+            Close tutorial
           </button>
-        </div>
-        <div className={css('modal-content')}>
-          { this.step() }
-        </div>
-        <div className={css('step-buttons')}>
-          <button
-            type="button"
-            className={step === 1 ? css('previous-button', 'hidden') : css('previous-button')}
-            onClick={this.handlePreviousClick}
-          >
-            <InlineSVG src={ArrowIcon} />
-          </button>
-          <button
-            type="button"
-            className={step === final ? css('next-button', 'hidden') : css('next-button')}
-            onClick={this.handleNextClick}
-          >
-            <InlineSVG src={ArrowIcon} />
-          </button>
-        </div>
-        <button
-          type="button"
-          className={step !== final ? css('hidden') : css('done-button')}
-          onClick={this.handleCloseIntro}
-        >Close tutorial
-        </button>
-        <div className={css('skip-button-container')}>
-          <button
-            type="button"
-            onClick={this.handleCloseIntro}
-            className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
-          >skip
-          </button>
+          <div className={css('skip-button-container')}>
+            <button
+              type="button"
+              onClick={this.handleCloseIntro}
+              className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
+            >skip
+            </button>
+          </div>
         </div>
       </ReactModal>
     )
