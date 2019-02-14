@@ -1,6 +1,38 @@
 import { toast } from 'react-toastify'
 import { apiUrl } from './meta/env.meta'
-import { getUsers } from './globals'
+import { getUsers, subscribeUsers, unsubscribeUsers, updateUsers } from './globals'
+
+let retryAuthPromise = null
+
+async function retryAuth() {
+  // eslint-disable-next-line no-use-before-define
+  const { id, secret } = await apiCall('POST', '/users')
+  console.log('Regenerated new token from API', { [id]: secret })
+  return { id, secret }
+}
+
+function queueRetryAuth() {
+  return new Promise((resolve, reject) => {
+    console.log('Authentication failed, trying to regenerate user')
+    window.setTimeout(async () => {
+      let newUser = { }
+      const token = subscribeUsers((users) => {
+        if (newUser.id && users.hasOwnProperty(newUser.id)) {
+          unsubscribeUsers(token)
+          resolve()
+        }
+      })
+
+      try {
+        newUser = await retryAuth()
+      } catch (error) {
+        reject(error)
+      }
+
+      updateUsers({ [newUser.id]: newUser.secret })
+    }, 500)
+  })
+}
 
 // API call wrapper, use this to communicate with the API server. This wrapper
 // adds `Authentication` and `X-Feedback-Host` headers to provide context for the server.
@@ -12,10 +44,11 @@ import { getUsers } from './globals'
 // opts: Extra options for the function
 //   - rawResponse: Return the raw response from `fetch()` with no JSON conversion or
 //                  automatic error handling
+//   - noRetryAuth: Do not attempt to retry authentication
 //
 // Example usage:
 //   const { id } = await apiCall('POST', '/comments', { text: 'My comment!' })
-export default async function (method, endpoint, body = null, opts = { }) {
+export default async function apiCall(method, endpoint, body = null, opts = { }) {
   const url = apiUrl + endpoint
   const users = getUsers()
   const authToken = btoa(JSON.stringify(users))
@@ -34,6 +67,24 @@ export default async function (method, endpoint, body = null, opts = { }) {
   }
 
   const response = await fetch(url, args)
+
+  // Attempt automatic user regeneration
+  if (response.status === 401 && response.headers.get('X-Feedback-Retry-Auth') && !opts.noRetryAuth) {
+    if (!retryAuthPromise) {
+      retryAuthPromise = queueRetryAuth()
+    }
+    try {
+      await retryAuthPromise
+
+      const result = await apiCall(method, endpoint, body, {
+        ...opts, noRetryAuth: true,
+      })
+
+      return result
+    } catch (error) {
+      console.error('Failed to regenerate user')
+    }
+  }
 
   // -- Early return if raw response
   if (opts.rawResponse) return response
