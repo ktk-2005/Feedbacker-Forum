@@ -48,24 +48,28 @@ class RouteContainer extends React.Component {
 
   render() {
     const amountsByRoute = this.getRouteComments()
-    return (
-      <div
-        className={css('route-container', { hidden: this.state.hidden })}
-        onClick={this.expand}
-        // TODO: element can be focused when hidden = true
-        role="presentation"
-      >
-        {amountsByRoute.map(route => (
-          <p key={route[0]}>
-            {route[1]} {this.pluralize('comment', route[1])} at{' '}
-            <a href={route[0]}>{route[0]}</a>
-          </p>
-        ))}
-        <button type="button" onClick={this.hide}>
-          Collapse
-        </button>
-      </div>
-    )
+    if (amountsByRoute.length > 0) {
+      return (
+        <div
+          className={css('route-container', { hidden: this.state.hidden })}
+          onClick={this.expand}
+          // TODO: element can be focused when hidden = true
+          role="presentation"
+        >
+          {amountsByRoute.map(route => (
+            <p key={route[0]}>
+              {route[1]} {this.pluralize('comment', route[1])} at{' '}
+              <a href={route[0]}>{route[0]}</a>
+            </p>
+          ))}
+          <button type="button" onClick={this.hide}>
+            Collapse
+          </button>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 }
 
