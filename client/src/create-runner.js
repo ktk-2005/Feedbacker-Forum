@@ -124,7 +124,7 @@ function RunnerRow(props) {
   return (
     <div
       className={css('runner', runner.status)}
-      data-tooltip={runner.status}
+      data-tooltip={`Status: ${runner.status}`}
     >
       <div className={css('runner-content')}>
         {runner.tag}
