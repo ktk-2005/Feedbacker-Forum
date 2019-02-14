@@ -85,7 +85,7 @@ class Onboarding extends React.Component {
     } else if (step === 2) {
       return (
         makeContent(
-          'Survey Panel',
+          'Surveys',
           `
             This button opens the survey panel.
           `
@@ -94,7 +94,7 @@ class Onboarding extends React.Component {
     } else if (step === 3) {
       return (
         makeContent(
-          'Survey Panel',
+          'Surveys',
           dev
             ? `
             This is the survey panel where you can create surveys and
@@ -110,7 +110,7 @@ class Onboarding extends React.Component {
         makeContent(
           'Commenting',
           `
-            This button opens the commenting panel.
+            This button opens the comment panel.
           `
         )
       )

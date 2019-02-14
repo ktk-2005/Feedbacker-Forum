@@ -96,9 +96,7 @@ class MainView extends React.Component {
 
     this.state = {
       surveyPanelIsHidden: true,
-      surveyButtonIsHidden: false,
       commentPanelIsHidden: true,
-      commentPanelButtonIsHidden: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
@@ -107,14 +105,12 @@ class MainView extends React.Component {
   handleSurveyPanelClick() {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
-      surveyButtonIsHidden: !state.surveyButtonIsHidden,
     }))
   }
 
   handleCommentPanelClick() {
     this.setState(state => ({
       commentPanelIsHidden: !state.commentPanelIsHidden,
-      commentPanelButtonIsHidden: !state.commentPanelButtonIsHidden,
     }))
   }
 
@@ -139,9 +135,7 @@ class MainView extends React.Component {
 
   render() {
     const {
-      surveyButtonIsHidden,
       surveyPanelIsHidden,
-      commentPanelButtonIsHidden,
       commentPanelIsHidden,
       taggingModeActive,
     } = this.state
@@ -151,11 +145,11 @@ class MainView extends React.Component {
         className={css('feedback-app-container', { 'tagging-mode-active': taggingModeActive })}
       >
         <OpenSurveyPanelButton
-          hidden={surveyButtonIsHidden}
+          hidden={!surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
         />
         <OpenCommentPanelButton
-          hidden={commentPanelButtonIsHidden}
+          hidden={!commentPanelIsHidden}
           onClick={this.handleCommentPanelClick}
         />
         <SurveyPanel
