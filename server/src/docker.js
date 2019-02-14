@@ -24,7 +24,7 @@ let docker = null
 // Initializes the `docker` variable to the docker socket path
 // for the current operating system.
 export function initializeDocker() {
-  const opts = { }
+  let opts = { }
 
   if (config.dockerUrl) {
     const [url, port] = config.dockerUrl.split(':')
@@ -35,13 +35,19 @@ export function initializeDocker() {
       opts.socketPath = '//./pipe/docker_engine'
     } else {
       // TODO: be able to define these from the config file
-      const basePath = `${os.homedir()}/.docker/machine/machines/default`
-      opts.host = '192.168.99.100'
-      opts.protocol = 'https'
-      opts.ca = fs.readFileSync(`${basePath}/ca.pem`)
-      opts.cert = fs.readFileSync(`${basePath}/cert.pem`)
-      opts.key = fs.readFileSync(`${basePath}/key.pem`)
-      opts.port = 2376
+      try {
+        const tryOpts = { ...opts }
+        const basePath = `${os.homedir()}/.docker/machine/machines/default`
+        tryOpts.host = '192.168.99.100'
+        tryOpts.protocol = 'https'
+        tryOpts.ca = fs.readFileSync(`${basePath}/ca.pem`)
+        tryOpts.cert = fs.readFileSync(`${basePath}/cert.pem`)
+        tryOpts.key = fs.readFileSync(`${basePath}/key.pem`)
+        tryOpts.port = 2376
+        opts = tryOpts
+      } catch (error) {
+        opts.socketPath = '//./pipe/docker_engine'
+      }
     }
   } else {
     opts.socketPath = '/var/run/docker.sock'
