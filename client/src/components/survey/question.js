@@ -8,9 +8,10 @@ const css = classNames.bind(styles)
 
 const Question = ({ question, current }) => (
   <div className={css('question')}>
-    <h3>
-      Question { current + 1 }
-    </h3>
+    {question.type === 'text' || question.type === 'option'
+      ? <h3>Question { current + 1 }</h3>
+      : null
+    }
     <p>
       { question.text }
     </p>

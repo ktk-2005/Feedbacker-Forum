@@ -1,0 +1,22 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+@import '../../scss/atoms/button';
+
+.sub-thread {
+  margin-bottom: $spacer;
+
+  > * {
+    margin-left: $spacer;
+    width: calc(100% - #{$spacer});
+  }
+
+  > *:first-of-type {
+    margin-top: $spacer;
+  }
+
+  > div:first-of-type ~ form {
+    margin-top: $spacer;
+  }
+}
+

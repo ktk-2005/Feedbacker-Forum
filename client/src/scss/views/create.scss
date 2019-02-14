@@ -1,6 +1,7 @@
 @import '../../scss/compulsory';
 
-@import '../atoms-organisms/button';
+@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms-organisms/forms';
 
 @import './dashboard-view.scss';
 
@@ -44,19 +45,7 @@
   }
 
   input:not([type="submit"]), select {
-    display: block;
-    width: 100%;
-    margin-top: $baseline;
-    padding: $baseline $spacer;
-    border: none;
-    border-radius: $border-radius-default;
-    line-height: normal;
-    box-shadow: 0 2px 5px $palette-shadow-light;
-
-    &:focus {
-      outline: none;
-      @include shadow-outline($fade: $baseline);
-    }
+    @extend %generic-input;
   }
 
   select {

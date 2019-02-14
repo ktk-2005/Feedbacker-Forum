@@ -1,13 +1,13 @@
 import React from 'react'
 // Helpers
-import * as R from 'ramda'
-import classNames from 'classnames/bind'
-import InlineSVG from 'svg-inline-react'
 import Moment from 'react-moment'
-import moment from 'moment-timezone'
+import * as R from 'ramda'
+import InlineSVG from 'svg-inline-react'
+import classNames from 'classnames/bind'
 import * as DomTagging from '../../dom-tagging'
 // Components
 import Reactions from '../reactions/reactions'
+import CommentLabel from '../comment-label/comment-label'
 // Styles
 import styles from './comment.scss'
 // Assets
@@ -40,17 +40,35 @@ const targetElement = (comment) => {
   }
 }
 
-const Comment = ({ id, comment, role }) => (
+const opLabel = (op, userId) => {
+  if (userId === op) {
+    return <CommentLabel posterRole="op" />
+  }
+  return null
+}
+
+// TODO: refactor
+const devLabel = () => {
+  if (true) {
+    return <CommentLabel posterRole="Developer" />
+  }
+  return null
+}
+
+const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, deleteComment }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
-      <div className={css('name')}>{comment.username || 'Anonymous user'}</div>
-      <Moment
-        className={css('timestamp')}
-        date={comment.time}
-        format="D.MM.YYYY HH:mm"
-        tz={moment.tz.guess()}
-      />
-      { targetElement(comment) }
+      <div className={css('name-label-container')}>
+        {devLabel()}
+        <div className={css('name')}>
+          {comment.username || 'Anonymous user'}
+        </div>
+        {opLabel(op, comment.userId)}
+      </div>
+      <div className={css('time-target-container')}>
+        <Moment className={css('timestamp')} fromNow>{comment.time}</Moment>
+        {targetElement(comment)}
+      </div>
     </div>
     <div className={css('body')}>
       <div className={css('text')}>
@@ -58,6 +76,20 @@ const Comment = ({ id, comment, role }) => (
       </div>
     </div>
     <Reactions reactions={comment.reactions} commentId={id} />
+    <div className={css('actions-container')}>
+      {
+        canDelete ? (
+          <button
+            className={css('delete-button')}
+            type="button"
+            onClick={() => deleteComment(comment)}
+          >
+            Delete
+          </button>
+        ) : null
+      }
+      <button type="button" onClick={onClick}>{buttonText}</button>
+    </div>
   </div>
 )
 

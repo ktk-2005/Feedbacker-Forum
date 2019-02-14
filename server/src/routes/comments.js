@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getComments, getThreadComments, addComment, addThread
+  getComments, getThreadComments, addComment, addThread, deleteComment
 } from '../database'
 import { uuid, attempt, reqContainer, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
@@ -54,7 +54,7 @@ router.get('/', catchErrors(async (req, res) => {
         text: comment.comment_text,
         userId: comment.comment_user_id,
         username: comment.username,
-        threadId: comment.thread_id,
+        threadId: comment.comment_thread_id,
         blob: JSON.parse(comment.comment_blob) || {},
         reactions: [],
       }
@@ -122,6 +122,44 @@ router.get('/:threadId', catchErrors(async (req, res) => {
     containerID: r.container_id,
     blob: JSON.parse(r.blob || '{}'),
   })))
+}))
+
+// @api DELETE /api/comments
+// Tries to delete a comment. Only successful if the userId of the comment is the same
+// as the user trying to delete the comment, or if the user is a dev.
+//
+// Returns the numbers of rows affected,
+// one if the comment was deleted and 0 if it was not successful.
+//
+// e.g. @json {
+//   "delRows": 1
+// }
+router.delete('/', catchErrors(async (req, res) => {
+  const { commentId, commentUser } = req.body
+  const { users } = await reqUser(req)
+  const { owner } = await reqContainer(req)
+  let delRows = {}
+  if (users.hasOwnProperty(owner)) {
+    try {
+      delRows = await deleteComment({
+        commentId,
+        userId: commentUser,
+      })
+    } catch (err) { /* ignore */ }
+  } else {
+    for (const userId in users) {
+      if (users.hasOwnProperty(userId)) {
+        try {
+          delRows = await deleteComment({
+            commentId,
+            userId,
+          })
+        } catch (err) { /* ignore */
+        }
+      }
+    }
+  }
+  res.json({ delRows })
 }))
 
 module.exports = router

@@ -2,22 +2,32 @@
 
 @import '../../scss/atoms-organisms/button';
 
+@import '../comment/comment';
+
 .button {
-  @include button(2px);
-  @include display-and-animate();
-  position: fixed;
-  bottom: 12%;
-  left: 3%;
-  $dimension: 30px;
-  height: $dimension;
-  padding: $baseline $spacer;
-  box-shadow: 0 3px 5px $palette-light;
-  color: $palette-lighter;
-  background: $palette-accent;
+  @extend %target-icon;
+  @include shadow-outline();
+  padding: $baseline;
+  border-radius: 100%;
+  background: $palette-white;
+  color: transparent;
+  cursor: pointer;
+
   &.active {
-    background: $palette-dark;
-    &, & * {
-      visibility: visible;
+    @include button(2px);
+    visibility: visible;
+    box-shadow: 0 2px 5px $palette-medium;
+    padding: $baseline $spacer;
+    background: $palette-accent;
+    color: $palette-white;
+  }
+
+  &.selected {
+    background: $palette-accent;
+
+    svg {
+      fill: $palette-white;
     }
   }
 }
+
