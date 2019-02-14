@@ -9,7 +9,7 @@ import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
-import { setUsers } from './globals'
+import { setUsers, subscribeUpdateUsers } from './globals'
 import { prepareReactRoot } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
@@ -208,16 +208,20 @@ const initialize = () => {
 
   const savePersist = setupPersist(loadPersist)
 
-  apiCall('GET', '/comments')
-    .then((comments) => {
-      store.dispatch(loadComments(comments))
-    })
-
   store.subscribe(() => {
     const persist = store.getState().persist || { }
     savePersist(persist)
     setUsers(persist.users || { })
   })
+
+  subscribeUpdateUsers((newUsers) => {
+    store.dispatch(setPersistData({ users: newUsers }))
+  })
+
+  apiCall('GET', '/comments')
+    .then((comments) => {
+      store.dispatch(loadComments(comments))
+    })
 
   const root = prepareReactRoot()
 
