@@ -39,11 +39,9 @@ class ContainerCard extends React.Component {
   async removeContainer() {
     this.setState({ removePending: true })
     try {
-      await apiCall('POST', '/instances/delete', { name: this.instance.name }, { rawResponse: true })
+      await apiCall('POST', '/instances/delete', { name: this.instance.name })
       this.props.removeContainerCallback(this.instance.name)
     } catch (error) {
-      // nop
-    } finally {
       this.setState({ removePending: false })
     }
   }

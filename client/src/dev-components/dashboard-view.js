@@ -18,6 +18,7 @@ class Dashboard extends React.Component {
     super(props)
 
     this.refreshInstances = this.refreshInstances.bind(this)
+    this.removeContainerCallback = this.removeContainerCallback.bind(this)
 
     this.state = {
       instances: [],
@@ -40,9 +41,10 @@ class Dashboard extends React.Component {
   removeContainerCallback(containerName) {
     this.setState((prevState) => {
       const instancesWithoutDeletedOne = R.reject(
-        instance => instance.id === containerName, prevState.instances
+        instance => instance.name === containerName,
+        prevState.instances
       )
-      return instancesWithoutDeletedOne
+      return { instances: instancesWithoutDeletedOne }
     })
   }
 
