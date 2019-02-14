@@ -276,15 +276,20 @@ export async function confirmContainerOwnership(name, users) {
 // This function assumes that the authenticity of claimed userIds are already verified.
 // Returns false if the user doesn't own the claimed instance runner, or the owner id elsewise.
 export async function confirmInstanceRunnerOwnership(tag, users) {
-  const rows = await db.query('SELECT user_id FROM instance_runners WHERE tag=? LIMIT 1', [tag])
+  const rows = await db.query('SELECT user_id FROM instance_runners WHERE tag=?', [tag])
 
   if (rows && rows.length > 0) {
-    const ownerUserId = rows[0].user_id
-    if (users.hasOwnProperty(ownerUserId)) {
-      return ownerUserId
-    }
+    const ownerUserIds = rows.map(row => row.user_id)
+    const matchedId = R.find((userId) => {
+      if (users.hasOwnProperty(userId)) {
+        return true
+      }
+
+      return false
+    })(ownerUserIds)
+
+    if (matchedId) return matchedId
   }
 
   throw new HttpError(400, 'Invalid tag')
 }
-
