@@ -143,7 +143,7 @@ class CommentPanel extends React.Component {
         }
       }
     })
-    const threadArray = groupByThread(Object.values(this.props.comments))
+    const threadArray = groupByThread(Object.values(commentsOfRoute))
     const sortbyTime = R.sortBy(([comments]) => R.reduce(
       R.minBy(comment => comment.time),
       { time: '9999-99-99 99:99:99' },
