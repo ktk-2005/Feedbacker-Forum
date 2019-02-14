@@ -114,8 +114,13 @@ export async function removeQuestion({ id }) { return db.run('DELETE FROM questi
 
 export async function getQuestionHighestOrder(container) {
   const row = await db.query('SELECT order_id FROM questions WHERE container_id=? ORDER BY order_id DESC LIMIT 1', [container])
-  const [{ order_id: orderId }] = row
-  return orderId || 0
+
+  try {
+    const [{ order_id: orderId }] = row
+    return orderId || 0
+  } catch (error) {
+    return 0
+  }
 }
 
 export async function reorderQuestions(order) {
