@@ -69,10 +69,6 @@ class Onboarding extends React.Component {
     this.keyTraverse = this.keyTraverse.bind(this)
   }
 
-  componentDidMount() {
-    shadowDocument().addEventListener('onKeyDown', this.keyTraverse)
-  }
-
   step() {
     const { step } = this.state
     const { dev } = this.props
