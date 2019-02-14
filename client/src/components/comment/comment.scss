@@ -2,6 +2,7 @@
 @import '../../scss/colors';
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
+@import '../../scss/atoms/tooltip';
 
 %target-icon {
   @include reset-button();

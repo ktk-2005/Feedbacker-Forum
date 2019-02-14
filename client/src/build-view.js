@@ -64,7 +64,7 @@ class Build extends React.Component {
               >Back to dashboard
               </button>
             </Link>
-            <label>
+            <label data-tooltip="when the instance has been built the link will work">
               Feedbackable UI:
               <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url.replace(/^(https?:)?\/\//, '')}</a>
             </label>

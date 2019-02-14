@@ -48,6 +48,7 @@ class TagElementButton extends React.Component {
           DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
           DomTagging.toggleMarkingMode()
         }}
+        data-tooltip="Tag element button"
       >
         {active ? 'Cancel' : <InlineSVG src={TargetIcon} raw />}
       </button>
@@ -56,4 +57,3 @@ class TagElementButton extends React.Component {
 }
 
 export default TagElementButton
-
