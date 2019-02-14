@@ -76,10 +76,11 @@ class Survey extends React.Component {
     const { currentIndex } = this.state
     const { questions } = this.props
     if (questions.length > 0) {
+      const progressPercents = Math.round(100 * (currentIndex + 1) / questions.length)
       return (
         <div className={css('survey-container')}>
           <div className={css('progress-container')}>
-            <div className={css('progress-bar')} data-progress-percents={Math.round(100 * (currentIndex + 1) / questions.length)} />
+            <div className={css('progress-bar')} data-progress-percents={progressPercents} />
           </div>
           <Question
             question={questions[currentIndex]}
