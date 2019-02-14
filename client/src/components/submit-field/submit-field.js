@@ -60,9 +60,13 @@ class SubmitField extends React.Component {
 
   handleElementTagged(event) {
     const xPath = DomTagging.getXPathByElement(event)
-    this.setState({
-      taggedElementXPath: xPath,
-    })
+    if (xPath === this.state.taggedElementXPath) {
+      this.setState({ taggedElementXPath: '' })
+    } else {
+      this.setState({
+        taggedElementXPath: xPath,
+      })
+    }
   }
 
   unsetTaggedElement() {
