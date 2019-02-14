@@ -65,7 +65,7 @@ export function waitForUsers() {
 }
 
 export function showCookieToast(dispatch) {
-  const message = 'By continuing to use our Feedbacker Forum you accept our use of cookies.'
+  const message = 'By continuing to use Feedbacker Forum you accept our use of cookies.'
   toast(message, {
     autoClose: false,
     onClose: () => {

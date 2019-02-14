@@ -14,12 +14,18 @@ $rt-color-error: $palette-error-dark;
 }
 
 .#{$rt-namespace}__toast {
+  padding: $spacer;
   border-radius: $border-radius-default;
 
   &--default {
     color: $palette-dark;
   }
+
   &--error {
     color: $palette-white
+  }
+
+  &-body {
+    padding: $spacer;
   }
 }
