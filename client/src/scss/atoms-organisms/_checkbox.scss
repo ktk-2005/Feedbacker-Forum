@@ -8,6 +8,7 @@ input[type="checkbox"], %checkbox {
     position: relative;
     display: block;
     padding-left: 4 * $baseline;
+    line-height: $checkbox-width; // Same as checkbox height
     cursor: pointer;
 
     // Checkbox
@@ -15,7 +16,7 @@ input[type="checkbox"], %checkbox {
       content: '';
       position: absolute;
       left: 0;
-      top: -$baseline / 2;
+      top: 0;
       display: block;
       width: $checkbox-width;
       height: $checkbox-width;

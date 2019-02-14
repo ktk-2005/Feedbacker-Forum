@@ -51,14 +51,10 @@
         color: $palette-medium;
       }
     }
-  }
 
-  .submit-comment {
-    @include button();
-    align-self: flex-end;
-    margin-left: $baseline;
-    padding: $baseline $spacer;
-    background: $palette-accent;
-    color: $palette-lighter;
+    .submit-comment {
+      margin-top: 0;
+      margin-left: $baseline;
+    }
   }
 }
