@@ -2,6 +2,7 @@ import * as R from 'ramda'
 import SQLiteDatabase from './database/database-sqlite'
 import PostgresDatabase from './database/database-postgres'
 import { config, args } from './globals'
+import { HttpError } from './errors'
 
 let db = null
 
