@@ -40,7 +40,22 @@ class Create extends React.Component {
       name: inputValue('name').toLowerCase(),
     })
 
-    console.log(json)
+    this.setState({
+      containerName: json.containerInfo.name,
+      redirect: true,
+    })
+  }
+
+  async postSite(event) {
+    event.preventDefault()
+    event.nativeEvent.stopImmediatePropagation()
+    const doc = shadowDocument()
+    const inputValue = name => doc.getElementById(name).value
+
+    const json = await apiCall('POST', '/instances/new', {
+      url: inputValue('url'),
+      name: inputValue('name').toLowerCase(),
+    })
 
     this.setState({
       containerName: json.containerInfo.name,
@@ -98,7 +113,7 @@ class Create extends React.Component {
       <form
         className={css('form-create')}
         id="form"
-        onSubmit={this.postContainer}
+        onSubmit={this.postSite}
       >
         <label htmlFor="url">
           Git URL
