@@ -39,7 +39,7 @@
     "quote-props": [
       "error",
       "consistent"
-    ]
+    ],
     "method-can-be-static": "off"
   },
 

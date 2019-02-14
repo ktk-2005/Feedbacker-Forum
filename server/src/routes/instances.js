@@ -1,15 +1,13 @@
 import express from 'express'
-import * as R from 'ramda'
 import {
   // getRunningContainers,
-  getRunningContainersByUser,
   createNewContainer,
   startContainer,
   stopContainer,
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser, resolveContainer, addSite, listContainersByUser } from '../database'
+import { resolveContainer, addSite, listContainersByUser } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
