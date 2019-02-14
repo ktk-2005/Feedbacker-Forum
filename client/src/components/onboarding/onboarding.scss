@@ -52,7 +52,7 @@ $padding: $spacer * 2;
   }
 
   .next-button {
-    transform: scaleX(-1);
+    transform: rotateY(180deg);
     margin-left: auto;
   }
 }

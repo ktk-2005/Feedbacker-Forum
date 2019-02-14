@@ -97,7 +97,8 @@ class Onboarding extends React.Component {
           'Survey Panel',
           dev
             ? `
-            This is the survey panel where the users can answer your questions.
+            This is the survey panel where you can create surveys and
+            where the users can answer them.
             `
             : `
             This is the survey panel where you can answer questions.
