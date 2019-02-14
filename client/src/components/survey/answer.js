@@ -152,7 +152,7 @@ class Answer extends React.Component {
             )
           }
           {
-            !this.props.users.name
+            !this.props.name
               ? (
                 <UsernameModal
                   isOpen={this.state.usernameModalIsOpen}
@@ -180,7 +180,7 @@ class Answer extends React.Component {
             ))
           }
           {
-            !this.props.users.name
+            !this.props.name
               ? (
                 <UsernameModal
                   isOpen={this.state.usernameModalIsOpen}
