@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
+import RouteContainer from '../route-container/route-container'
 import UsernameModal from '../add-username-modal/add-username-modal'
 
 // Components
@@ -65,6 +66,7 @@ class CommentPanel extends React.Component {
       if (xPath) {
         blob.xPath = xPath
       }
+      blob.route = window.location.pathname
       return blob
     }
 
@@ -130,8 +132,10 @@ class CommentPanel extends React.Component {
   }
 
   threadContainer() {
-    if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
-    const threadIds = new Set(Object.values(this.props.comments).map(comment => comment.threadId))
+    const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
+      this.props.comments)
+    if (R.isEmpty(commentsOfRoute)) return (<p>No comments fetched.</p>)
+    const threadIds = new Set(Object.values(commentsOfRoute).map(comment => comment.threadId))
     const groupByThread = R.groupBy((comment) => {
       for (const id of threadIds) {
         if (comment.threadId === id) {
@@ -190,6 +194,7 @@ class CommentPanel extends React.Component {
           </button>
         </div>
         <div className={css('panel-body')}>
+          <RouteContainer comments={this.props.comments} />
           { this.threadContainer() }
           <SubmitField
             handleSubmit={this.handleSubmit}
