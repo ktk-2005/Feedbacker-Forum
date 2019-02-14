@@ -4,6 +4,7 @@
 @import '../../scss/atoms-organisms/forms';
 
 @import './dashboard-view.scss';
+@import '../../components/reactions/reactions';
 
 .center-center-block {
   display: flex;
@@ -31,6 +32,19 @@
 
   h2 {
     margin-bottom: $spacer;
+  }
+}
+
+.selection-tabs {
+  @extend .reactions;
+  button {
+    @extend .reaction;
+    margin-top: $baseline;
+    margin-bottom: $spacer;
+
+    &.current {
+      @extend .toggled;
+    }
   }
 }
 

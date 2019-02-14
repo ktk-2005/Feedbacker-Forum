@@ -14,9 +14,16 @@ class Create extends React.Component {
     super(props)
 
     this.postContainer = this.postContainer.bind(this)
+    this.postSite = this.postSite.bind(this)
+    this.containerForm = this.containerForm.bind(this)
+    this.siteForm = this.siteForm.bind(this)
+    this.form = this.form.bind(this)
+    this.activateContainerForm = this.activateContainerForm.bind(this)
+    this.activateSiteForm = this.activateSiteForm.bind(this)
 
     this.state = {
-      redirect: false,
+      redirectContainer: false,
+      containerForm: true,
     }
   }
 
@@ -36,20 +43,167 @@ class Create extends React.Component {
       name: inputValue('name').toLowerCase(),
     })
 
-    console.log(json)
-
     this.setState({
       containerName: json.containerInfo.name,
-      redirect: true,
+      redirectContainer: true,
     })
   }
 
+  async postSite(event) {
+    event.preventDefault()
+    event.nativeEvent.stopImmediatePropagation()
+    const doc = shadowDocument()
+    const inputValue = name => doc.getElementById(name).value
+
+    const json = await apiCall('POST', '/instances/new', {
+      url: inputValue('url'),
+      name: inputValue('name').toLowerCase(),
+      type: 'site',
+    })
+
+    window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}`)
+  }
+
+  containerForm() {
+    return (
+      <form
+        className={css('form-create')}
+        id="containerForm"
+        onSubmit={this.postContainer}
+      >
+        <label htmlFor="application">
+          Application type
+          <select
+            name="application"
+            id="application"
+            form="containerForm"
+            required
+          >
+            <option value="node">Node.js</option>
+          </select>
+        </label>
+        <label htmlFor="url">
+          Git URL
+          <input
+            type="text"
+            name="url"
+            id="url"
+            placeholder="https://github.com/ui-router/sample-app-react"
+            required
+          />
+        </label>
+        <label htmlFor="version">
+          Git Hash
+          <input
+            type="text"
+            id="version"
+            name="version"
+            placeholder="master or commit hash"
+            required
+          />
+        </label>
+        <label htmlFor="name">
+          Name
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="new-feature"
+            pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*"
+            minLength="3"
+            maxLength="20"
+            required
+          />
+        </label>
+        <label htmlFor="port">
+          Port
+          <input
+            type="number"
+            id="port"
+            min="1"
+            max="65535"
+            name="port"
+            defaultValue="3000"
+            required
+          />
+        </label>
+        <div className={css('button-container')}>
+          <Link to="/">
+            <button className={css('dashboard-button')} type="button">
+              Back to dashboard
+            </button>
+          </Link>
+          <button type="submit">Create</button>
+        </div>
+      </form>
+    )
+  }
+
+  siteForm() {
+    // TODO: Add tooltip to warn about live url redirection
+    return (
+      <form
+        className={css('form-create')}
+        id="siteForm"
+        onSubmit={this.postSite}
+      >
+        <label htmlFor="url">
+          Git URL
+          <input
+            type="text"
+            name="url"
+            id="url"
+            placeholder="https://codeberry.fi"
+            required
+          />
+        </label>
+        <label htmlFor="name">
+          Name
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="new-feature"
+            pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*"
+            minLength="3"
+            maxLength="20"
+            required
+          />
+        </label>
+        <div className={css('button-container')}>
+          <Link to="/">
+            <button className={css('dashboard-button')} type="button">
+              Back to dashboard
+            </button>
+          </Link>
+          <button type="submit">Create</button>
+        </div>
+      </form>
+    )
+  }
+
+  form() {
+    if (this.state.containerForm) {
+      return this.containerForm()
+    }
+    return this.siteForm()
+  }
+
+  activateContainerForm() {
+    this.setState({ containerForm: true })
+  }
+
+  activateSiteForm() {
+    this.setState({ containerForm: false })
+  }
+
   render() {
-    if (this.state.redirect) {
+    if (this.state.redirectContainer) {
       return (
-        <Redirect to={{
-          pathname: `/logs/${this.state.containerName}`,
-        }}
+        <Redirect
+          to={{
+            pathname: `/logs/${this.state.containerName}`,
+          }}
         />
       )
     }
@@ -58,46 +212,23 @@ class Create extends React.Component {
       <div className={css('center-center-block')}>
         <div className={css('create-view')}>
           <h2>Create an instance</h2>
-          <form
-            className={css('form-create')}
-            id="form"
-            onSubmit={this.postContainer}
-          >
-            <label htmlFor="application">
-              Application type
-              <select name="application" id="application" form="form" required>
-                <option value="node">Node.js</option>
-              </select>
-            </label>
-            <label htmlFor="url">
-              Git URL
-              <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
-            </label>
-            <label htmlFor="version">
-              Git Hash
-              <input type="text" id="version" name="version" placeholder="master or commit hash" required />
-            </label>
-            <label htmlFor="name">
-              Name
-              <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
-            </label>
-            <label htmlFor="port">
-              Port
-              <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
-            </label>
-            <div className={css('button-container')}>
-              <Link to="/">
-                <button
-                  className={css('dashboard-button')}
-                  type="button"
-                >Back to dashboard
-                </button>
-              </Link>
-              <button type="submit">
-                Create
-              </button>
-            </div>
-          </form>
+          <div className={css('selection-tabs')}>
+            <button
+              type="button"
+              onClick={this.activateContainerForm}
+              className={css({ 'current': this.state.containerForm })}
+            >
+              From git repository
+            </button>
+            <button
+              type="button"
+              onClick={this.activateSiteForm}
+              className={css({ 'current': !this.state.containerForm })}
+            >
+              External live site
+            </button>
+          </div>
+          {this.form()}
         </div>
       </div>
     )
