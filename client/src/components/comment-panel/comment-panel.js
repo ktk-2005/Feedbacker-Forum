@@ -125,10 +125,6 @@ class CommentPanel extends React.Component {
     if (el) el.scrollTop = el.scrollHeight
   }
 
-  handleRouteContainerClick() {
-
-  }
-
   threadContainer() {
     const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
       this.props.comments)
