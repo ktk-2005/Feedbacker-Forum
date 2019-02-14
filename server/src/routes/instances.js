@@ -59,10 +59,8 @@ router.post('/new', catchErrors(async (req, res) => {
     url, version, type, name, port,
   } = req.body
 
-  console.log('dddd')
   const { userId } = await reqUser(req)
 
-  console.log('ffff')
   if (!url) {
     throw new HttpError(400, 'No git url given')
   }
@@ -90,7 +88,6 @@ router.post('/new', catchErrors(async (req, res) => {
     const containerInfo = await addSite({
       id, subdomain, userId, url,
     })
-    console.log(containerInfo)
     res.json({ containerInfo })
   } else {
     throw new HttpError(501, `Expected type 'node', but got '${type}'`)
