@@ -68,7 +68,7 @@ func StartServing(config *Config) error {
 // -- Implementation
 
 // `scriptInjectString` is injected before `injectPositionRegex`
-var doctypeRegex = regexp.MustCompile("<!DOCTYPE")
+var doctypeRegex = regexp.MustCompile("(?i)<!doctype")
 var injectPositionRegex = regexp.MustCompile("(?i)</body>")
 var doctypeInjectString string
 var doctypeInjectLength int
