@@ -68,16 +68,16 @@ class CreateRunner extends React.Component {
     return (
       <div className={css('runner-view-container')}>
         <div className={css('inner-container')}>
-          <div className={css('default-runner-container')}>
-            <h2>Default runners</h2>
-            {this.state.defaultRunners.map(runner => (<DefaultRunnerRow
-              key={runner.tag}
-              runner={runner}
-            />
-            )) }
+          <div className={css('runner-container')}>
+            <h3>Default runners</h3>
+            {
+              this.state.defaultRunners.map(
+                runner => <DefaultRunnerRow key={runner.tag} runner={runner} />
+              )
+            }
           </div>
           <div className={css('runner-container')}>
-            <h2>Your runners</h2>
+            <h3>Your runners</h3>
             <div className={css('runners')}>
               {instanceRunners.map(runner => (<RunnerRow
                 key={runner.tag}
@@ -92,7 +92,7 @@ class CreateRunner extends React.Component {
               ) : null }
             </div>
           </div>
-          <h2>Create a runner</h2>
+          <h3>Create a runner</h3>
           <p>This is some useful instructions. Tag should contain the version.</p>
           <form
             className={css('form-create-runner')}
@@ -100,7 +100,7 @@ class CreateRunner extends React.Component {
           >
             <label htmlFor="tag">
               Tag
-              <input type="text" name="tag" id="tag" placeholder="tag:version" />
+              <input type="text" name="tag" id="tag" placeholder="tag:version e.g. rails:latest" />
             </label>
             <div className={css('button-container')}>
               <Link to="/create">
