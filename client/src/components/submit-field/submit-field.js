@@ -16,10 +16,12 @@ class SubmitField extends React.Component {
     super(props)
     this.state = {
       value: '',
+      hideName: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
     this.handleChange = this.handleChange.bind(this)
+    this.toggleHide = this.toggleHide.bind(this)
     this.passSubmit = this.passSubmit.bind(this)
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
@@ -28,6 +30,12 @@ class SubmitField extends React.Component {
 
   handleChange(event) {
     this.setState({ value: event.target.value })
+  }
+
+  toggleHide() {
+    this.setState(prevState => ({
+      hideName: !prevState.hideName,
+    }))
   }
 
   passSubmit(event) {
@@ -41,6 +49,7 @@ class SubmitField extends React.Component {
     this.props.handleSubmit(event,
       this.state.taggedElementXPath,
       this.state.value,
+      this.state.hideName,
       this.props.threadId)
   }
 
@@ -51,9 +60,13 @@ class SubmitField extends React.Component {
 
   handleElementTagged(event) {
     const xPath = DomTagging.getXPathByElement(event)
-    this.setState({
-      taggedElementXPath: xPath,
-    })
+    if (xPath === this.state.taggedElementXPath) {
+      this.setState({ taggedElementXPath: '' })
+    } else {
+      this.setState({
+        taggedElementXPath: xPath,
+      })
+    }
   }
 
   unsetTaggedElement() {
@@ -63,7 +76,7 @@ class SubmitField extends React.Component {
   }
 
   render() {
-    const { value, taggingModeActive, taggedElementXPath } = this.state
+    const { value, hideName, taggingModeActive, taggedElementXPath } = this.state
     return (
       <form className={css('comment-form')} onSubmit={this.passSubmit}>
         <textarea
@@ -74,12 +87,24 @@ class SubmitField extends React.Component {
           onKeyDown={keyPressSubmit}
         />
         <div className={css('button-container')}>
+          <div className={css('anonymous-check')}>
+            <input
+              type="checkbox"
+              id="hideName"
+              name="Anonymous"
+              checked={hideName}
+              onChange={() => {}}
+              onClick={this.toggleHide}
+            />
+            <label htmlFor="hideName" className={css('check-text')}>
+              Anonymous
+            </label>
+          </div>
           <TagElementButton
             active={taggingModeActive}
             elementTagged={this.handleElementTagged}
             toggleTagElementState={this.toggleTagElementState}
             selected={taggedElementXPath !== ''}
-            data-introduction-step="6"
           />
           <input className={css('submit-comment')} type="submit" value="Comment" />
         </div>
