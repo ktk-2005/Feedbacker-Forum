@@ -14,8 +14,9 @@ import Dashboard from './dashboard-view'
 import Create from './create'
 import Build from './build-view'
 import { prepareReactRoot } from './shadowDomHelper'
-import { setUsers } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
 import apiCall from './api-call'
+import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
 
@@ -61,14 +62,7 @@ const initialize = () => {
 
         console.log('Created new user from API', { [id]: secret })
 
-        store.dispatch({
-          type: SET_PERSIST,
-          data: {
-            users: {
-              [id]: secret,
-            },
-          },
-        })
+        store.dispatch(setPersistData({ users: { [id]: secret } }))
       } else {
         console.log('Loaded user from persistent storage', state.users)
       }
@@ -81,6 +75,11 @@ const initialize = () => {
     const persist = store.getState().persist || { }
     savePersist(persist)
     setUsers(persist.users || { })
+    setUserName(persist.name)
+  })
+
+  subscribeUpdateUsers((newUsers) => {
+    store.dispatch(setPersistData({ users: newUsers }))
   })
 
   ReactDOM.render(

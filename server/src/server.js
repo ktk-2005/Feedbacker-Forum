@@ -54,7 +54,11 @@ export function startServer() {
     app.use(express.static(path.join(__dirname, '../../client/build')))
   }
 
-  app.use(cors())
+  app.use(cors({
+    exposedHeaders: [
+      'X-Feedback-Retry-Auth',
+    ],
+  }))
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
