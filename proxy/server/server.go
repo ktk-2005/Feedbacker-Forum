@@ -27,6 +27,7 @@ type Config struct {
 	ProxyPort int       // < Port to bind the proxy to
 	ErrorPort int       // < Internal port to use as error proxy target
 	InjectScript string // < Script source to inject to html files
+	ErrorPage string    // < Error page to redirect to
 }
 
 // Start serving the proxy
@@ -34,11 +35,19 @@ func StartServing(config *Config) error {
 	errPort := config.ErrorPort
 	proxyPort := config.ProxyPort
 
-	htmlInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
-	htmlInjectLength = len([]byte(htmlInjectString))
+	doctypeInjectString = "<!DOCTYPE html>"
+	doctypeInjectLength = len([]byte(doctypeInjectString))
+
+	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
+	scriptInjectLength = len([]byte(scriptInjectString))
+
+	errorPage = config.ErrorPage
+	if !strings.HasSuffix(errorPage, "/") {
+		errorPage += "/"
+	}
 
 	var err error
-	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d", errPort))
+	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/", errPort))
 	if err != nil {
 		return err
 	}
@@ -58,10 +67,14 @@ func StartServing(config *Config) error {
 
 // -- Implementation
 
-// `htmlInjectString` is injected before `injectPositionRegex`
+// `scriptInjectString` is injected before `injectPositionRegex`
+var doctypeRegex = regexp.MustCompile("<!DOCTYPE")
 var injectPositionRegex = regexp.MustCompile("(?i)</body>")
-var htmlInjectString string
-var htmlInjectLength int
+var doctypeInjectString string
+var doctypeInjectLength int
+var scriptInjectString string
+var scriptInjectLength int
+var errorPage string
 
 // Server that returns error responses
 var errorUrl *url.URL
@@ -89,6 +102,8 @@ func redirectRequest(req *http.Request) {
 			}
 
 			return
+		} else {
+			req.Header.Set("X-Feedback-Subdomain", token)
 		}
 	}
 
@@ -135,12 +150,21 @@ func modifyResponse(res *http.Response) error {
 			loc := match[0]
 			result = io.MultiReader(
 				bytes.NewReader([]byte(body[:loc])),
-				bytes.NewReader([]byte(htmlInjectString)),
+				bytes.NewReader([]byte(scriptInjectString)),
 				bytes.NewReader([]byte(body[loc:])))
 
-			length += htmlInjectLength
+			length += scriptInjectLength
 		} else {
 			result = bytes.NewReader(bodyBytes)
+		}
+
+		// Insert <!DOCTYPE html> if necessary
+		match = doctypeRegex.FindStringIndex(body)
+		if match == nil {
+			prefix := bytes.NewReader([]byte(doctypeInjectString))
+			result = io.MultiReader(prefix, result)
+
+			length += doctypeInjectLength
 		}
 
 	} else {
@@ -160,7 +184,8 @@ func modifyResponse(res *http.Response) error {
 
 type ErrorHandler struct { }
 func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(404)
-	io.WriteString(w, "Unknown container")
+	host := r.Header.Get("X-Feedback-Subdomain")
+	target := errorPage + host
+	http.Redirect(w, r, target, 301)
 }
 

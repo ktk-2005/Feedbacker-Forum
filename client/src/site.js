@@ -12,6 +12,7 @@ import {
 import { setupPersist } from './persist'
 import Dashboard from './dashboard-view'
 import Create from './create'
+import InvalidContainer from './invalid-container'
 import Build from './build-view'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
@@ -90,6 +91,7 @@ const initialize = () => {
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/create" component={Create} />
+            <Route exact path="/invalid-container/:name" component={InvalidContainer} />
             <Route exact path="/logs/:name" component={Build} />
           </Switch>
         </div>
