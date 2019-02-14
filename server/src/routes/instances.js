@@ -1,15 +1,13 @@
 import express from 'express'
-import * as R from 'ramda'
 import {
   // getRunningContainers,
-  getRunningContainersByUser,
   createNewContainer,
   startContainer,
   stopContainer,
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser, resolveContainer } from '../database'
+import { resolveContainer, addSite, listContainersByUser } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -23,14 +21,8 @@ const router = express.Router()
 //
 // Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 router.get('/', catchErrors(async (req, res) => {
-  const { users } = await reqUser(req)
-  const containers = []
-  for (const [userId, secret] of R.toPairs(users)) {
-    try {
-      await verifyUser(userId, secret)
-      containers.push(...await getRunningContainersByUser([userId]))
-    } catch (error) { /* ignore */ }
-  }
+  const { userId } = await reqUser(req)
+  const containers = await listContainersByUser([userId])
   res.send(containers)
 }))
 
@@ -72,7 +64,7 @@ router.post('/new', catchErrors(async (req, res) => {
   if (!url) {
     throw new HttpError(400, 'No git url given')
   }
-  if (!version) {
+  if (!version && type !== 'site') {
     throw new HttpError(400, 'No git version given')
   }
   if (name.length < 3 || name.length > 20) {
@@ -90,6 +82,13 @@ router.post('/new', catchErrors(async (req, res) => {
       )
       res.json({ containerInfo })
     })
+  } else if (type === 'site') {
+    const subdomain = `${name}-${uuid(5)}`
+    const id = uuid(8)
+    const containerInfo = await addSite({
+      id, subdomain, userId, url,
+    })
+    res.json({ containerInfo })
   } else {
     throw new HttpError(501, `Expected type 'node', but got '${type}'`)
   }

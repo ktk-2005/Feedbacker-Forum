@@ -12,10 +12,12 @@ import {
 import { setupPersist } from './persist'
 import Dashboard from './dashboard-view'
 import Create from './create'
+import InvalidContainer from './invalid-container'
 import Build from './build-view'
 import { prepareReactRoot } from './shadowDomHelper'
-import { setUsers } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
 import apiCall from './api-call'
+import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
 
@@ -57,18 +59,12 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const { id, secret } = await apiCall('POST', '/users')
+        const { id, secret } = await apiCall('POST', '/users',
+          { name: state.name }, { noUser: true, noRetryAuth: true })
 
         console.log('Created new user from API', { [id]: secret })
 
-        store.dispatch({
-          type: SET_PERSIST,
-          data: {
-            users: {
-              [id]: secret,
-            },
-          },
-        })
+        store.dispatch(setPersistData({ users: { [id]: secret } }))
       } else {
         console.log('Loaded user from persistent storage', state.users)
       }
@@ -81,6 +77,11 @@ const initialize = () => {
     const persist = store.getState().persist || { }
     savePersist(persist)
     setUsers(persist.users || { })
+    setUserName(persist.name)
+  })
+
+  subscribeUpdateUsers((newUsers) => {
+    store.dispatch(setPersistData({ users: newUsers }))
   })
 
   ReactDOM.render(
@@ -90,6 +91,7 @@ const initialize = () => {
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/create" component={Create} />
+            <Route exact path="/invalid-container/:name" component={InvalidContainer} />
             <Route exact path="/logs/:name" component={Build} />
           </Switch>
         </div>

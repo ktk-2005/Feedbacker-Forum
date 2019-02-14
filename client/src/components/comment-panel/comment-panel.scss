@@ -1,7 +1,7 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms-organisms/forms';
 
 @import '../survey-panel/survey-panel.scss';
 @import '../comment/comment.scss';
@@ -9,6 +9,7 @@
 $panel-min-width: 300px;
 
 .comment-panel {
+  @include display-and-animate;
   min-width: $panel-min-width;
   max-width: $panel-min-width;
   height: 100%;
@@ -23,6 +24,9 @@ $panel-min-width: 300px;
   border-left: solid $palette-light 1px;
   background-color: $palette-lighter;
   box-shadow: 0 0 10px $palette-light;
+  &.hidden {
+    @include hide-and-animate;
+  }
 }
 
 .panel-header {
@@ -48,4 +52,12 @@ $panel-min-width: 300px;
   // Make sure box-shadow is not cut-off
   padding: $baseline;
   margin: 0 (-$baseline);
+}
+
+.comment-form {
+  @extend %form;
+  margin-top: $baseline;
+  textarea {
+    margin-top: $spacer;
+  }
 }

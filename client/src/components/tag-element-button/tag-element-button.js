@@ -1,5 +1,4 @@
 import React from 'react'
-
 // Helpers
 import classNames from 'classnames/bind'
 import InlineSVG from 'svg-inline-react'
@@ -38,19 +37,23 @@ class TagElementButton extends React.Component {
   }
 
   render() {
-    const { active, selected } = this.props
+    const { active, selected, elementTagged, toggleTagElementState } = this.props
 
     return (
       <button
         type="button"
-        className={css('button', { active }, { selected })}
-        onClick={DomTagging.toggleMarkingMode}
+        className={css('button', { active, selected })}
+        onClick={() => {
+          DomTagging.setElementTaggedCallback(event => elementTagged(event))
+          DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
+          DomTagging.toggleMarkingMode()
+        }}
+        data-introduction-step="6"
       >
-        {active ? 'Cancel' : <InlineSVG src={TargetIcon} />}
+        {active ? 'Cancel' : <InlineSVG src={TargetIcon} raw />}
       </button>
     )
   }
 }
 
 export default TagElementButton
-

@@ -1,9 +1,33 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms-organisms/button';
+
+%target-icon {
+  @include reset-button();
+  display: flex;
+  cursor: pointer;
+
+  svg {
+    $target-icon-dimension: $icon-dimension-default / 2;
+    width: $target-icon-dimension;
+    height: $target-icon-dimension;
+    fill: $palette-dark;
+    transition: fill $transition-default-tail
+  }
+
+  &:hover svg {
+    fill: $palette-black;
+    transition: fill $transition-default-tail
+  }
+
+  &:focus svg {
+    fill: $palette-accent;
+    transition: fill $transition-default-tail
+  }
+}
 
 .comment {
+  position: relative; // For labels
   margin-top: $spacer;
   padding: $spacer;
   border-radius: $border-radius-default;
@@ -16,57 +40,60 @@
 
   .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+
+    // For labels
+    .name {
+      position: relative;
+      margin-bottom: $baseline;
+      z-index: 2;
+    }
+
+    // When name wraps => still at top but time & target centered
+    .time-target-container {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
   }
 
   .target-icon {
-    @include reset-button();
-    cursor: pointer;
-
-    svg {
-      $target-icon-dimension: $icon-dimension-default / 2;
-      width: $target-icon-dimension;
-      height: $target-icon-dimension;
-      fill: $palette-dark;
-      transition: fill $transition-default-tail
-    }
-
-    &:hover svg {
-      fill: $palette-black;
-      transition: fill $transition-default-tail
-    }
-
-    &:focus svg {
-      fill: $palette-accent;
-      transition: fill $transition-default-tail
-    }
+    @extend %target-icon;
   }
 
   .text {
     margin-top: $baseline;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   .timestamp {
-    align-self: flex-end;
+    margin-right: $baseline;
     font-size: $font-size-small;
   }
 }
 
-.expand-button-container {
+.actions-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   button {
-    @include button();
-    background: white;
-    @include shadow-outline(1px);
-    position: relative;
-    top: $baseline;
-    margin-right: $spacer;
+    @include reset-button();
+    margin: $spacer 1px 0 0; // 1px for shadow-outline fix
+    color: $palette-medium;
 
     &.hidden {
       display: none;
     }
+
+    &:only-of-type {
+      margin-left: auto;
+    }
   }
+}
+
+.name-label-container {
+  display: none; // TODO: NOT IN USE CURRENTLY
 }

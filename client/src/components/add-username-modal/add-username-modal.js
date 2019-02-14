@@ -1,0 +1,75 @@
+import React from 'react'
+import { connect } from 'react-redux'
+import ReactModal from 'react-modal'
+
+import classNames from 'classnames/bind'
+
+import { shadowModalRoot } from '../../shadowDomHelper'
+import apiCall from '../../api-call'
+import { setPersistData } from '../../actions'
+
+import styles from './add-username-modal.scss'
+
+const css = classNames.bind(styles)
+
+const mapStateToProps = (state) => {
+  const users = (state.persist || {}).users || {}
+  return { users }
+}
+
+class UsernameModal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: '',
+    }
+
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(event) {
+    this.setState({ value: event.target.value })
+  }
+
+  async handleSubmit(event) {
+    event.preventDefault()
+    event.nativeEvent.stopImmediatePropagation()
+    const name = this.state.value
+    await apiCall('PUT', '/users', { name })
+    this.setState({
+      value: '',
+    })
+    this.props.toggle()
+    this.props.dispatch(setPersistData({ name }))
+  }
+
+  render() {
+    return (
+      <ReactModal
+        className={css('username-modal')}
+        isOpen={this.props.isOpen}
+        parentSelector={shadowModalRoot}
+        overlayClassName={css('username-overlay')}
+        onRequestClose={this.props.toggle}
+        shouldFocusAfterRender
+        shouldCloseOnOverlayClick
+        shouldCloseOnEsc
+      >
+        <h4 className={css('header')}>Add Username</h4>
+        <div className={css('body')}>
+          <div className={css('text')}>
+              Add a username to be associated with your account on Feedbacker Forum.
+              Your name will be visible above all of your comments.
+          </div>
+        </div>
+        <form className={css('modal-form')} onSubmit={this.handleSubmit}>
+          <input type="text" onChange={this.handleChange} name="name" id="name" placeholder="New username..." />
+          <input className={css('add-button')} type="submit" value="Add username" />
+        </form>
+      </ReactModal>
+    )
+  }
+}
+
+export default connect(mapStateToProps)(UsernameModal)
