@@ -43,7 +43,7 @@
 
     &:after {
       // TODO: make backdrop blur effect when surveys merged
-      content: 'See comments on other pages';
+      content: 'Click to see comments on other pages';
       height: 100%;
       width: 100%;
       transition: opacity $transition-default-tail;
