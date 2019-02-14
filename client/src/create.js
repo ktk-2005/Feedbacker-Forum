@@ -60,7 +60,8 @@ class Create extends React.Component {
       name: inputValue('name').toLowerCase(),
       type: 'site',
     })
-    window.location.replace(`//${json.containerInfo.subdomain}.localhost:8080`)
+
+    window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}`)
   }
 
   containerForm() {
