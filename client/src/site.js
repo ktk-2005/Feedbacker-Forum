@@ -22,7 +22,7 @@ import apiCall from './api-call'
 import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
-import './scss/atoms/_toast.scss'
+import './scss/atoms-organisms/_toast.scss'
 import CreateRunner from './dev-components/create-runner'
 
 const css = classNames.bind(styles)
