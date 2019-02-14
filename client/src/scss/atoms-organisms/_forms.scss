@@ -1,0 +1,54 @@
+@import '../../scss/compulsory';
+
+%textarea {
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+  display: block;
+  min-height: 3em;
+  resize: vertical;
+  border: none;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 2px 10px $palette-shadow-default;
+  }
+}
+
+%generic-input {
+  display: block;
+  width: 100%;
+  margin-top: $baseline;
+  padding: $baseline $spacer;
+  border: none;
+  border-radius: $border-radius-default;
+  line-height: normal;
+  box-shadow: 0 2px 5px $palette-shadow-light;
+
+  &:focus {
+    outline: none;
+    @include shadow-outline($fade: $baseline);
+  }
+}
+
+%form {
+  display: flex;
+  flex-flow: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  justify-content: center;
+
+  textarea {
+    @extend %textarea;
+  }
+
+  input[type="submit"] {
+    @include button();
+    align-self: flex-end;
+    margin-top: $baseline;
+    padding: $baseline $spacer;
+    background: $palette-accent;
+    color: $palette-lighter;
+  }
+}

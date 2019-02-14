@@ -2,6 +2,7 @@ import * as R from 'ramda'
 
 let users = { }
 let userCallbackCounter = 0
+let userName = null
 const userChangeCallbacks = new Map()
 
 let userUpdateCallback = null
@@ -26,6 +27,14 @@ export function subscribeUpdateUsers(func) {
   userUpdateCallback = func
 }
 
+export function setUserName(name) {
+  userName = name
+}
+
+export function getUserName() {
+  return userName
+}
+
 export function updateUsers(users) {
   userUpdateCallback(users)
 }
@@ -39,6 +48,18 @@ export function setUsers(value) {
 
 export function getUsers() {
   return users
+}
+
+export function waitForUsers() {
+  return new Promise((resolve) => {
+    if (!R.isEmpty(users)) resolve(users)
+    else {
+      const token = subscribeUsers((users) => {
+        unsubscribeUsers(token)
+        resolve(users)
+      })
+    }
+  })
 }
 
 // Gets called onKeyDown from textArea of form element, if keys pressed are ctrl+enter or

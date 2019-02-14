@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
-// Styles
-import styles from './reactions.scss'
 import apiCall from '../../api-call'
 import { loadComments } from '../../actions'
+// Styles
+import styles from './reactions.scss'
 
 const css = classNames.bind(styles)
 

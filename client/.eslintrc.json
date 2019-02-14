@@ -5,6 +5,7 @@
     "consistent-return": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/no-autofocus": "off",
     "linebreak-style": "off",
     "no-multiple-empty-lines": "off",
     "semi": ["error", "never"],
@@ -16,10 +17,12 @@
     "react/destructuring-assignment": "off",
     "prefer-destructuring": ["error", {"object": true, "array": false}],
     "react/no-multi-comp": "off",
+    "react/no-array-index-key": "off",
     "no-multi-spaces": "off",
     "no-unused-vars": "warn",
     "no-shadow": "off",
     "no-plusplus": ["off"],
+    "no-nested-ternary": ["off"],
     "no-param-reassign": ["error", { "props": false }],
     "no-else-return": "off",
     "comma-dangle": ["error", {
@@ -40,6 +43,7 @@
       "error",
       "consistent"
     ],
+    "no-else-return": "off",
     "method-can-be-static": "off"
   },
 

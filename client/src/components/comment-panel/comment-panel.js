@@ -20,8 +20,6 @@ import commentPanelStyles from './comment-panel.scss'
 // Assets
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
-
-
 const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = state => ({
