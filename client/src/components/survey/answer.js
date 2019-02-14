@@ -150,38 +150,44 @@ class Answer extends React.Component {
               </form>
             )
           }
-          {!this.props.users.name
-            ? (
-              <UsernameModal
-                isOpen={this.state.usernameModalIsOpen}
-                toggle={this.toggleUsernameModal}
-              />
-            )
-            : null}
+          {
+            !this.props.users.name
+              ? (
+                <UsernameModal
+                  isOpen={this.state.usernameModalIsOpen}
+                  toggle={this.toggleUsernameModal}
+                />
+              )
+              : null
+          }
         </>
       )
     } else if (this.props.question.type === 'option') {
       const { option } = this.state
       return (
         <div className={css('options')}>
-          {this.props.question.options.map((value, index) => (
-            <button
-              key={value}
-              type="button"
-              className={css('option', option.answered && option.answer === index ? 'chosen' : '')}
-              onClick={() => this.handleOptionSubmit(index)}
-            >
-              {value}
-            </button>
-          ))}
-          {!this.props.users.name
-            ? (
-              <UsernameModal
-                isOpen={this.state.usernameModalIsOpen}
-                toggle={this.toggleUsernameModal}
-              />
-            )
-            : null}
+          {
+            this.props.question.options.map((value, index) => (
+              <button
+                key={value}
+                type="button"
+                className={css('option', option.answered && option.answer === index ? 'chosen' : '')}
+                onClick={() => this.handleOptionSubmit(index)}
+              >
+                { value }
+              </button>
+            ))
+          }
+          {
+            !this.props.users.name
+              ? (
+                <UsernameModal
+                  isOpen={this.state.usernameModalIsOpen}
+                  toggle={this.toggleUsernameModal}
+                />
+              )
+              : null
+          }
         </div>
       )
     } else {
