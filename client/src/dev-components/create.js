@@ -124,7 +124,11 @@ class Create extends React.Component {
           Name
           <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
         </label>
-        <label htmlFor="port">
+        <label
+          htmlFor="port"
+          data-tooltip="Port number depends on the application type eg. node.js runs on  3000"
+          data-tooltip-width="200px"
+        >
           Port
           <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
         </label>

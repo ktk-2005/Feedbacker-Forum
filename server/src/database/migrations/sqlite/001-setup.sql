@@ -37,6 +37,7 @@ CREATE TABLE comments (
     text      TEXT NOT NULL,
     user_id   CHAR(8) NOT NULL,
     thread_id CHAR(8) NOT NULL,
+    anonymous INTEGER,
     blob      TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (thread_id) REFERENCES threads(id) ON DELETE CASCADE
