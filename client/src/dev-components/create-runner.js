@@ -28,10 +28,12 @@ class CreateRunner extends React.Component {
 
   componentDidMount() {
     this.userSub = subscribeUsers(this.getInstanceRunnersFromServer)
+    this.timer = setInterval(this.getInstanceRunnersFromServer, 5000)
   }
 
   componentWillUnmount() {
     unsubscribeUsers(this.userSub)
+    clearInterval(this.timer)
   }
 
   async getInstanceRunnersFromServer() {
