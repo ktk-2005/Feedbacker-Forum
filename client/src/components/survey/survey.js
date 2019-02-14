@@ -2,8 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 // Helpers
 import classNames from 'classnames/bind'
+import * as R from 'ramda'
 import apiCall from '../../api-call'
 import { loadQuestions } from '../../actions'
+import { fakeQuestions } from './fake-survey-data'
 // Components
 import Question from './question'
 import Answer from './answer'
@@ -12,9 +14,14 @@ import styles from './survey.scss'
 
 const css = classNames.bind(styles)
 
-const mapStateToProps = state => ({
-  questions: state.questions,
-})
+const mapStateToProps = (state) => {
+  const persist = state.persist || {}
+  return ({
+    questions: state.questions,
+    onboarding: !R.isEmpty(persist.users) && !persist.introCompleted,
+    dev: !R.isEmpty(persist.users) && state.role === 'dev',
+  })
+}
 
 class Survey extends React.Component {
   constructor(props) {
@@ -22,6 +29,7 @@ class Survey extends React.Component {
 
     this.nextQuestion = this.nextQuestion.bind(this)
     this.previousQuestion = this.previousQuestion.bind(this)
+    this.checkOnboarding = this.checkOnboarding.bind(this)
 
     this.state = {
       currentIndex: 0,
@@ -47,9 +55,22 @@ class Survey extends React.Component {
     }))
   }
 
+  checkOnboarding() {
+    let { currentIndex } = this.state
+    let { questions } = this.props
+    const { onboarding, dev } = this.props
+    if (onboarding && !dev) {
+      currentIndex = 0
+      questions = fakeQuestions
+    }
+    return {
+      currentIndex,
+      questions,
+    }
+  }
+
   buttons() {
-    const { currentIndex } = this.state
-    const { questions } = this.props
+    const { currentIndex, questions } = this.checkOnboarding()
     const hasNext = currentIndex < questions.length - 1
     const hasPrevious = currentIndex > 0
     return (
@@ -73,8 +94,7 @@ class Survey extends React.Component {
   }
 
   render() {
-    const { currentIndex } = this.state
-    const { questions } = this.props
+    const { currentIndex, questions } = this.checkOnboarding()
     if (questions.length > 0) {
       const progressPercents = Math.round(100 * (currentIndex + 1) / questions.length)
       return (

@@ -124,6 +124,7 @@ class PostgresDatabase {
 
   Note: Does not perform prepared statement '?' to '$1' replacement!
    */
+
   exec(str, values) {
     return this.db.multi(str, values)
   }
