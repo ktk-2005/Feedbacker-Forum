@@ -8,11 +8,13 @@ import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
 import RouteContainer from '../route-container/route-container'
+import UsernameModal from '../add-username-modal/add-username-modal'
 
 // Components
 import Thread from '../thread/thread'
 import apiCall from '../../api-call'
 import SubmitField from '../submit-field/submit-field'
+import ConfirmModal from '../confirm-modal/confirm-modal'
 // Styles
 import commentPanelStyles from './comment-panel.scss'
 // Assets
@@ -25,6 +27,7 @@ const css = classNames.bind(commentPanelStyles)
 const mapStateToProps = state => ({
   comments: state.comments,
   users: (state.persist || {}).users || {},
+  name: (state.persist || {}).name,
   role: state.role,
 })
 
@@ -32,14 +35,16 @@ class CommentPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      usernameModalIsOpen: false,
+      commentToDelete: {},
       currentThread: '',
-      isHidden: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleClick = this.handleClick.bind(this)
+    this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
+    this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
   }
@@ -73,15 +78,21 @@ class CommentPanel extends React.Component {
       blob: getBlob(),
       threadId: threadId || null,
     })
+
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
     await this.fetchComments()
+
+    if (!this.props.name) {
+      await this.toggleUsernameModal()
+    } else {
+      await this.fetchComments()
+    }
   }
 
-  handleClick() {
-    this.setState(state => ({
-      isHidden: !state.isHidden,
-    }))
+  async toggleUsernameModal() {
+    if (this.state.usernameModalIsOpen) await this.fetchComments()
+    this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
   async fetchComments() {
@@ -90,9 +101,23 @@ class CommentPanel extends React.Component {
     await this.scrollToBottom()
   }
 
-  async deleteComment(comment) {
-    if (Object.keys(this.props.users)[0] === comment.userId) {
-      await apiCall('DELETE', '/comments', { commentId: comment.id })
+  toggleDeleteModal(comment) {
+    this.setState((prevState) => {
+      if (R.isEmpty(prevState.commentToDelete)) {
+        return { commentToDelete: comment }
+      }
+      return { commentToDelete: {} }
+    })
+  }
+
+  async deleteComment() {
+    const { commentToDelete: comment } = this.state
+    if (Object.keys(this.props.users)[0] === comment.userId || this.props.role === 'dev') {
+      await apiCall(
+        'DELETE',
+        '/comments',
+        { commentId: comment.id, commentUser: comment.userId }
+      )
       await this.fetchComments()
     }
   }
@@ -118,8 +143,8 @@ class CommentPanel extends React.Component {
         }
       }
     })
-    const threadArray = groupByThread(Object.values(commentsOfRoute))
-    const sortbyTime = R.sortBy(([id, comments]) => R.reduce(
+    const threadArray = groupByThread(Object.values(this.props.comments))
+    const sortbyTime = R.sortBy(([comments]) => R.reduce(
       R.minBy(comment => comment.time),
       { time: '9999-99-99 99:99:99' },
       comments
@@ -139,7 +164,7 @@ class CommentPanel extends React.Component {
                 handleSubmit={this.handleSubmit}
                 updateCurrentThread={this.updateCurrentThread}
                 currentThread={this.state.currentThread}
-                deleteComment={this.deleteComment}
+                deleteComment={this.toggleDeleteModal}
                 toggleTagElementState={this.props.toggleTagElementState}
               />),
             sortedThreads
@@ -150,14 +175,20 @@ class CommentPanel extends React.Component {
   }
 
   render() {
+    const { hidden, onClick } = this.props
+
     return (
-      <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
+      <div
+        className={css('panel-container', 'comment-panel', { hidden })}
+        data-introduction-step="5"
+      >
         <div className={css('panel-header')}>
           <h5 className={css('heading')}>Comments</h5>
           <button
             type="button"
             className={css('close-button')}
-            onClick={this.handleClick}
+            onClick={onClick}
+            data-introduction-step-close="5"
           >
             <InlineSVG src={CloseIcon} />
           </button>
@@ -169,6 +200,21 @@ class CommentPanel extends React.Component {
             handleSubmit={this.handleSubmit}
             threadId=""
             toggleTagElementState={this.props.toggleTagElementState}
+          />
+          {
+            !this.props.name ? (
+              <UsernameModal
+                isOpen={this.state.usernameModalIsOpen}
+                toggle={this.toggleUsernameModal}
+              />
+            )
+              : null
+          }
+          <ConfirmModal
+            text="Are you sure you want to delete this comment?"
+            action={this.deleteComment}
+            isOpen={!R.isEmpty(this.state.commentToDelete)}
+            toggle={this.toggleDeleteModal}
           />
         </div>
       </div>

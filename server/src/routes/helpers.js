@@ -87,7 +87,9 @@ export async function reqUser(req) {
 
   const keys = Object.keys(verifiedUsers)
   if (keys.length === 0) {
-    throw new HttpError(401, 'No valid user found')
+    throw new HttpError(401, 'No valid user found', null, {
+      shouldRetryAuth: true,
+    })
   }
 
   return {

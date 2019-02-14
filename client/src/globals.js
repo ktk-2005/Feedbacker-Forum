@@ -4,6 +4,8 @@ let users = { }
 let userCallbackCounter = 0
 const userChangeCallbacks = new Map()
 
+let userUpdateCallback = null
+
 // Subscribe `func(users)` to be called when users are loaded or created
 // Returns an unsubscribe token
 export function subscribeUsers(func) {
@@ -20,6 +22,14 @@ export function unsubscribeUsers(token) {
   userChangeCallbacks.delete(token)
 }
 
+export function subscribeUpdateUsers(func) {
+  userUpdateCallback = func
+}
+
+export function updateUsers(users) {
+  userUpdateCallback(users)
+}
+
 export function setUsers(value) {
   if (!R.equals(users, value)) {
     users = value
@@ -31,3 +41,10 @@ export function getUsers() {
   return users
 }
 
+// Gets called onKeyDown from textArea of form element, if keys pressed are ctrl+enter or
+//  metaKey+enter, clicks parentelements input element which has attribute type="submit"
+export function keyPressSubmit(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.path[1].querySelector('input[type="submit"]').click()
+  }
+}

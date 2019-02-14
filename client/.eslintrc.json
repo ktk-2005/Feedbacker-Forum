@@ -21,6 +21,7 @@
     "no-shadow": "off",
     "no-plusplus": ["off"],
     "no-param-reassign": ["error", { "props": false }],
+    "no-else-return": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
@@ -39,6 +40,7 @@
       "error",
       "consistent"
     ]
+    "method-can-be-static": "off"
   },
 
   "globals": {

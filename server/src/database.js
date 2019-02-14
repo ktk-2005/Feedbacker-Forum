@@ -29,12 +29,15 @@ export async function getComments(container) {
     reactions.time      AS reaction_time,
     reactions.emoji     AS reaction_emoji,
     reactions.user_id   AS reaction_user_id,
-    reactions.comment_id AS reaction_comment_id
+    reactions.comment_id AS reaction_comment_id,
+    users.name          AS username
     FROM comments
     LEFT JOIN reactions
     ON comments.id = reactions.comment_id
     INNER JOIN threads
     ON comments.thread_id = threads.id
+    INNER JOIN users
+    ON comments.user_id = users.id
     WHERE threads.container_id = ?
     `, [container])
 }
@@ -73,6 +76,8 @@ export async function getCommentReactions(values = []) { return db.query('SELECT
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
+export async function addUsername({ id, name, secret }) { return db.query('UPDATE users SET name=? WHERE id=? AND secret=?', [name, id, secret]) }
+
 export async function addContainer({
   id, subdomain, userId, blob, url,
 }) {
@@ -98,7 +103,7 @@ export async function listContainersByUser(values = []) {
 
 export async function removeContainer({
   id,
-}) { return db.run('DELETE FROM containers WHERE id=?', [id]) }
+}) { return db.run('DELETE FROM containers WHERE subdomain=?', [id]) }
 
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])

@@ -5,6 +5,7 @@
 
 .sub-thread {
   margin-bottom: $spacer;
+
   > * {
     margin-left: $spacer;
     width: calc(100% - #{$spacer});

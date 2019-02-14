@@ -3,48 +3,31 @@
 @import '../../scss/mixins';
 @import '../../scss/atoms/button';
 
+@import '../comment/comment';
+
 .button {
-  @include button(100%);
-  cursor: pointer;
-  margin-top: $spacer;
+  @extend %target-icon;
+  @include shadow-outline();
   padding: $baseline;
-  box-shadow: 0 2px 5px $palette-medium;
+  border-radius: 100%;
   background: $palette-white;
+  color: transparent;
+  cursor: pointer;
+
   &.active {
-    visibility: visible;
     @include button(2px);
-    color: $palette-dark;
+    visibility: visible;
+    box-shadow: 0 2px 5px $palette-medium;
+    padding: $baseline $spacer;
     background: $palette-accent;
-    box-shadow: 0 3px 5px $palette-light;
-
+    color: $palette-white;
   }
+
   &.selected {
-    background: $palette-medium;
-  }
-  i {
-    display: block;
-    width: $icon-dimension-default;
-    height: $icon-dimension-default;
-    margin-left: auto;
-    margin-right: auto;
+    background: $palette-accent;
+
     svg {
-      $target-icon-dimension: $icon-dimension-default;
-      width: $target-icon-dimension;
-      height: $target-icon-dimension;
-      margin-left: auto;
-      margin-right: auto;
-      fill: $palette-dark;
-      transition: fill $transition-default-tail
-    }
-
-    &:hover svg {
-      fill: $palette-black;
-      transition: fill $transition-default-tail
-    }
-
-    &:focus svg {
-      fill: $palette-accent;
-      transition: fill $transition-default-tail
+      fill: $palette-white;
     }
   }
 }
