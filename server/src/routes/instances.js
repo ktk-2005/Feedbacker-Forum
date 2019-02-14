@@ -1,15 +1,13 @@
 import express from 'express'
-import * as R from 'ramda'
 import {
   // getRunningContainers,
-  getRunningContainersByUser,
   createNewContainer,
   startContainer,
   stopContainer,
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { confirmContainerOwnership } from '../database'
+import { resolveContainer, addSite, listContainersByUser, confirmContainerOwnership } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -67,7 +65,7 @@ router.post('/new', catchErrors(async (req, res) => {
   if (!url) {
     throw new HttpError(400, 'No git url given')
   }
-  if (!version) {
+  if (!version && type !== 'site') {
     throw new HttpError(400, 'No git version given')
   }
   if (name.length < 3 || name.length > 20) {
@@ -77,13 +75,22 @@ router.post('/new', catchErrors(async (req, res) => {
     throw new HttpError(400, `Bad container name: ${name}`)
   }
 
-  await attempt(async () => {
-    const suffixedName = `${name}-${uuid(5)}`
-    const containerInfo = await createNewContainer(
-      url, version, type, suffixedName, port, userId
-    )
+  if (type === 'site') {
+    const subdomain = `${name}-${uuid(5)}`
+    const id = uuid(8)
+    const containerInfo = await addSite({
+      id, subdomain, userId, url,
+    })
     res.json({ containerInfo })
-  })
+  } else {
+    await attempt(async () => {
+      const suffixedName = `${name}-${uuid(5)}`
+      const containerInfo = await createNewContainer(
+        url, version, type, suffixedName, port, userId
+      )
+      res.json({ containerInfo })
+    })
+  }
 }))
 
 // @api POST /api/instances/stop

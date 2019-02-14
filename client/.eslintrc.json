@@ -39,6 +39,10 @@
     "class-methods-use-this": "off",
     "no-continue": "off",
     "object-curly-newline": "off",
+    "quote-props": [
+      "error",
+      "consistent"
+    ],
     "no-else-return": "off",
     "method-can-be-static": "off"
   },
