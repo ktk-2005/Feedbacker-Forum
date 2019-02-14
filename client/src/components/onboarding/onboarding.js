@@ -222,7 +222,7 @@ class Onboarding extends React.Component {
         onAfterOpen={() => element && element.focus()}
       >
         <div
-          className={css('full-modal')}
+          className={css('event-modal')}
           ref={(el) => { element = el }}
           tabIndex="-1"
           onKeyDown={this.keyTraverse}
