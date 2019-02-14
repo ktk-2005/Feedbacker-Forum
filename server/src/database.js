@@ -114,7 +114,12 @@ export async function removeQuestion({ id }) { return db.run('DELETE FROM questi
 
 export async function getQuestionHighestOrder(container) {
   const row = await db.query('SELECT MAX(order_id) FROM questions WHERE container_id = ?', [container])
-  return row[0]['MAX(order_id)'] || 0
+  try {
+    return Object.values(row[0])[0] || 0
+  } catch (error) {
+    console.error('Failed to get largest question ID')
+    return 0
+  }
 }
 
 export async function reorderQuestions(order) {

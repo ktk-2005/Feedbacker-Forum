@@ -120,12 +120,12 @@ class PostgresDatabase {
   }
   /*
   Runs all SQL queries in the parameter string. Can be used for running migrations
-  from a file or other grouped statements in the same string
-   */
+  from a file or other grouped statements in the same string.
 
+  Note: Does not perform prepared statement '?' to '$1' replacement!
+   */
   exec(str, values) {
-    const preparedString = prepStatement(str)
-    return this.db.multi(preparedString, values)
+    return this.db.multi(str, values)
   }
   /*
   For using delete statements. Returns the number of rows affected.
