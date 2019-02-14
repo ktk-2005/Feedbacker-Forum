@@ -12,9 +12,9 @@ import {
 } from 'react-router-dom'
 
 import { setupPersist } from './persist'
-import Dashboard from './dashboard-view'
-import Create from './create'
-import Build from './build-view'
+import Dashboard from './dev-components/dashboard-view'
+import Create from './dev-components/create'
+import Build from './dev-components/build-view'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
 import apiCall from './api-call'
@@ -22,7 +22,7 @@ import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
 import './scss/atoms/_toast.scss'
-import CreateRunner from './create-runner'
+import CreateRunner from './dev-components/create-runner'
 
 const css = classNames.bind(styles)
 

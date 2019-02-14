@@ -2,11 +2,11 @@ import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
-import { shadowDocument } from './shadowDomHelper'
-import apiCall from './api-call'
-import { subscribeUsers, unsubscribeUsers } from './globals'
+import { shadowDocument } from '../shadowDomHelper'
+import apiCall from '../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../globals'
 // Styles
-import styles from './scss/views/create.scss'
+import styles from '../scss/views/create.scss'
 
 const css = classNames.bind(styles)
 

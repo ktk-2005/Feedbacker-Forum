@@ -6,7 +6,7 @@ import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 // External libraries & helpers
 import * as R from 'ramda'
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
@@ -14,16 +14,17 @@ import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
 import { prepareReactRoot } from './shadowDomHelper'
 
 // Components
-import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
-import SurveyPanel from './components/survey-panel/survey-panel'
-import OpenCommentPanelButton from './components/open-comment-panel-button/open-comment-panel-button'
-import CommentPanel from './components/comment-panel/comment-panel'
-import Onboarding from './components/onboarding/onboarding'
+import OpenSurveyPanelButton from './feedbacker-components/open-survey-panel-button/open-survey-panel-button'
+import SurveyPanel from './feedbacker-components/survey-panel/survey-panel'
+import OpenCommentPanelButton from './feedbacker-components/open-comment-panel-button/open-comment-panel-button'
+import CommentPanel from './feedbacker-components/comment-panel/comment-panel'
+import Onboarding from './feedbacker-components/onboarding/onboarding'
 
 // Internal js
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
+import './scss/atoms/_toast.scss'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)
