@@ -2,7 +2,22 @@
 @import '../colors';
 @import '../typography';
 
-$rt-z-index: map-get($z-index-levels, 3);
+$rt-z-index: map-get($z-index-levels, 5);
+$rt-font-family: $font-default;
+$rt-color-default: $palette-white;
 $rt-color-error: $palette-error-dark;
 
 @import '../../../node_modules/react-toastify/scss/main.scss';
+
+.#{$rt-namespace}__toast-container {
+  color: $palette-dark;
+}
+
+.#{$rt-namespace}__toast {
+  &--default {
+    color: $palette-dark;
+  }
+  &--error {
+    color: $palette-white
+  }
+}
