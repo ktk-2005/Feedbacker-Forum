@@ -47,10 +47,10 @@ const clickElementOpen = (step) => {
 }
 
 const makeContent = (header, paragraph) => (
-    <>
-      <h3>{header}</h3>
-      <p>{paragraph}</p>
-    </>
+  <article>
+    <h3>{header}</h3>
+    <p>{paragraph}</p>
+  </article>
 )
 
 class Onboarding extends React.Component {
@@ -240,12 +240,14 @@ class Onboarding extends React.Component {
           onClick={this.handleCloseIntro}
         >Close tutorial
         </button>
-        <button
-          type="button"
-          onClick={this.handleCloseIntro}
-          className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
-        >skip
-        </button>
+        <div className={css('skip-button-container')}>
+          <button
+            type="button"
+            onClick={this.handleCloseIntro}
+            className={step === final ? css('skip-button', 'hidden') : css('skip-button')}
+          >skip
+          </button>
+        </div>
       </ReactModal>
     )
   }

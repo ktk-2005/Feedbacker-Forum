@@ -12,8 +12,8 @@ $padding: $spacer * 2;
   display: flex;
   flex-flow: column;
   justify-content: space-around;
-  width: 30vw;
-  height: 40vh;
+  min-width: 30vw;
+  max-width: 30vw; // TODO: responsive
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
   background-color: $palette-lighter;
@@ -29,6 +29,7 @@ $padding: $spacer * 2;
   justify-content: flex-end;
   align-items: center;
   width: auto;
+  margin: 0;
   border-top-right-radius: $border-radius-default;
   border-top-left-radius: $border-radius-default;
   background-color: $palette-lighter;
@@ -57,6 +58,10 @@ $padding: $spacer * 2;
   }
 }
 
+.skip-button-container {
+  display: flex;
+  justify-content: center;
+}
 
 .skip-button {
   @include button();
@@ -74,6 +79,7 @@ $padding: $spacer * 2;
 }
 
 .hidden {
+  height: 0;
   visibility: hidden;
   opacity: 0;
 }
@@ -81,7 +87,6 @@ $padding: $spacer * 2;
 .modal-content {
   display: flex;
   flex-flow: column;
-  justify-content: center;
   flex: 1;
   padding: 0 $padding;
 }
