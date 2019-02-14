@@ -35,7 +35,6 @@ class UsernameModal extends React.Component {
   async handleSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    const { users } = this.props
     const name = this.state.value
     await apiCall('PUT', '/users', { name })
     this.setState({
@@ -52,17 +51,14 @@ class UsernameModal extends React.Component {
         isOpen={this.props.isOpen}
         parentSelector={shadowModalRoot}
         overlayClassName={css('username-overlay')}
-        onRequestClose={this.props.toggle}
         shouldFocusAfterRender
-        shouldCloseOnOverlayClick
-        shouldCloseOnEsc
       >
-        <h4 className={css('header')}>Add Username</h4>
-        <div className={css('body')}>
-          <div className={css('text')}>
-              Add a username to be associated with your account on Feedbacker Forum.
-              Your name will be visible above all of your comments.
-          </div>
+        <div className={css('content')}>
+          <h3 className={css('header')}>Add Username</h3>
+          <p className={css('text')}>
+              Your name will be visible above all of your comments and survey answers.
+              You can also later decide to comment anonymously.
+          </p>
         </div>
         <form className={css('modal-form')} onSubmit={this.handleSubmit}>
           <input type="text" onChange={this.handleChange} name="name" id="name" placeholder="New username..." />
