@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
 import UsernameModal from '../add-username-modal/add-username-modal'
+import { keyPressSubmit } from '../../globals'
 // Styles
 import styles from './survey.scss'
 
@@ -138,6 +139,7 @@ class Answer extends React.Component {
                   value={this.state.value}
                   onChange={this.handleChange}
                   placeholder="Write answer..."
+                  onKeyDown={keyPressSubmit}
                 />
                 <input
                   className={css('submit-text-answer')}
