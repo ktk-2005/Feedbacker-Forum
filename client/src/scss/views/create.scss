@@ -51,6 +51,7 @@
   select {
     background: $palette-white;
     appearance: none;
+    margin-right: $baseline;
   }
 
   button[type="submit"] {

@@ -46,6 +46,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  padding: $baseline $spacer;
   $border: 1px solid $palette-light;
   border: $border;
   border-bottom: 0;
@@ -84,7 +85,6 @@
 
 .runner-content {
   display: flex;
-  padding: $spacer;
   flex: 1;
 
   &.delete {
