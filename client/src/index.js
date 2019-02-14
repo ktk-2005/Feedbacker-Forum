@@ -180,6 +180,13 @@ class MainView extends React.Component {
   }
 }
 
+const getComments = () => {
+  apiCall('GET', '/comments')
+    .then((comments) => {
+      store.dispatch(loadComments(comments))
+    })
+}
+
 const initializedKey = '!!feedbacker_forum_initialized!!'
 
 const initialize = () => {
@@ -225,6 +232,8 @@ const initialize = () => {
 
   const savePersist = setupPersist(loadPersist)
 
+  getComments()
+
   store.subscribe(() => {
     const persist = store.getState().persist || { }
     savePersist(persist)
@@ -252,6 +261,16 @@ const initialize = () => {
     root
   )
 }
+
+let route = window.location.pathname
+const updateComments = () => {
+  if (route !== window.location.pathname) {
+    getComments()
+  }
+  route = window.location.pathname
+}
+
+setInterval(updateComments, 100)
 
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
