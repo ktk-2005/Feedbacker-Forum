@@ -125,10 +125,6 @@ class CommentPanel extends React.Component {
     if (el) el.scrollTop = el.scrollHeight
   }
 
-  handleRouteContainerClick() {
-
-  }
-
   threadContainer() {
     const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
       this.props.comments)
@@ -142,7 +138,7 @@ class CommentPanel extends React.Component {
       }
     })
     const threadArray = groupByThread(Object.values(commentsOfRoute))
-    const sortbyTime = R.sortBy(([id, comments]) => R.reduce(
+    const sortbyTime = R.sortBy(([comments]) => R.reduce(
       R.minBy(comment => comment.time),
       { time: '9999-99-99 99:99:99' },
       comments
