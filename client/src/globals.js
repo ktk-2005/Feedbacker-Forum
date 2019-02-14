@@ -66,11 +66,11 @@ export function waitForUsers() {
 
 export function showCookieToast(dispatch) {
   const message = 'COOKIES'
-  const cookieToastId = toast.info(message, {
+  toast.info(message, {
     autoClose: false,
     onClose: () => {
       dispatch(setPersistData({ acceptCookies: true }))
-    }
+    },
   })
 }
 
