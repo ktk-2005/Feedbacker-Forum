@@ -31,7 +31,7 @@ export function setUserName(name) {
   userName = name
 }
 
-export function getUserName(name) {
+export function getUserName() {
   return userName
 }
 

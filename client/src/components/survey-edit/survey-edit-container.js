@@ -174,8 +174,7 @@ export default class SurveyEditContainer extends React.Component {
     }
   }
 
-  // TODO: id unnecessary?
-  editCancel(id) {
+  editCancel() {
     this.setState(({ questions }) => ({
       questions: questions.filter(question => question.id !== PENDING_ID),
       edit: {},

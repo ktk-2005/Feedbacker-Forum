@@ -7,7 +7,7 @@ async function retryAuth() {
   const name = getUserName()
   // eslint-disable-next-line no-use-before-define
   const { id, secret } = await apiCall('POST', '/users',
-    { name: name }, { noRetryAuth: true, noUser: true })
+    { name }, { noRetryAuth: true, noUser: true })
   console.log('Regenerated new token from API', { [id]: secret })
   return { id, secret }
 }
