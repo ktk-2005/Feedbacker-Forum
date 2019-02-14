@@ -70,6 +70,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--delay'], {
+      help: 'Milliseconds to delay server responses',
+      type: 'int',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }

@@ -37,6 +37,16 @@ Authentication is done using the standard `Authorization` header with a non-stan
 
 @api /api/questions
 
+@api /api/questions/:id
+
+@api /api/questions/order
+
+### Answers
+
+@api /api/answers
+
+@api /api/answers/:questionId
+
 ## Reactions
 
 @api /api/reactions

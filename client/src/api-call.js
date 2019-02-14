@@ -1,12 +1,14 @@
 import { toast } from 'react-toastify'
 import { apiUrl } from './meta/env.meta'
-import { getUsers, subscribeUsers, unsubscribeUsers, updateUsers } from './globals'
+import { waitForUsers, subscribeUsers, unsubscribeUsers, updateUsers, getUserName } from './globals'
 
 let retryAuthPromise = null
 
 async function retryAuth() {
+  const name = getUserName()
   // eslint-disable-next-line no-use-before-define
-  const { id, secret } = await apiCall('POST', '/users')
+  const { id, secret } = await apiCall('POST', '/users',
+    { name }, { noRetryAuth: true, noUser: true })
   console.log('Regenerated new token from API', { [id]: secret })
   return { id, secret }
 }
@@ -44,13 +46,14 @@ function queueRetryAuth() {
 // opts: Extra options for the function
 //   - rawResponse: Return the raw response from `fetch()` with no JSON conversion or
 //                  automatic error handling
+//   - noUser: If set don't attach user header
 //   - noRetryAuth: Do not attempt to retry authentication
 //
 // Example usage:
 //   const { id } = await apiCall('POST', '/comments', { text: 'My comment!' })
 export default async function apiCall(method, endpoint, body = null, opts = { }) {
   const url = apiUrl + endpoint
-  const users = getUsers()
+  const users = opts.noUser ? {} : await waitForUsers()
   const authToken = btoa(JSON.stringify(users))
 
   const args = {
@@ -90,6 +93,7 @@ export default async function apiCall(method, endpoint, body = null, opts = { })
   if (opts.rawResponse) return response
 
   const json = await response.json()
+
   if (response.status >= 400 && response.status <= 599) {
     const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
     console.error(message)
