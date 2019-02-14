@@ -74,6 +74,13 @@
   @extend %content;
 }
 
+.event-modal {
+  outline: none;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+}
+
 .overlay {
   @extend %overlay;
   &.first {

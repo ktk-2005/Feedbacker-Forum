@@ -66,6 +66,8 @@ export function waitForUsers() {
 //  metaKey+enter, clicks parentelements input element which has attribute type="submit"
 export function keyPressSubmit(e) {
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-    e.path[1].querySelector('input[type="submit"]').click()
+    const parent = e.target.parentNode
+    const submit = parent.querySelector('input[type="submit"]')
+    if (submit) submit.click()
   }
 }
