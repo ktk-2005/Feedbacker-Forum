@@ -62,7 +62,7 @@ class RouteContainer extends React.Component {
           </p>
         ))}
         <button type="button" onClick={this.hide}>
-          hide
+          Collapse
         </button>
       </div>
     )

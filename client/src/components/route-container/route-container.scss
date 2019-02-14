@@ -10,7 +10,6 @@
   position: relative;
   max-height: 500px; // Some hardcoded value needed
   transition: $transition-default-all;
-  overflow: scroll;
 
   &:after {
     content: '';
@@ -27,9 +26,20 @@
     opacity: 0;
   }
 
+  * > {
+    opacity: 1;
+  }
+
   &.hidden {
-    max-height: $spacer * 3; // 2 for padding, 1 for line
-    transition: $transition-default-all;
+    $height: $spacer * 3; // 2 for padding, 1 for line
+    min-height: $height;
+    max-height: $height;
+
+    > * {
+      opacity: 0;
+      display: none;
+      transition: opacity ease-in 0.5s;
+    }
 
     &:after {
       // TODO: make backdrop blur effect when surveys merged
@@ -40,5 +50,18 @@
       opacity: 1;
       cursor: pointer;
     }
+  }
+
+  button {
+    // TODO: refactor to @extend %anchor-button;
+    @include button();
+    display: inline-block;
+    text-decoration: none;
+    align-self: end;
+    margin-bottom: $baseline;
+    padding: $baseline $spacer;
+    box-shadow: 0 1px 5px $palette-shadow-light;
+    color: $palette-dark;
+    background: $palette-white;
   }
 }
