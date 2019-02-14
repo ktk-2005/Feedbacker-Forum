@@ -1,5 +1,39 @@
 import { apiUrl } from './meta/env.meta'
-import { getUsers } from './globals'
+import { waitForUsers, subscribeUsers, unsubscribeUsers, updateUsers, getUserName } from './globals'
+
+let retryAuthPromise = null
+
+async function retryAuth() {
+  const name = getUserName()
+  // eslint-disable-next-line no-use-before-define
+  const { id, secret } = await apiCall('POST', '/users',
+    { name }, { noRetryAuth: true, noUser: true })
+  console.log('Regenerated new token from API', { [id]: secret })
+  return { id, secret }
+}
+
+function queueRetryAuth() {
+  return new Promise((resolve, reject) => {
+    console.log('Authentication failed, trying to regenerate user')
+    window.setTimeout(async () => {
+      let newUser = { }
+      const token = subscribeUsers((users) => {
+        if (newUser.id && users.hasOwnProperty(newUser.id)) {
+          unsubscribeUsers(token)
+          resolve()
+        }
+      })
+
+      try {
+        newUser = await retryAuth()
+      } catch (error) {
+        reject(error)
+      }
+
+      updateUsers({ [newUser.id]: newUser.secret })
+    }, 500)
+  })
+}
 
 // API call wrapper, use this to communicate with the API server. This wrapper
 // adds `Authentication` and `X-Feedback-Host` headers to provide context for the server.
@@ -11,12 +45,14 @@ import { getUsers } from './globals'
 // opts: Extra options for the function
 //   - rawResponse: Return the raw response from `fetch()` with no JSON conversion or
 //                  automatic error handling
+//   - noUser: If set don't attach user header
+//   - noRetryAuth: Do not attempt to retry authentication
 //
 // Example usage:
 //   const { id } = await apiCall('POST', '/comments', { text: 'My comment!' })
-export default async function (method, endpoint, body = null, opts = { }) {
+export default async function apiCall(method, endpoint, body = null, opts = { }) {
   const url = apiUrl + endpoint
-  const users = getUsers()
+  const users = opts.noUser ? {} : await waitForUsers()
   const authToken = btoa(JSON.stringify(users))
 
   const args = {
@@ -34,10 +70,29 @@ export default async function (method, endpoint, body = null, opts = { }) {
 
   const response = await fetch(url, args)
 
+  // Attempt automatic user regeneration
+  if (response.status === 401 && response.headers.get('X-Feedback-Retry-Auth') && !opts.noRetryAuth) {
+    if (!retryAuthPromise) {
+      retryAuthPromise = queueRetryAuth()
+    }
+    try {
+      await retryAuthPromise
+
+      const result = await apiCall(method, endpoint, body, {
+        ...opts, noRetryAuth: true,
+      })
+
+      return result
+    } catch (error) {
+      console.error('Failed to regenerate user')
+    }
+  }
+
   // -- Early return if raw response
   if (opts.rawResponse) return response
 
   const json = await response.json()
+
   if (response.status >= 400 && response.status <= 599) {
     const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
     console.error(message)

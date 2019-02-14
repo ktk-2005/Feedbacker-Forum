@@ -3,6 +3,7 @@ import React from 'react'
 // Helpers
 import classNames from 'classnames/bind'
 import * as DomTagging from '../../dom-tagging'
+import { keyPressSubmit } from '../../globals'
 // Components
 import TagElementButton from '../tag-element-button/tag-element-button'
 // Styles
@@ -32,7 +33,10 @@ class SubmitField extends React.Component {
   passSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    this.setState({ value: '' })
+    this.setState({
+      value: '',
+      taggedElementXPath: '',
+    })
 
     this.props.handleSubmit(event,
       this.state.taggedElementXPath,
@@ -67,6 +71,7 @@ class SubmitField extends React.Component {
           onChange={this.handleChange}
           placeholder={this.props.threadId ? 'Reply to thread...' : 'Write comment...'}
           ref={this.props.inputRef}
+          onKeyDown={keyPressSubmit}
         />
         <div className={css('button-container')}>
           <TagElementButton
@@ -74,6 +79,7 @@ class SubmitField extends React.Component {
             elementTagged={this.handleElementTagged}
             toggleTagElementState={this.toggleTagElementState}
             selected={taggedElementXPath !== ''}
+            data-introduction-step="6"
           />
           <input className={css('submit-comment')} type="submit" value="Comment" />
         </div>

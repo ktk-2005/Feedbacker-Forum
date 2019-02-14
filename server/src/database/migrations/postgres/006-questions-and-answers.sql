@@ -1,0 +1,23 @@
+BEGIN TRANSACTION;
+
+ALTER TABLE questions
+DROP COLUMN thread_id,
+ADD COLUMN container_id VARCHAR(8) NOT NULL,
+ADD COLUMN type VARCHAR(8) NOT NULL,
+ADD COLUMN order_id INTEGER NOT NULL,
+ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+ADD FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE CASCADE;
+
+CREATE TABLE answers (
+  id          CHAR(8) UNIQUE NOT NULL,
+  time        VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+  user_id     CHAR(8) NOT NULL,
+  question_id CHAR(8) NOT NULL,
+  blob        TEXT,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE,
+
+  UNIQUE (user_id, question_id)
+);
+
+COMMIT TRANSACTION;

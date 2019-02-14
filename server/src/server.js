@@ -7,6 +7,7 @@ import childProcess from 'child_process'
 import cors from 'cors'
 import proxy from 'express-http-proxy'
 import path from 'path'
+import delay from 'express-delay'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
@@ -40,6 +41,8 @@ function anySubdomain(fn) {
 export function startServer() {
   const app = express()
 
+  if (args.delay) app.use(delay(args.delay))
+
   if (checkBool('dev', config.dev)) {
     console.log('Running as development server')
     app.use(matchSubdomain(express.static('../client/build/test'), 'test'))
@@ -51,7 +54,11 @@ export function startServer() {
     app.use(express.static(path.join(__dirname, '../../client/build')))
   }
 
-  app.use(cors())
+  app.use(cors({
+    exposedHeaders: [
+      'X-Feedback-Retry-Auth',
+    ],
+  }))
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies

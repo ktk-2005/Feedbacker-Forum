@@ -1,29 +1,18 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms-organisms/button';
 
 .button {
-  @include button(100%);
+  @include button(2px);
   @include display-and-animate();
   position: fixed;
   bottom: 5%;
   left: 3%;
-  $dimension: 30px;
-  width: $dimension;
-  height: $dimension;
-  padding: 2px;
+  padding: $baseline $spacer;
   box-shadow: 0 2px 5px $palette-medium;
+  color: $palette-lighter;
   background: $palette-accent;
   &.hidden {
     @include hide-and-animate();
-  }
-  i {
-    display: block;
-    width: $icon-dimension-default;
-    height: $icon-dimension-default;
-    margin-left: auto;
-    margin-right: auto;
-    fill: $palette-lighter;
   }
 }
