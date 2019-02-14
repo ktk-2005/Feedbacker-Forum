@@ -59,7 +59,7 @@ export default async function apiCall(method, endpoint, body = null, opts = { })
   const args = {
     headers: {
       'X-Feedback-Host': window.location.hostname,
-      Authorization: `Feedbacker ${authToken}`,
+      'Authorization': `Feedbacker ${authToken}`,
     },
     method,
   }
