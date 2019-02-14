@@ -83,18 +83,19 @@ class SubmitField extends React.Component {
           onKeyDown={keyPressSubmit}
         />
         <div className={css('button-container')}>
-          <label className={css('anonymous-check')}>
+          <div className={css('anonymous-check')}>
             <input
               type="checkbox"
               id="hideName"
-              className={css('hidden')}
-              name="anonymous"
+              name="Anonymous"
               checked={hideName}
               onChange={() => {}}
               onClick={this.toggleHide}
             />
-            <span className={css('check-text')}>Hide name</span>
-          </label>
+            <label htmlFor="hideName" className={css('check-text')}>
+              Anonymous
+            </label>
+          </div>
           <TagElementButton
             active={taggingModeActive}
             elementTagged={this.handleElementTagged}

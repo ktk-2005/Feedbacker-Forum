@@ -1,7 +1,9 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+
 @import '../../scss/atoms/button';
+@import '../../scss/atoms/checkbox';
 
 @import '../survey-panel/survey-panel.scss';
 @import '../comment/comment.scss';
@@ -41,19 +43,12 @@
     .anonymous-check {
       margin-right: auto;
 
-      .check-text {
-        @include button();
-        padding: $baseline $spacer;
-        background: $palette-light;
-        color: $palette-medium;
+      input[type="checkbox"] {
+        @extend %checkbox;
       }
 
-      .hidden {
-        display: none;
-        &:checked + span {
-          background: $palette-accent;
-          color: $palette-lighter;
-        }
+      label {
+        color: $palette-medium;
       }
     }
   }
