@@ -11,4 +11,7 @@ CREATE TABLE instance_runners (
   UNIQUE (tag, user_id)
 );
 
+ALTER TABLE instances
+  ADD COLUMN runner VARCHAR(128) NOT NULL;
+
 COMMIT TRANSACTION;

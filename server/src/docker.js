@@ -12,7 +12,8 @@ import {
   createNewInstanceRunner,
   listInstanceRunnerOwnersByTag,
   deleteInstanceRunnerForUser,
-  confirmInstanceRunnerOwnership
+  confirmInstanceRunnerOwnership,
+  resolveContainer,
 } from './database'
 import { config } from './globals'
 import logger from './logger'
@@ -135,6 +136,7 @@ export async function createNewContainer(url, version, type, name, port, userId)
     id: containerInfo.Id,
     subdomain: name,
     userId,
+    type,
     blob: null,
     url: `http://localhost:${hostPort}`,
   }
@@ -157,7 +159,8 @@ export async function createNewContainer(url, version, type, name, port, userId)
   return { id: containerInfo.Id, name }
 }
 
-export async function startContainer(id) {
+export async function startContainer(name) {
+  const { id } = await resolveContainer(name)
   const container = await docker.getContainer(id)
   if ((await container.inspect()).State.Running) {
     throw new HttpError(400, 'Instance is already running.')
@@ -165,7 +168,8 @@ export async function startContainer(id) {
   await container.start()
 }
 
-export async function stopContainer(id) {
+export async function stopContainer(name) {
+  const { id } = await resolveContainer(name)
   const container = await docker.getContainer(id)
   if (!(await container.inspect()).State.Running) {
     throw new HttpError(400, 'Instance is already stopped.')
@@ -176,12 +180,15 @@ export async function stopContainer(id) {
   })
 }
 
-export async function deleteContainer(id) {
-  const container = await docker.getContainer(id)
-  await container.remove({
-    force: true,
-  })
-  await removeContainer(id)
+export async function deleteContainer(name) {
+  const { id, runner } = await resolveContainer(name)
+  if (runner !== 'site') {
+    const container = await docker.getContainer(id)
+    await container.remove({
+      force: true,
+    })
+  }
+  await removeContainer(name)
 }
 
 export async function createNewRunner(userId, dockerTag) {

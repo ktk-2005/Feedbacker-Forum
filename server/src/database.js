@@ -186,31 +186,27 @@ export async function addUsername({ id, name, secret }) { return db.query('UPDAT
 // Containers/Instances
 
 export async function addContainer({
-  id, subdomain, userId, blob, url,
+  id, subdomain, userId, blob, type, url,
 }) {
-  return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
-}
-
-export async function listContainers() {
-  return db.query('SELECT id, subdomain FROM containers')
+  return db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, blob])
 }
 
 export async function resolveContainer(subdomain) {
-  const rows = await db.query('SELECT id, user_id FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
+  const rows = await db.query('SELECT id, user_id, runner FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
   if (!rows || rows.length === 0) throw new HttpError(400, `Invalid container ${subdomain}`)
   return {
     id: rows[0].id,
     userId: rows[0].user_id,
+    runner: rows[0].runner,
   }
 }
 
 export async function listContainersByUser(values = []) {
-  return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
+  return db.query('SELECT id, subdomain, runner FROM containers WHERE user_id=?', values)
 }
 
-export async function removeContainer({
-  id,
-}) { return db.run('DELETE FROM containers WHERE subdomain=?', [id]) }
+export async function removeContainer(name) {
+  return db.run('DELETE FROM containers WHERE subdomain=?', [name]) }
 
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
@@ -220,9 +216,9 @@ export async function verifyUser(user, secret) {
 }
 
 export async function addSite({
-  id, subdomain, userId, url, blob,
+  id, subdomain, userId, url, type, blob,
 }) {
-  db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
+  db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, blob])
   return {
     subdomain,
   }

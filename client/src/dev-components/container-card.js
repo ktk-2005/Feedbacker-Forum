@@ -79,22 +79,26 @@ class ContainerCard extends React.Component {
       <div key={instance.id} className={css('instance-card')}>
         <div className={css('header-container')}>
           <div className={css('header-button-container')}>
-            <button
-              type="button"
-              disabled={this.state.containerRunning || this.isOperationPending()}
-              onClick={this.startContainer}
-              data-tooltip="Start"
-            >
-              {<InlineSVG src={StartIcon} />}
-            </button>
-            <button
-              type="button"
-              disabled={!this.state.containerRunning || this.isOperationPending()}
-              onClick={this.stopContainer}
-              data-tooltip="Stop"
-            >
-              <InlineSVG src={StopIcon} />
-            </button>
+            {instance.runner !== 'site' ? (
+              <>
+                <button
+                  type="button"
+                  disabled={this.state.containerRunning || this.isOperationPending()}
+                  onClick={this.startContainer}
+                  data-tooltip="Start"
+                >
+                  {<InlineSVG src={StartIcon} />}
+                </button>
+                <button
+                  type="button"
+                  disabled={!this.state.containerRunning || this.isOperationPending()}
+                  onClick={this.stopContainer}
+                  data-tooltip="Stop"
+                >
+                  <InlineSVG src={StopIcon} />
+                </button>
+              </>
+            ) : null}
             <button
               type="button"
               disabled={this.isOperationPending()}
