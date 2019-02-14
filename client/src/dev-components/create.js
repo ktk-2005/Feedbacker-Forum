@@ -230,58 +230,6 @@ class Create extends React.Component {
       <div className={css('center-center-block')}>
         <div className={css('create-view')}>
           <h2>Create an instance</h2>
-<<<<<<< HEAD:client/src/dev-components/create.js
-          <form
-            className={css('form-create')}
-            id="form"
-            onSubmit={this.postContainer}
-          >
-            <label htmlFor="application">
-              Application type
-              <div className={css('inline-button')}>
-                <select name="application" id="application" form="form" required>
-                  {this.state.instanceRunners.map(runner => (
-                    <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
-                  ))}
-                </select>
-                <Link to="/create-runner">
-                  <button
-                    className={css('new-runner-button')}
-                    type="button"
-                  >New runner
-                  </button>
-                </Link>
-              </div>
-            </label>
-            <label htmlFor="url">
-              Git URL
-              <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
-            </label>
-            <label htmlFor="version">
-              Git Hash
-              <input type="text" id="version" name="version" placeholder="master or commit hash" required />
-            </label>
-            <label htmlFor="name">
-              Name
-              <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
-            </label>
-            <label htmlFor="port">
-              Port
-              <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
-            </label>
-            <div className={css('button-container')}>
-              <Link to="/">
-                <button
-                  className={css('dashboard-button')}
-                  type="button"
-                >Back to dashboard
-                </button>
-              </Link>
-              <button type="submit">
-                Create
-              </button>
-            </div>
-          </form>
           <div className={css('selection-tabs')}>
             <button
               type="button"

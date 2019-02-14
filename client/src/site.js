@@ -12,9 +12,9 @@ import {
 } from 'react-router-dom'
 
 import { setupPersist } from './persist'
-import Dashboard from './dashboard-view'
-import Create from './create'
-import Build from './build-view'
+import Dashboard from './dev-components/dashboard-view'
+import Create from './dev-components/create'
+import Build from './dev-components/build-view'
 import InvalidContainer from './invalid-container'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
