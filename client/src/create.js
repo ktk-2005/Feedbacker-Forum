@@ -73,7 +73,7 @@ class Create extends React.Component {
           </select>
         </label>
         <label htmlFor="url">
-          Git URL
+          Git repository URL
           <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
         </label>
         <label htmlFor="version">
@@ -81,11 +81,11 @@ class Create extends React.Component {
           <input type="text" id="version" name="version" placeholder="master or commit hash" required />
         </label>
         <label htmlFor="name">
-          Name
+          Instance name
           <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
         </label>
         <label htmlFor="port">
-          Port
+          Application serving port
           <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
         </label>
         <div className={css('button-container')}>
@@ -93,7 +93,8 @@ class Create extends React.Component {
             <button
               className={css('dashboard-button')}
               type="button"
-            >Back to dashboard
+            >
+              Back to dashboard
             </button>
           </Link>
           <button type="submit">
@@ -105,6 +106,7 @@ class Create extends React.Component {
   }
 
   siteForm() {
+    // TODO: Add tooltip to warn about live url redirection
     return (
       <form
         className={css('form-create')}
@@ -112,11 +114,11 @@ class Create extends React.Component {
         onSubmit={this.postSite}
       >
         <label htmlFor="url">
-          Git URL
+          Live website URL
           <input type="text" name="url" id="url" placeholder="https://codeberry.fi" required />
         </label>
         <label htmlFor="name">
-          Name
+          Instance name
           <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
         </label>
         <div className={css('button-container')}>
@@ -164,8 +166,22 @@ class Create extends React.Component {
       <div className={css('center-center-block')}>
         <div className={css('create-view')}>
           <h2>Create an instance</h2>
-          <button type="button" onClick={this.activateContainerForm}>Container</button>
-          <button type="button" onClick={this.activateSiteForm}>External Site</button>
+          <div className={css('selection-tabs')}>
+            <button
+              type="button"
+              onClick={this.activateContainerForm}
+              className={css({ 'current': this.state.containerForm })}
+            >
+              From git repository
+            </button>
+            <button
+              type="button"
+              onClick={this.activateSiteForm}
+              className={css({ 'current': !this.state.containerForm })}
+            >
+              External live site
+            </button>
+          </div>
           {this.form()}
         </div>
       </div>

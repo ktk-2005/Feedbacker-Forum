@@ -34,7 +34,11 @@
     "no-prototype-builtins": "off",
     "class-methods-use-this": "off",
     "no-continue": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "quote-props": [
+      "error",
+      "consistent"
+    ]
   },
 
   "globals": {
