@@ -1,7 +1,7 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms-organisms/forms';
 
 @import '../survey-panel/survey-panel.scss';
 @import '../comment/comment.scss';
@@ -52,4 +52,12 @@ $panel-min-width: 300px;
   // Make sure box-shadow is not cut-off
   padding: $baseline;
   margin: 0 (-$baseline);
+}
+
+.comment-form {
+  @extend %form;
+  margin-top: $baseline;
+  textarea {
+    margin-top: $spacer;
+  }
 }

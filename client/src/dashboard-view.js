@@ -1,5 +1,5 @@
 import React from 'react'
-import R from 'ramda'
+import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'

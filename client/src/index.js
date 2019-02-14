@@ -9,7 +9,7 @@ import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
-import { setUsers, subscribeUpdateUsers } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
 import { prepareReactRoot } from './shadowDomHelper'
 // Components
 import OpenSurveyPanelButton from './components/open-survey-panel-button/open-survey-panel-button'
@@ -31,6 +31,7 @@ const SET_PERSIST = 'SET_PERSIST'
 const LOAD_ALL = 'LOAD_ALL'
 const INTRO_COMPLETED = 'INTRO_COMPLETED'
 const UPDATE_ROLE = 'UPDATE_ROLE'
+const LOAD_QUESTIONS = 'LOAD_QUESTIONS'
 
 function persistReducer(state = { }, action) {
   switch (action.type) {
@@ -76,10 +77,20 @@ function roleReducer(state = '', action) {
   }
 }
 
+function questionReducer(state = [], action) {
+  switch (action.type) {
+    case LOAD_QUESTIONS:
+      return action.questions
+    default:
+      return state
+  }
+}
+
 const reducer = combineReducers({
   persist: persistReducer,
   comments: commentsReducer,
   role: roleReducer,
+  questions: questionReducer,
 })
 
 const store = createStore(reducer)
@@ -191,7 +202,8 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const { id, secret } = await apiCall('POST', '/users', { name: state.name })
+        const { id, secret } = await apiCall('POST', '/users',
+          { name: state.name }, { noUser: true })
 
         console.log('Created new user from API', { [id]: secret })
 
@@ -200,7 +212,12 @@ const initialize = () => {
         console.log('Loaded user from persistent storage', state.users)
       }
 
-      const { role } = await apiCall('GET', '/users/role')
+      let { role } = await apiCall('GET', '/users/role')
+
+      if (DEV) {
+        if (window.location.host.includes('.dev.')) role = 'dev'
+      }
+
       console.log('User role:', role)
       store.dispatch(updateRole(role))
     }
@@ -212,6 +229,7 @@ const initialize = () => {
     const persist = store.getState().persist || { }
     savePersist(persist)
     setUsers(persist.users || { })
+    setUserName(persist.name)
   })
 
   subscribeUpdateUsers((newUsers) => {

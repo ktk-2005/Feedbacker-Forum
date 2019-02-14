@@ -14,7 +14,7 @@ import Dashboard from './dashboard-view'
 import Create from './create'
 import Build from './build-view'
 import { prepareReactRoot } from './shadowDomHelper'
-import { setUsers, subscribeUpdateUsers } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
 import apiCall from './api-call'
 import { setPersistData } from './actions'
 // Styles
@@ -75,6 +75,7 @@ const initialize = () => {
     const persist = store.getState().persist || { }
     savePersist(persist)
     setUsers(persist.users || { })
+    setUserName(persist.name)
   })
 
   subscribeUpdateUsers((newUsers) => {
