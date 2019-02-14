@@ -10,7 +10,7 @@ ADD FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE CASCADE;
 
 CREATE TABLE answers (
   id          CHAR(8) UNIQUE NOT NULL,
-  time        VARCHAR(30) (CURRENT_TIMESTAMP) NOT NULL,
+  time        VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
   user_id     CHAR(8) NOT NULL,
   question_id CHAR(8) NOT NULL,
   blob        TEXT,
