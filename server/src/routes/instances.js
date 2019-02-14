@@ -7,6 +7,7 @@ import {
   stopContainer,
   deleteContainer,
   getContainerLogs,
+  getRunningContainersByUser,
 } from '../docker'
 import { resolveContainer, addSite, listContainersByUser, confirmContainerOwnership } from '../database'
 import { attempt, uuid, reqUser } from './helpers'

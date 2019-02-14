@@ -66,8 +66,12 @@ export async function getRunningContainersByUser(userId) {
   const trackedContainers = await listContainersByUser(userId)
   return Promise.all(trackedContainers.map(async (container) => {
     const containerCopy = container
-    const dockerContainerInfo = await getContainerInfoFromDocker(container.id)
-    containerCopy.running = dockerContainerInfo.State.Running
+    try {
+      const dockerContainerInfo = await getContainerInfoFromDocker(container.id)
+      containerCopy.running = dockerContainerInfo.State.Running
+    } catch (error) {
+      containerCopy.running = false
+    }
     return containerCopy
   }))
 }
