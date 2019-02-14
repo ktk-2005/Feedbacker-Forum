@@ -16,6 +16,7 @@
 
 .inner-container {
   @extend .create-view;
+  line-height: 1.5;
 
   h3 {
     margin-bottom: $spacer;

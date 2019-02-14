@@ -85,7 +85,7 @@ class Create extends React.Component {
               <div className={css('inline-button')}>
                 <select name="application" id="application" form="form" required>
                   {this.state.instanceRunners.map(runner => (
-                    <option key={runner.tag} value={runner.tag}>{runner.name}</option>
+                    <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
                   ))}
                 </select>
                 <Link to="/create-runner">
