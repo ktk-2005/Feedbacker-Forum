@@ -26,6 +26,7 @@ const css = classNames.bind(commentPanelStyles)
 const mapStateToProps = state => ({
   comments: state.comments,
   users: (state.persist || {}).users || {},
+  name: (state.persist || {}).name,
   role: state.role,
 })
 
@@ -36,13 +37,11 @@ class CommentPanel extends React.Component {
       usernameModalIsOpen: false,
       commentToDelete: {},
       currentThread: '',
-      isHidden: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
-    this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
@@ -82,7 +81,7 @@ class CommentPanel extends React.Component {
     this.props.unsetTaggedElement()
     await this.fetchComments()
 
-    if (!this.props.users.name) {
+    if (!this.props.name) {
       await this.toggleUsernameModal()
     } else {
       await this.fetchComments()
@@ -94,12 +93,6 @@ class CommentPanel extends React.Component {
     this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
-  handleClick() {
-    this.setState(state => ({
-      isHidden: !state.isHidden,
-    }))
-  }
-
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
     this.props.dispatch(loadComments(comments))
@@ -107,15 +100,12 @@ class CommentPanel extends React.Component {
   }
 
   toggleDeleteModal(comment) {
-    console.log('TOGGLING: ', comment)
     this.setState((prevState) => {
       if (R.isEmpty(prevState.commentToDelete)) {
-        console.log('yes')
         return { commentToDelete: comment }
       }
       return { commentToDelete: {} }
     })
-    console.log('STATE: ', this.state.commentToDelete)
   }
 
   async deleteComment() {
@@ -177,14 +167,20 @@ class CommentPanel extends React.Component {
   }
 
   render() {
+    const { hidden, onClick } = this.props
+
     return (
-      <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
+      <div
+        className={css('panel-container', 'comment-panel', { hidden })}
+        data-introduction-step="5"
+      >
         <div className={css('panel-header')}>
           <h5 className={css('heading')}>Comments</h5>
           <button
             type="button"
             className={css('close-button')}
-            onClick={this.handleClick}
+            onClick={onClick}
+            data-introduction-step-close="5"
           >
             <InlineSVG src={CloseIcon} />
           </button>
@@ -197,7 +193,7 @@ class CommentPanel extends React.Component {
             toggleTagElementState={this.props.toggleTagElementState}
           />
           {
-            !this.props.users.name ? (
+            !this.props.name ? (
               <UsernameModal
                 isOpen={this.state.usernameModalIsOpen}
                 toggle={this.toggleUsernameModal}

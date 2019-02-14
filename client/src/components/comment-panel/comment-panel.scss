@@ -9,6 +9,7 @@
 $panel-min-width: 300px;
 
 .comment-panel {
+  @include display-and-animate;
   min-width: $panel-min-width;
   max-width: $panel-min-width;
   height: 100%;
@@ -23,6 +24,9 @@ $panel-min-width: 300px;
   border-left: solid $palette-light 1px;
   background-color: $palette-lighter;
   box-shadow: 0 0 10px $palette-light;
+  &.hidden {
+    @include hide-and-animate;
+  }
 }
 
 .panel-header {
