@@ -10,7 +10,7 @@ class RouteContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      hidden: true,
+      hidden: false,
     }
     this.hide = this.hide.bind(this)
     this.expand = this.expand.bind(this)
