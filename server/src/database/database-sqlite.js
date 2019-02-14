@@ -136,7 +136,7 @@ class SQLiteDatabase {
 
   async del(...args) {
     return new Promise((resolve, reject) => {
-      this.db.run(...args, function (err) {
+      this.db.run(...args, (err) => {
         if (err) {
           verboseError(`DELERROR: ${err} on query ${args}`)
           reject(err)

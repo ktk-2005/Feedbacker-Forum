@@ -4,6 +4,7 @@ import { getUsers, subscribeUsers, unsubscribeUsers, updateUsers } from './globa
 let retryAuthPromise = null
 
 async function retryAuth() {
+  // eslint-disable-next-line no-use-before-define
   const { id, secret } = await apiCall('POST', '/users')
   console.log('Regenerated new token from API', { [id]: secret })
   return { id, secret }
@@ -14,8 +15,9 @@ function queueRetryAuth() {
     console.log('Authentication failed, trying to regenerate user')
     window.setTimeout(async () => {
       let newUser = { }
-      subscribeUsers((users) => {
+      const token = subscribeUsers((users) => {
         if (newUser.id && users.hasOwnProperty(newUser.id)) {
+          unsubscribeUsers(token)
           resolve()
         }
       })
