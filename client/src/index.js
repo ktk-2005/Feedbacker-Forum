@@ -191,7 +191,7 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const { id, secret } = await apiCall('POST', '/users')
+        const { id, secret } = await apiCall('POST', '/users', { name: state.name })
 
         console.log('Created new user from API', { [id]: secret })
 
