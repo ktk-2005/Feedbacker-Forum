@@ -9,7 +9,7 @@ import {
   deleteContainer,
   getContainerLogs,
 } from '../docker'
-import { verifyUser, resolveContainer } from '../database'
+import { verifyUser, resolveContainer, addSite } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -72,9 +72,9 @@ router.post('/new', catchErrors(async (req, res) => {
   if (!url) {
     throw new HttpError(400, 'No git url given')
   }
-  if (!version) {
-    throw new HttpError(400, 'No git version given')
-  }
+  // if (!version) {
+  //   throw new HttpError(400, 'No git version given')
+  // }
   if (name.length < 3 || name.length > 20) {
     throw new HttpError(400, `Name too short or long: ${name}`)
   }
@@ -90,6 +90,14 @@ router.post('/new', catchErrors(async (req, res) => {
       )
       res.json({ containerInfo })
     })
+  } else if (type === 'site') {
+    const subdomain = `${name}-${uuid(5)}`
+    const id = 'aaaabbbb'
+    console.log(id, subdomain, userId, url)
+    const containerInfo = await addSite({
+      id, subdomain, userId, url,
+    })
+    res.json({ containerInfo })
   } else {
     throw new HttpError(501, `Expected type 'node', but got '${type}'`)
   }

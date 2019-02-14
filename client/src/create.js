@@ -55,11 +55,7 @@ class Create extends React.Component {
     const json = await apiCall('POST', '/instances/new', {
       url: inputValue('url'),
       name: inputValue('name').toLowerCase(),
-    })
-
-    this.setState({
-      containerName: json.containerInfo.name,
-      redirect: true,
+      type: 'site',
     })
   }
 

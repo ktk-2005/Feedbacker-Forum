@@ -106,3 +106,10 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
+
+export async function addSite({
+  id, subdomain, userId, url, blob,
+}) {
+  console.log(id)
+  return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
+}
