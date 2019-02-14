@@ -19,7 +19,8 @@
 | text | Text content of comment |
 | user\_id | Id of user who left the comment |
 | thread\_id | Id of comment thread which this comment is part of |
-| blob | JSON blob for other data added to comment e.g. DOM tagging information |
+| anonymous | Boolean value for if the comment is to be displayed as anonymous |
+| blob | JSON blob for other data added to comment e.g. DOM tagging information or dev-label |
 
 ### Questions
 | Column | Usage |

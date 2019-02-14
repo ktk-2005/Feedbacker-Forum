@@ -1,5 +1,7 @@
 @import '../../scss/compulsory.scss';
+
 @import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms-organisms/checkbox';
 
 @import '../survey-panel/survey-panel.scss';
 @import '../comment/comment.scss';
@@ -35,14 +37,22 @@
     flex-shrink: 0;
     flex-grow: 0;
     margin-top: $baseline;
-  }
 
-  .submit-comment {
-    @include button();
-    align-self: flex-end;
-    margin-left: $baseline;
-    padding: $baseline $spacer;
-    background: $palette-accent;
-    color: $palette-lighter;
+    .anonymous-check {
+      margin-right: auto;
+
+      input[type="checkbox"] {
+        @extend %checkbox;
+      }
+
+      label {
+        color: $palette-medium;
+      }
+    }
+
+    .submit-comment {
+      margin-top: 0;
+      margin-left: $baseline;
+    }
   }
 }

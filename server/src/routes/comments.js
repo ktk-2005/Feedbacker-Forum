@@ -19,6 +19,7 @@ const router = express.Router()
 //         "userId": "da776df3",
 //         "username": "jaba",
 //         "threadId": "3blkj3ad",
+//         "hideName": false,
 //         "blob": "",
 //         "reactions": [
 //             {
@@ -55,6 +56,7 @@ router.get('/', catchErrors(async (req, res) => {
         userId: comment.comment_user_id,
         username: comment.username,
         threadId: comment.comment_thread_id,
+        hideName: comment.comment_hide_name,
         blob: JSON.parse(comment.comment_blob) || {},
         reactions: [],
       }
@@ -89,7 +91,7 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns `{ id, threadId }` of the new comment
 router.post('/', catchErrors(async (req, res) => {
-  const { text, blob } = req.body
+  const { text, hideName, blob } = req.body
   const { container } = await reqContainer(req)
   const { userId } = await reqUser(req)
 
@@ -104,7 +106,7 @@ router.post('/', catchErrors(async (req, res) => {
   await attempt(async () => {
     const id = uuid()
     await addComment({
-      id, text, userId, threadId, blob: JSON.stringify(blob),
+      id, text, userId, threadId, anonymous: hideName, blob: JSON.stringify(blob),
     })
     res.json({ id, threadId })
   })
