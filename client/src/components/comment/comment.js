@@ -55,6 +55,7 @@ const devLabel = () => {
   return null
 }
 
+
 const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, deleteComment }) => (
   <div className={css('comment', { dev: role === 'dev' })} key={id}>
     <div className={css('header')}>
@@ -65,9 +66,20 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
         </div>
         {opLabel(op, comment.userId)}
       </div>
-      <div className={css('time-target-container')}>
-        <Moment className={css('timestamp')} fromNow data-tooltip={comment.time} data-tooltip-west>{Moment(comment.time).format('DD-MM-YYYY hh:mm')}</Moment>
-        <div data-tooltip="This comment has a element tagged with it" data-tooltip-west>
+      <div
+        className={css('time-target-container')}
+        data-tooltip={comment.time}
+        data-tooltip-west
+        data-tooltip-width="120px"
+      >
+        <Moment className={css('timestamp')} fromNow>
+          {comment.time}
+        </Moment>
+        <div
+          data-tooltip="This comment has a element tagged with it"
+          data-tooltip-west
+          data-tooltip-width="200px"
+        >
           {targetElement(comment)}
         </div>
       </div>

@@ -49,6 +49,7 @@ class TagElementButton extends React.Component {
           DomTagging.toggleMarkingMode()
         }}
         data-tooltip="Tag element button"
+        data-tooltip-width="150px"
       >
         {active ? 'Cancel' : <InlineSVG src={TargetIcon} raw />}
       </button>
