@@ -14,6 +14,7 @@ class RouteContainer extends React.Component {
     }
     this.hide = this.hide.bind(this)
     this.expand = this.expand.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
   getRouteComments() {
@@ -46,6 +47,12 @@ class RouteContainer extends React.Component {
     this.setState({ hidden: true })
   }
 
+  handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      this.expand()
+    }
+  }
+
   render() {
     const amountsByRoute = this.getRouteComments()
     if (amountsByRoute.length > 0) {
@@ -53,8 +60,9 @@ class RouteContainer extends React.Component {
         <div
           className={css('route-container', { hidden: this.state.hidden })}
           onClick={this.expand}
-          // TODO: element can be focused when hidden = true
-          role="presentation"
+          role="button"
+          tabIndex={0}
+          onKeyDown={this.handleKeyDown}
         >
           {amountsByRoute.map(route => (
             <p key={route[0]}>
@@ -67,9 +75,8 @@ class RouteContainer extends React.Component {
           </button>
         </div>
       )
-    } else {
-      return null
     }
+    return null
   }
 }
 
