@@ -123,12 +123,12 @@ returns JSON array of all comments in thread
 
 ## Questions
 
-### [GET /api/questions](../server/src/routes/questions.js#L15)
+### [GET /api/questions](../server/src/routes/questions.js#L22)
 
 Retrieve all questions in the current container instance.
 
 returns JSON array of all questions in database
-### [POST /api/questions](../server/src/routes/questions.js#L36)
+### [POST /api/questions](../server/src/routes/questions.js#L54)
 
 adds question to database.
 
@@ -141,6 +141,37 @@ Example body
 ```
 
 Returns `{ id }` of the created question
+
+### [DELETE /api/questions/:id](../server/src/routes/questions.js#L85)
+
+Delete a previously posted question
+### [PUT /api/questions/:id](../server/src/routes/questions.js#L101)
+
+Update a previously posted question
+
+### [POST /api/questions/order](../server/src/routes/questions.js#L128)
+
+Re-order questions, accepts a body like
+```json
+{
+  order: ['id-1', 'id-2', 'id-3']
+}
+```
+
+### Answers
+
+### [POST /api/answers](../server/src/routes/answers.js#L14)
+
+adds answer to database
+
+Returns `{ id }` of the added answer
+
+### [GET /api/answers/:questionId](../server/src/routes/answers.js#L29)
+
+Returns answer of a user for specific question
+### [PUT /api/answers/:questionId](../server/src/routes/answers.js#L47)
+
+Edits an answer of a user for specific question
 
 ## Reactions
 
@@ -165,7 +196,7 @@ Returns JSON indicating whether deletion was successful or not
 
 ## Users
 
-### [POST /api/users](../server/src/routes/users.js#L22)
+### [POST /api/users](../server/src/routes/users.js#L23)
 
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
@@ -185,36 +216,18 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-### [PUT /api/users](../server/src/routes/users.js#L47)
+### [PUT /api/users](../server/src/routes/users.js#L44)
 
 Change username of existing user.
-The request requires the id, the secret and the new username for the user,
-eg.
+The user is specified using the Authorization header as with other endpoints
+and the body should contain the new name eg.
 ```json
 {
    "name": "Testuser2",
-   "id": "d6ac55e9",
-   "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-Returns 'ok' if the change was successful.
 
-### [PUT /api/users](../server/src/routes/users.js#L81)
-
-Change username of existing user.
-The request requires the id, the secret and the new username for the user,
-eg.
-```json
-{
-   "name": "Testuser2",
-   "id": "d6ac55e9",
-   "secret": "ea2ca2565f484906bfd5096126816a"
-}
-```
-Returns 'ok' if the change was successful.
-
-
-### [GET /api/users/role](../server/src/routes/users.js#L62)
+### [GET /api/users/role](../server/src/routes/users.js#L74)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
@@ -228,13 +241,13 @@ Example body
 
 ## Instances
 
-### [GET /api/instances](../server/src/routes/instances.js#L25)
+### [GET /api/instances](../server/src/routes/instances.js#L23)
 
 Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L63)
+### [POST /api/instances/new](../server/src/routes/instances.js#L57)
 
 Create a new container.
 
@@ -250,13 +263,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L39)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L33)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L118)
+### [POST /api/instances/start](../server/src/routes/instances.js#L119)
 
 Start a stopped container.
 
@@ -269,7 +282,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L104)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L105)
 
 Stop a running container.
 
@@ -282,7 +295,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L132)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L133)
 
 Delete a container
 

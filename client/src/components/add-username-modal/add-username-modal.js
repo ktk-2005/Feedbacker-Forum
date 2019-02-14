@@ -35,20 +35,13 @@ class UsernameModal extends React.Component {
   async handleSubmit(event) {
     event.preventDefault()
     event.nativeEvent.stopImmediatePropagation()
-    const { users } = this.props
-    const [id] = Object.keys(users)
-    const secret = users[id]
     const name = this.state.value
-    await apiCall('PUT', '/users', {
-      name,
-      id,
-      secret,
-    })
+    await apiCall('PUT', '/users', { name })
     this.setState({
       value: '',
     })
     this.props.toggle()
-    this.props.dispatch(setPersistData({ users: { [id]: secret, name } }))
+    this.props.dispatch(setPersistData({ name }))
   }
 
   render() {

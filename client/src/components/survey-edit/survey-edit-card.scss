@@ -1,0 +1,128 @@
+@import '../../scss/variables';
+@import '../../scss/colors';
+@import '../../scss/mixins';
+
+@import '../../scss/atoms-organisms/button';
+
+@import '../../scss/views/dashboard-view';
+@import '../../scss/atoms-organisms/forms';
+
+.survey-edit-card {
+  margin-bottom: $spacer;
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+
+  &:last-of-type {
+    margin-top: 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & textarea + .actions {
+      align-self: flex-start;
+    }
+  }
+
+  button {
+    @extend %anchor-button;
+  }
+
+  .actions {
+    margin-left: auto;
+
+    button {
+      margin-left: $baseline;
+    }
+  }
+
+  textarea {
+    @extend %textarea;
+    min-width: unset;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+
+  input {
+    @extend %generic-input;
+  }
+
+  .options-container {
+    display: flex;
+    margin-top: -$baseline;
+
+    input {
+      display: inline-flex;
+      width: unset;
+      margin-top: 0;
+      margin-right: $baseline;
+      flex-grow: 1;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .display-area:not(:empty) {
+    margin-top: $spacer;
+  }
+
+  &.edit-commit {
+    background-color: $palette-white;
+  }
+
+  .reorder-handle {
+    $size-y: $font-size-default * 2;
+    $size-x: 4px;
+    display: flex;
+    height: $size-y;
+    width: 4px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: $spacer;
+    cursor: move;
+    user-select: none;
+
+    &:after {
+      content: '\2807';
+      position: relative;
+      left: -$size-x; // Character has some spacing
+      font-size: $size-y;
+      color: $palette-dark;
+      user-select: none;
+    }
+  }
+
+  h4 {
+    display: inline-block;
+  }
+}
+
+.answer {
+  $spacer-x: -$spacer - 1px; // 1px for border
+  margin-left: $spacer-x;
+  margin-right: $spacer-x;
+  padding: -$spacer-x; // -- => +
+  border-bottom: 1px solid rgba($palette-light, 0.4);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  .answer-meta {
+    margin-bottom: $baseline;
+    font-size: $font-size-small;
+  }
+
+  .answer-content {
+    p {
+      margin: 0;
+    }
+  }
+}
+

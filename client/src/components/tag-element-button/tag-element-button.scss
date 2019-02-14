@@ -1,8 +1,9 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
-@import '../../scss/atoms/button';
-@import '../../scss/atoms/tooltip';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms-organisms/button';
 
 @import '../comment/comment';
 

@@ -1,22 +1,9 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms/button';
-@import '../../scss/typography';
+@import '../../scss/compulsory';
 
-@import '../atoms/tooltip';
+@import '../atoms-organisms/button';
+@import '../atoms-organisms/tooltip';
 
 // Placeholders
-
-%anchor-button {
-  @include button();
-  display: inline-block;
-  text-decoration: none;
-  align-self: end;
-  padding: $baseline $spacer;
-  box-shadow: 0 1px 5px $palette-shadow-light;
-  color: $palette-dark;
-}
 
 %accent {
   box-shadow: 0 2px 5px $palette-shadow-default;

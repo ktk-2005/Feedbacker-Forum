@@ -46,7 +46,7 @@ describe('/api/comments', () => {
 
 describe('/api/questions', () => {
   it('should handle multiple posts', async () => {
-    const body = { text: 'Test' }
+    const body = { text: 'Test', type: 'text' }
     await apiRequest('POST', '/api/questions', body)
     await apiRequest('POST', '/api/questions', body)
     await apiRequest('POST', '/api/questions', body)
@@ -55,7 +55,7 @@ describe('/api/questions', () => {
   it('should return OK', async () => {
     const response = await apiRequest('POST', '/api/questions', {
       text: 'Pääpäivä?',
-      blob: { path: '/path/to/element' },
+      type: 'text',
     })
     assert.equal(typeof response.id, 'string')
   })

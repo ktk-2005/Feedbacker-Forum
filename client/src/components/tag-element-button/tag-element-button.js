@@ -50,6 +50,7 @@ class TagElementButton extends React.Component {
         }}
         data-tooltip="Tag element button"
         data-tooltip-width="150px"
+        data-introduction-step="6"
       >
         {active ? 'Cancel' : <InlineSVG src={TargetIcon} raw />}
       </button>

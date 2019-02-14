@@ -1,4 +1,8 @@
 import retargetEvents from 'react-shadow-dom-retarget-events'
+import classNames from 'classnames/bind'
+import styles from './scss/_base.scss'
+
+const css = classNames.bind(styles)
 
 const shadowRoot = () => document
   .querySelector('[data-feedback-shadow-root]')
@@ -19,6 +23,7 @@ const prepareReactRoot = () => {
   shadow.appendChild(reactRoot)
 
   const modalRoot = document.createElement('div')
+  modalRoot.classList.add(css('feedback-app-modal-root'))
   modalRoot.setAttribute('data-feedback-modal-root', true)
   shadow.appendChild(modalRoot)
 

@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import * as DomTagging from '../../dom-tagging'
 import { loadComments } from '../../actions'
+import RouteContainer from '../route-container/route-container'
 import UsernameModal from '../add-username-modal/add-username-modal'
 
 // Components
@@ -19,13 +20,12 @@ import commentPanelStyles from './comment-panel.scss'
 // Assets
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 
-
-
 const css = classNames.bind(commentPanelStyles)
 
 const mapStateToProps = state => ({
   comments: state.comments,
   users: (state.persist || {}).users || {},
+  name: (state.persist || {}).name,
   role: state.role,
 })
 
@@ -36,13 +36,11 @@ class CommentPanel extends React.Component {
       usernameModalIsOpen: false,
       commentToDelete: {},
       currentThread: '',
-      isHidden: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.toggleUsernameModal = this.toggleUsernameModal.bind(this)
-    this.handleClick = this.handleClick.bind(this)
     this.fetchComments = this.fetchComments.bind(this)
     this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
@@ -61,10 +59,11 @@ class CommentPanel extends React.Component {
 
     const getBlob = () => {
       const xPath = taggedElementXPath
+      const route = window.location.pathname
       if (xPath) {
-        return { xPath }
+        return { xPath, route }
       }
-      return {}
+      return { route }
     }
 
     const unhighlightTaggedElement = () => {
@@ -82,7 +81,7 @@ class CommentPanel extends React.Component {
     this.props.unsetTaggedElement()
     await this.fetchComments()
 
-    if (!this.props.users.name) {
+    if (!this.props.name) {
       await this.toggleUsernameModal()
     } else {
       await this.fetchComments()
@@ -94,12 +93,6 @@ class CommentPanel extends React.Component {
     this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
-  handleClick() {
-    this.setState(state => ({
-      isHidden: !state.isHidden,
-    }))
-  }
-
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
     this.props.dispatch(loadComments(comments))
@@ -107,15 +100,12 @@ class CommentPanel extends React.Component {
   }
 
   toggleDeleteModal(comment) {
-    console.log('TOGGLING: ', comment)
     this.setState((prevState) => {
       if (R.isEmpty(prevState.commentToDelete)) {
-        console.log('yes')
         return { commentToDelete: comment }
       }
       return { commentToDelete: {} }
     })
-    console.log('STATE: ', this.state.commentToDelete)
   }
 
   async deleteComment() {
@@ -136,8 +126,10 @@ class CommentPanel extends React.Component {
   }
 
   threadContainer() {
-    if (R.isEmpty(this.props.comments)) return (<p>No comments fetched.</p>)
-    const threadIds = new Set(Object.values(this.props.comments).map(comment => comment.threadId))
+    const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
+      this.props.comments)
+    if (R.isEmpty(commentsOfRoute)) return (<p>No comments fetched.</p>)
+    const threadIds = new Set(Object.values(commentsOfRoute).map(comment => comment.threadId))
     const groupByThread = R.groupBy((comment) => {
       for (const id of threadIds) {
         if (comment.threadId === id) {
@@ -177,19 +169,26 @@ class CommentPanel extends React.Component {
   }
 
   render() {
+    const { hidden, onClick } = this.props
+
     return (
-      <div className={css('panel-container', 'comment-panel', { hidden: this.state.isHidden })}>
+      <div
+        className={css('panel-container', 'comment-panel', { hidden })}
+        data-introduction-step="5"
+      >
         <div className={css('panel-header')}>
           <h5 className={css('heading')}>Comments</h5>
           <button
             type="button"
             className={css('close-button')}
-            onClick={this.handleClick}
+            onClick={onClick}
+            data-introduction-step-close="5"
           >
             <InlineSVG src={CloseIcon} />
           </button>
         </div>
         <div className={css('panel-body')}>
+          <RouteContainer comments={this.props.comments} />
           { this.threadContainer() }
           <SubmitField
             handleSubmit={this.handleSubmit}
@@ -197,7 +196,7 @@ class CommentPanel extends React.Component {
             toggleTagElementState={this.props.toggleTagElementState}
           />
           {
-            !this.props.users.name ? (
+            !this.props.name ? (
               <UsernameModal
                 isOpen={this.state.usernameModalIsOpen}
                 toggle={this.toggleUsernameModal}

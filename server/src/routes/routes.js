@@ -8,5 +8,6 @@ router.use('/comments', require('./comments'))
 router.use('/questions', require('./questions'))
 router.use('/reactions', require('./reactions'))
 router.use('/instances', require('./instances'))
+router.use('/answers', require('./answers'))
 
 module.exports = router
