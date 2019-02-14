@@ -7,7 +7,7 @@ import classNames from 'classnames/bind'
 import { shadowModalRoot } from '../../shadowDomHelper'
 import apiCall from '../../api-call'
 import { setPersistData } from '../../actions'
-import { keyPressDown, keyPressSubmit } from '../../globals'
+import { keyPressSubmit } from '../../globals'
 
 import styles from './add-username-modal.scss'
 

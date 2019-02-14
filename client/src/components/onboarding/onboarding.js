@@ -208,7 +208,9 @@ class Onboarding extends React.Component {
         break
       case 'ArrowLeft': if (step > 1) this.handlePreviousClick()
         break
-      default:
+      case 'Escape': this.handleCloseIntro()
+        break
+      default: break
     }
   }
 
@@ -224,8 +226,8 @@ class Onboarding extends React.Component {
         onAfterOpen={() => myEl && myEl.focus()}
       >
         <div
-          className={css("full-modal")}
-          ref={el => {myEl = el}}
+          className={css('full-modal')}
+          ref={(el) => { myEl = el }}
           tabIndex="-1"
           onKeyDown={this.keyTraverse}
         >

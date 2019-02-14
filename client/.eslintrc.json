@@ -40,7 +40,8 @@
     "no-continue": "off",
     "object-curly-newline": "off",
     "no-else-return": "off",
-    "method-can-be-static": "off"
+    "method-can-be-static": "off",
+    "jsx-a11y/no-static-element-interactions": "off"
   },
 
   "globals": {
