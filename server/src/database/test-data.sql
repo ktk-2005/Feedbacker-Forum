@@ -16,7 +16,7 @@ INSERT INTO comments (id, time, text, user_id, thread_id) VALUES ('cb38e8f6', '2
 INSERT INTO comments (id, text, user_id, thread_id) VALUES ('13adr8sa', 'jaahaa', 'da776df3', 'THR-1234');
 
 
-INSERT INTO questions (id, time, text, user_id, thread_id) VALUES ('eb1de3fc', '2018-11-14 17:40:09', 'Mitä tänään syötäisiin?', 'da776df3', 'THR-1234');
+INSERT INTO questions (id, time, text, type, user_id, container_id, order_id) VALUES ('eb1de3fc', '2018-11-14 17:40:09', 'Mitä tänään syötäisiin?', 'text', 'da776df3', 'APP-TEST', 1);
 
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('5eaafea3', '2018-11-14 16:38:41', 'up', 'da776df3', 'cb38e8f6');
 INSERT INTO reactions (id, time, emoji, user_id, comment_id) VALUES ('fb05d1a5', '2018-11-14 16:59:32', 'up', 'da776df3', '1bd8052b');
