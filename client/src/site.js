@@ -16,7 +16,7 @@ import Dashboard from './dev-components/dashboard-view'
 import Create from './dev-components/create'
 import Build from './dev-components/build-view'
 import { prepareReactRoot } from './shadowDomHelper'
-import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import apiCall from './api-call'
 import { setPersistData } from './actions'
 // Styles
@@ -62,13 +62,18 @@ const initialize = () => {
 
     if (allDataLoaded) {
       if (!state.users || R.isEmpty(state.users)) {
-        const { id, secret } = await apiCall('POST', '/users', { name: state.name })
+        const { id, secret } = await apiCall('POST', '/users',
+          { name: state.name }, { noUser: true, noRetryAuth: true })
 
         console.log('Created new user from API', { [id]: secret })
 
         store.dispatch(setPersistData({ users: { [id]: secret } }))
       } else {
         console.log('Loaded user from persistent storage', state.users)
+      }
+
+      if (!state.acceptCookies) {
+        showCookieToast(store.dispatch.bind(store))
       }
     }
   }

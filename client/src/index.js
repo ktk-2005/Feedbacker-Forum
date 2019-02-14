@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
-import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import { prepareReactRoot } from './shadowDomHelper'
 
 // Components
@@ -234,6 +234,10 @@ const initialize = () => {
 
       console.log('User role:', role)
       store.dispatch(updateRole(role))
+
+      if (state.introCompleted && !state.acceptCookies) {
+        showCookieToast(store.dispatch.bind(store))
+      }
     }
   }
 

@@ -1,4 +1,6 @@
 import * as R from 'ramda'
+import { toast } from 'react-toastify'
+import { setPersistData } from './actions'
 
 let users = { }
 let userCallbackCounter = 0
@@ -58,6 +60,16 @@ export function waitForUsers() {
         unsubscribeUsers(token)
         resolve(users)
       })
+    }
+  })
+}
+
+export function showCookieToast(dispatch) {
+  const message = 'COOKIES'
+  const cookieToastId = toast.info(message, {
+    autoClose: false,
+    onClose: () => {
+      dispatch(setPersistData({ acceptCookies: true }))
     }
   })
 }
