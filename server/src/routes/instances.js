@@ -76,12 +76,14 @@ router.post('/new', catchErrors(async (req, res) => {
   }
 
   if (type === 'site') {
-    const subdomain = `${name}-${uuid(5)}`
-    const id = uuid(8)
-    const containerInfo = await addSite({
-      id, subdomain, userId, url,
+    await attempt(async () => {
+      const subdomain = `${name}-${uuid(5)}`
+      const id = uuid(8)
+      const containerInfo = await addSite({
+        id, subdomain, userId, url,
+      })
+      res.json({ containerInfo })
     })
-    res.json({ containerInfo })
   } else {
     await attempt(async () => {
       const suffixedName = `${name}-${uuid(5)}`
