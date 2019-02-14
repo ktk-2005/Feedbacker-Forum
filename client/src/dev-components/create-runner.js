@@ -67,6 +67,17 @@ class CreateRunner extends React.Component {
 
   render() {
     const { instanceRunners } = this.state
+
+    function noRunners() {
+      if (instanceRunners.length < 1) {
+        return (
+          <p>
+            Your haven&#39;t added any custom runners yet.
+          </p>
+        )
+      }
+    }
+
     return (
       <div className={css('runner-view-container')}>
         <div className={css('inner-container')}>
@@ -81,17 +92,16 @@ class CreateRunner extends React.Component {
           <div className={css('runner-container')}>
             <h3>Your runners</h3>
             <div className={css('runners')}>
-              {instanceRunners.map(runner => (<RunnerRow
-                key={runner.tag}
-                runner={runner}
-                deleteRunnerCallback={this.deleteRunner}
-              />
-              )) }
-              { instanceRunners.length < 1 ? (
-                <p>
-                  Your haven&#39;t added any custom runners yet.
-                </p>
-              ) : null }
+              {
+                instanceRunners.map(runner => (
+                  <RunnerRow
+                    key={runner.tag}
+                    runner={runner}
+                    deleteRunnerCallback={this.deleteRunner}
+                  />
+                ))
+              }
+              { noRunners() }
             </div>
           </div>
           <h3>Create a runner</h3>

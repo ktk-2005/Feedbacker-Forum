@@ -76,12 +76,15 @@ class Dashboard extends React.Component {
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>
-          { instances.map(instance => (<ContainerCard
-            key={instance.id}
-            removeContainerCallback={this.removeContainerCallback}
-            instance={instance}
-          />
-          )) }
+          {
+            instances.map(instance => (
+              <ContainerCard
+                key={instance.id}
+                removeContainerCallback={this.removeContainerCallback}
+                instance={instance}
+              />
+            ))
+          }
           { noInstances() }
         </div>
       </>
