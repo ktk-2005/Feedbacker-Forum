@@ -1,12 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import ReactModal from 'react-modal'
+import { toast } from 'react-toastify'
 // Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import * as R from 'ramda'
 import { introCompleted } from '../../actions'
 import { shadowModalRoot, shadowDocument } from '../../shadowDomHelper'
+import { showCookieToast } from '../../globals'
 // Styles
 import styles from './onboarding.scss'
 // Assets
@@ -21,6 +23,7 @@ const mapStateToProps = (state) => {
   return ({
     onboarding: !R.isEmpty(persist.users) && !persist.introCompleted,
     dev: !R.isEmpty(persist.users) && state.role === 'dev',
+    acceptCookies: persist.acceptCookies,
   })
 }
 
@@ -66,6 +69,7 @@ class Onboarding extends React.Component {
     this.handlePreviousClick = this.handlePreviousClick.bind(this)
     this.handleCloseIntro = this.handleCloseIntro.bind(this)
     this.doStepActions = this.doStepActions.bind(this)
+    this.modalClosed = this.modalClosed.bind(this)
     this.keyTraverse = this.keyTraverse.bind(this)
   }
 
@@ -198,6 +202,14 @@ class Onboarding extends React.Component {
       if (!el.classList.contains('hidden')) clickElementClose(this.state.step - 1)
     }
     this.props.dispatch(introCompleted())
+
+    this.modalClosed()
+  }
+
+  modalClosed() {
+    if (!this.props.acceptCookies) {
+      showCookieToast(this.props.dispatch)
+    }
   }
 
   keyTraverse(e) {
@@ -220,6 +232,7 @@ class Onboarding extends React.Component {
       <ReactModal
         className={css('intro-modal')}
         isOpen={this.props.onboarding}
+        onRequestClose={this.modalClosed}
         parentSelector={shadowModalRoot}
         overlayClassName={step === 1 ? css('overlay', 'first') : css('overlay')}
         onAfterOpen={() => element && element.focus()}

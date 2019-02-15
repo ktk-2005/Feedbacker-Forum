@@ -34,9 +34,14 @@
 
   .actions {
     margin-left: auto;
+    text-align: right; // For right aligning wrapping buttons
 
     button {
       margin-left: $baseline;
+
+      &:not(:last-of-type) {
+        margin-bottom: $baseline;
+      }
     }
   }
 

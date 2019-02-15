@@ -17,6 +17,7 @@ CREATE TABLE containers (
   subdomain     VARCHAR(32) UNIQUE NOT NULL,
   url           VARCHAR(255) NOT NULL,
   user_id       CHAR(8) NOT NULL,
+  runner        VARCHAR(128) NOT NULL,
   blob          TEXT,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -86,6 +87,18 @@ CREATE TABLE answers (
 
 -- Table: Migrations
 CREATE TABLE migrations (id INTEGER PRIMARY KEY, file VARCHAR(255) UNIQUE);
+
+-- Table: Instance runners
+CREATE TABLE instance_runners (
+  tag      VARCHAR(128) NOT NULL,
+  time     VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+  user_id  CHAR(8) NOT NULL,
+  size     INT,
+  status   CHAR(16) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+
+  UNIQUE (tag, user_id) ON CONFLICT ROLLBACK
+);
 
 
 COMMIT TRANSACTION;

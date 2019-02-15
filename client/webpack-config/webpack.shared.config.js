@@ -2,6 +2,7 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const outputPath = path.resolve(__dirname, '../build')
+const getLocalIdent = require('css-loader/lib/getLocalIdent')
 
 // Webpack configuration shared between development and production builds
 module.exports = {
@@ -84,6 +85,12 @@ module.exports = {
             options: {
               modules: true,
               localIdentName: '[local]__[hash:base64:4]',
+              getLocalIdent: (loaderContext, localIdentName, localName, options) => {
+                if (loaderContext.resourcePath.includes('_toast.scss')) {
+                  return localName
+                }
+                return getLocalIdent(loaderContext, localIdentName, localName, options)
+              },
             },
           },
           {

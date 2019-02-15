@@ -4,22 +4,26 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 // Helpers
+import { ToastContainer } from 'react-toastify'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
 import {
   BrowserRouter as Router, Route, Switch
 } from 'react-router-dom'
+
 import { setupPersist } from './persist'
-import Dashboard from './dashboard-view'
-import Create from './create'
+import Dashboard from './dev-components/dashboard-view'
+import Create from './dev-components/create'
+import Build from './dev-components/build-view'
 import InvalidContainer from './invalid-container'
-import Build from './build-view'
 import { prepareReactRoot } from './shadowDomHelper'
-import { setUsers, subscribeUpdateUsers, setUserName } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import apiCall from './api-call'
 import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
+import './scss/atoms-organisms/_toast.scss'
+import CreateRunner from './dev-components/create-runner'
 
 const css = classNames.bind(styles)
 
@@ -68,6 +72,10 @@ const initialize = () => {
       } else {
         console.log('Loaded user from persistent storage', state.users)
       }
+
+      if (!state.acceptCookies) {
+        showCookieToast(store.dispatch.bind(store))
+      }
     }
   }
 
@@ -85,18 +93,35 @@ const initialize = () => {
   })
 
   ReactDOM.render(
-    <Provider store={store}>
-      <Router>
-        <div className={css('feedback-app-container', 'site-views')}>
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/create" component={Create} />
-            <Route exact path="/invalid-container/:name" component={InvalidContainer} />
-            <Route exact path="/logs/:name" component={Build} />
-          </Switch>
-        </div>
-      </Router>
-    </Provider>,
+    <div className={css('management-container')}>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable={false}
+        pauseOnHover
+        className={css('toast-container')}
+        toastClassName={css('toast')}
+        progressClassName={css('toast-progress')}
+      />
+      <Provider store={store}>
+        <Router>
+          <div className={css('feedback-app-container', 'site-views')}>
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/create" component={Create} />
+              <Route exact path="/create-runner" component={CreateRunner} />
+              <Route exact path="/logs/:name" component={Build} />
+              <Route exact path="/invalid-container/:name" component={InvalidContainer} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
+    </div>,
     prepareReactRoot()
   )
 }

@@ -4,7 +4,7 @@
 @import '../../scss/atoms-organisms/forms';
 
 @import './dashboard-view.scss';
-@import '../../components/reactions/reactions';
+@import '../../feedbacker-components/reactions/reactions';
 
 .center-center-block {
   display: flex;
@@ -19,7 +19,7 @@
   }
 }
 
-.dashboard-button {
+.dashboard-button, .new-runner-button {
   @extend %anchor-button;
 }
 
@@ -65,10 +65,25 @@
   select {
     background: $palette-white;
     appearance: none;
+    margin-right: $baseline;
   }
 
   button[type="submit"] {
     @extend %anchor-button-accent;
     align-self: flex-end;
+  }
+}
+
+.inline-button {
+  display: flex;
+  align-items: baseline;
+
+  select {
+    flex-shrink: 1;
+    flex-grow: 0;
+  }
+  a {
+    flex-shrink: 0;
+    flex-grow: 1;
   }
 }
