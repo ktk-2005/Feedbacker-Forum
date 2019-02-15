@@ -40,6 +40,7 @@ class Dashboard extends React.Component {
 
   removeContainerCallback(containerName) {
     this.setState((prevState) => {
+      // TODO: should fetch and not just filter
       const instancesWithoutDeletedOne = R.reject(
         instance => instance.name === containerName,
         prevState.instances
