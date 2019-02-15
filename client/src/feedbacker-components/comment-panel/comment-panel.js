@@ -178,44 +178,46 @@ class CommentPanel extends React.Component {
     const { hidden, onClick } = this.props
 
     return (
-      <div
-        className={css('panel-container', 'comment-panel', { hidden })}
-        data-introduction-step="5"
-      >
-        <div className={css('panel-header')}>
-          <h5 className={css('heading')}>Comments</h5>
-          <button
-            type="button"
-            className={css('close-button')}
-            onClick={onClick}
-            data-introduction-step-close="5"
-          >
-            <InlineSVG src={CloseIcon} />
-          </button>
-        </div>
-        <div className={css('panel-body')}>
-          <RouteContainer comments={this.props.comments} />
-          { this.threadContainer() }
-          <SubmitField
-            handleSubmit={this.handleSubmit}
-            threadId=""
-            toggleTagElementState={this.props.toggleTagElementState}
-          />
-          {
-            !this.props.name ? (
-              <UsernameModal
-                isOpen={this.state.usernameModalIsOpen}
-                toggle={this.toggleUsernameModal}
-              />
-            )
-              : null
-          }
-          <ConfirmModal
-            text="Are you sure you want to delete this comment?"
-            action={this.deleteComment}
-            isOpen={!R.isEmpty(this.state.commentToDelete)}
-            toggle={this.toggleDeleteModal}
-          />
+      <div className={css('panel-container', { hidden })}>
+        <div
+          className={css('comment-panel')}
+          data-introduction-step="5"
+        >
+          <div className={css('panel-header')}>
+            <h5 className={css('heading')}>Comments</h5>
+            <button
+              type="button"
+              className={css('close-button')}
+              onClick={onClick}
+              data-introduction-step-close="5"
+            >
+              <InlineSVG src={CloseIcon} />
+            </button>
+          </div>
+          <div className={css('panel-body')}>
+            <RouteContainer comments={this.props.comments} />
+            { this.threadContainer() }
+            <SubmitField
+              handleSubmit={this.handleSubmit}
+              threadId=""
+              toggleTagElementState={this.props.toggleTagElementState}
+            />
+            {
+              !this.props.name ? (
+                <UsernameModal
+                  isOpen={this.state.usernameModalIsOpen}
+                  toggle={this.toggleUsernameModal}
+                />
+              )
+                : null
+            }
+            <ConfirmModal
+              text="Are you sure you want to delete this comment?"
+              action={this.deleteComment}
+              isOpen={!R.isEmpty(this.state.commentToDelete)}
+              toggle={this.toggleDeleteModal}
+            />
+          </div>
         </div>
       </div>
     )
