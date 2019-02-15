@@ -183,7 +183,7 @@ class Create extends React.Component {
           <button
             type="submit"
             data-tooltip="Build can take a while, check again later if site unavailable"
-            data-tooltip-width="220px"
+            data-tooltip-width="221px"
           >
             Create
           </button>
