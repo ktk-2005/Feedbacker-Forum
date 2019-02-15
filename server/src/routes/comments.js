@@ -127,7 +127,7 @@ router.get('/:threadId', catchErrors(async (req, res) => {
   })))
 }))
 
-// @api DELETE /api/comments
+// @api DELETE /api/comments/:id
 // Tries to delete a comment. Only successful if the userId of the comment is the same
 // as the user trying to delete the comment, or if the user is a dev.
 //
