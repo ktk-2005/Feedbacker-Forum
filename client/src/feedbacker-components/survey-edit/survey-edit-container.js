@@ -314,7 +314,7 @@ export default class SurveyEditContainer extends React.Component {
           className={css('modal')}
           overlayClassName={css('overlay')}
         >
-          <h3>Are you sure you want to delete this question?</h3>
+          <h3>Are you sure you want to delete this item?</h3>
           <div className={css('button-container')}>
             <button type="button" onClick={this.commitDelete}>Delete</button>
             <button type="button" onClick={this.cancelDelete}>Cancel</button>

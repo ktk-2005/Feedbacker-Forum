@@ -2,10 +2,10 @@ import React from 'react'
 // Helpers
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import apiCall from './api-call'
-import { subscribeUsers, unsubscribeUsers } from './globals'
+import apiCall from '../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../globals'
 // Styles
-import styles from './scss/views/build-view.scss'
+import styles from '../scss/views/build-view.scss'
 
 const css = classNames.bind(styles)
 
@@ -64,7 +64,7 @@ class Build extends React.Component {
               >Back to dashboard
               </button>
             </Link>
-            <label data-tooltip="When the instance has been built the link will work" data-tooltip-width="200px">
+            <label data-tooltip="The link will start working when the application has started." data-tooltip-width="200px">
               Feedbackable UI:
               <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url.replace(/^(https?:)?\/\//, '')}</a>
             </label>

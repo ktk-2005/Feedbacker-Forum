@@ -1,4 +1,6 @@
 import * as R from 'ramda'
+import { toast } from 'react-toastify'
+import { setPersistData } from './actions'
 
 let users = { }
 let userCallbackCounter = 0
@@ -59,6 +61,16 @@ export function waitForUsers() {
         resolve(users)
       })
     }
+  })
+}
+
+export function showCookieToast(dispatch) {
+  const message = 'By continuing to use Feedbacker Forum you accept our use of cookies.'
+  toast(message, {
+    autoClose: false,
+    onClose: () => {
+      dispatch(setPersistData({ acceptCookies: true }))
+    },
   })
 }
 

@@ -3,12 +3,12 @@ import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
-import apiCall from './api-call'
-import { subscribeUsers, unsubscribeUsers } from './globals'
+import apiCall from '../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../globals'
 // Components
 import ContainerCard from './container-card'
 // Styles
-import styles from './scss/views/dashboard-view.scss'
+import styles from '../scss/views/dashboard-view.scss'
 
 
 const css = classNames.bind(styles)
@@ -18,6 +18,7 @@ class Dashboard extends React.Component {
     super(props)
 
     this.refreshInstances = this.refreshInstances.bind(this)
+    this.removeContainerCallback = this.removeContainerCallback.bind(this)
 
     this.state = {
       instances: [],
@@ -39,10 +40,12 @@ class Dashboard extends React.Component {
 
   removeContainerCallback(containerName) {
     this.setState((prevState) => {
+      // TODO: should fetch and not just filter
       const instancesWithoutDeletedOne = R.reject(
-        instance => instance.id === containerName, prevState.instances
+        instance => instance.name === containerName,
+        prevState.instances
       )
-      return instancesWithoutDeletedOne
+      return { instances: instancesWithoutDeletedOne }
     })
   }
 
@@ -74,12 +77,17 @@ class Dashboard extends React.Component {
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>
-          { instances.map(instance => (<ContainerCard
-            key={instance.id}
-            removeContainerCallback={this.removeContainerCallback}
-            instance={instance}
-          />
-          )) }
+          <div className={css('reverse')}>
+            {
+              instances.map(instance => (
+                <ContainerCard
+                  key={instance.id}
+                  removeContainerCallback={this.removeContainerCallback}
+                  instance={instance}
+                />
+              ))
+            }
+          </div>
           { noInstances() }
         </div>
       </>

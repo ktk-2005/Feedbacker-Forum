@@ -1,4 +1,5 @@
 import express from 'express'
+import * as R from 'ramda'
 import {
   // getRunningContainers,
   createNewContainer,
@@ -6,8 +7,9 @@ import {
   stopContainer,
   deleteContainer,
   getContainerLogs,
+  getRunningContainersByUser,
 } from '../docker'
-import { resolveContainer, addSite, listContainersByUser } from '../database'
+import { resolveContainer, addSite, listContainersByUser, confirmContainerOwnership } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
@@ -21,8 +23,11 @@ const router = express.Router()
 //
 // Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 router.get('/', catchErrors(async (req, res) => {
-  const { userId } = await reqUser(req)
-  const containers = await listContainersByUser([userId])
+  const { users } = await reqUser(req)
+  const containers = []
+  for (const [userId] of R.toPairs(users)) {
+    containers.push(...await getRunningContainersByUser([userId]))
+  }
   res.send(containers)
 }))
 
@@ -31,14 +36,12 @@ router.get('/', catchErrors(async (req, res) => {
 //
 // Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 router.get('/logs/:name', catchErrors(async (req, res) => {
+  const { name } = req.params
   const { users } = await reqUser(req)
-  const { id, userId } = await resolveContainer(req.params.name)
 
-  if (!users.hasOwnProperty(userId)) {
-    throw new HttpError(403, 'Only instance owner can see logs')
-  }
+  await confirmContainerOwnership(name, users)
 
-  const logs = await getContainerLogs(id)
+  const logs = await getContainerLogs(name)
   res.type('txt')
   res.send(logs)
 }))
@@ -74,7 +77,16 @@ router.post('/new', catchErrors(async (req, res) => {
     throw new HttpError(400, `Bad container name: ${name}`)
   }
 
-  if (type === 'node') {
+  if (type === 'site') {
+    await attempt(async () => {
+      const subdomain = `${name}-${uuid(5)}`
+      const id = uuid(8)
+      const containerInfo = await addSite({
+        id, subdomain, userId, type, url,
+      })
+      res.json({ containerInfo })
+    })
+  } else {
     await attempt(async () => {
       const suffixedName = `${name}-${uuid(5)}`
       const containerInfo = await createNewContainer(
@@ -82,15 +94,6 @@ router.post('/new', catchErrors(async (req, res) => {
       )
       res.json({ containerInfo })
     })
-  } else if (type === 'site') {
-    const subdomain = `${name}-${uuid(5)}`
-    const id = uuid(8)
-    const containerInfo = await addSite({
-      id, subdomain, userId, url,
-    })
-    res.json({ containerInfo })
-  } else {
-    throw new HttpError(501, `Expected type 'node', but got '${type}'`)
   }
 }))
 
@@ -103,9 +106,14 @@ router.post('/new', catchErrors(async (req, res) => {
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/stop', catchErrors(async (req, res) => {
-  await stopContainer(req.body.name)
-  logger.info(`Stopped container with name ${req.body.name}`)
-  res.sendStatus(200)
+  const { name } = req.body
+  const { users } = await reqUser(req)
+
+  await confirmContainerOwnership(name, users)
+
+  await stopContainer(name)
+  logger.info(`Stopped container with name ${name}`)
+  res.send({})
 }))
 
 // @api POST /api/instances/start
@@ -117,9 +125,14 @@ router.post('/stop', catchErrors(async (req, res) => {
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/start', catchErrors(async (req, res) => {
-  await startContainer(req.body.name)
-  logger.info(`Started container with name ${req.body.name}`)
-  res.sendStatus(200)
+  const { name } = req.body
+  const { users } = await reqUser(req)
+
+  await confirmContainerOwnership(name, users)
+
+  await startContainer(name)
+  logger.info(`Started container with name ${name}`)
+  res.send({})
 }))
 
 // @api POST /api/instances/delete
@@ -131,9 +144,14 @@ router.post('/start', catchErrors(async (req, res) => {
 //
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/delete', catchErrors(async (req, res) => {
-  await deleteContainer(req.body.name)
-  logger.info(`Deleted container with name ${req.body.name}`)
-  res.send(200)
+  const { name } = req.body
+  const { users } = await reqUser(req)
+
+  await confirmContainerOwnership(name, users)
+
+  await deleteContainer(name)
+  logger.info(`Deleted container with name ${name}`)
+  res.send({})
 }))
 
 module.exports = router

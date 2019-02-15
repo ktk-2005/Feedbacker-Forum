@@ -184,32 +184,31 @@ export async function addUser({ id, name, secret }) { return db.run('INSERT INTO
 
 export async function addUsername({ id, name, secret }) { return db.query('UPDATE users SET name=? WHERE id=? AND secret=?', [name, id, secret]) }
 
-export async function addContainer({
-  id, subdomain, userId, blob, url,
-}) {
-  return db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
-}
+// Containers/Instances
 
-export async function listContainers() {
-  return db.query('SELECT id, subdomain FROM containers')
+export async function addContainer({
+  id, subdomain, userId, blob, type, url,
+}) {
+  return db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, blob])
 }
 
 export async function resolveContainer(subdomain) {
-  const rows = await db.query('SELECT id, user_id FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
+  const rows = await db.query('SELECT id, user_id, runner FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
   if (!rows || rows.length === 0) throw new HttpError(400, `Invalid container ${subdomain}`)
   return {
     id: rows[0].id,
     userId: rows[0].user_id,
+    runner: rows[0].runner,
   }
 }
 
 export async function listContainersByUser(values = []) {
-  return db.query('SELECT id, subdomain FROM containers WHERE user_id=?', values)
+  return db.query('SELECT id, subdomain, runner FROM containers WHERE user_id=?', values)
 }
 
-export async function removeContainer({
-  id,
-}) { return db.run('DELETE FROM containers WHERE subdomain=?', [id]) }
+export async function removeContainer(name) {
+  return db.run('DELETE FROM containers WHERE subdomain=?', [name])
+}
 
 export async function verifyUser(user, secret) {
   const rows = await db.query('SELECT * FROM users WHERE id=? AND secret=? LIMIT 1', [user, secret])
@@ -219,10 +218,79 @@ export async function verifyUser(user, secret) {
 }
 
 export async function addSite({
-  id, subdomain, userId, url, blob,
+  id, subdomain, userId, url, type, blob,
 }) {
-  db.run('INSERT INTO containers(id, subdomain, url, user_id, blob) VALUES (?, ?, ?, ? ,?)', [id, subdomain, url, userId, blob])
+  db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, blob])
   return {
     subdomain,
   }
+}
+
+// Instance runners
+
+export async function getInstanceRunnersForUser(user) {
+  return db.query('SELECT * FROM instance_runners WHERE user_id=?', [user])
+}
+
+export async function listInstanceRunnerOwnersByTag(tag) {
+  return db.query('SELECT user_id FROM instance_runners WHERE tag=?', [tag])
+}
+
+export async function getInstanceRunnerTagsForUser(userId) {
+  return db.query('SELECT id FROM instance_runners WHERE user_tag=?', [userId])
+}
+
+export async function deleteInstanceRunnerForUser(userId, tag) {
+  return db.query('DELETE FROM instance_runners WHERE user_id=? AND tag=?', [userId, tag])
+}
+
+export async function createNewInstanceRunner(user, dockerTag) {
+  return db.run('INSERT INTO instance_runners(tag, user_id, status) VALUES (?, ?, ?)', [dockerTag, user, 'pending'])
+}
+
+export async function setInstanceRunnerStatusSuccess(dockerTag, size, userId) {
+  return db.run('UPDATE instance_runners SET status=?, size=? WHERE tag=? AND user_id=?', ['success', size, dockerTag, userId])
+}
+
+export async function setInstanceRunnerStatusFail(dockerTag, userId) {
+  return db.run('UPDATE instance_runners SET status=? WHERE tag=? AND user_id=?', ['fail', dockerTag, userId])
+}
+
+
+// Authentication stuff
+
+// This function assumes that the authenticity of claimed userIds are already verified.
+// Returns false if the user doesn't own the claimed container, or the owener id elsewise.
+export async function confirmContainerOwnership(name, users) {
+  const rows = await db.query('SELECT user_id FROM containers WHERE subdomain=? LIMIT 1', [name])
+
+  if (rows && rows.length > 0) {
+    const ownerUserId = rows[0].user_id
+    if (users.hasOwnProperty(ownerUserId)) {
+      return ownerUserId
+    }
+  }
+
+  throw new HttpError(400, 'Invalid id')
+}
+
+// This function assumes that the authenticity of claimed userIds are already verified.
+// Returns false if the user doesn't own the claimed instance runner, or the owner id elsewise.
+export async function confirmInstanceRunnerOwnership(tag, users) {
+  const rows = await db.query('SELECT user_id FROM instance_runners WHERE tag=?', [tag])
+
+  if (rows && rows.length > 0) {
+    const ownerUserIds = rows.map(row => row.user_id)
+    const matchedId = R.find((userId) => {
+      if (users.hasOwnProperty(userId)) {
+        return true
+      }
+
+      return false
+    })(ownerUserIds)
+
+    if (matchedId) return matchedId
+  }
+
+  throw new HttpError(400, 'Invalid tag')
 }

@@ -41,6 +41,11 @@
     margin-top: $spacer * 3;
     margin-bottom: $spacer * 2;
   }
+
+  .reverse {
+    display: flex;
+    flex-direction: column-reverse;
+  }
 }
 
 .button-container {
@@ -60,11 +65,14 @@
   border-radius: $border-radius-default;
   box-shadow: 0 0 10px $palette-shadow-default;
 
+  &:not(:first-of-type) {
+    margin-top: 0;
+  }
+
   .header-container {
     display: flex;
     justify-content: space-between;
     flex-flow: row-reverse wrap;
-
 
     h5 {
       text-transform: capitalize;
