@@ -180,7 +180,13 @@ class Create extends React.Component {
               Back to dashboard
             </button>
           </Link>
-          <button type="submit">Create</button>
+          <button
+            type="submit"
+            data-tooltip="Build can take a while, check again later if site unavailable"
+            data-tooltip-width="220px"
+          >
+            Create
+          </button>
         </div>
       </form>
     )
