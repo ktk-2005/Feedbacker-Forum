@@ -118,7 +118,7 @@ class Create extends React.Component {
         </label>
         <label htmlFor="version">
           Git Hash
-          <input type="text" id="version" name="version" placeholder="master or commit hash" required />
+          <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" required />
         </label>
         <label htmlFor="name">
           Name
@@ -126,8 +126,8 @@ class Create extends React.Component {
         </label>
         <label
           htmlFor="port"
-          data-tooltip="Port number depends on the application type eg. node.js runs on  3000"
-          data-tooltip-width="200px"
+          data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
+          data-tooltip-width="250px"
         >
           Port
           <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
@@ -156,8 +156,12 @@ class Create extends React.Component {
         id="siteForm"
         onSubmit={this.postSite}
       >
-        <label htmlFor="url">
-          Git URL
+        <label
+          htmlFor="url"
+          data-tooltip="Does not work if the website has absolute redirect."
+          data-tooltip-width="250px"
+        >
+          Live website URL
           <input
             type="text"
             name="url"
