@@ -194,9 +194,12 @@ class Onboarding extends React.Component {
 
   handleCloseIntro() {
     stopPulseAnimation(this.state.step)
-    if (this.state.step === 3 || this.state.step === 5 || this.state.step === 6) {
+    if (this.state.step === 3 || this.state.step === 5) {
       const el = shadowDocument().querySelector(`[data-introduction-step-close="${this.state.step}"]`)
       if (!el.classList.contains('hidden')) clickElementClose(this.state.step)
+    } else if (this.state.step === 6) {
+      const el = shadowDocument().querySelector(`[data-introduction-step-close="${this.state.step - 1}"]`)
+      if (!el.classList.contains('hidden')) clickElementClose(this.state.step - 1)
     }
     this.props.dispatch(introCompleted())
 
