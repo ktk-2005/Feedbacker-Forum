@@ -146,11 +146,10 @@ router.delete('/:id', catchErrors(async (req, res) => {
 
   if (users.hasOwnProperty(owner) || users.hasOwnProperty(commentUser)) {
     const delRows = await deleteComment({ id })
-    res.json(delRows)
+    res.json({ delRows })
   } else {
     throw new HttpError(403, 'Not authorized to delete this comment')
   }
-  res.json({ delRows })
 }))
 
 module.exports = router
