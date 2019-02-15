@@ -99,7 +99,9 @@ class Create extends React.Component {
           Application type
           <div className={css('inline-button')}>
             <select name="application" id="application" form="form" required>
-              {this.state.instanceRunners.map(runner => (
+              {this.state.instanceRunners.filter(runner => (
+                (runner.status === 'success' || !runner.status)
+              )).map(runner => (
                 <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
               ))}
             </select>
