@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getComments, getThreadComments, addComment, addThread, deleteComment
+  getComments, getThreadComments, addComment, addThread, deleteComment, getCommentUser
 } from '../database'
 import { uuid, attempt, reqContainer, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
+import { HttpError } from '../errors'
 
 const router = express.Router()
 
@@ -136,30 +137,18 @@ router.get('/:threadId', catchErrors(async (req, res) => {
 // e.g. @json {
 //   "delRows": 1
 // }
-router.delete('/', catchErrors(async (req, res) => {
-  const { commentId, commentUser } = req.body
+router.delete('/:id', catchErrors(async (req, res) => {
+  const { id } = req.params
   const { users } = await reqUser(req)
   const { owner } = await reqContainer(req)
-  let delRows = {}
-  if (users.hasOwnProperty(owner)) {
-    try {
-      delRows = await deleteComment({
-        commentId,
-        userId: commentUser,
-      })
-    } catch (err) { /* ignore */ }
+
+  const commentUser = await getCommentUser({ id })
+
+  if (users.hasOwnProperty(owner) || users.hasOwnProperty(commentUser)) {
+    const delRows = await deleteComment({ id })
+    res.json(delRows)
   } else {
-    for (const userId in users) {
-      if (users.hasOwnProperty(userId)) {
-        try {
-          delRows = await deleteComment({
-            commentId,
-            userId,
-          })
-        } catch (err) { /* ignore */
-        }
-      }
-    }
+    throw new HttpError(403, 'Not authorized to delete this comment')
   }
   res.json({ delRows })
 }))
