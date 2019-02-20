@@ -158,7 +158,6 @@ export async function deleteComment({
 
 export async function getCommentUser({ id }) {
   const rows = await db.query('SELECT user_id FROM comments WHERE id=?', [id])
-  console.log(id, rows)
   return rows[0].user_id
 }
 
