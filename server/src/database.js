@@ -153,8 +153,14 @@ export async function deleteReaction({
 }) { return db.del('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
 
 export async function deleteComment({
-  userId, commentId,
-}) { return db.del('DELETE FROM comments WHERE user_id=? AND id=?', [userId, commentId]) }
+  id,
+}) { return db.del('DELETE FROM comments WHERE id=?', [id]) }
+
+export async function getCommentUser({ id }) {
+  const rows = await db.query('SELECT user_id FROM comments WHERE id=?', [id])
+  return rows[0].user_id
+}
+
 
 export async function addComment({
   id, text, userId, threadId, anonymous, blob,
