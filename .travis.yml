@@ -60,6 +60,9 @@ jobs:
         - npm --prefix server run doc -- --endpoints ../build/endpoints.json
         - diff build/api.md docs/api.md
 
+        # Run client tests
+        - npm --prefix client run test
+
         # Test local development
         - npm --prefix server run test:api
         - APP_SERVER_PORT=9001 npm --prefix server run start &
