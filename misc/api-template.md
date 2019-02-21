@@ -31,6 +31,8 @@ Authentication is done using the standard `Authorization` header with a non-stan
 
 @api /api/comments
 
+@api /api/comments/:id
+
 @api /api/comments/:threadId
 
 ## Questions

@@ -129,6 +129,11 @@ func modifyResponse(res *http.Response) error {
 		}
 	}
 
+	code := res.StatusCode
+	if code >= 300 && code < 400 {
+		isHtml = false
+	}
+
 	if !isHtml {
 		return nil
 	}
