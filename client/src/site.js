@@ -27,7 +27,7 @@ import CreateRunner from './dev-components/create-runner'
 
 const css = classNames.bind(styles)
 
-const initializedKey = '!!feedbacker_forum_initialized!!'
+const initializedKey = '!!feedbacker_forum_site_initialized!!'
 
 const LOAD_PERSIST = 'LOAD_PERSIST'
 const SET_PERSIST = 'SET_PERSIST'
