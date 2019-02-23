@@ -174,7 +174,7 @@ class CommentPanel extends React.Component {
     const { hidden, onClick } = this.props
 
     return (
-      <div id="huutis" className={css('panel-container', { hidden })}>
+      <div className={css('panel-container', { hidden })}>
         <div
           className={css('comment-panel')}
           data-introduction-step="5"
