@@ -10,7 +10,7 @@ let middlewares
 
 const id = 123456
 const devComment = {
-  content: 'Wow, such a waste of talend :-DD',
+  text: 'Wow, such a waste of talend :-DD',
   time: '01.01.1990',
   reactions: 'Thonking',
   blob: { dev: true },
@@ -27,14 +27,8 @@ beforeEach(() => {
     role,
   }
 })
-/*
-describe('', () => {
-  it('', () => {
-    expect(test).toEqual('success')
-  })
-})
-*/
-test('Comment mount', () => {
+
+test('Comment should mount with correct text', () => {
   const initialState = { comments: [] }
   const store = mockStore()
   const comment = mount(
@@ -42,5 +36,6 @@ test('Comment mount', () => {
       <Comment {...testProps} />
     </Provider>
   )
-  expect(comment).toHaveLength(1)
+  const wrapper = comment.find('.text')
+  expect(wrapper.text()).toBe('Wow, such a waste of talend :-DD')
 })
