@@ -11,7 +11,7 @@ let middlewares
 const id = 123456
 const devComment = {
   text: 'This doesn\'t work',
-  time: '2019-02-02',
+  time: '2019-02-02T18:00:00+02:00',
   reactions: 'down',
   blob: { dev: true },
 }
