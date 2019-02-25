@@ -71,8 +71,8 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
           className={css('timestamp')}
           date={comment.time}
           format="D.MM.YYYY HH.mm"
-          add={{ hours: 2 }}
-          data-tooltip={moment(comment.time).add(2, 'hours').fromNow()}
+          add={{ hours: 2 }} // REMOVE WHEN SWITCHING TO POSTGRES IN PROD
+          data-tooltip={moment(comment.time).add(2, 'hours').fromNow()} // REMOVE .add() WHEN SWITCHING TO POSTGRES IN PROD
           data-tooltip-south
           data-tooltip-width="100px"
         />
