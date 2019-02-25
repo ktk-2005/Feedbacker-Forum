@@ -10,9 +10,9 @@ let middlewares
 
 const id = 123456
 const devComment = {
-  text: 'Wow, such a waste of talend :-DD',
-  time: '01.01.1990',
-  reactions: 'Thonking',
+  text: 'This doesn\'t work',
+  time: '2019-02-02',
+  reactions: 'down',
   blob: { dev: true },
 }
 
@@ -37,5 +37,5 @@ test('Comment should mount with correct text', () => {
     </Provider>
   )
   const wrapper = comment.find('.text')
-  expect(wrapper.text()).toBe('Wow, such a waste of talend :-DD')
+  expect(wrapper.text()).toBe(devComment.text)
 })
