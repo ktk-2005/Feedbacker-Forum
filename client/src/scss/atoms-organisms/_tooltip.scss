@@ -17,7 +17,7 @@
   transition: $transition-default-all;
   opacity: 0;
   visibility: hidden;
-  @include z-level(1)
+  @include z-level(5);
 }
 
 $tooltip-background: $palette-dark;
@@ -56,6 +56,7 @@ $tooltip-background: $palette-dark;
 
 [data-tooltip-south]:after, [data-tooltip-south]:before {
   top: 100%;
+  bottom: auto;
 }
 
 [data-tooltip-east]:before, [data-tooltip-east]:after,

@@ -1,6 +1,7 @@
 import React from 'react'
 // Helpers
 import Moment from 'react-moment'
+import moment from 'moment'
 import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
@@ -66,9 +67,15 @@ const Comment = ({ id, comment, role, op, onClick, buttonText, canDelete, delete
         {opLabel(op, comment.userId)}
       </div>
       <div className={css('time-target-container')}>
-        <Moment className={css('timestamp')} fromNow>
-          {comment.time}
-        </Moment>
+        <Moment
+          className={css('timestamp')}
+          date={comment.time}
+          format="D.MM.YYYY HH.mm"
+          add={{ hours: 2 }} // REMOVE WHEN SWITCHING TO POSTGRES IN PROD
+          data-tooltip={moment(comment.time).add(2, 'hours').fromNow()} // REMOVE .add() WHEN SWITCHING TO POSTGRES IN PROD
+          data-tooltip-south
+          data-tooltip-width="100px"
+        />
         <div
           data-tooltip="This comment has a element tagged with it"
           data-tooltip-west
