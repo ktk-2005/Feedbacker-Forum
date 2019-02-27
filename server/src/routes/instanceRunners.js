@@ -5,7 +5,6 @@ import { reqUser } from './helpers'
 import {  getInstanceRunnersForUser, confirmInstanceRunnerOwnership } from '../database'
 import { config } from '../globals'
 import { createNewRunner, deleteRunner } from '../docker'
-import { HttpError } from '../errors'
 
 const router = express.Router()
 
