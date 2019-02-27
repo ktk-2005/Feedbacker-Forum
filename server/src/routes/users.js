@@ -12,8 +12,9 @@ const router = express.Router()
 // Returns JSON that contains generated id and secret of added user.
 // The body can be empty to create a new anonymous user which is the default
 // mode of interaction in the frontend.
-// Alternatively you can specify properties for the new user, eg. @json {
-//   "name": "salaattipoika"
+// Alternatively you can specify properties for the new user, 
+// eg. @json {
+//   "name": "testuser"
 // }
 //
 // Example response @json {

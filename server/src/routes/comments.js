@@ -15,18 +15,21 @@ const router = express.Router()
 //     "1bd8052b": {
 //         "id": "1bd8052b",
 //         "time": "2018-11-14 16:35:27",
-//         "text": "skrattia",
+//         "text": "comment text",
 //         "userId": "da776df3",
-//         "username": "jaba",
+//         "username": "TestUser",
 //         "threadId": "3blkj3ad",
 //         "hideName": false,
-//         "blob": "",
+//         "blob": {
+//            "path": "/path/to/comment",
+//            "route": "/route/to/comment"
+//         },
 //         "reactions": [
 //             {
 //                 "id": "1ddb07c8",
 //                 "time": "2019-01-16 16:43:21",
 //                 "userId": "da776df3",
-//                 "emoji": "🍑",
+//                 "emoji": "up",
 //                 "commentId": "1bd8052b"
 //             }
 //          ]
@@ -34,11 +37,13 @@ const router = express.Router()
 //     "cb38e8f6": {
 //         "id": "cb38e8f6",
 //         "time": "2018-11-14 17:10:42",
-//         "text": "tröttistä",
+//         "text": "other comment",
 //         "userId": "da776df3",
-//         "username": "jaba",
+//         "username": "NewUser",
 //         "threadId": "3blkj3ad",
-//         "blob": "",
+//         "blob": {
+//            "route": "/"
+//         },
 //         "reactions": []
 //     }
 // }
@@ -80,13 +85,19 @@ router.get('/', catchErrors(async (req, res) => {
 // Adds comment to the current container instance.
 //
 // Example body for a root comment @json {
-//   "text": "minttua",
-//   "blob": {"path": "/path/to/element"}
+//   "text": "comment",
+//   "blob": {
+//      "route": "/",
+//      "path": "/path/to/element"
+//    }
 // }
 // comments can be linked to a thread with @json {
-//   "text": "minttua",
+//   "text": "thread comment",
 //   "threadId": "1234",
-//   "blob": {"path": "/path/to/element"}
+//   "blob": {
+//      "route": "/",
+//      "path": "/path/to/element"
+//    }
 // }
 //
 // Returns `{ id, threadId }` of the new comment
