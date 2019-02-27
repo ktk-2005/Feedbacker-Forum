@@ -1,16 +1,14 @@
 @import '../../scss/compulsory';
 
 @import './create.scss';
-@import './dashboard-view.scss';
 
-
-.view404 {
+.view-404 {
   @extend .create-view;
 
   h2 {
     margin-bottom: $spacer;
   }
-  
+
   div {
     margin-bottom: $spacer;
   }
