@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import express from 'express'
 import {
-  getComments, getThreadComments, addComment, addThread, deleteComment
+  getComments, getThreadComments, addComment, addThread, deleteComment, getCommentUser
 } from '../database'
 import { uuid, attempt, reqContainer, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
+import { HttpError } from '../errors'
 
 const router = express.Router()
 
@@ -15,18 +16,21 @@ const router = express.Router()
 //     "1bd8052b": {
 //         "id": "1bd8052b",
 //         "time": "2018-11-14 16:35:27",
-//         "text": "skrattia",
+//         "text": "comment text",
 //         "userId": "da776df3",
-//         "username": "jaba",
+//         "username": "TestUser",
 //         "threadId": "3blkj3ad",
 //         "hideName": false,
-//         "blob": "",
+//         "blob": {
+//            "path": "/path/to/comment",
+//            "route": "/route/to/comment"
+//         },
 //         "reactions": [
 //             {
 //                 "id": "1ddb07c8",
 //                 "time": "2019-01-16 16:43:21",
 //                 "userId": "da776df3",
-//                 "emoji": "🍑",
+//                 "emoji": "up",
 //                 "commentId": "1bd8052b"
 //             }
 //          ]
@@ -34,11 +38,13 @@ const router = express.Router()
 //     "cb38e8f6": {
 //         "id": "cb38e8f6",
 //         "time": "2018-11-14 17:10:42",
-//         "text": "tröttistä",
+//         "text": "other comment",
 //         "userId": "da776df3",
-//         "username": "jaba",
+//         "username": "NewUser",
 //         "threadId": "3blkj3ad",
-//         "blob": "",
+//         "blob": {
+//            "route": "/"
+//         },
 //         "reactions": []
 //     }
 // }
@@ -80,13 +86,19 @@ router.get('/', catchErrors(async (req, res) => {
 // Adds comment to the current container instance.
 //
 // Example body for a root comment @json {
-//   "text": "minttua",
-//   "blob": {"path": "/path/to/element"}
+//   "text": "comment",
+//   "blob": {
+//      "route": "/",
+//      "path": "/path/to/element"
+//    }
 // }
 // comments can be linked to a thread with @json {
-//   "text": "minttua",
+//   "text": "thread comment",
 //   "threadId": "1234",
-//   "blob": {"path": "/path/to/element"}
+//   "blob": {
+//      "route": "/",
+//      "path": "/path/to/element"
+//    }
 // }
 //
 // Returns `{ id, threadId }` of the new comment
@@ -126,7 +138,7 @@ router.get('/:threadId', catchErrors(async (req, res) => {
   })))
 }))
 
-// @api DELETE /api/comments
+// @api DELETE /api/comments/:id
 // Tries to delete a comment. Only successful if the userId of the comment is the same
 // as the user trying to delete the comment, or if the user is a dev.
 //
@@ -136,32 +148,19 @@ router.get('/:threadId', catchErrors(async (req, res) => {
 // e.g. @json {
 //   "delRows": 1
 // }
-router.delete('/', catchErrors(async (req, res) => {
-  const { commentId, commentUser } = req.body
+router.delete('/:id', catchErrors(async (req, res) => {
+  const { id } = req.params
   const { users } = await reqUser(req)
   const { owner } = await reqContainer(req)
-  let delRows = {}
-  if (users.hasOwnProperty(owner)) {
-    try {
-      delRows = await deleteComment({
-        commentId,
-        userId: commentUser,
-      })
-    } catch (err) { /* ignore */ }
+
+  const commentUser = await getCommentUser({ id })
+
+  if (users.hasOwnProperty(owner) || users.hasOwnProperty(commentUser)) {
+    const delRows = await deleteComment({ id })
+    res.json({ delRows })
   } else {
-    for (const userId in users) {
-      if (users.hasOwnProperty(userId)) {
-        try {
-          delRows = await deleteComment({
-            commentId,
-            userId,
-          })
-        } catch (err) { /* ignore */
-        }
-      }
-    }
+    throw new HttpError(403, 'Not authorized to delete this comment')
   }
-  res.json({ delRows })
 }))
 
 module.exports = router

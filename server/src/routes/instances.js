@@ -1,7 +1,6 @@
 import express from 'express'
 import * as R from 'ramda'
 import {
-  // getRunningContainers,
   createNewContainer,
   startContainer,
   stopContainer,
@@ -47,7 +46,7 @@ router.get('/logs/:name', catchErrors(async (req, res) => {
 }))
 
 // @api POST /api/instances/new
-// Create a new container.
+// Create a new instance.
 //
 // Currently the only parameter considered is `instance_image`. The name and subdomain are
 // generated automatically.

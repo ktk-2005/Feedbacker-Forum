@@ -5,6 +5,9 @@ node_modules/
 # Webpack output files
 build/
 
+# Test coverage files
+coverage/
+
 # NPM cache directory
 .npm
 

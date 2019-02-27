@@ -12,7 +12,7 @@ const router = express.Router()
 // add reaction to a comment.
 //
 // Example body @json {
-//   "emoji": "fire",
+//   "emoji": "up",
 //   "commentId": "1bd8052b"
 // }
 //
@@ -33,7 +33,7 @@ router.post('/', catchErrors(async (req, res) => {
 // @api DELETE /api/reactions
 // Remove reaction from a comment.
 //
-// Returns JSON indicating whether deletion was successful or not
+// Returns empty JSON if deletion was succesful
 router.delete('/', catchErrors(async (req, res) => {
   const { emoji, commentId } = req.body
   const { users } = await reqUser(req)

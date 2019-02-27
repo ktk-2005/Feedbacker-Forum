@@ -17,32 +17,8 @@ export async function initializeDatabase() {
   }
 }
 
-export async function getComments(container) {
-  return db.query(`
-    SELECT
-    comments.id         AS comment_id,
-    comments.time       AS comment_time,
-    comments.text       AS comment_text,
-    comments.user_id    AS comment_user_id,
-    comments.thread_id  AS comment_thread_id,
-    comments.anonymous  AS comment_hide_name,
-    comments.blob       AS comment_blob,
-    reactions.id        AS reaction_id,
-    reactions.time      AS reaction_time,
-    reactions.emoji     AS reaction_emoji,
-    reactions.user_id   AS reaction_user_id,
-    reactions.comment_id AS reaction_comment_id,
-    users.name          AS username
-    FROM comments
-    LEFT JOIN reactions
-    ON comments.id = reactions.comment_id
-    INNER JOIN threads
-    ON comments.thread_id = threads.id
-    INNER JOIN users
-    ON comments.user_id = users.id
-    WHERE threads.container_id = ?
-    `, [container])
-}
+
+// Questions
 
 export async function getQuestions(container) {
   const rows = await db.query('SELECT * FROM questions WHERE container_id = ? ORDER BY order_id, id', [container])
@@ -141,6 +117,7 @@ END WHERE id IN (${inExpr})
   return db.run(query)
 }
 
+// Reactions
 
 export async function getReactions() { return db.query('SELECT * FROM reactions') }
 
@@ -152,13 +129,52 @@ export async function deleteReaction({
   emoji, userId, commentId,
 }) { return db.del('DELETE FROM reactions WHERE emoji=? AND user_id=? AND comment_id=?', [emoji, userId, commentId]) }
 
+// Comments
+
+export async function getComments(container) {
+  return db.query(`
+    SELECT
+    comments.id         AS comment_id,
+    comments.time       AS comment_time,
+    comments.text       AS comment_text,
+    comments.user_id    AS comment_user_id,
+    comments.thread_id  AS comment_thread_id,
+    comments.anonymous  AS comment_hide_name,
+    comments.blob       AS comment_blob,
+    reactions.id        AS reaction_id,
+    reactions.time      AS reaction_time,
+    reactions.emoji     AS reaction_emoji,
+    reactions.user_id   AS reaction_user_id,
+    reactions.comment_id AS reaction_comment_id,
+    users.name          AS username
+    FROM comments
+    LEFT JOIN reactions
+    ON comments.id = reactions.comment_id
+    INNER JOIN threads
+    ON comments.thread_id = threads.id
+    INNER JOIN users
+    ON comments.user_id = users.id
+    WHERE threads.container_id = ?
+    `, [container])
+}
+
+export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
+
 export async function deleteComment({
-  userId, commentId,
-}) { return db.del('DELETE FROM comments WHERE user_id=? AND id=?', [userId, commentId]) }
+  id,
+}) { return db.del('DELETE FROM comments WHERE id=?', [id]) }
+
+export async function getCommentUser({ id }) {
+  const rows = await db.query('SELECT user_id FROM comments WHERE id=?', [id])
+  return rows[0].user_id
+}
+
 
 export async function addComment({
   id, text, userId, threadId, anonymous, blob,
 }) { return db.run('INSERT INTO comments(id, text, user_id, thread_id, anonymous, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, text, userId, threadId, anonymous ? '1' : '0', blob]) }
+
+// Answers
 
 export async function addAnswer({
   id, userId, questionId, blob,
@@ -172,13 +188,15 @@ export async function editAnswer({
   userId, questionId, blob,
 }) { return db.query('UPDATE answers SET blob=? WHERE user_id=? AND question_id=?', [blob, userId, questionId]) }
 
+// Threads
+
 export async function addThread({
   id, container, blob,
 }) { return db.run('INSERT INTO threads(id, container_id, blob) VALUES (?, ?, ?)', [id, container, blob]) }
 
 export async function getThreadComments(values = []) { return db.query('SELECT * FROM comments WHERE thread_id=?', values) }
 
-export async function getCommentReactions(values = []) { return db.query('SELECT * FROM reactions WHERE comment_id=?', values) }
+// Users
 
 export async function addUser({ id, name, secret }) { return db.run('INSERT INTO users(id, name, secret) VALUES (?, ?, ?)', [id, name, secret]) }
 
@@ -216,6 +234,8 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
+
+// External site
 
 export async function addSite({
   id, subdomain, userId, url, type, blob,
