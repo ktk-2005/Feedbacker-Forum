@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
   })
 }
 const OpenSurveyPanelButton = (props) => {
-  const { hidden, onClick, role, questions, onboarding } = props
+  const { hidden, onClick, role, questions, onboarding, animation } = props
   const disabled = role !== 'dev' && questions.length < 1 && !onboarding
   return (
     <button
@@ -26,6 +26,7 @@ const OpenSurveyPanelButton = (props) => {
       onClick={() => { if (!disabled) onClick() }}
       data-introduction-step="2"
       disabled={disabled}
+      data-animation={animation}
     >
       Survey
     </button>
