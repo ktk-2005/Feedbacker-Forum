@@ -136,7 +136,6 @@ class MainView extends React.Component {
     }))
     if (this.state.commentPanelIsHidden) {
       this.setState({ commentButtonAnimation: true })
-      console.log(this.state.commentButtonAnimation)
       setTimeout(() => {
         this.setState({ commentButtonAnimation: false })
       }, 3000)
