@@ -1,7 +1,7 @@
 @import '../../scss/compulsory';
 
-@import './create.scss';
-@import './dashboard-view.scss';
+@import '../create/create';
+@import '../dashboard-view/dashboard-view';
 
 $palette-console: #0D1323;
 
