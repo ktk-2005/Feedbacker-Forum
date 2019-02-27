@@ -145,10 +145,10 @@ export default class SurveyEditContainer extends React.Component {
     this.setState({ questions })
 
     const { edit, openId } = this.state
-    if (edit && edit.id && !questions.some(q => q.id == edit.id)) {
+    if (edit && edit.id && !questions.some(q => q.id === edit.id)) {
       this.setState({ edit: { } })
     }
-    if (openId && !questions.some(q => q.id == openId)) {
+    if (openId && !questions.some(q => q.id === openId)) {
       this.setState({ openId: null })
     }
   }
