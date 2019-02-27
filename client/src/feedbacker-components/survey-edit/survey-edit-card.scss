@@ -62,7 +62,7 @@
 
     input {
       display: inline-flex;
-      width: unset;
+      width: 50%;
       margin-top: 0;
       margin-right: $baseline;
       flex-grow: 1;
@@ -130,4 +130,3 @@
     }
   }
 }
-
