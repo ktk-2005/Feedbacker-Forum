@@ -32,7 +32,10 @@
   left: 0;
 
   &.site-views {
-    height: 100%;
     width: 100%;
+
+    @include media-query(wide-screens) {
+      height: 100%;
+    }
   }
 }

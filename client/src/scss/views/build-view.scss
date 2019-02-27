@@ -1,4 +1,5 @@
 @import '../../scss/compulsory';
+@import '../../scss/mixins';
 
 @import './create.scss';
 @import './dashboard-view.scss';
@@ -7,6 +8,7 @@ $palette-console: #0D1323;
 
 .build-view {
   @extend .create-view;
+  width: 100%;
 
   h2 {
     margin-bottom: $spacer;
@@ -22,6 +24,12 @@ $palette-console: #0D1323;
     overflow-wrap: break-word;
     background-color: $palette-console;
     color: $palette-white;
+  }
+}
+
+.button-container {
+  @include media-query(mobile) {
+    flex-wrap: wrap;
   }
 }
 
