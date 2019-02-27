@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { mount } from 'enzyme'
 import configureMockStore from 'redux-mock-store'
 import { Provider } from 'react-redux'
 import Comment from './comment'
@@ -10,9 +10,9 @@ let middlewares
 
 const id = 123456
 const devComment = {
-  content: 'Wow, such a waste of talend :-DD',
-  time: '01.01.1990',
-  reactions: 'Thonking',
+  text: 'This doesn\'t work',
+  time: '2019-02-02T18:00:00+02:00',
+  reactions: 'down',
   blob: { dev: true },
 }
 
@@ -27,20 +27,14 @@ beforeEach(() => {
     role,
   }
 })
-/*
-describe('', () => {
-  it('', () => {
-    expect(test).toEqual('success')
-  })
-})
-*/
-test('Comment mount', () => {
-  const initialState = { comments: [] }
+
+test('Comment should mount with correct text', () => {
   const store = mockStore()
   const comment = mount(
     <Provider store={store}>
       <Comment {...testProps} />
     </Provider>
   )
-  expect(comment).toHaveLength(1)
+  const wrapper = comment.find('.text')
+  expect(wrapper.text()).toBe(devComment.text)
 })
