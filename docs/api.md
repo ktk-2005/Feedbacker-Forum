@@ -42,7 +42,7 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L46)
+### [GET /api/comments](../server/src/routes/comments.js#L51)
 
 Retrieve all comments of the current container instance.
 
@@ -52,18 +52,21 @@ returns JSON array of all comments grouped with reactions in database
     "1bd8052b": {
         "id": "1bd8052b",
         "time": "2018-11-14 16:35:27",
-        "text": "skrattia",
+        "text": "comment text",
         "userId": "da776df3",
-        "username": "jaba",
+        "username": "TestUser",
         "threadId": "3blkj3ad",
         "hideName": false,
-        "blob": "",
+        "blob": {
+           "path": "/path/to/comment",
+           "route": "/route/to/comment"
+        },
         "reactions": [
             {
                 "id": "1ddb07c8",
                 "time": "2019-01-16 16:43:21",
                 "userId": "da776df3",
-                "emoji": "🍑",
+                "emoji": "up",
                 "commentId": "1bd8052b"
             }
          ]
@@ -71,38 +74,46 @@ returns JSON array of all comments grouped with reactions in database
     "cb38e8f6": {
         "id": "cb38e8f6",
         "time": "2018-11-14 17:10:42",
-        "text": "tröttistä",
+        "text": "other comment",
         "userId": "da776df3",
-        "username": "jaba",
+        "username": "NewUser",
         "threadId": "3blkj3ad",
-        "blob": "",
+        "blob": {
+           "route": "/"
+        },
         "reactions": []
     }
 }
 ```
-### [POST /api/comments](../server/src/routes/comments.js#L94)
+### [POST /api/comments](../server/src/routes/comments.js#L105)
 
 Adds comment to the current container instance.
 
 Example body for a root comment
 ```json
 {
-  "text": "minttua",
-  "blob": {"path": "/path/to/element"}
+  "text": "comment",
+  "blob": {
+     "route": "/",
+     "path": "/path/to/element"
+   }
 }
 ```
 comments can be linked to a thread with
 ```json
 {
-  "text": "minttua",
+  "text": "thread comment",
   "threadId": "1234",
-  "blob": {"path": "/path/to/element"}
+  "blob": {
+     "route": "/",
+     "path": "/path/to/element"
+   }
 }
 ```
 
 Returns `{ id, threadId }` of the new comment
 
-### [DELETE /api/comments/:id](../server/src/routes/comments.js#L140)
+### [DELETE /api/comments/:id](../server/src/routes/comments.js#L151)
 
 Tries to delete a comment. Only successful if the userId of the comment is the same
 as the user trying to delete the comment, or if the user is a dev.
@@ -117,7 +128,7 @@ e.g.
 }
 ```
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L120)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L131)
 
 Get comments by `threadId`
 
@@ -129,7 +140,7 @@ returns JSON array of all comments in thread
 
 Retrieve all questions in the current container instance.
 
-returns JSON array of all questions in database
+returns JSON array of all questions of instance
 ### [POST /api/questions](../server/src/routes/questions.js#L54)
 
 adds question to database.
@@ -137,8 +148,8 @@ adds question to database.
 Example body
 ```json
 {
-  "text": "What?",
-  "blob": {"path": "/path/to/element"}
+  "text": "What do you think?",
+  "type": "text"
 }
 ```
 
@@ -184,7 +195,7 @@ add reaction to a comment.
 Example body
 ```json
 {
-  "emoji": "fire",
+  "emoji": "up",
   "commentId": "1bd8052b"
 }
 ```
@@ -194,20 +205,21 @@ Returns `{ id }` of the reaction
 
 Remove reaction from a comment.
 
-Returns JSON indicating whether deletion was successful or not
+Returns empty JSON if deletion was succesful
 
 ## Users
 
-### [POST /api/users](../server/src/routes/users.js#L23)
+### [POST /api/users](../server/src/routes/users.js#L24)
 
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
 The body can be empty to create a new anonymous user which is the default
 mode of interaction in the frontend.
-Alternatively you can specify properties for the new user, eg.
+Alternatively you can specify properties for the new user,
+eg.
 ```json
 {
-  "name": "salaattipoika"
+  "name": "testuser"
 }
 ```
 
@@ -218,7 +230,7 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-### [PUT /api/users](../server/src/routes/users.js#L44)
+### [PUT /api/users](../server/src/routes/users.js#L45)
 
 Change username of existing user.
 The user is specified using the Authorization header as with other endpoints
@@ -229,7 +241,7 @@ and the body should contain the new name eg.
 }
 ```
 
-### [GET /api/users/role](../server/src/routes/users.js#L74)
+### [GET /api/users/role](../server/src/routes/users.js#L75)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
@@ -243,15 +255,15 @@ Example body
 
 ## Instances
 
-### [GET /api/instances](../server/src/routes/instances.js#L25)
+### [GET /api/instances](../server/src/routes/instances.js#L24)
 
 Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L60)
+### [POST /api/instances/new](../server/src/routes/instances.js#L59)
 
-Create a new container.
+Create a new instance.
 
 Currently the only parameter considered is `instance_image`. The name and subdomain are
 generated automatically.
@@ -265,13 +277,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L38)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L37)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L127)
+### [POST /api/instances/start](../server/src/routes/instances.js#L126)
 
 Start a stopped container.
 
@@ -284,7 +296,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L108)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L107)
 
 Stop a running container.
 
@@ -297,7 +309,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L146)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L145)
 
 Delete a container
 
@@ -312,7 +324,7 @@ Returns 200 OK if the operation completed successfully and 500 ISE if an error o
 
 ## Instance runners
 
-### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L22)
+### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L21)
 
 Retrieve all instance runners in the database and configured system default
 runners.
@@ -324,7 +336,7 @@ if
   a) the user doesn't have any custom runners or
   b) the user isn't authenticated properly
 
-### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L48)
+### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L47)
 
 Create a new instance runner for the user. The image is pulled from the
 Docker Hub. There is currently no limitations on how large or many images a
@@ -341,7 +353,7 @@ Example request body:
 Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
 in the `status` field.
 
-### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L66)
+### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L65)
 
 Deletes an instance runner. This will also cleanup space used on disk, so
 if per-user quotas are implemented later, this is the way instance runner
