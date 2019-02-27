@@ -25,9 +25,9 @@ CREATE TABLE containers (
 -- Table: threads
 CREATE TABLE threads (
   id            CHAR(8) UNIQUE NOT NULL,
-  container_id  CHAR(8) NOT NULL,
+  container_id  CHAR(8),
   blob          TEXT,
-  FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE CASCADE
+  FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE SET NULL
 );
 
 -- Table: comments
