@@ -215,7 +215,7 @@ Add user to database.
 Returns JSON that contains generated id and secret of added user.
 The body can be empty to create a new anonymous user which is the default
 mode of interaction in the frontend.
-Alternatively you can specify properties for the new user, 
+Alternatively you can specify properties for the new user,
 eg.
 ```json
 {
@@ -324,7 +324,7 @@ Returns 200 OK if the operation completed successfully and 500 ISE if an error o
 
 ## Instance runners
 
-### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L22)
+### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L21)
 
 Retrieve all instance runners in the database and configured system default
 runners.
@@ -336,7 +336,7 @@ if
   a) the user doesn't have any custom runners or
   b) the user isn't authenticated properly
 
-### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L48)
+### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L47)
 
 Create a new instance runner for the user. The image is pulled from the
 Docker Hub. There is currently no limitations on how large or many images a
@@ -353,7 +353,7 @@ Example request body:
 Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
 in the `status` field.
 
-### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L66)
+### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L65)
 
 Deletes an instance runner. This will also cleanup space used on disk, so
 if per-user quotas are implemented later, this is the way instance runner

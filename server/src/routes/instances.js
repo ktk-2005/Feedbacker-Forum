@@ -8,7 +8,7 @@ import {
   getContainerLogs,
   getRunningContainersByUser,
 } from '../docker'
-import { resolveContainer, addSite, listContainersByUser, confirmContainerOwnership } from '../database'
+import { addSite, confirmContainerOwnership } from '../database'
 import { attempt, uuid, reqUser } from './helpers'
 import { catchErrors } from '../handlers'
 import { HttpError } from '../errors'
