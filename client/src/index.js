@@ -111,6 +111,8 @@ class MainView extends React.Component {
     this.state = {
       surveyPanelIsHidden: true,
       commentPanelIsHidden: true,
+      surveyButtonAnimation: false,
+      commentButtonAnimation: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
@@ -120,12 +122,24 @@ class MainView extends React.Component {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
     }))
+    if (this.state.surveyPanelIsHidden) {
+      this.setState({ surveyButtonAnimation: true })
+      setTimeout(() => {
+        this.setState({ surveyButtonAnimation: false })
+      }, 3000)
+    }
   }
 
   handleCommentPanelClick() {
     this.setState(state => ({
       commentPanelIsHidden: !state.commentPanelIsHidden,
     }))
+    if (this.state.commentPanelIsHidden) {
+      this.setState({ commentButtonAnimation: true })
+      setTimeout(() => {
+        this.setState({ commentButtonAnimation: false })
+      }, 3000)
+    }
   }
 
   toggleTagElementState() {
@@ -151,6 +165,8 @@ class MainView extends React.Component {
     const {
       surveyPanelIsHidden,
       commentPanelIsHidden,
+      surveyButtonAnimation,
+      commentButtonAnimation,
       taggingModeActive,
     } = this.state
 
@@ -161,10 +177,12 @@ class MainView extends React.Component {
         <OpenSurveyPanelButton
           hidden={!surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
+          animation={surveyButtonAnimation}
         />
         <OpenCommentPanelButton
           hidden={!commentPanelIsHidden}
           onClick={this.handleCommentPanelClick}
+          animation={commentButtonAnimation}
         />
         <SurveyPanel
           hidden={surveyPanelIsHidden}
