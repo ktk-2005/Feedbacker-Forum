@@ -10,13 +10,16 @@ const css = classNames.bind(styles)
 const View404 = () => (
   <div className={css('center-center-block')}>
     <div className={css('view-404')}>
-      <h2>404</h2>
-      <div className={css('text')}>There is nothing here, go back to dashboard</div>
+      <h1 data-text="404">404</h1>
+      <p>
+        Looks like there is nothing here, go back to dashboard.
+      </p>
       <Link to="/">
         <button
           className={css('dashboard-button')}
           type="button"
-        >Back to dashboard
+        >
+          Back to dashboard
         </button>
       </Link>
     </div>
