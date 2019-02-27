@@ -1,4 +1,5 @@
 @import '../../scss/compulsory';
+@import '../../scss/mixins';
 
 @import '../../scss/atoms/view-container';
 @import '../../scss/atoms/button';
@@ -9,6 +10,7 @@
 
 .build-view {
   @extend %view-container;
+  width: 100%;
 
   h2 {
     margin-bottom: $spacer;
@@ -24,6 +26,12 @@
     overflow-wrap: break-word;
     background-color: $palette-console;
     color: $palette-white;
+  }
+}
+
+.button-container {
+  @include media-query(mobile) {
+    flex-wrap: wrap;
   }
 }
 
