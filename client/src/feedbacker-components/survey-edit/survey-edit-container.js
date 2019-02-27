@@ -139,9 +139,10 @@ export default class SurveyEditContainer extends React.Component {
   }
 
   async refetch() {
-    const questions = await apiCall('GET', '/questions')
+    const fetchedQuestions = await apiCall('GET', '/questions')
     const pending = this.state.questions.filter(q => q.id === PENDING_ID)
-    this.setState({ questions: [...questions, ...pending] })
+    const questions = [...fetchedQuestions, ...pending]
+    this.setState({ questions })
 
     const { edit, openId } = this.state
     if (edit && edit.id && !questions.some(q => q.id == edit.id)) {
