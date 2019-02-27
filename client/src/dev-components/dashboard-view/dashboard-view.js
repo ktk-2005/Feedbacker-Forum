@@ -3,12 +3,12 @@ import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
-import apiCall from '../api-call'
-import { subscribeUsers, unsubscribeUsers } from '../globals'
+import apiCall from '../../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Components
-import ContainerCard from './container-card'
+import ContainerCard from '../container-card/container-card'
 // Styles
-import styles from '../scss/views/dashboard-view.scss'
+import styles from './dashboard-view.scss'
 
 
 const css = classNames.bind(styles)
