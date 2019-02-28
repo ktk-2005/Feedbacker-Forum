@@ -45,7 +45,7 @@ class SurveyPanel extends React.Component {
             </div>
             {role === 'dev' ? (
               <div className={css('panel-body', 'edit-container')}>
-                <SurveyEditContainer />
+                <SurveyEditContainer open={!hidden} />
               </div>
             ) : (
               <div className={css('panel-body')}>
