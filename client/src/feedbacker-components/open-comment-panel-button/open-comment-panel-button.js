@@ -7,12 +7,13 @@ import styles from './open-comment-panel-button.scss'
 
 const css = classNames.bind(styles)
 
-const OpenCommentPanelButton = ({ hidden, onClick }) => (
+const OpenCommentPanelButton = ({ hidden, onClick, animation }) => (
   <button
     type="button"
     className={css('open-button', { hidden })}
     onClick={onClick}
     data-introduction-step="4"
+    data-animation={animation}
   >Comments
   </button>
 )

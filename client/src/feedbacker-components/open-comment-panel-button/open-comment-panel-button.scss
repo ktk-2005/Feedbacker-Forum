@@ -1,6 +1,7 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+@import '../../scss/animations';
 @import '../../scss/atoms-organisms/button';
 
 .open-button {
@@ -16,4 +17,8 @@
   &.hidden {
     @include hide-and-animate();
   }
+}
+
+[data-animation="true"] {
+  animation: close-pulse 0.7s 2;
 }
