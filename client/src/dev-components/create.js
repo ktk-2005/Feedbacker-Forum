@@ -80,7 +80,6 @@ class Create extends React.Component {
       console.error('Failed to create container', error)
       this.setState({ busy: false })
     }
-
   }
 
   async postSite(event) {

@@ -22,7 +22,6 @@ function followRedirects(targetUrl) {
   return new Promise((resolve, reject) => {
     const client = targetUrl.startsWith('https') ? https : http
     const request = client.get(targetUrl, (response) => {
-      const redirectedUrl = response.responseUrl.toString().trim()
       const url = new URL(response.responseUrl)
       request.abort()
       resolve({
@@ -32,7 +31,7 @@ function followRedirects(targetUrl) {
       })
     })
 
-    request.setTimeout(20000, (timeout) => {
+    request.setTimeout(20000, () => {
       reject(new HttpError(400, `Could not resolve URL, timed out: ${targetUrl}`))
     })
 
@@ -111,7 +110,11 @@ router.post('/new', catchErrors(async (req, res) => {
       const subdomain = `${name}-${uuid(5)}`
       const id = uuid(8)
       const containerInfo = await addSite({
-        id, subdomain, userId, type, url: rootUrl,
+        id,
+        subdomain,
+        userId,
+        type,
+        url: rootUrl,
         blob: JSON.stringify({ path: redirectPath }),
       })
       res.json({ containerInfo, redirectPath })
