@@ -65,7 +65,7 @@ class Build extends React.Component {
               </button>
             </Link>
             <label data-tooltip="The link will start working when the application has started." data-tooltip-width="200px">
-              <span className={css('text')}>Feedbackable UI:</span>
+              <span className={css('label-text')}>Feedbackable UI:</span>
               <a href={url} target="_blank" rel="noopener noreferrer" className={css('container-link')}>{url.replace(/^(https?:)?\/\//, '')}</a>
             </label>
           </div>
