@@ -85,7 +85,7 @@ class Create extends React.Component {
       type: 'site',
     })
 
-    window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}`)
+    window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}${json.redirectPath}`)
   }
 
   containerForm() {
