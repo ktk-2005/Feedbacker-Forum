@@ -24,7 +24,7 @@ import Onboarding from './feedbacker-components/onboarding/onboarding'
 import { setupPersist } from './persist'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
-import './scss/atoms-organisms/_toast.scss'
+import './scss/atoms/_toast.scss'
 import styles from './scss/_base.scss'
 
 const css = classNames.bind(styles)

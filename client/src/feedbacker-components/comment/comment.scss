@@ -2,7 +2,7 @@
 @import '../../scss/mixins';
 @import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms/button';
 
 %target-icon {
   @include reset-button();
