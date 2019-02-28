@@ -18,7 +18,7 @@ const router = express.Router()
 // @api GET /api/questions
 // Retrieve all questions in the current container instance.
 //
-// returns JSON array of all questions in database
+// returns JSON array of all questions of instance
 router.get('/', catchErrors(async (req, res) => {
   const { container, owner } = await reqContainer(req)
   const { users } = await reqUser(req)
@@ -46,8 +46,8 @@ function extractBlob(question) {
 // adds question to database.
 //
 // Example body @json {
-//   "text": "What?",
-//   "blob": {"path": "/path/to/element"}
+//   "text": "What do you think?",
+//   "type": "text"
 // }
 //
 // Returns `{ id }` of the created question

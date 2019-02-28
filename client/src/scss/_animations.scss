@@ -1,0 +1,25 @@
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 $spacer rgba($palette-accent, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba($palette-accent, 0);
+  }
+}
+
+@keyframes close-pulse {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
