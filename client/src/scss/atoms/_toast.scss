@@ -7,7 +7,7 @@ $rt-font-family: $font-default;
 $rt-color-default: $palette-white;
 $rt-color-error: $palette-error-dark;
 
-@import '../../../node_modules/react-toastify/scss/main.scss';
+@import '../../../node_modules/react-toastify/scss/main';
 
 .#{$rt-namespace}__toast-container {
   color: $palette-dark;

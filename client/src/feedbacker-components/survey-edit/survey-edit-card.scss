@@ -2,10 +2,10 @@
 @import '../../scss/colors';
 @import '../../scss/mixins';
 
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms/button';
 
 @import '../../dev-components/dashboard-view/dashboard-view';
-@import '../../scss/atoms-organisms/forms';
+@import '../../scss/organisms/forms';
 
 .survey-edit-card {
   margin-bottom: $spacer;

@@ -1,8 +1,8 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+@import '../../scss/atoms/button';
 @import '../../scss/animations';
-@import '../../scss/atoms-organisms/button';
 
 .open-button {
   @include button(2px);

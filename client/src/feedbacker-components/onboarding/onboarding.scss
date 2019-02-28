@@ -1,9 +1,9 @@
 @import '../../scss/variables';
 @import '../../scss/colors';
 @import '../../scss/mixins';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/modal';
 @import '../../scss/animations';
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/modal';
 
 @import '../survey-panel/survey-panel.scss';
 
