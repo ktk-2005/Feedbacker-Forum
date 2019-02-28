@@ -27,16 +27,23 @@
     background-color: $palette-console;
     color: $palette-white;
   }
+
+}
+
+.label-text {
+  margin-right: $spacer;
 }
 
 .button-container {
-  @include media-query(mobile) {
-    flex-wrap: wrap;
-  }
+  flex-wrap: wrap;
+}
+
+.dashboard-button {
+  margin-right: $spacer;
+  margin-bottom: $spacer;
 }
 
 .container-link {
   @extend %anchor-button-accent;
-  margin-left: $spacer;
   color: $palette-white;
 }
