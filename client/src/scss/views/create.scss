@@ -74,6 +74,10 @@
   }
 }
 
+.busy * {
+  cursor: wait;
+}
+
 .inline-button {
   display: flex;
   align-items: baseline;
