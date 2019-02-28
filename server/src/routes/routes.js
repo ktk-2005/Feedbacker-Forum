@@ -10,5 +10,6 @@ router.use('/reactions', require('./reactions'))
 router.use('/instances', require('./instances'))
 router.use('/answers', require('./answers'))
 router.use('/instanceRunners', require('./instanceRunners'))
+router.use('/slack', require('./slackbot'))
 
 module.exports = router

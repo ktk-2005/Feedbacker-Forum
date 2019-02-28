@@ -80,6 +80,14 @@ function formatQuestion(rows) {
   }
 }
 
+export async function addSlackUser(id) {
+  return db.run('INSERT INTO slack_users(id) VALUES (?)', [id])
+}
+
+export async function linkUserToSlack(slackId, userId) {
+  return db.run('UPDATE users SET slack_id=? WHERE id=?', [slackId, userId])
+}
+
 export async function getQuestionsWithAnswers(container) {
   const rows = await db.query(`
     SELECT
