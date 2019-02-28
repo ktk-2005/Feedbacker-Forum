@@ -27,7 +27,7 @@ CREATE TABLE threads (
   id            CHAR(8) UNIQUE NOT NULL,
   container_id  CHAR(8),
   blob          TEXT,
-  FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE NO ACTION
+  FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE SET NULL
 );
 
 -- Table: comments
