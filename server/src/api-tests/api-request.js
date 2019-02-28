@@ -55,7 +55,7 @@ export default function apiRequest(method, path, body, optsArg) {
     method,
     body,
     headers: {
-      Authorization: `Feedbacker ${authToken}`,
+      'X-Feedback-Auth': authToken,
       'X-Feedback-Host': `${container}.localhost`,
     },
     ...(opts.request || {}),
