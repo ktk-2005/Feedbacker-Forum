@@ -1,4 +1,5 @@
 @import '../../scss/compulsory';
+@import '../typography';
 
 $rt-z-index: map-get($z-index-levels, 5);
 $rt-font-family: $font-default;

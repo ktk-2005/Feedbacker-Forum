@@ -6,6 +6,7 @@
 @import '../../node_modules/node.normalize.scss/normalize';
 // Import all project partials
 @import './compulsory';
+@import './typography';
 
 // Set box sizing
 [data-feedback-react-root] {
