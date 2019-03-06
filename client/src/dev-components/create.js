@@ -184,7 +184,7 @@ class Create extends React.Component {
         >
           Live website URL
           <input
-            type="text"
+            type="url"
             name="url"
             id="url"
             placeholder="https://codeberry.fi"

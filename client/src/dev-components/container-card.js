@@ -78,6 +78,8 @@ class ContainerCard extends React.Component {
   render() {
     const { instance } = this.props
 
+    const typeText = instance.runner === 'site' ? 'External site' : 'Instance'
+
     return (
       <div key={instance.id} className={css('instance-card')}>
         <div className={css('header-container')}>
@@ -112,12 +114,14 @@ class ContainerCard extends React.Component {
               <InlineSVG src={CloseIcon} />
             </button>
           </div>
-          <h5>Instance: {instance.subdomain}</h5>
+          <h5>{typeText}: {instance.subdomain}</h5>
         </div>
         <div className={css('button-container')}>
-          <Link to={`/logs/${instance.subdomain}`}>
-            Open instance logs
-          </Link>
+          {instance.runner !== 'site' ? (
+            <Link to={`/logs/${instance.subdomain}`}>
+              Open instance logs
+            </Link>
+          ) : null}
           <a
             href={this.instanceUrl}
             target="_blank"

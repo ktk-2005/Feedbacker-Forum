@@ -17,7 +17,7 @@ Instance specific endpoints like comments expect the current instance to be pass
 
 ### Authentication
 
-Authentication is done using the standard `Authorization` header with a non-standard `Feedbacker` scheme. The content of the authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
+Authentication is done using a custom `X-Feedback-Auth` header. The content of the custom authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
 
 ```json
 {
@@ -233,7 +233,7 @@ Example response
 ### [PUT /api/users](../server/src/routes/users.js#L45)
 
 Change username of existing user.
-The user is specified using the Authorization header as with other endpoints
+The user is specified using the X-Feedback-Auth header as with other endpoints
 and the body should contain the new name eg.
 ```json
 {

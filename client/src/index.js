@@ -22,6 +22,7 @@ import Onboarding from './feedbacker-components/onboarding/onboarding'
 
 // Internal js
 import { setupPersist } from './persist'
+import { getSession, updateSession } from './session'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
 import './scss/atoms-organisms/_toast.scss'
@@ -108,14 +109,24 @@ class MainView extends React.Component {
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
 
+    const {
+      surveyPanelIsHidden = true,
+      commentPanelIsHidden = true,
+    } = getSession()
+
     this.state = {
-      surveyPanelIsHidden: true,
-      commentPanelIsHidden: true,
+      surveyPanelIsHidden,
+      commentPanelIsHidden,
       surveyButtonAnimation: false,
       commentButtonAnimation: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
+  }
+
+  componentDidUpdate() {
+    const { surveyPanelIsHidden, commentPanelIsHidden } = this.state
+    updateSession({ surveyPanelIsHidden, commentPanelIsHidden })
   }
 
   handleSurveyPanelClick() {
