@@ -1,9 +1,9 @@
 @import '../../scss/compulsory';
 
+@import '../../scss/organisms/forms';
 @import '../../scss/atoms/button';
 
 @import '../../dev-components/dashboard-view/dashboard-view';
-@import '../../scss/organisms/forms';
 
 .survey-edit-card {
   margin-bottom: $spacer;

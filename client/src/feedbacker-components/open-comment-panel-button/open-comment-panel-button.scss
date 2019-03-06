@@ -1,7 +1,7 @@
 @import '../../scss/compulsory';
+@import '../../scss/animations';
 
 @import '../../scss/atoms/button';
-@import '../../scss/animations';
 
 .open-button {
   @include button(2px);
