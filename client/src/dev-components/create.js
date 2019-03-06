@@ -26,6 +26,7 @@ class Create extends React.Component {
       instanceRunners: [],
       redirectContainer: false,
       containerForm: true,
+      busy: false,
     }
   }
 
@@ -59,18 +60,26 @@ class Create extends React.Component {
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
-    const json = await apiCall('POST', '/instances/new', {
-      url: inputValue('url'),
-      version: inputValue('version'),
-      type: inputValue('application'),
-      port: inputValue('port'),
-      name: inputValue('name').toLowerCase(),
-    })
+    this.setState({ busy: true })
 
-    this.setState({
-      containerName: json.containerInfo.name,
-      redirectContainer: true,
-    })
+    try {
+      const json = await apiCall('POST', '/instances/new', {
+        url: inputValue('url'),
+        version: inputValue('version'),
+        type: inputValue('application'),
+        port: inputValue('port'),
+        name: inputValue('name').toLowerCase(),
+      })
+
+      this.setState({
+        containerName: json.containerInfo.name,
+        redirectContainer: true,
+        busy: false,
+      })
+    } catch (error) {
+      console.error('Failed to create container', error)
+      this.setState({ busy: false })
+    }
   }
 
   async postSite(event) {
@@ -79,16 +88,25 @@ class Create extends React.Component {
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
-    const json = await apiCall('POST', '/instances/new', {
-      url: inputValue('url'),
-      name: inputValue('name').toLowerCase(),
-      type: 'site',
-    })
+    this.setState({ busy: true })
 
-    window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}`)
+    try {
+      const json = await apiCall('POST', '/instances/new', {
+        url: inputValue('url'),
+        name: inputValue('name').toLowerCase(),
+        type: 'site',
+      })
+
+      this.setState({ busy: false })
+      window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}${json.redirectPath}`)
+    } catch (error) {
+      console.error('Failed to create container', error)
+      this.setState({ busy: false })
+    }
   }
 
   containerForm() {
+    const { busy } = this.state
     return (
       <form
         className={css('form-create')}
@@ -142,7 +160,7 @@ class Create extends React.Component {
             >Back to dashboard
             </button>
           </Link>
-          <button type="submit">
+          <button type="submit" disabled={busy}>
             Create
           </button>
         </div>
@@ -151,6 +169,7 @@ class Create extends React.Component {
   }
 
   siteForm() {
+    const { busy } = this.state
     // TODO: Add tooltip to warn about live url redirection
     return (
       <form
@@ -195,6 +214,7 @@ class Create extends React.Component {
             type="submit"
             data-tooltip="Build can take a while, check again later if site unavailable"
             data-tooltip-width="220px"
+            disabled={busy}
           >
             Create
           </button>
@@ -213,8 +233,10 @@ class Create extends React.Component {
       )
     }
 
+    const { busy } = this.state
+
     return (
-      <div className={css('center-center-block')}>
+      <div className={css('center-center-block', { busy })}>
         <div className={css('create-view')}>
           <h2>Create an instance</h2>
           <div className={css('selection-tabs')}>
