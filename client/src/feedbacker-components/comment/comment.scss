@@ -26,6 +26,16 @@
     fill: $palette-accent;
     transition: fill $transition-default-tail
   }
+
+  &.highlighted {
+    border-radius: 10px;
+    padding: 0.2 * $spacer;
+    background: $palette-accent;
+
+    svg {
+      fill: $palette-white;
+    }
+  }
 }
 
 .comment {

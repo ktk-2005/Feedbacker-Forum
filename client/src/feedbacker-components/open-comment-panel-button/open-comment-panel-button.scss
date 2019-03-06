@@ -14,9 +14,11 @@
   box-shadow: 0 2px 5px $palette-medium;
   color: $palette-lighter;
   background: $palette-accent;
+
   &.hidden {
     @include hide-and-animate();
   }
+  
 }
 
 [data-animation="true"] {
