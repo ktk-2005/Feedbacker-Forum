@@ -15,11 +15,14 @@
   &.body {
     text-align: center;
   }
-  &.button-container {
+  .button-container {
     display: flex;
-    flex-flow: row;
     justify-content: space-between;
-    align-items: center;
+    margin-top: $spacer;
+  }
+
+  button {
+    @extend %anchor-button;
   }
 }
 

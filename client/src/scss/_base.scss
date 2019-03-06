@@ -5,9 +5,7 @@
 
 @import '../../node_modules/node.normalize.scss/normalize';
 // Import all project partials
-@import './variables';
-@import './typography';
-@import './mixins';
+@import './compulsory';
 
 // Set box sizing
 [data-feedback-react-root] {
