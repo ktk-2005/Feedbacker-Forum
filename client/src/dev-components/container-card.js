@@ -10,6 +10,7 @@ import styles from '../scss/views/dashboard-view.scss'
 import CloseIcon from '../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../assets/svg/baseline-play_arrow-24px.svg'
 import StopIcon from '../assets/svg/baseline-stop-24px.svg'
+import SlackIcon from '../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -30,6 +31,7 @@ class ContainerCard extends React.Component {
     this.startContainer = this.startContainer.bind(this)
     this.stopContainer = this.stopContainer.bind(this)
     this.removeContainer = this.removeContainer.bind(this)
+    this.shareSlack = this.shareSlack.bind(this)
   }
 
   isOperationPending() {
@@ -68,6 +70,11 @@ class ContainerCard extends React.Component {
     } finally {
       this.setState({ stopPending: false })
     }
+  }
+
+  async shareSlack() {
+    console.log(this.instance.name)
+    const { success } = await apiCall('GET', `/slack/notify/${this.instance.name}/${window.location.host}`)
   }
 
   render() {
@@ -110,6 +117,15 @@ class ContainerCard extends React.Component {
           <h5>Instance: {instance.subdomain}</h5>
         </div>
         <div className={css('button-container')}>
+          <button
+            type="button"
+            className={css('slack-share')}
+            onClick={this.shareSlack}
+            data-tooltip="Share in Slack"
+            data-tooltip-width="130px"
+          >
+            {<InlineSVG src={SlackIcon} />}
+          </button>
           <Link to={`/logs/${instance.subdomain}`}>
             Open instance logs
           </Link>

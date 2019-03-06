@@ -84,8 +84,16 @@ export async function addSlackUser(id) {
   return db.run('INSERT INTO slack_users(id) VALUES (?)', [id])
 }
 
-export async function linkUserToSlack(slackId, userId) {
+export async function linkSlackToUser(slackId, userId) {
   return db.run('UPDATE users SET slack_id=? WHERE id=?', [slackId, userId])
+}
+
+export async function setSlackUser(id, username, slackId) {
+  return db.run('UPDATE slack_users SET username=?, slack_user_id=? WHERE id=?', [username, slackId, id])
+}
+
+export async function getSlackUser(userId) {
+  return db.query('SELECT username, slack_user_id FROM users INNER JOIN slack_users ON users.slack_id = slack_users.id WHERE users.id = ?', [userId])
 }
 
 export async function getQuestionsWithAnswers(container) {

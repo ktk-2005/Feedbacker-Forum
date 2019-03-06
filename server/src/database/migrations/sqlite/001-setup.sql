@@ -8,8 +8,8 @@ CREATE TABLE users (
     time       VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL, -- Postgres CURRENT_TIMESTAMP is 29 chars long
     name       VARCHAR(255),
     secret     CHAR(30) NOT NULL,
-    slack_id   VARCHAR(8)
-    blob       TEXT
+    slack_id   VARCHAR(8),
+    blob       TEXT,
     FOREIGN KEY (slack_id) REFERENCES slack_users(id)
 );
 
@@ -106,7 +106,7 @@ CREATE TABLE instance_runners (
 CREATE TABLE slack_users (
   id        VARCHAR(8) UNIQUE NOT NULL,
   username  TEXT,
-  user_id   VARCHAR(32)
+  slack_user_id   VARCHAR(32)
 );
 
 

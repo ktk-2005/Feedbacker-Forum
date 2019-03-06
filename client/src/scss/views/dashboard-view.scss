@@ -16,6 +16,18 @@
   @extend %accent;
 }
 
+.slack-share i {
+  $dimension: 20px;
+  height: $dimension;
+  width: $dimension;
+
+  // Visually centered vertically
+  svg {
+    position: relative;
+    top: -1px;
+  }
+}
+
 .top-section {
   display: flex;
   align-items: center;
@@ -45,16 +57,6 @@
   .reverse {
     display: flex;
     flex-direction: column-reverse;
-  }
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: $spacer;
-
-  > *:not(:first-of-type) {
-    margin-left: $spacer;
   }
 }
 
@@ -88,13 +90,30 @@
       }
     }
   }
+}
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacer;
+
+  button {
+    @extend %icon-button;
+  }
 
   a {
     @extend %anchor-button;
 
     &.accent {
       @extend %accent;
+    }
+  }
+
+  & > button,  & > a {
+    margin-left: $spacer;
+
+    &:first-child {
+      margin-left: 0;
     }
   }
 }
