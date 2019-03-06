@@ -56,6 +56,8 @@ Some of these can be imported as one from the [compulsory](../client/src/scss/_c
 @import '../../scss/compulsory';
 ```
 
+It imports `colors`, `functions`, `mixins`, `and variables`. If needed, typography needs to be imported separately.
+
 ### [Atoms](../client/src/scss/atoms/)
 
 The atoms directory contains small basic reusable styling parts. Atoms can be styling for simple elements like inputs or buttons.
