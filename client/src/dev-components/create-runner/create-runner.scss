@@ -1,8 +1,7 @@
 @import '../../scss/compulsory';
 
+@import '../../scss/atoms/view-container';
 @import '../../scss/atoms/tooltip';
-
-@import '../create/create';
 
 .runner-view-container {
   display: flex;
@@ -14,7 +13,7 @@
 }
 
 .inner-container {
-  @extend .create-view;
+  @extend %view-container;
 
   line-height: 1.5;
 

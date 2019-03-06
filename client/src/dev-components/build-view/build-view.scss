@@ -1,11 +1,10 @@
 @import '../../scss/compulsory';
 
-@import '../create/create';
-@import '../dashboard-view/dashboard-view';
-
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
 
 .build-view {
-  @extend .create-view;
+  @extend %view-container;
 
   h2 {
     margin-bottom: $spacer;
