@@ -80,7 +80,7 @@ class Thread extends React.Component {
   }
 
   render() {
-    const { role } = this.props
+    const { role, hidePanel, showPanel } = this.props
     const sortByTime = R.sortBy(comment => comment.time)
     const firstComment = sortByTime(this.props.comments)[0]
     return (
@@ -94,6 +94,8 @@ class Thread extends React.Component {
           buttonText={this.buttonText()}
           canDelete={this.canDelete(firstComment.userId)}
           deleteComment={this.props.deleteComment}
+          hidePanel={hidePanel}
+          showPanel={showPanel}
         />
         <aside className={css('sub-thread', { 'expanded-thread': this.threadIsExpanded() })}>
           {this.expandedThread(firstComment.userId)}
@@ -104,4 +106,3 @@ class Thread extends React.Component {
 }
 
 export default Thread
-

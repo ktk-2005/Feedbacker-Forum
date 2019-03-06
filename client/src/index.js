@@ -137,11 +137,16 @@ class MainView extends React.Component {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
     }))
+
     if (this.state.surveyPanelIsHidden) {
       this.setState({ surveyButtonAnimation: true })
       setTimeout(() => {
         this.setState({ surveyButtonAnimation: false })
       }, 3000)
+    }
+
+    if (window.innerWidth < 500 && !this.state.commentPanelIsHidden) {
+      this.setState({ commentPanelIsHidden: true })
     }
   }
 
@@ -149,11 +154,16 @@ class MainView extends React.Component {
     this.setState(state => ({
       commentPanelIsHidden: !state.commentPanelIsHidden,
     }))
+
     if (this.state.commentPanelIsHidden) {
       this.setState({ commentButtonAnimation: true })
       setTimeout(() => {
         this.setState({ commentButtonAnimation: false })
       }, 3000)
+    }
+
+    if (window.innerWidth < 500 && !this.state.surveyPanelIsHidden) {
+      this.setState({ surveyPanelIsHidden: true })
     }
   }
 

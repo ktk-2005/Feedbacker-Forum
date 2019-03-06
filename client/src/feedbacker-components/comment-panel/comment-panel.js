@@ -36,6 +36,9 @@ class CommentPanel extends React.Component {
       usernameModalIsOpen: false,
       commentToDelete: {},
       currentThread: '',
+      hide: false,
+      buttonHidden: true,
+      counter: 4,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
@@ -45,6 +48,9 @@ class CommentPanel extends React.Component {
     this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
+    this.hidePanel = this.hidePanel.bind(this)
+    this.showPanel = this.showPanel.bind(this)
+    this.updateCounter = this.updateCounter.bind(this)
   }
 
   updateCurrentThread(threadId) {
@@ -69,7 +75,6 @@ class CommentPanel extends React.Component {
       blob.route = window.location.pathname
       return blob
     }
-
 
     const unhighlightTaggedElement = () => {
       const { xPath } = getBlob()
@@ -127,6 +132,36 @@ class CommentPanel extends React.Component {
     if (el) el.scrollTop = el.scrollHeight
   }
 
+  showPanel() {
+    this.setState({
+      hide: false,
+      buttonHidden: true,
+    })
+  }
+
+  hidePanel() {
+    this.setState({
+      hide: true,
+      buttonHidden: false,
+    })
+
+    const intervalId = setInterval(() => {
+      this.updateCounter(intervalId)
+    }, 1000)
+  }
+
+  updateCounter(id) {
+    if (this.state.counter === 1) {
+      this.setState({ counter: 4 })
+      //this.showPanel()
+      clearInterval(id)
+    } else {
+      this.setState(state => ({
+        counter: state.counter - 1,
+      }))
+    }
+  }
+
   threadContainer() {
     const commentsOfRoute = R.filter(comment => comment.blob.route === window.location.pathname,
       this.props.comments)
@@ -162,6 +197,7 @@ class CommentPanel extends React.Component {
                 currentThread={this.state.currentThread}
                 deleteComment={this.toggleDeleteModal}
                 toggleTagElementState={this.props.toggleTagElementState}
+                hidePanel={this.hidePanel}
               />),
             sortedThreads
           )
@@ -172,50 +208,63 @@ class CommentPanel extends React.Component {
 
   render() {
     const { hidden, onClick } = this.props
+    const { hide, buttonHidden, counter } = this.state
 
     return (
-      <div className={css('panel-container', { hidden })}>
-        <div
-          className={css('comment-panel')}
-          data-introduction-step="5"
+      <>
+        <button
+          type="button"
+          className={css('close-mobile-mode', { buttonHidden })}
+          onClick={this.showPanel}
         >
-          <div className={css('panel-header')}>
-            <h5 className={css('heading')}>Comments</h5>
-            <button
-              type="button"
-              className={css('close-button')}
-              onClick={onClick}
-              data-introduction-step-close="5"
-            >
-              <InlineSVG src={CloseIcon} />
-            </button>
-          </div>
-          <div className={css('panel-body')}>
-            <RouteContainer comments={this.props.comments} />
-            { this.threadContainer() }
-            <SubmitField
-              handleSubmit={this.handleSubmit}
-              threadId=""
-              toggleTagElementState={this.props.toggleTagElementState}
-            />
-            {
-              !this.props.name ? (
-                <UsernameModal
-                  isOpen={this.state.usernameModalIsOpen}
-                  toggle={this.toggleUsernameModal}
-                />
-              )
-                : null
-            }
-            <ConfirmModal
-              text="Are you sure you want to delete this comment?"
-              action={this.deleteComment}
-              isOpen={!R.isEmpty(this.state.commentToDelete)}
-              toggle={this.toggleDeleteModal}
-            />
+          <h3>{counter}</h3>
+          <InlineSVG src={CloseIcon} />
+        </button>
+        <div
+          className={css('panel-container', { hidden }, { hide })}
+        >
+          <div
+            className={css('comment-panel')}
+            data-introduction-step="5"
+          >
+            <div className={css('panel-header')}>
+              <h5 className={css('heading')}>Comments</h5>
+              <button
+                type="button"
+                className={css('close-button')}
+                onClick={onClick}
+                data-introduction-step-close="5"
+              >
+                <InlineSVG src={CloseIcon} />
+              </button>
+            </div>
+            <div className={css('panel-body')}>
+              <RouteContainer comments={this.props.comments} />
+              { this.threadContainer() }
+              <SubmitField
+                handleSubmit={this.handleSubmit}
+                threadId=""
+                toggleTagElementState={this.props.toggleTagElementState}
+              />
+              {
+                !this.props.name ? (
+                  <UsernameModal
+                    isOpen={this.state.usernameModalIsOpen}
+                    toggle={this.toggleUsernameModal}
+                  />
+                )
+                  : null
+              }
+              <ConfirmModal
+                text="Are you sure you want to delete this comment?"
+                action={this.deleteComment}
+                isOpen={!R.isEmpty(this.state.commentToDelete)}
+                toggle={this.toggleDeleteModal}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }
