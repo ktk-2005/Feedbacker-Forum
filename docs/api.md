@@ -17,7 +17,7 @@ Instance specific endpoints like comments expect the current instance to be pass
 
 ### Authentication
 
-Authentication is done using the standard `Authorization` header with a non-standard `Feedbacker` scheme. The content of the authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
+Authentication is done using a custom `X-Feedback-Auth` header. The content of the custom authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
 
 ```json
 {
@@ -233,7 +233,7 @@ Example response
 ### [PUT /api/users](../server/src/routes/users.js#L45)
 
 Change username of existing user.
-The user is specified using the Authorization header as with other endpoints
+The user is specified using the X-Feedback-Auth header as with other endpoints
 and the body should contain the new name eg.
 ```json
 {
@@ -255,13 +255,13 @@ Example body
 
 ## Instances
 
-### [GET /api/instances](../server/src/routes/instances.js#L24)
+### [GET /api/instances](../server/src/routes/instances.js#L48)
 
 Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L59)
+### [POST /api/instances/new](../server/src/routes/instances.js#L83)
 
 Create a new instance.
 
@@ -277,13 +277,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L37)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L61)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L126)
+### [POST /api/instances/start](../server/src/routes/instances.js#L160)
 
 Start a stopped container.
 
@@ -296,7 +296,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L107)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L141)
 
 Stop a running container.
 
@@ -309,7 +309,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L145)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L179)
 
 Delete a container
 

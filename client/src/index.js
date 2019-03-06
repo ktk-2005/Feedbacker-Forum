@@ -22,6 +22,7 @@ import Onboarding from './feedbacker-components/onboarding/onboarding'
 
 // Internal js
 import { setupPersist } from './persist'
+import { getSession, updateSession } from './session'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
 import './scss/atoms-organisms/_toast.scss'
@@ -108,24 +109,48 @@ class MainView extends React.Component {
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
 
+    const {
+      surveyPanelIsHidden = true,
+      commentPanelIsHidden = true,
+    } = getSession()
+
     this.state = {
-      surveyPanelIsHidden: true,
-      commentPanelIsHidden: true,
+      surveyPanelIsHidden,
+      commentPanelIsHidden,
+      surveyButtonAnimation: false,
+      commentButtonAnimation: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
+  }
+
+  componentDidUpdate() {
+    const { surveyPanelIsHidden, commentPanelIsHidden } = this.state
+    updateSession({ surveyPanelIsHidden, commentPanelIsHidden })
   }
 
   handleSurveyPanelClick() {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
     }))
+    if (this.state.surveyPanelIsHidden) {
+      this.setState({ surveyButtonAnimation: true })
+      setTimeout(() => {
+        this.setState({ surveyButtonAnimation: false })
+      }, 3000)
+    }
   }
 
   handleCommentPanelClick() {
     this.setState(state => ({
       commentPanelIsHidden: !state.commentPanelIsHidden,
     }))
+    if (this.state.commentPanelIsHidden) {
+      this.setState({ commentButtonAnimation: true })
+      setTimeout(() => {
+        this.setState({ commentButtonAnimation: false })
+      }, 3000)
+    }
   }
 
   toggleTagElementState() {
@@ -151,6 +176,8 @@ class MainView extends React.Component {
     const {
       surveyPanelIsHidden,
       commentPanelIsHidden,
+      surveyButtonAnimation,
+      commentButtonAnimation,
       taggingModeActive,
     } = this.state
 
@@ -161,10 +188,12 @@ class MainView extends React.Component {
         <OpenSurveyPanelButton
           hidden={!surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
+          animation={surveyButtonAnimation}
         />
         <OpenCommentPanelButton
           hidden={!commentPanelIsHidden}
           onClick={this.handleCommentPanelClick}
+          animation={commentButtonAnimation}
         />
         <SurveyPanel
           hidden={surveyPanelIsHidden}

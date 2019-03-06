@@ -38,7 +38,7 @@ router.post('/', catchErrors(async (req, res) => {
 
 // @api PUT /api/users
 // Change username of existing user.
-// The user is specified using the Authorization header as with other endpoints
+// The user is specified using the X-Feedback-Auth header as with other endpoints
 // and the body should contain the new name eg. @json {
 //    "name": "Testuser2",
 // }
