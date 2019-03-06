@@ -1,5 +1,6 @@
 import express from 'express'
 import * as R from 'ramda'
+import bcrypt from 'bcrypt'
 import {
   createNewContainer,
   startContainer,
@@ -58,7 +59,7 @@ router.get('/logs/:name', catchErrors(async (req, res) => {
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/new', catchErrors(async (req, res) => {
   const {
-    url, version, type, name, port,
+    url, version, type, name, port, password,
   } = req.body
 
   const { userId } = await reqUser(req)
@@ -76,6 +77,18 @@ router.post('/new', catchErrors(async (req, res) => {
     throw new HttpError(400, `Bad container name: ${name}`)
   }
 
+  let hashedPassword
+  if (password) {
+    if (password.length < 5 || password.length > 64) {
+      throw new HttpError(400, 'Password is too short or long. Minimum length is 5 and maximum length is 64.')
+    }
+
+    /* ***************** */
+    /*  IMPORTANT STUFF  */
+    /* ***************** */
+    hashedPassword = await bcrypt.hash(password, 10)
+  }
+
   if (type === 'site') {
     await attempt(async () => {
       const subdomain = `${name}-${uuid(5)}`
@@ -89,7 +102,7 @@ router.post('/new', catchErrors(async (req, res) => {
     await attempt(async () => {
       const suffixedName = `${name}-${uuid(5)}`
       const containerInfo = await createNewContainer(
-        url, version, type, suffixedName, port, userId
+        url, version, type, suffixedName, port, userId, hashedPassword
       )
       res.json({ containerInfo })
     })

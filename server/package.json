@@ -38,6 +38,7 @@
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
+    "bcrypt": "^3.0.4",
     "btoa": "^1.2.1",
     "cors": "^2.8.5",
     "dockerode": "^2.5.8",
