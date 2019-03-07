@@ -1,11 +1,10 @@
 @import '../../scss/compulsory';
 // Atoms & organisms
 @import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/progress-bar';
 @import '../../scss/atoms/button-container';
-
-@import '../reactions/reactions';
 
 .survey-container {
   padding: $baseline 0;
@@ -18,14 +17,14 @@
 }
 
 .options {
-  @extend .reactions;
+  @extend %toggle-container;
   button {
-    @extend .reaction;
+    @extend %toggle-button;
   }
 
   // Options cannot be toggled off
   .chosen {
-    @extend .toggled;
+    @extend %toggled;
   }
 }
 

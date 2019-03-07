@@ -1,11 +1,10 @@
 @import '../../scss/compulsory';
 
 @import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
 @import '../../scss/atoms/view-container';
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/button-container';
-
-@import '../../feedbacker-components/reactions/reactions';
 
 .center-center-block {
   display: flex;
@@ -33,14 +32,14 @@
 }
 
 .selection-tabs {
-  @extend .reactions;
+  @extend %toggle-container;
   button {
-    @extend .reaction;
+    @extend %toggle-button;
     margin-top: $baseline;
     margin-bottom: $spacer;
 
     &.current {
-      @extend .toggled;
+      @extend %toggled;
     }
   }
 }
