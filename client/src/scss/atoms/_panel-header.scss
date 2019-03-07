@@ -1,0 +1,27 @@
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms/button';
+
+%panel-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: none;
+  width: 100%;
+  border-bottom: 1px solid $palette-light;
+  border-top-right-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
+  background-color: $palette-lighter;
+  padding: $baseline $spacer;
+  cursor: move; // IE11
+  cursor: grab;
+
+  .heading {
+    margin: 0;
+    margin-right: auto;
+  }
+
+  button {
+    @extend %icon-button;
+  }
+}

@@ -1,10 +1,8 @@
 @import '../../scss/compulsory';
 
 @import '../../scss/atoms/button';
+@import '../../scss/atoms/panel-header';
 @import '../../scss/organisms/forms';
-
-@import '../survey-panel/survey-panel.scss';
-@import '../comment/comment.scss';
 
 $panel-min-width: 300px;
 
@@ -33,16 +31,21 @@ $panel-min-width: 300px;
 }
 
 .panel-header {
-  @extend .panel-header;
+  @extend %panel-header;
   cursor: unset;
 }
 
 .panel-body {
-  @extend .panel-body;
   display: flex;
-  flex: 1;
   flex-flow: column;
+  flex: none;
+  min-height: 0; // Firefox shrink bug
   justify-content: flex-start;
+  overflow-y: scroll;
+  padding: $baseline $spacer;
+}
+
+.panel-body, .panel-header {
 }
 
 .thread-container {
