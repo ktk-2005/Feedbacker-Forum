@@ -208,7 +208,7 @@ class MainView extends React.Component {
           onClick={this.handleCommentPanelClick}
           animation={commentButtonAnimation}
         />
-        {!dashboardButtonIsHidden ? (
+        {dashboardButtonIsHidden ? (
           <DashboardLink />
         ) : false
         }

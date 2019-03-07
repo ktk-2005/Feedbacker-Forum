@@ -4,17 +4,14 @@
 @import '../../scss/animations';
 @import '../../scss/atoms-organisms/button';
 
+@import '../open-comment-panel-button/open-comment-panel-button.scss';
 
 
-a:link, a:visited {
-  background-color: #f44336;
-  color: white;
-  padding: 14px 25px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
 
-a:hover, a:active {
-  background-color: red;
+.dashboard-button {
+  @extend .open-button;
+  @extend %anchor-button;
+  bottom: 19%;
+  color: $palette-dark;
+  background-color: $palette-white;
 }
