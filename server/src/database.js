@@ -222,7 +222,7 @@ export async function resolveContainer(subdomain) {
 }
 
 export async function listContainersByUser(values = []) {
-  return db.query('SELECT id, subdomain, runner FROM containers WHERE user_id=?', values)
+  return db.query('SELECT id, subdomain, runner, blob FROM containers WHERE user_id=?', values)
 }
 
 export async function removeContainer(name) {

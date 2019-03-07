@@ -17,8 +17,13 @@ class ContainerCard extends React.Component {
   constructor(props) {
     super(props)
     this.instance = this.props.instance
-    this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
+
+    this.instanceUrl = `//${this.instance.subdomain}.${window.location.host}`
+    const { blob } = this.instance
+    if (blob.path) {
+      this.instanceUrl += blob.path
+    }
 
     this.state = {
       containerRunning: this.instance.running,
@@ -118,7 +123,7 @@ class ContainerCard extends React.Component {
             </Link>
           ) : null}
           <a
-            href={this.instance.url}
+            href={this.instanceUrl}
             target="_blank"
             rel="noreferrer noopener"
             className={css('accent')}

@@ -17,6 +17,7 @@ import Create from './dev-components/create'
 import Build from './dev-components/build-view'
 import InvalidContainer from './invalid-container'
 import AuthenticationView from './authorization-view'
+import View404 from './dev-components/404-view'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import apiCall from './api-call'
@@ -119,6 +120,7 @@ const initialize = () => {
               <Route exact path="/logs/:name" component={Build} />
               <Route exact path="/invalid-container/:name" component={InvalidContainer} />
               <Route exact path="/auth/:subdomain" component={AuthenticationView} />
+              <Route exact path="*" component={View404} />
             </Switch>
           </div>
         </Router>
