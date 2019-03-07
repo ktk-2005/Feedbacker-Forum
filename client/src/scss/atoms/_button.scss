@@ -79,6 +79,14 @@
   }
 }
 
+%submit-button {
+  @include button();
+  align-self: flex-end;
+  padding: $baseline $spacer;
+  background: $palette-accent;
+  color: $palette-lighter;
+}
+
 %anchor-button {
   @include button();
   display: inline-block;
