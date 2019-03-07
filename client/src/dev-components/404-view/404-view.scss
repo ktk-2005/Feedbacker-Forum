@@ -1,0 +1,61 @@
+@import '../../scss/compulsory';
+@import '../../scss/animations';
+
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/_button';
+
+.center-center-block {
+  @extend %center-view;
+}
+
+.view-404 {
+  @extend %view-container;
+  align-items: center;
+
+  h1 {
+    margin-bottom: $spacer;
+    font-size: $spacer * 10;
+    line-height: 100%;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: $spacer * 2;
+  }
+
+  .dashboard-button {
+    @extend %anchor-button;
+  }
+
+  // For glitch effect
+
+  h1 {
+    position: relative;
+
+    &:before, &:after {
+      content: attr(data-text);
+      position: absolute;
+      clip: rect(0, 900px, 0, 0);
+      overflow: hidden;
+      animation: noise-variation-1 3s infinite linear alternate-reverse;
+    }
+
+    &:before {
+      left: -2px;
+      top: 2px;
+       text-shadow: 3px 0 rgba($palette-accent, 0.5);
+      animation-name: noise-variation-2;
+      animation-duration: 4s;
+    }
+
+    &:after {
+      left: 2px;
+      top: 0;
+      text-shadow: -3px 0 rgba($palette-error-dark, 0.7);
+    }
+
+    &::selection {
+      background-color: transparent;
+    }
+  }
+}

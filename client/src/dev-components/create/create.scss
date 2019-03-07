@@ -8,16 +8,7 @@
 @import '../../scss/organisms/toggle-buttons';
 
 .center-center-block {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-
-  > * {
-    display: flex;
-    flex-flow: column;
-    flex: 1;
-  }
+  @extend %center-view;
 }
 
 .dashboard-button, .new-runner-button {
@@ -70,6 +61,10 @@
     @extend %anchor-button-accent;
     align-self: flex-end;
   }
+}
+
+.busy * {
+  cursor: wait;
 }
 
 .inline-button {

@@ -1,5 +1,18 @@
 @import '../compulsory';
 
+%center-view {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  > * {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+  }
+}
+
 %view-container {
   max-width: 700px;
   padding: $spacer * 4;

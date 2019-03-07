@@ -1,5 +1,7 @@
 import express from 'express'
 import * as R from 'ramda'
+import { http, https } from 'follow-redirects'
+import { URL } from 'url'
 import {
   createNewContainer,
   startContainer,
@@ -16,6 +18,28 @@ import logger from '../logger'
 
 const router = express.Router()
 
+function followRedirects(targetUrl) {
+  return new Promise((resolve, reject) => {
+    const client = targetUrl.startsWith('https') ? https : http
+    const request = client.get(targetUrl, (response) => {
+      const url = new URL(response.responseUrl)
+      request.abort()
+      resolve({
+        protocol: url.protocol,
+        host: url.host,
+        path: `${url.pathname}${url.search || ''}${url.hash || ''}`,
+      })
+    })
+
+    request.setTimeout(20000, () => {
+      reject(new HttpError(400, `Could not resolve URL, timed out: ${targetUrl}`))
+    })
+
+    request.on('error', (error) => {
+      reject(new HttpError(400, `Could not resolve URL: ${targetUrl}`, error))
+    })
+  })
+}
 
 // @api GET /api/instances
 // Retrieve all instances in the database.
@@ -77,13 +101,23 @@ router.post('/new', catchErrors(async (req, res) => {
   }
 
   if (type === 'site') {
+    const finalUrl = await followRedirects(url)
+
+    const rootUrl = `${finalUrl.protocol}//${finalUrl.host}`
+    const redirectPath = finalUrl.path
+
     await attempt(async () => {
       const subdomain = `${name}-${uuid(5)}`
-      const id = uuid(8)
+      const id = uuid(64)
       const containerInfo = await addSite({
-        id, subdomain, userId, type, url,
+        id,
+        subdomain,
+        userId,
+        type,
+        url: rootUrl,
+        blob: JSON.stringify({ path: redirectPath }),
       })
-      res.json({ containerInfo })
+      res.json({ containerInfo, redirectPath })
     })
   } else {
     await attempt(async () => {
