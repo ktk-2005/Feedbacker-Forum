@@ -17,11 +17,11 @@ function AuthorizationView(props) {
   }
 
   return (
-    <div className={css("auth-container")}>
-      <div className={css("dialog")}>
+    <div className={css('auth-container')}>
+      <div className={css('dialog')}>
         <h1>Authorization</h1>
         <p>You are not authorized to access the container <code>{subdomain}</code></p>
-        <div className={css("form")}>
+        <div className={css('form')}>
           <input type="password" placeholder="Password" id="password" />
           <button type="button" onClick={submitAuthTry}>Login</button>
         </div>
