@@ -108,7 +108,7 @@ router.post('/new', catchErrors(async (req, res) => {
 
     await attempt(async () => {
       const subdomain = `${name}-${uuid(5)}`
-      const id = uuid(8)
+      const id = uuid(64)
       const containerInfo = await addSite({
         id,
         subdomain,
