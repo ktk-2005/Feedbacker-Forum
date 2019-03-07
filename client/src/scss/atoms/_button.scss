@@ -97,14 +97,14 @@
   color: $palette-dark;
 }
 
-%anchor-button-accent {
-  @extend %anchor-button;
-  @extend %accent;
-}
-
 %accent {
   box-shadow: 0 2px 5px $palette-shadow-default;
   background: $palette-accent;
   color: $palette-lighter;
+}
+
+%anchor-button-accent {
+  @extend %anchor-button;
+  @extend %accent;
 }
 
