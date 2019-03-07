@@ -159,7 +159,7 @@ class Create extends React.Component {
           data-tooltip-width="250px"
         >
           Password
-          <input type="password" id="password" name="password" placeholder="correct horse battery staple" minlength="5" maxlength="64" />
+          <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
         </label>
         <div className={css('button-container')}>
           <Link to="/">
