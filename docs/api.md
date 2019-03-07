@@ -255,13 +255,13 @@ Example body
 
 ## Instances
 
-### [GET /api/instances](../server/src/routes/instances.js#L24)
+### [GET /api/instances](../server/src/routes/instances.js#L25)
 
 Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L59)
+### [POST /api/instances/new](../server/src/routes/instances.js#L60)
 
 Create a new instance.
 
@@ -277,13 +277,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L37)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L38)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L126)
+### [POST /api/instances/start](../server/src/routes/instances.js#L139)
 
 Start a stopped container.
 
@@ -296,7 +296,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L107)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L120)
 
 Stop a running container.
 
@@ -309,7 +309,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L145)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L158)
 
 Delete a container
 
@@ -369,3 +369,20 @@ Example request body:
 
 Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
 in the `status` field.
+
+## Authorization
+
+### [POST /api/authorization](../server/src/routes/authorization.js#L18)
+
+Authorize user for accessing the specified container.
+Required fields in the body: [password, subdomain]
+Example request:
+```json
+{
+  "password": "correct horse battery staple",
+  "subdomain": "hello-world-abcd23"
+}
+```
+
+Returns 200 OK and an empty JSON object if the authorization was succesful.
+Returns 401 if the authorization was not succesful.
