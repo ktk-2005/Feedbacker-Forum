@@ -7,7 +7,7 @@ import styles from './dashboard-link.scss'
 const css = classNames.bind(styles)
 
 function url() {
-  return `https://${window.location.origin.match(/([^.]*).(.*)/m)[2]}`
+  return `//${window.location.origin.match(/([^.]*).(.*)/m)[2]}`
 }
 
 const DashboardLink = () => (
