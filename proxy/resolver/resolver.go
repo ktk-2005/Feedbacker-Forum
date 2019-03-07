@@ -11,14 +11,18 @@ package resolver
 //   container, err := resolver.Resolve(subdomain)
 
 import (
+	"errors"
+	"strings"
 	"net/url"
+	"net/http"
 	"time"
 	"log"
-	"sync"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/lib/pq"
+	"github.com/hashicorp/golang-lru"
 )
 
 // -- Public API
@@ -29,15 +33,19 @@ type Config struct {
 	DbConnectString string // < Driver specific connection string
 }
 
+var UnauthorizedError = errors.New("User is not authorized")
+
 // Running container instance that can be proxied to.
 // (used internally for invalid containers also)
 type Container struct {
 	Subdomain string   // < Subdomain the container is routed under
 	TargetUrl *url.URL // < URL of the running container instance
+	Protected bool     // < Does the container reqiure authentication
 
 	// Internal
-	err    error     // < If not `nil`, then the container is not reachable
-	expiry time.Time // < Cached data is valid until this time
+	err        error     // < If not `nil`, then the container is not reachable
+	expiry     time.Time // < Cached data is valid until this time
+	authCache *lru.Cache // < Cached authenticated users
 }
 
 // Initialize the resolver, must be called before Resolve()
@@ -49,11 +57,18 @@ func Initialize(config *Config) error {
 	}
 
 	if config.DbDriver == "sqlite3" {
-		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = ?"
+		dbQueryString = "SELECT subdomain, url, blob FROM containers WHERE subdomain = ?"
+		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = ? AND user_id = ?"
 	} else if config.DbDriver == "postgres" {
-		dbQueryString = "SELECT subdomain, url FROM containers WHERE subdomain = $1"
+		dbQueryString = "SELECT subdomain, url, blob FROM containers WHERE subdomain = $1"
+		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = $? AND user_id = $?"
 	} else {
 		log.Fatalf("Unsupported database driver '%s'", config.DbDriver)
+	}
+
+	containerCache, err = lru.New(10000)
+	if err != nil {
+		return err
 	}
 
 	for i := 0; i < 10; i++ {
@@ -64,16 +79,17 @@ func Initialize(config *Config) error {
 	return nil
 }
 
-// Resolves a container for a given public ID. May result in a database lookup
-// and take a while to return. Returns `nil` if no matching container instance
-// is found.
-func Resolve(id string) (*Container, error) {
-	container := getCachedContainer(id)
+// Resolves a container for a given public `subdomain`. May result in a database lookup
+// and take a while to return. `cookies` is used to authenticate the user if the
+// containe ris protected. Returns `nil` if no matching container instance is
+// found or the user is unauthenticated.
+func Resolve(subdomain string, cookies []*http.Cookie) (*Container, error) {
+	container := getCachedContainer(subdomain)
 
 	if container == nil {
 		response := make(chan *Container)
 		resolveRequests <- resolveRequest {
-			id: id,
+			id: subdomain,
 			response: response,
 		}
 		container = <-response
@@ -83,10 +99,19 @@ func Resolve(id string) (*Container, error) {
 		return nil, container.err
 	}
 
+	err := authenticate(container, cookies)
+	if err != nil {
+		return nil, err
+	}
+
 	return container, nil
 }
 
 // -- Implementation
+
+// Singleton value to use as map value for sets
+type dummySetType struct {}
+var dummySetValue = &dummySetType{}
 
 // An in-flight container resolve request. The resolved container is written
 // through response. Sort of like a "promise" of Container. Always returns a
@@ -96,24 +121,106 @@ type resolveRequest struct {
 	response chan<- *Container // < Found container
 }
 
+type authRequest struct {
+	container *Container // < Container to authenticate to
+	userToAuth string    // < User to authenticate
+	response chan<- bool // < List of authenticated users
+}
+
 // -- Container cache
 // Containers are cached for some amount of time for more responsive user experience
 // and less database load.
 
-var containerCache = make(map[string]*Container)
-var cacheMutex sync.RWMutex
+var containerCache *lru.Cache
 
 // Try to find a container in the cache, returns `nil` if not present or
 // if the cached data is outdated.
 func getCachedContainer(id string) *Container {
-	cacheMutex.RLock()
-	container, ok := containerCache[id]
-	cacheMutex.RUnlock()
+	containerI, ok := containerCache.Get(id)
+	if !ok {
+		return nil
+	}
 
-	if ok && time.Now().Before(container.expiry) {
+	container := containerI.(*Container)
+	if time.Now().Before(container.expiry) {
 		return container
 	} else {
 		return nil
+	}
+}
+
+// -- Authentication
+
+type persistBlob struct {
+	Users map[string]string `json:"users"`
+}
+
+func authenticate(container *Container, cookies []*http.Cookie) error {
+
+	// If the container is not protected authenticate always
+	if !container.Protected {
+		return nil
+	}
+
+	// Collect users to authenticate from cookies
+	usersToAuth := make(map[string]bool)
+	for _, cookie := range cookies {
+		if !strings.HasPrefix(cookie.Name, "FeedbackerForum_") {
+			continue
+		}
+
+		jsonString, err := url.QueryUnescape(cookie.Value)
+		if err != nil {
+			continue
+		}
+
+		var blob persistBlob
+		err = json.Unmarshal([]byte(jsonString), &blob)
+		if err != nil {
+			continue
+		}
+
+		for user, _ := range blob.Users {
+			if _, ok := usersToAuth[user]; ok {
+				continue
+			}
+			if len(usersToAuth) < 1000 {
+				usersToAuth[user] = true
+			}
+		}
+	}
+
+	// Check if the user is in the auth cache
+	for user, _ := range usersToAuth {
+		_, ok := container.authCache.Get(user)
+		if ok {
+			return nil
+		}
+	}
+
+	response := make(chan bool)
+	anyAuth := false
+
+	// Authenticate the user hashes
+	for user, _ := range usersToAuth {
+		databaseAuthRequests <- authRequest{
+			container: container,
+			userToAuth: user,
+			response: response,
+		}
+
+		ok := <-response
+		if ok {
+			log.Printf("Authenticated '%s' to '%s'", user, container.Subdomain)
+			anyAuth = true
+			container.authCache.Add(user, dummySetValue)
+		}
+	}
+
+	if anyAuth {
+		return nil
+	} else {
+		return UnauthorizedError
 	}
 }
 
@@ -121,16 +228,23 @@ func getCachedContainer(id string) *Container {
 
 var db *sql.DB
 var dbQueryString string
+var dbAuthString string
 
 // Pending requests to the database
 var databaseRequests = make(chan resolveRequest)
+var databaseAuthRequests = make(chan authRequest)
+
+type containerBlob struct {
+	Auth map[string]json.RawMessage `json:"auth"`
+}
 
 // Query the database and create a container instance
 func fetchContainerFromDatabase(id string) (*Container, error) {
 	row := db.QueryRow(dbQueryString, id)
 	idString := ""
 	urlString := ""
-	err := row.Scan(&idString, &urlString)
+	blobString := ""
+	err := row.Scan(&idString, &urlString, &blobString)
 	if err != nil {
 		return nil, err
 	}
@@ -145,31 +259,72 @@ func fetchContainerFromDatabase(id string) (*Container, error) {
 		return nil, err
 	}
 
+	protected := false
+	if blobString != "" {
+		var blob containerBlob
+		err = json.Unmarshal([]byte(blobString), &blob)
+		if err == nil {
+			if blob.Auth != nil && len(blob.Auth) > 0 {
+				protected = true
+			}
+		} else {
+			return nil, fmt.Errorf("Failed to parse container '%v' blob", id)
+		}
+	}
+
+	cache, _ := lru.New(10000)
 	container := &Container{
 		Subdomain: id,
 		TargetUrl: url,
+		Protected: protected,
 		err: nil,
 		expiry: time.Now().Add(30 * time.Minute),
+		authCache: cache,
 	}
 
 	return container, nil
 }
 
+func authenticateUserFromDatabase(subdomain string, user string) error {
+	row := db.QueryRow(dbAuthString, subdomain, user)
+	subdomainString := ""
+	userString := ""
+	err := row.Scan(&subdomainString, &userString)
+	if err != nil {
+		return err
+	} else if subdomainString != subdomain {
+		return fmt.Errorf("Database subdomain '%s' not match query '%s'", subdomainString, subdomain)
+	} else if userString != user {
+		return fmt.Errorf("Database user '%s' not match query '%s'", userString, user)
+	} else {
+		return nil
+	}
+}
+
 // This function is spawned a fixed amount of times to serve database requests.
 func databaseWorker() {
-	for req := range databaseRequests {
-		container, err := fetchContainerFromDatabase(req.id)
-		if err != nil {
-			// If there was an error create an "error" container
-			container = &Container{
-				TargetUrl: nil,
-				Subdomain: req.id,
+	for {
+		select {
 
-				err: err,
-				expiry: time.Now().Add(time.Minute),
+		case req := <-databaseRequests:
+			container, err := fetchContainerFromDatabase(req.id)
+			if err != nil {
+				// If there was an error create an "error" container
+				container = &Container{
+					TargetUrl: nil,
+					Subdomain: req.id,
+
+					err: err,
+					expiry: time.Now().Add(time.Minute),
+				}
 			}
+			req.response <- container
+
+		case authReq := <-databaseAuthRequests:
+			err := authenticateUserFromDatabase(authReq.container.Subdomain, authReq.userToAuth)
+			authReq.response <- (err == nil)
+
 		}
-		req.response <- container
 	}
 }
 
@@ -219,9 +374,7 @@ func resolveWorker() {
 				log.Printf("Resolved container '%v' -> %v", id, container.TargetUrl.String())
 			}
 
-			cacheMutex.Lock()
-			containerCache[id] = container
-			cacheMutex.Unlock()
+			containerCache.Add(id, container)
 
 			reqs, found := pending[id]
 			if found {

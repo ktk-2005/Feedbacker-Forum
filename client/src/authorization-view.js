@@ -7,8 +7,8 @@ import styles from './scss/views/auth-view.scss'
 
 const css = classNames.bind(styles)
 
-function AuthorizationView(props) {
-  const { subdomain } = props.match.params
+function AuthorizationView() {
+  const subdomain = window.location.host.split('.')[0]
 
   async function submitAuthTry() {
     const password = shadowDocument().getElementById('password').value

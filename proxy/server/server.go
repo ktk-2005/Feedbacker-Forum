@@ -27,7 +27,8 @@ type Config struct {
 	ProxyPort int       // < Port to bind the proxy to
 	ErrorPort int       // < Internal port to use as error proxy target
 	InjectScript string // < Script source to inject to html files
-	ErrorPage string    // < Error page to redirect to
+	ErrorScript string  // < Script to load on error (invalid container)
+	AuthScript string   // < Script to load to authenticate
 }
 
 // Start serving the proxy
@@ -41,31 +42,55 @@ func StartServing(config *Config) error {
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
 	scriptInjectLength = len([]byte(scriptInjectString))
 
-	errorPage = config.ErrorPage
-	if !strings.HasSuffix(errorPage, "/") {
-		errorPage += "/"
-	}
-
 	var err error
-	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/", errPort))
+	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/error", errPort))
 	if err != nil {
 		return err
 	}
+	authUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/auth", errPort))
+	if err != nil {
+		return err
+	}
+
+	errorHtml = fmt.Sprintf(htmlTemplate, config.ErrorScript)
+	authHtml = fmt.Sprintf(htmlTemplate, config.AuthScript)
 
 	proxy := httputil.ReverseProxy{
 		Director: redirectRequest,
 		ModifyResponse: modifyResponse,
 	}
 
-	log.Printf("Serving proxy at %d", proxyPort)
 	go func() {
 		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", errPort), &ErrorHandler{}))
 	}()
+
+	log.Printf("Serving proxy at %d", proxyPort)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", proxyPort), &proxy))
 	return nil
 }
 
 // -- Implementation
+
+// HTML template for error and auth sites
+const htmlTemplate = `<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" >
+  <title>Feedbacker Forum</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="%s"></script>
+  <!-- Dummy inject slot: </body> -->
+</body>
+
+
+</html>
+`
 
 // `scriptInjectString` is injected before `injectPositionRegex`
 var doctypeRegex = regexp.MustCompile("(?i)<!doctype")
@@ -74,12 +99,15 @@ var doctypeInjectString string
 var doctypeInjectLength int
 var scriptInjectString string
 var scriptInjectLength int
-var errorPage string
+var errorHtml string
+var authHtml string
 
 // Server that returns error responses
 var errorUrl *url.URL
+var authUrl *url.URL
 
 func redirectRequest(req *http.Request) {
+	var err error
 
 	// Retrieve container name from subdomain
 	host := req.Host
@@ -89,7 +117,8 @@ func redirectRequest(req *http.Request) {
 		token := host[0:tokenLen]
 
 		// Try to find and redirect request
-		container, err := resolver.Resolve(token)
+		var container *resolver.Container
+		container, err = resolver.Resolve(token, req.Cookies())
 		if err == nil {
 			target := container.TargetUrl
 			req.URL.Scheme = target.Scheme
@@ -102,13 +131,16 @@ func redirectRequest(req *http.Request) {
 			}
 
 			return
-		} else {
-			req.Header.Set("X-Feedback-Subdomain", token)
 		}
 	}
 
-	req.URL = errorUrl
-	req.Host = errorUrl.Host
+	if err == resolver.UnauthorizedError {
+		req.URL = authUrl
+		req.Host = authUrl.Host
+	} else {
+		req.URL = errorUrl
+		req.Host = errorUrl.Host
+	}
 }
 
 func modifyResponse(res *http.Response) error {
@@ -189,8 +221,10 @@ func modifyResponse(res *http.Response) error {
 
 type ErrorHandler struct { }
 func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	host := r.Header.Get("X-Feedback-Subdomain")
-	target := errorPage + host
-	http.Redirect(w, r, target, 301)
+	w.Header().Set("Content-Type", "text/html")
+	if r.URL.Path == "/auth" {
+		io.WriteString(w, authHtml)
+	} else {
+		io.WriteString(w, errorHtml)
+	}
 }
-
