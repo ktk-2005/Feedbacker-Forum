@@ -19,6 +19,7 @@ import SurveyPanel from './feedbacker-components/survey-panel/survey-panel'
 import OpenCommentPanelButton from './feedbacker-components/open-comment-panel-button/open-comment-panel-button'
 import CommentPanel from './feedbacker-components/comment-panel/comment-panel'
 import Onboarding from './feedbacker-components/onboarding/onboarding'
+import DashboardLink from './feedbacker-components/dashboard-link/dashboard-link'
 
 // Internal js
 import { setupPersist } from './persist'
@@ -108,6 +109,7 @@ class MainView extends React.Component {
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
+    this.dashboardButton = this.dashboardButton.bind(this)
 
     const {
       surveyPanelIsHidden = true,
@@ -121,12 +123,22 @@ class MainView extends React.Component {
       commentButtonAnimation: false,
       taggingModeActive: false,
       taggedElementXPath: '',
+      dashboardButtonIsHidden: true,
     }
   }
 
   componentDidUpdate() {
     const { surveyPanelIsHidden, commentPanelIsHidden } = this.state
     updateSession({ surveyPanelIsHidden, commentPanelIsHidden })
+    this.dashboardButton()
+  }
+
+  dashboardButton() {
+    if (window.location.host.includes('.dev.')) {
+      this.setState(state => ({
+        dashboardButtonIsHidden: !state.dashboardButtonIsHidden,
+      }))
+    }
   }
 
   handleSurveyPanelClick() {
@@ -179,6 +191,7 @@ class MainView extends React.Component {
       surveyButtonAnimation,
       commentButtonAnimation,
       taggingModeActive,
+      dashboardButtonIsHidden,
     } = this.state
 
     return (
@@ -195,6 +208,10 @@ class MainView extends React.Component {
           onClick={this.handleCommentPanelClick}
           animation={commentButtonAnimation}
         />
+        {!dashboardButtonIsHidden ? (
+          <DashboardLink />
+        ) : false
+        }
         <SurveyPanel
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
