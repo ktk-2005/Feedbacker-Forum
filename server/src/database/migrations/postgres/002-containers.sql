@@ -3,7 +3,7 @@ BEGIN TRANSACTION;
 
 -- Table: containers
 CREATE TABLE containers (
-  id            CHAR(8) UNIQUE NOT NULL,
+  id            VARCHAR(64) UNIQUE NOT NULL,
   subdomain     VARCHAR(32) UNIQUE NOT NULL,
   url           VARCHAR(255) NOT NULL,
   user_id       CHAR(8) NOT NULL,
