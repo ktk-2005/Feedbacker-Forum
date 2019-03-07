@@ -1,11 +1,11 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/organisms/forms';
-@import '../../scss/organisms/toggle-buttons';
 @import '../../scss/atoms/view-container';
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/button-container';
 @import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
 
 .center-center-block {
   display: flex;

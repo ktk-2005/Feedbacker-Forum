@@ -1,7 +1,7 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/organisms/toggle-buttons';
 @import '../../scss/atoms/button';
+@import '../../scss/organisms/toggle-buttons';
 
 .reactions {
   @extend %toggle-container;

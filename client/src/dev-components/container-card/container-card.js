@@ -7,6 +7,7 @@ import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
 // Styles
 import styles from './container-card.scss'
+// Icons
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
 import StopIcon from '../../assets/svg/baseline-stop-24px.svg'

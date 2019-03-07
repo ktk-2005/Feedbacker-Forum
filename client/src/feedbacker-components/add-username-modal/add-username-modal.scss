@@ -1,9 +1,9 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/organisms/forms';
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/modal';
 @import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/forms';
 
 .username-modal {
   @extend %modal;

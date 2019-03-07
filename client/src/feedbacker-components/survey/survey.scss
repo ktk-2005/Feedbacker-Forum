@@ -1,10 +1,10 @@
 @import '../../scss/compulsory';
-// Atoms & organisms
-@import '../../scss/organisms/forms';
-@import '../../scss/organisms/toggle-buttons';
+
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/progress-bar';
 @import '../../scss/atoms/button-container';
+@import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
 
 .survey-container {
   padding: $baseline 0;
