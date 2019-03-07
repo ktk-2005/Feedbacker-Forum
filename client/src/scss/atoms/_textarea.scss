@@ -14,5 +14,10 @@
     outline: none;
     box-shadow: 0 2px 10px $palette-shadow-default;
   }
+
+  &:disabled {
+    background-color: $palette-medium;
+    cursor: not-allowed;
+  }
 }
 

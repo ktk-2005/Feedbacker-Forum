@@ -3,8 +3,7 @@
 @import '../../scss/organisms/forms';
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/modal';
-
-@import '../comment/comment.scss';
+@import '../../scss/atoms/generic_input';
 
 .username-modal {
   @extend %modal;
@@ -24,7 +23,7 @@
   padding: 0 $padding $padding;
 
   input[type="text"] {
-    @extend .comment;
+    @extend %generic-input;
     box-sizing: border-box;
     min-width: 100%;
     border: none;

@@ -14,4 +14,9 @@
     outline: none;
     @include shadow-outline($fade: $baseline);
   }
+
+  &:disabled {
+    background-color: $palette-medium;
+    cursor: not-allowed;
+  }
 }
