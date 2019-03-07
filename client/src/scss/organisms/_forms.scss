@@ -12,10 +12,10 @@
 
   textarea {
     @extend %textarea;
+    margin-bottom: $baseline;
   }
 
   input[type="submit"] {
     @extend %submit-button;
-    margin-top: $baseline;
   }
 }
