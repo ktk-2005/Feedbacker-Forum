@@ -1,7 +1,10 @@
 @import '../../scss/compulsory';
 
+@import '../../scss/organisms/forms';
 @import '../../scss/atoms/view-container';
 @import '../../scss/atoms/tooltip';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/button-container';
 
 .runner-view-container {
   display: flex;
@@ -29,11 +32,29 @@
   margin-bottom: $spacer;
 }
 
+.dashboard-button {
+  @extend %anchor-button;
+}
+
 .form-create-runner {
-  @extend .form-create;
+  @extend %form;
+  line-height: 2;
 
   label[for="tag"] {
     margin-bottom: 0;
+  }
+
+  input[type="text"] {
+    @extend %generic-input;
+  }
+
+  .button-container {
+    @extend %button-container;
+  }
+
+  button[type="submit"] {
+    @extend %anchor-button-accent;
+    align-self: flex-end;
   }
 }
 

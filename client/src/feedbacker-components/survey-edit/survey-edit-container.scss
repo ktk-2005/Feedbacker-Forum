@@ -2,6 +2,7 @@
 
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/modal';
+@import '../../scss/atoms/button-container';
 
 .drag-helper {
   @include z-level(1);
@@ -32,9 +33,7 @@
   max-width: 500px;
 
   .button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: $spacer;
+    @extend %button-container;
   }
 
   button {

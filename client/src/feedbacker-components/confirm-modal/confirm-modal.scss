@@ -2,6 +2,7 @@
 
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/modal';
+@import '../../scss/atoms/button-container';
 
 .confirm-modal {
   @extend %modal;
@@ -16,9 +17,7 @@
     text-align: center;
   }
   .button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: $spacer;
+    @extend %button-container;
   }
 
   button {

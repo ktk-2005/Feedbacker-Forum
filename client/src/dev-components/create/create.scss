@@ -3,8 +3,8 @@
 @import '../../scss/organisms/forms';
 @import '../../scss/atoms/view-container';
 @import '../../scss/atoms/button';
+@import '../../scss/atoms/button-container';
 
-@import '../dashboard-view/dashboard-view';
 @import '../../feedbacker-components/reactions/reactions';
 
 .center-center-block {
@@ -46,9 +46,7 @@
 }
 
 .form-create {
-  display: flex;
-  flex-shrink: 0;
-  flex-flow: column;
+  @extend %form;
   line-height: 2;
 
   label {
@@ -63,6 +61,9 @@
     background: $palette-white;
     appearance: none;
     margin-right: $baseline;
+  }
+  .button-container {
+    @extend %button-container;
   }
 
   button[type="submit"] {

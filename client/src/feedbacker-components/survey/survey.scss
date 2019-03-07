@@ -3,6 +3,7 @@
 @import '../../scss/organisms/forms';
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/progress-bar';
+@import '../../scss/atoms/button-container';
 
 @import '../reactions/reactions';
 
@@ -91,9 +92,7 @@ form.answer-form {
 }
 
 .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: $spacer;
+  @extend %button-container;
 
   .answer-form + & {
     margin-top: $baseline;

@@ -2,6 +2,8 @@
 
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/tooltip';
+@import '../../scss/atoms/button-container';
+
 
 .top-section {
   display: flex;
@@ -36,12 +38,6 @@
 }
 
 .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: $spacer;
-
-  > *:not(:first-of-type) {
-    margin-left: $spacer;
-  }
+  @extend %button-container;
 }
 
