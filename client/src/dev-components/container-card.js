@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
+import { toast } from 'react-toastify'
 import apiCall from '../api-call'
 // Styles
+import '../scss/atoms-organisms/_toast.scss'
 import styles from '../scss/views/dashboard-view.scss'
 import CloseIcon from '../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../assets/svg/baseline-play_arrow-24px.svg'
@@ -26,6 +28,7 @@ class ContainerCard extends React.Component {
       startPending: false,
       stopPending: false,
       removePending: false,
+      disableSlack: false,
     }
 
     this.startContainer = this.startContainer.bind(this)
@@ -72,9 +75,23 @@ class ContainerCard extends React.Component {
     }
   }
 
+  // TODO: This is duplicate code, not nice
   async shareSlack() {
-    console.log(this.instance.name)
-    const { success } = await apiCall('GET', `/slack/notify/${this.instance.name}/${window.location.host}`)
+    this.setState({ disableSlack: true })
+    let succ = null
+    try {
+      const { success } = await apiCall('GET', `/slack/notify/${this.instance.name}.${window.location.host}`)
+      succ = success
+    } catch (error) {
+      // Do nothing
+    }
+    this.setState({ disableSlack: false })
+    if (succ) {
+      const message = 'Slack notification sent.'
+      toast(message, {
+        autoClose: 2000,
+      })
+    }
   }
 
   render() {
@@ -120,6 +137,7 @@ class ContainerCard extends React.Component {
           <button
             type="button"
             className={css('slack-share')}
+            disabled={this.state.disableSlack}
             onClick={this.shareSlack}
             data-tooltip="Share in Slack"
             data-tooltip-width="130px"

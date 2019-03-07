@@ -22,7 +22,7 @@
   width: $dimension;
 
   // Visually centered vertically
-  svg {
+  &svg {
     position: relative;
     top: -1px;
   }

@@ -4,6 +4,9 @@ import { SortableContainer, arrayMove } from 'react-sortable-hoc'
 import classNames from 'classnames/bind'
 import ReactModal from 'react-modal'
 
+import { toast } from 'react-toastify'
+import InlineSVG from 'svg-inline-react'
+import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 import SurveyEditCard from './survey-edit-card'
 import { shadowModalRoot } from '../../shadowDomHelper'
 import styles from './survey-edit-container.scss'
@@ -99,6 +102,7 @@ export default class SurveyEditContainer extends React.Component {
     this.editCancel = this.editCancel.bind(this)
     this.editChange = this.editChange.bind(this)
     this.sortEnd = this.sortEnd.bind(this)
+    this.shareSlack = this.shareSlack.bind(this)
 
     this.addTextQuestion = () => this.addQuestion('text')
     this.addOptionQuestion = () => this.addQuestion('option')
@@ -109,6 +113,7 @@ export default class SurveyEditContainer extends React.Component {
       openId: null,
       pendingDelete: null,
       edit: { },
+      disableSlack: false,
     }
   }
 
@@ -244,6 +249,25 @@ export default class SurveyEditContainer extends React.Component {
     this.setState({ pendingDelete: null })
   }
 
+  // TODO: This is duplicate code, not nice
+  async shareSlack() {
+    this.setState({ disableSlack: true })
+    let succ = null
+    try {
+      const { success } = await apiCall('GET', `/slack/notify/${window.location.host}`)
+      succ = success
+    } catch (error) {
+      // Do nothing
+    }
+    this.setState({ disableSlack: false })
+    if (succ) {
+      const message = 'Slack notification sent.'
+      toast(message, {
+        autoClose: 2000,
+      })
+    }
+  }
+
   render() {
     const { openId, edit, pendingDelete } = this.state
     const questions = this.state.previewQuestions || this.state.questions
@@ -304,6 +328,16 @@ export default class SurveyEditContainer extends React.Component {
               >
                 Add explanation
               </button>
+              {questions.length > 0 ? (
+                <button
+                  type="button"
+                  className={css('add-button', 'slack-button')}
+                  disabled={this.state.disableSlack}
+                  onClick={this.shareSlack}
+                >
+                  {<InlineSVG src={SlackIcon} />} <span>Share in Slack</span>
+                </button>
+              ) : null}
             </div>
           ) : null
         }

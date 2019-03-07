@@ -14,21 +14,15 @@ const router = express.Router()
 
 // TODO: Define these, gotten from Slack api, move to env
 // CHANGE THESE FOR BETA KTK SLACK
-// REAL const clientId = '13555351540.557284460738' // process.env.client_id
-// REAL const clientSecret = 'fbc944900f51bb22b960676a1ccd53fa' // process.env.client_secret
-// Use this to make sure requests come from Slack, DEPRECATED???
-// REAL const verificationToken = 'xcPW8ST04fDX1YHdY2ym08Qc' // process.env.token
-
 const clientId = '563857873046.569019332453'
 const clientSecret = 'ad1592debf2b5dd6ab7dd762e2953826'
-
-// FIX Return doc (line 19)
+const token = 'xoxb-563857873046-570133284070-d05OPITH7fjvxONFhNZVOWOX'
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
 // This path should only be called by Slack oauth after pressing 'Sign in with Slack'-button.
 //
-// Returns error if authentication failed or redirects back to dashboard otherwise?
+// Returns error if authentication failed or redirects back to dashboard otherwise
 router.get('/oauth', catchErrors(async (req, res) => {
   // Make updates to database with state(=slack_users.id)
   const { state } = req.query
@@ -39,15 +33,12 @@ router.get('/oauth', catchErrors(async (req, res) => {
   await request(options, async (error, response, body) => {
     const parsedBody = JSON.parse(body)
     if (!parsedBody.ok) {
-      console.log(parsedBody)
       res.send(`Error encountered: \n${JSON.stringify(parsedBody)}`)
         .status(200)
         .end()
     } else {
       // DO SOMETHING WITH USER INFO (UPDATE SLACK_USERS TABLE)
-      console.log(parsedBody)
       await setSlackUser(state, parsedBody.user.name, parsedBody.user.id)
-      // FIX THIS, to redirect to dashboard?
       res.redirect('/')
     }
   })
@@ -78,7 +69,6 @@ router.get('/auth', catchErrors(async (req, res) => {
   for (const userId of Object.keys(users)) {
     const slackUser = await getSlackUser(userId)
     if (slackUser.length > 0 && slackUser[0].slack_user_id) {
-      console.log(slackUser[0])
       res.json({ slackAuth: true, slackUser: slackUser[0] })
       return
     }
@@ -96,21 +86,24 @@ router.get('/command/help', catchErrors((req, res) => {
   res.send(help)
 }))
 
-router.get('/notify/:container/:domain', catchErrors(async (req, res) => {
-  const { container, domain } = req.params
+// @api GET /api/slack/notify/:container/:domain
+// Used for sending slack notifications by webhook when wanting to share published instance.
+//
+// Returns json object with 'success' boolean field indicating whether notification was send or not.
+router.get('/notify/:url', catchErrors(async (req, res) => {
+  let { url } = req.params
   const { users } = await reqUser(req)
   // Check if user owns this container
+  url = url.split('.').filter(x => x !== 'dev').join('.')
+  const container = url.split('.')[0]
   try {
     await confirmContainerOwnership(container, users)
   } catch (error) {
-    res.json({ success: false, error })
-    return
+    throw new Error('Not authorised')
   }
   // Change this webhook URL to match used slack app
   const webhookURL = 'https://hooks.slack.com/services/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'
 
-  // Remove
-  console.log(`//${container}.${domain}`)
   request({
     url: webhookURL,
     method: 'POST',
@@ -119,8 +112,32 @@ router.get('/notify/:container/:domain', catchErrors(async (req, res) => {
     },
     body: JSON.stringify({
       // TODO: Right notification message
-      text: `Check this new feedbacker instance out: http://${container}.${domain}`,
+      text: `Check this new feedbacker instance out: http://${url}`,
     }),
+  })
+
+  // For private messages
+  request({
+    url: `https://slack.com/api/im.open?token=${token}&user=UGKEJFTEK`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }, (error, response, body) => {
+    const JSONres = JSON.parse(body)
+    if (JSONres.ok) {
+      const channel = JSONres.channel.id
+      const message = "Sup dude, you got a new message"
+      request({
+        url: `https://slack.com/api/chat.postMessage?token=${token}&channel=${channel}&text=${message}&pretty=1`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    } else {
+      console.log("Failed")
+    }
   })
 
   res.json({ success: true })
