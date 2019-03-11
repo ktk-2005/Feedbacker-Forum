@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 // Redux
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 // External libraries & helpers
 import * as R from 'ramda'
 import { ToastContainer } from 'react-toastify'
@@ -100,6 +100,8 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
+const mapStateToProps = state => ({ role: state.role })
+
 class MainView extends React.Component {
   constructor(props) {
     super(props)
@@ -109,7 +111,6 @@ class MainView extends React.Component {
     this.toggleTagElementState = this.toggleTagElementState.bind(this)
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
-    this.dashboardButton = this.dashboardButton.bind(this)
 
     const {
       surveyPanelIsHidden = true,
@@ -123,23 +124,14 @@ class MainView extends React.Component {
       commentButtonAnimation: false,
       taggingModeActive: false,
       taggedElementXPath: '',
-      dashboardButtonIsHidden: true,
     }
   }
 
   componentDidUpdate() {
     const { surveyPanelIsHidden, commentPanelIsHidden } = this.state
     updateSession({ surveyPanelIsHidden, commentPanelIsHidden })
-    this.dashboardButton()
   }
 
-  dashboardButton() {
-    if (window.location.host.includes('.dev.')) {
-      this.setState(state => ({
-        dashboardButtonIsHidden: !state.dashboardButtonIsHidden,
-      }))
-    }
-  }
 
   handleSurveyPanelClick() {
     this.setState(state => ({
@@ -191,7 +183,6 @@ class MainView extends React.Component {
       surveyButtonAnimation,
       commentButtonAnimation,
       taggingModeActive,
-      dashboardButtonIsHidden,
     } = this.state
 
     return (
@@ -208,9 +199,9 @@ class MainView extends React.Component {
           onClick={this.handleCommentPanelClick}
           animation={commentButtonAnimation}
         />
-        {!dashboardButtonIsHidden ? (
+        { this.props.role === 'user' ? (
           <DashboardLink />
-        ) : false
+        ) : null
         }
         <SurveyPanel
           hidden={surveyPanelIsHidden}
@@ -239,6 +230,8 @@ class MainView extends React.Component {
     )
   }
 }
+
+export default connect(mapStateToProps)(MainView)
 
 const getComments = () => {
   apiCall('GET', '/comments')

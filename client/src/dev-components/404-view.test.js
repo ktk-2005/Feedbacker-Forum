@@ -10,5 +10,5 @@ test('should have back to dashboard text on button', () => {
     </Router>
   )
   const wrapper = view.find('.dashboard-button')
-  expect(wrapper.first().text()).toBe('Back to dashboard')
+  expect(wrapper.text()).toBe('Back to dashboard')
 })

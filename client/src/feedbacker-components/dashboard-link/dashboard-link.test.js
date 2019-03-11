@@ -10,6 +10,7 @@ let middlewares
 beforeEach(() => {
   middlewares = []
   mockStore = configureMockStore(middlewares)
+  global.window.location =  { href: 'site.localhost:8080' }
 })
 
 test('should have back to dashboard text on button', () => {
@@ -20,5 +21,24 @@ test('should have back to dashboard text on button', () => {
     </Provider>
   )
   const wrapper = view.find('.dashboard-button')
-  expect(wrapper.first().text()).toBe('Back to dashboard')
+  expect(wrapper.text()).toBe('Back to dashboard')
+})
+
+test('link should be correct', () => {
+  global.window = Object.create(window)
+  const url = 'https://new-feature-4cdfa.feedbacker.site'
+  Object.defineProperty(window, 'location', {
+    value: {
+      origin: url,
+    },
+  })
+  const store = mockStore()
+  const view = mount(
+    <Provider store={store}>
+      <DashboardLink />
+    </Provider>
+  )
+  view.setProps({ href: `//${window.location.origin.match(/([^.]*).(.*)/m)[2]}` })
+  const wrapper = view.find('.dashboard-button')
+  expect(wrapper.props().href).toBe('//feedbacker.site')
 })
