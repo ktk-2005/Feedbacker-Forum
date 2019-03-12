@@ -57,5 +57,11 @@ input[type="checkbox"], %checkbox {
     }
   }
 
-  // TODO: focus state for checkbox
+  &:focus + label {
+    &:before {
+      @include shadow-outline($fade: $baseline);
+      outline: none;
+      transition: $transition-default-all;
+    }
+  }
 }

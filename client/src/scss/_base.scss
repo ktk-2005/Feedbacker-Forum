@@ -19,7 +19,7 @@
 // For hiding on tagging mode active
 .tagging-mode-active {
   &, & * {
-    visibility: hidden; // TODO: smoother and more performant alternative?
+    visibility: hidden;
   }
 }
 
