@@ -37,8 +37,8 @@ $panel-min-width: 300px;
 
 .panel-body {
   display: flex;
+  flex: 1;
   flex-flow: column;
-  flex: none;
   min-height: 0; // Firefox shrink bug
   justify-content: flex-start;
   overflow-y: scroll;
