@@ -23,10 +23,6 @@
     margin-bottom: $spacer * 2;
   }
 
-  .dashboard-button {
-    @extend %anchor-button;
-  }
-
   // For glitch effect
 
   h1 {
