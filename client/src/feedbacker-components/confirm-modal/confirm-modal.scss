@@ -8,7 +8,6 @@
   @extend %modal;
   position: fixed;
   min-width: 20 * $baseline;
-  max-width: 400px;
   min-height: 2 * $baseline;
   max-height: 300px;
   padding: 2 * $spacer;

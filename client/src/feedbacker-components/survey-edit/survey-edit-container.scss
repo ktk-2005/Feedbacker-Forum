@@ -30,7 +30,6 @@
   @include shadow-outline();
   justify-content: space-between;
   min-width: 40vw;
-  max-width: 500px;
 
   .button-container {
     @extend %button-container;

@@ -10,7 +10,7 @@ $padding: $spacer * 2;
   flex-flow: column;
   justify-content: space-around;
   min-width: 25vw;
-  width: 450px; // TODO: responsive
+  max-width: 450px; // TODO: replace with 75vw on mobile
   border: solid $palette-light 1px;
   border-radius: $border-radius-default;
   background-color: $palette-lighter;
@@ -25,6 +25,7 @@ $padding: $spacer * 2;
 %content {
   display: flex;
   flex-flow: column;
+  max-width: 60vw;
   flex: 1;
   padding: 0 $padding;
 }
