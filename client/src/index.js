@@ -199,7 +199,7 @@ class MainView extends React.Component {
           onClick={this.handleCommentPanelClick}
           animation={commentButtonAnimation}
         />
-        { this.props.role === 'user' ? (
+        { this.props.role === 'dev' ? (
           <DashboardLink />
         ) : null
         }
@@ -231,7 +231,7 @@ class MainView extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(MainView)
+const ConnectedMainView = connect(mapStateToProps)(MainView)
 
 const getComments = () => {
   apiCall('GET', '/comments')
@@ -313,7 +313,7 @@ const initialize = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <MainView />
+      <ConnectedMainView />
     </Provider>,
     root
   )
