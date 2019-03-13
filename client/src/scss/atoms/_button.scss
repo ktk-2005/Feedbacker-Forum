@@ -57,6 +57,21 @@
   }
 }
 
+@mixin open-panel-button($bottom-padding) {
+  @include button(2px);
+  @include display-and-animate();
+  position: fixed;
+  bottom: $bottom-padding;
+  left: 3%;
+  padding: $baseline $spacer;
+  box-shadow: 0 2px 5px $palette-medium;
+  color: $palette-lighter;
+  background: $palette-accent;
+  &.hidden {
+    @include hide-and-animate();
+  }
+}
+
 %icon-button {
   @include button($states: false, $transition: false);
   background: transparent;

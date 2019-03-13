@@ -3,9 +3,10 @@
 
 @import '../../scss/atoms/button';
 
-@import '../open-comment-panel-button/open-comment-panel-button.scss';
-
 .button {
-  @extend .open-button;
-  bottom: 5%;
+  @include open-panel-button(5%);
+}
+
+[data-animation="true"] {
+  animation: close-pulse 0.7s 2;
 }
