@@ -10,7 +10,9 @@ const css = classNames.bind(styles)
 function AuthorizationView() {
   const subdomain = window.location.host.split('.')[0]
 
-  async function submitAuthTry() {
+  async function submitAuthTry(event) {
+    event.preventDefault()
+
     const password = shadowDocument().getElementById('password').value
     await apiCall('POST', '/authorization', { password, subdomain })
     window.location.reload()
@@ -21,10 +23,10 @@ function AuthorizationView() {
       <div className={css('dialog')}>
         <h1>Authorization</h1>
         <p>You are not authorized to access the container <code>{subdomain}</code></p>
-        <div className={css('form')}>
+        <form className={css('form')}>
           <input type="password" placeholder="Password" id="password" />
-          <button type="button" onClick={submitAuthTry}>Login</button>
-        </div>
+          <input type="submit" onClick={submitAuthTry} />
+        </form>
       </div>
     </div>
   )
