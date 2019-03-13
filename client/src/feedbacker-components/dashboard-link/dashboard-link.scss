@@ -3,8 +3,6 @@
 @import '../../scss/atoms/button';
 
 .dashboard-button {
-  @include open-panel-button(19%);
+  @include open-panel-button(19%, true);
   @extend %anchor-button;
-  color: $palette-dark;
-  background-color: $palette-white;
 }

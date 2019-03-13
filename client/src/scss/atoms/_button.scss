@@ -35,6 +35,11 @@
     transition: $transition-default-all;
   }
 
+  &:hover {
+    box-shadow: 0 2px $spacer $palette-shadow-default;
+    transform: translateY(-1px);
+  }
+
   @if $states {
     &:hover {
       @if $transition {
@@ -57,7 +62,7 @@
   }
 }
 
-@mixin open-panel-button($bottom-padding) {
+@mixin open-panel-button($bottom-padding, $anchor: false) {
   @include button(2px);
   @include display-and-animate();
   position: fixed;
@@ -67,10 +72,24 @@
   box-shadow: 0 2px 5px $palette-medium;
   color: $palette-lighter;
   background: $palette-accent;
+  @if $anchor {
+    color: $palette-dark;
+    background: $palette-white;
+
+    &:after {
+      background: $palette-shadow-default;
+    }
+  }
   &.hidden {
     @include hide-and-animate();
   }
+
+  @at-root[data-animation="true"] {
+    animation: close-pulse 0.7s 2;
+  }
+
 }
+
 
 %icon-button {
   @include button($states: false, $transition: false);

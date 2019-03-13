@@ -6,7 +6,3 @@
 .open-button {
   @include open-panel-button(12%);
 }
-
-[data-animation="true"] {
-  animation: close-pulse 0.7s 2;
-}
