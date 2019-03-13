@@ -18,7 +18,7 @@ import {
 import { config } from './globals'
 import logger from './logger'
 import { NestedError, HttpError } from './errors'
-import { getCloneUrlForOwnerAndRepo } from './githubapp';
+import { getCloneUrlForOwnerAndRepo } from './githubapp'
 
 // Docker socket handle, set in `initializeDocker` when server is started.
 let docker = null
