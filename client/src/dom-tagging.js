@@ -68,7 +68,7 @@ const getXPathByElement = (event) => {
 
 // State
 let markingMode = false
-
+let currentCommentId
 // Helper
 
 const isMarkable = el => (
@@ -83,13 +83,13 @@ const setElementTaggedCallback = callback => callbacks.elementTagged = callback
 // eslint-disable-next-line
 const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState = callback
 
-const toggleHighlightElement = (el, forceAdd = false) => {
+const toggleHighlightElement = (el, forceAdd = false, commentId = '') => {
   const className = 'dom-tagging-element-highlighted'
   // SVG should never be tagged
   el = getSVGParent(el)
   // Check that two tags cannot be present at same time
   document.querySelectorAll(`.${ className }`).forEach( taggedEl => {
-    if (taggedEl !== el) toggleHighlightElement(taggedEl)
+    if (taggedEl !== el) taggedEl.classList.remove(className)
   })
 
   // Force for highlight element on click for comment targets
@@ -97,7 +97,14 @@ const toggleHighlightElement = (el, forceAdd = false) => {
     if(!el.classList.contains(className)){
       el.classList.add(className)
     }
-  } else el.classList.toggle(className)
+  } else {
+    if (el.classList.contains(className) && currentCommentId === commentId) {
+      el.classList.remove(className)
+    } else {
+      el.classList.add(className)
+      currentCommentId = commentId
+    }
+  }
 }
 
 // Hover
@@ -148,7 +155,7 @@ const includeDomTaggingCss = () => {
       0% {
         box-shadow: 0 0 2px 2px ${ accentColor }, 0 0 2px 3px white;
       }
-      30% {
+      70% {
         box-shadow: 0 0 2px 2px ${ accentColor }, 0 0 2px 3px white, 0 0 9px 2px ${ accentColor };
       }
       100% {

@@ -51,6 +51,7 @@ class CommentPanel extends React.Component {
     this.hidePanel = this.hidePanel.bind(this)
     this.showPanel = this.showPanel.bind(this)
     this.updateCounter = this.updateCounter.bind(this)
+    this.updateTagButtonStatus = this.updateTagButtonStatus.bind(this)
   }
 
   updateCurrentThread(threadId) {
@@ -153,13 +154,17 @@ class CommentPanel extends React.Component {
   updateCounter(id) {
     if (this.state.counter === 1) {
       this.setState({ counter: 4 })
-      //this.showPanel()
+      this.showPanel()
       clearInterval(id)
     } else {
       this.setState(state => ({
         counter: state.counter - 1,
       }))
     }
+  }
+
+  updateTagButtonStatus(id) {
+    this.setState({ highlightedId: id })
   }
 
   threadContainer() {
@@ -198,6 +203,8 @@ class CommentPanel extends React.Component {
                 deleteComment={this.toggleDeleteModal}
                 toggleTagElementState={this.props.toggleTagElementState}
                 hidePanel={this.hidePanel}
+                updateTagButtonStatus={this.updateTagButtonStatus}
+                highlightedId={this.state.highlightedId}
               />),
             sortedThreads
           )

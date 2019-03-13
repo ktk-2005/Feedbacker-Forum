@@ -83,6 +83,9 @@ class Thread extends React.Component {
     const { role, hidePanel, showPanel } = this.props
     const sortByTime = R.sortBy(comment => comment.time)
     const firstComment = sortByTime(this.props.comments)[0]
+
+    const highlighted = this.props.highlightedId === firstComment.id
+
     return (
       <div className={css('thread')}>
         <Comment
@@ -96,6 +99,8 @@ class Thread extends React.Component {
           deleteComment={this.props.deleteComment}
           hidePanel={hidePanel}
           showPanel={showPanel}
+          updateTagButtonStatus={this.props.updateTagButtonStatus}
+          highlighted={highlighted}
         />
         <aside className={css('sub-thread', { 'expanded-thread': this.threadIsExpanded() })}>
           {this.expandedThread(firstComment.userId)}
