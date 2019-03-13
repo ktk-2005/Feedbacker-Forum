@@ -243,7 +243,7 @@ func fetchContainerFromDatabase(id string) (*Container, error) {
 	row := db.QueryRow(dbQueryString, id)
 	idString := ""
 	urlString := ""
-	blobString := ""
+	var blobString sql.NullString
 	err := row.Scan(&idString, &urlString, &blobString)
 	if err != nil {
 		return nil, err
@@ -260,9 +260,9 @@ func fetchContainerFromDatabase(id string) (*Container, error) {
 	}
 
 	protected := false
-	if blobString != "" {
+	if blobString.Valid && blobString.String != "" {
 		var blob containerBlob
-		err = json.Unmarshal([]byte(blobString), &blob)
+		err = json.Unmarshal([]byte(blobString.String), &blob)
 		if err == nil {
 			if blob.Auth != nil && len(blob.Auth) > 0 {
 				protected = true
