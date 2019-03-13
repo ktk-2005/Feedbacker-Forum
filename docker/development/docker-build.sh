@@ -1,7 +1,7 @@
 set -e
 set -u
 
-apk add --no-cache git curl libc6-compat build-base
+apk add --no-cache git curl libc6-compat build-base python
 
 cd /app
 
@@ -34,5 +34,3 @@ cd ../server
 
 rm -rf node_modules
 npm install
-
-
