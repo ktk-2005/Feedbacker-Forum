@@ -9,6 +9,7 @@ import { initializeDocker } from './docker'
 import { startServer } from './server'
 import { args, config } from './globals'
 import { initializeGitHubApp, getCloneUrlForOwnerAndRepo } from './githubapp'
+import logger from './logger'
 
 const readFile = promisify(fs.readFile)
 
@@ -145,13 +146,20 @@ export async function startup() {
 
   if (config.github && config.github.id && config.github.privateKey) {
     initializeGitHubApp(config.github.id, config.github.privateKey)
+    logger.info('GitHub App support initialized.')
+    console.log(await getCloneUrlForOwnerAndRepo('quvide', 'a-private-repo'))
+  } else {
+    logger.warn('GitHub App support is not initialized. Missing or invalid configuration.')
   }
 
   await initializeDatabase()
+  logger.info('Database initialized.')
+
   initializeDocker()
+  logger.info('Docker initialized.')
 
   if (args.startProxy) {
-    console.log('Starting proxy')
+    console.log('Starting proxy...')
     const proxyExecutable = /^win/.test(process.platform) ? 'proxy.exe' : 'proxy'
     const proxyPath = path.resolve(__dirname, '../../proxy')
     childProcess.spawn(path.resolve(proxyPath, proxyExecutable), [], {
@@ -162,7 +170,7 @@ export async function startup() {
   }
 
   if (args.watch) {
-    console.log('Starting Webpack in watch mode')
+    console.log('Starting Webpack in watch mode...')
     const npmExecutable = /^win/.test(process.platform) ? 'npm.cmd' : 'npm'
     childProcess.spawn(npmExecutable, ['run', 'watch'], {
       cwd: '../client/',
