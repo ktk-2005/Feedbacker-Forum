@@ -116,7 +116,7 @@ router.post('/new', catchErrors(async (req, res) => {
     })
   } else if (type === 'application') {
     if (!envs || !envs.GIT_CLONE_URL || !envs.GIT_VERSION_HASH) {
-      throw new HttpError(400, 'Type `site` requires the following environment variables to be set: `GIT_CLONE_URL` and `GIT_VERSION_HASH`')
+      throw new HttpError(400, 'Type `application` requires the following environment variables to be set: `GIT_CLONE_URL` and `GIT_VERSION_HASH`')
     }
 
     await attempt(async () => {
