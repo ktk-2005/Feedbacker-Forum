@@ -92,7 +92,7 @@ export async function getContainerLogs(id) {
 
 /* Operational methods */
 
-export async function createNewContainer(envs, type, name, port, userId) {
+export async function createNewContainer(envs, type, name, port, userId, hashedPassword) {
   // Check if the specified instance runner exists AND if it's a custom runner, that
   // the user has created it themselves.
 
@@ -133,12 +133,21 @@ export async function createNewContainer(envs, type, name, port, userId) {
   await container.start()
   const containerInfo = await getContainerInfoFromDocker(container.id)
 
+  let blob
+  if (hashedPassword) {
+    blob = {
+      auth: {
+        password: hashedPassword,
+      },
+    }
+  }
+
   const containerData = {
     id: containerInfo.Id,
     subdomain: name,
     userId,
     type,
-    blob: null,
+    blob,
     url: `http://localhost:${hostPort}`,
   }
 

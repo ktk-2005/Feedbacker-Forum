@@ -207,16 +207,17 @@ export async function addUsername({ id, name, secret }) { return db.query('UPDAT
 export async function addContainer({
   id, subdomain, userId, blob, type, url,
 }) {
-  return db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, blob])
+  return db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, JSON.stringify(blob)])
 }
 
 export async function resolveContainer(subdomain) {
-  const rows = await db.query('SELECT id, user_id, runner FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
+  const rows = await db.query('SELECT id, user_id, runner, blob FROM containers WHERE subdomain=? LIMIT 1', [subdomain])
   if (!rows || rows.length === 0) throw new HttpError(400, `Invalid container ${subdomain}`)
   return {
     id: rows[0].id,
     userId: rows[0].user_id,
     runner: rows[0].runner,
+    blob: rows[0].blob ? JSON.parse(rows[0].blob) : {},
   }
 }
 
@@ -234,6 +235,11 @@ export async function verifyUser(user, secret) {
     throw new Error('Authentication failure')
   }
 }
+
+export async function authenticateUserForContainerAccess(subdomain, userId) {
+  return db.run('INSERT INTO container_auth(subdomain, user_id) VALUES (?, ?)', [subdomain, userId])
+}
+
 
 // External site
 
