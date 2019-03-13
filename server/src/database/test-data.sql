@@ -8,7 +8,7 @@ INSERT INTO containers (id, subdomain, url, user_id, runner) VALUES ('APD-1111',
 INSERT INTO containers (id, subdomain, url, user_id, runner) VALUES ('APD-2222', 'dtwo', 'http://dockerhost:10002', 'da776df3', 'site');
 INSERT INTO containers (id, subdomain, url, user_id, runner) VALUES ('APP-TEST', 'test', 'http://localhost:8080', 'da776df3', 'site');
 INSERT INTO containers (id, subdomain, url, user_id, runner) VALUES ('APP-OTHR', 'other', 'http://localhost:8080', 'da776df3', 'site');
-INSERT INTO containers (id, subdomain, url, user_id, runner) VALUES ('APP-AUTH', 'authorized', 'http://localhost:8080', 'da776df3', 'site', '{"auth": {"password": "$2a$10$Hr8a20CYZbBrSsnjAWQfu.l/v471fhXdwMbQc3Pgpqs.He.JVUwbu"}}');
+INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APP-AUTH', 'authorized', 'http://localhost:8080', 'da776df3', 'site', '{"auth": {"password": "$2a$10$Hr8a20CYZbBrSsnjAWQfu.l/v471fhXdwMbQc3Pgpqs.He.JVUwbu"}}');
 
 INSERT INTO threads (id, container_id) VALUES ('THR-1234', 'APP-TEST');
 
