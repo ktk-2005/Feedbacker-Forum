@@ -64,8 +64,10 @@ class Create extends React.Component {
 
     try {
       const json = await apiCall('POST', '/instances/new', {
-        url: inputValue('url'),
-        version: inputValue('version'),
+        envs: {
+          GIT_CLONE_URL: inputValue('url'),
+          GIT_VERSION_HASH: inputValue('version'),
+        },
         type: inputValue('application'),
         port: inputValue('port'),
         name: inputValue('name').toLowerCase(),
