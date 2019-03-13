@@ -20,9 +20,7 @@ const css = classNames.bind(styles)
 class Comment extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      highlighted: false,
-    }
+
     this.handleToggleHighlight = this.handleToggleHighlight.bind(this)
     this.targetElement = this.targetElement.bind(this)
     this.opLabel = this.opLabel.bind(this)
@@ -39,15 +37,18 @@ class Comment extends React.Component {
       block: 'center',
       inline: 'center',
     })
-    DomTagging.toggleHighlightElement(element)
-    this.setState(state => ({
-      highlighted: !state.highlighted,
-    }))
+    DomTagging.toggleHighlightElement(element, false, this.props.id)
+
+    if (this.props.highlighted) {
+      this.props.updateTagButtonStatus('')
+    } else {
+      this.props.updateTagButtonStatus(this.props.id)
+    }
   }
 
   targetElement(comment, hidePanel) {
     const xPath = R.path(['blob', 'xPath'], comment)
-    const { highlighted } = this.state
+    const { highlighted } = this.props
     if (xPath) {
       return (
         <button
