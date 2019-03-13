@@ -116,7 +116,7 @@ export async function createNewContainer(envs, type, name, port, userId) {
 
   // UNSAFE
   if (type === 'node-runner') {
-    const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.*)\.git$/
+    const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.*)(\.git)?$/
     const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
 
     try {
