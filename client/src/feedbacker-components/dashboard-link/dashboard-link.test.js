@@ -10,7 +10,6 @@ let middlewares
 beforeEach(() => {
   middlewares = []
   mockStore = configureMockStore(middlewares)
-  global.window.location =  { href: 'site.localhost:8080' }
 })
 
 test('should have back to dashboard text on button', () => {
@@ -38,7 +37,6 @@ test('link should be correct', () => {
       <DashboardLink />
     </Provider>
   )
-  view.setProps({ href: `//${window.location.origin.match(/([^.]*).(.*)/m)[2]}` })
   const wrapper = view.find('.dashboard-button')
   expect(wrapper.props().href).toBe('//feedbacker.site')
 })
