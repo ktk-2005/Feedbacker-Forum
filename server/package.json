@@ -38,6 +38,8 @@
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
+    "@octokit/app": "^2.2.1",
+    "@octokit/rest": "^16.17.0",
     "btoa": "^1.2.1",
     "cors": "^2.8.5",
     "dockerode": "^2.5.8",

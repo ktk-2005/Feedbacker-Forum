@@ -16,3 +16,15 @@ environment variables. You can specify the configuration file to use with the `-
 | `dockerWindows` | | `Boolean` | Set this to true if you're using Docker for Windows (Only Win10 Pro/Education). If you're using Docker Toolbox (other Windows versions), leave this to false. Default is false. |
 | `runners` | | `List[Object]` | List of objects that describe the system-provided runners. For example `[{"name": "npm run start","tag": "node-runner"}]` |
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
+| `github` | | `GitHubConfig` | Subconfig containing GitHub App integration keys. |
+
+### GitHubConfig
+
+For configuring the GitHub Apps integration. If the `github` key is present on the parent config object, all of these properties must be present in the object.
+
+These parameters can be found/configured at https://github.com/settings/apps.
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `id` | The app id |
+| `privateKey` | `String` | The app's private key |

@@ -8,6 +8,7 @@ import { initializeDatabase } from './database'
 import { initializeDocker } from './docker'
 import { startServer } from './server'
 import { args, config } from './globals'
+import { initializeGitHubApp, getCloneUrlForOwnerAndRepo } from './githubapp'
 
 const readFile = promisify(fs.readFile)
 
@@ -140,8 +141,11 @@ export async function startup() {
   }
 
   Object.assign(config, configToSet)
-
   overrideConfigFromEnv()
+
+  if (config.github && config.github.id && config.github.privateKey) {
+    initializeGitHubApp(config.github.id, config.github.privateKey)
+  }
 
   await initializeDatabase()
   initializeDocker()
