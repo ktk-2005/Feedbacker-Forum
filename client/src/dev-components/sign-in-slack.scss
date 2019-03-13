@@ -1,0 +1,16 @@
+@import '../scss/atoms-organisms/button';
+@import '../scss/compulsory';
+
+.slack-sign-button {
+  @include reset-button;
+
+  display: flex;
+  position: relative;
+  top: 1px;
+  margin-right: $spacer;
+
+  img {
+    height: 31px;
+    width: auto;
+  }
+}

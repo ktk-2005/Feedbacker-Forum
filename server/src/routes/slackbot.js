@@ -13,10 +13,16 @@ import {
 const router = express.Router()
 
 // TODO: Define these, gotten from Slack api, move to env
-// CHANGE THESE FOR BETA KTK SLACK
+// CHANGE THESE TO MATCH USED SLACK APP
+
+// Doesn't need to be private
 const clientId = '563857873046.569019332453'
+// Needs to be private
 const clientSecret = 'ad1592debf2b5dd6ab7dd762e2953826'
+// Bot token can be obtained via Add to Slack -button
 const token = 'xoxb-563857873046-570133284070-d05OPITH7fjvxONFhNZVOWOX'
+// Doesn't need to be private
+const webhookURL = 'https://hooks.slack.com/services/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'
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
@@ -86,6 +92,21 @@ router.get('/command/help', catchErrors((req, res) => {
   res.send(help)
 }))
 
+// @api GET /api/slack/command/status
+// Slack slash status command, should only be called from Slack.
+//
+// Returns status check if user has connected Slack account to Feedbacker forum.
+router.get('/command/status', catchErrors((req, res) => {
+  // CHecks if connected
+  // if not "go to url domain and link ur account"
+  // else all set
+  console.log(req.body)
+  const username = req.body.user_name
+  const userId = req.body.user_id
+  const status = `Status check for ${username}, id: ${userId}`
+  res.send(status)
+}))
+
 // @api GET /api/slack/notify/:container/:domain
 // Used for sending slack notifications by webhook when wanting to share published instance.
 //
@@ -93,16 +114,14 @@ router.get('/command/help', catchErrors((req, res) => {
 router.get('/notify/:url', catchErrors(async (req, res) => {
   let { url } = req.params
   const { users } = await reqUser(req)
-  // Check if user owns this container
   url = url.split('.').filter(x => x !== 'dev').join('.')
   const container = url.split('.')[0]
+  // Check if user owns this container
   try {
     await confirmContainerOwnership(container, users)
   } catch (error) {
     throw new Error('Not authorised')
   }
-  // Change this webhook URL to match used slack app
-  const webhookURL = 'https://hooks.slack.com/services/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'
 
   request({
     url: webhookURL,
@@ -127,7 +146,7 @@ router.get('/notify/:url', catchErrors(async (req, res) => {
     const JSONres = JSON.parse(body)
     if (JSONres.ok) {
       const channel = JSONres.channel.id
-      const message = "Sup dude, you got a new message"
+      const message = 'Sup dude, you got a new comment'
       request({
         url: `https://slack.com/api/chat.postMessage?token=${token}&channel=${channel}&text=${message}&pretty=1`,
         method: 'POST',
@@ -136,9 +155,10 @@ router.get('/notify/:url', catchErrors(async (req, res) => {
         },
       })
     } else {
-      console.log("Failed")
+      console.log('Failed')
     }
   })
+  //
 
   res.json({ success: true })
 }))

@@ -35,6 +35,11 @@
 
   padding: $spacer * 3;
   box-shadow: 0 0 10px $palette-shadow-light;
+
+  .top-section-buttons {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .create-button {

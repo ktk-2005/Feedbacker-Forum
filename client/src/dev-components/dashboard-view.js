@@ -71,14 +71,16 @@ class Dashboard extends React.Component {
       <>
         <div className={css('top-section')}>
           <h2>Dashboard</h2>
-          {this.state.slackAuth ? null : slackSignButton()}
-          <Link to="/create">
-            <button
-              className={css('create-button')}
-              type="button"
-            >New instance
-            </button>
-          </Link>
+          <div className={css('top-section-buttons')}>
+            {this.state.slackAuth ? null : slackSignButton()}
+            <Link to="/create">
+              <button
+                className={css('create-button')}
+                type="button"
+              >New instance
+              </button>
+            </Link>
+          </div>
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>
@@ -89,6 +91,7 @@ class Dashboard extends React.Component {
                   key={instance.id}
                   removeContainerCallback={this.removeContainerCallback}
                   instance={instance}
+                  slackAuth={this.state.slackAuth}
                 />
               ))
             }

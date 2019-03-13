@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
-import { toast } from 'react-toastify'
 import apiCall from '../api-call'
 // Styles
 import '../scss/atoms-organisms/_toast.scss'
@@ -13,6 +12,7 @@ import CloseIcon from '../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../assets/svg/baseline-play_arrow-24px.svg'
 import StopIcon from '../assets/svg/baseline-stop-24px.svg'
 import SlackIcon from '../assets/svg/baseline-slack-24px.svg'
+import { shareSlack } from '../globals'
 
 const css = classNames.bind(styles)
 
@@ -34,7 +34,6 @@ class ContainerCard extends React.Component {
     this.startContainer = this.startContainer.bind(this)
     this.stopContainer = this.stopContainer.bind(this)
     this.removeContainer = this.removeContainer.bind(this)
-    this.shareSlack = this.shareSlack.bind(this)
   }
 
   isOperationPending() {
@@ -72,25 +71,6 @@ class ContainerCard extends React.Component {
       // nop
     } finally {
       this.setState({ stopPending: false })
-    }
-  }
-
-  // TODO: This is duplicate code, not nice
-  async shareSlack() {
-    this.setState({ disableSlack: true })
-    let succ = null
-    try {
-      const { success } = await apiCall('GET', `/slack/notify/${this.instance.name}.${window.location.host}`)
-      succ = success
-    } catch (error) {
-      // Do nothing
-    }
-    this.setState({ disableSlack: false })
-    if (succ) {
-      const message = 'Slack notification sent.'
-      toast(message, {
-        autoClose: 2000,
-      })
     }
   }
 
@@ -134,16 +114,19 @@ class ContainerCard extends React.Component {
           <h5>Instance: {instance.subdomain}</h5>
         </div>
         <div className={css('button-container')}>
-          <button
-            type="button"
-            className={css('slack-share')}
-            disabled={this.state.disableSlack}
-            onClick={this.shareSlack}
-            data-tooltip="Share in Slack"
-            data-tooltip-width="130px"
-          >
-            {<InlineSVG src={SlackIcon} />}
-          </button>
+          {this.props.slackAuth
+            ? (
+              <button
+                type="button"
+                className={css('slack-share')}
+                disabled={this.state.disableSlack}
+                onClick={() => shareSlack(this, `${this.instance.name}.${window.location.host}`, apiCall)}
+                data-tooltip="Share in Slack"
+                data-tooltip-width="130px"
+              >
+                {<InlineSVG src={SlackIcon} />}
+              </button>)
+            : null}
           <Link to={`/logs/${instance.subdomain}`}>
             Open instance logs
           </Link>

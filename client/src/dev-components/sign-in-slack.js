@@ -1,6 +1,9 @@
 import React from 'react'
+import classNames from 'classnames/bind'
 import apiCall from '../api-call'
+import styles from './sign-in-slack.scss'
 
+const css = classNames.bind(styles)
 
 const startOauth = async () => {
   const { url } = await apiCall('POST', '/slack/oauth/connect')
@@ -11,6 +14,7 @@ const slackSignButton = () => (
   <button
     onClick={startOauth}
     type="button"
+    className={css('slack-sign-button')}
   >
     <img
       alt="Sign in with Slack"
