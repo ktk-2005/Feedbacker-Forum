@@ -6,7 +6,7 @@ describe('/api/authorization', () => {
     try {
       await apiRequest('POST', '/api/authorization', {
         password: 'wrong',
-        subdomain: 'one',
+        subdomain: 'protected',
       }, { fail: true })
       return false
     } catch (error) {
@@ -17,7 +17,7 @@ describe('/api/authorization', () => {
   it('should return 200 for correct password/subdomain combination', async () => {
     await apiRequest('POST', '/api/authorization', {
       password: 'correct',
-      subdomain: 'one',
+      subdomain: 'protected',
     })
   })
 })
