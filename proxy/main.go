@@ -37,7 +37,8 @@ func main() {
 	serverConfig.ProxyPort = getEnvInt("FFGP_PROXY_PORT", "8086")
 	serverConfig.ErrorPort = getEnvInt("FFGP_ERROR_PORT", "8087")
 	serverConfig.InjectScript = getEnv("FFGP_INJECT_SCRIPT", "http://localhost:8080/embed.js")
-	serverConfig.ErrorPage = getEnv("FFGP_ERROR_PAGE", "http://localhost:8080/invalid-container")
+	serverConfig.ErrorScript = getEnv("FFGP_ERROR_SCRIPT", "http://localhost:8080/proxy-error.js")
+	serverConfig.AuthScript = getEnv("FFGP_AUTH_SCRIPT", "http://localhost:8080/proxy-auth.js")
 
 	err := resolver.Initialize(&resolverConfig)
 	if err != nil {

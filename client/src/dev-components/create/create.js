@@ -64,11 +64,14 @@ class Create extends React.Component {
 
     try {
       const json = await apiCall('POST', '/instances/new', {
-        url: inputValue('url'),
-        version: inputValue('version'),
+        envs: {
+          GIT_CLONE_URL: inputValue('url'),
+          GIT_VERSION_HASH: inputValue('version'),
+        },
         type: inputValue('application'),
         port: inputValue('port'),
         name: inputValue('name').toLowerCase(),
+        password: inputValue('password'),
       })
 
       this.setState({
@@ -151,6 +154,14 @@ class Create extends React.Component {
         >
           Port
           <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+        </label>
+        <label
+          htmlFor="password"
+          data-tooltip="If a password is set, the container can't be viewed without it."
+          data-tooltip-width="250px"
+        >
+          Password
+          <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
         </label>
         <div className={css('button-container')}>
           <Link to="/">

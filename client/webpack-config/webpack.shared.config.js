@@ -8,15 +8,25 @@ const getLocalIdent = require('css-loader/lib/getLocalIdent')
 module.exports = {
 
   entry: {
-    embed: [
+    'embed': [
       'whatwg-fetch',    // < IE11 can't handle window.fetch()
       '@babel/polyfill', // < Pass our source through a polyfill transformation
       './src/index.js',
     ],
-    site: [
+    'site': [
       'whatwg-fetch',    // < IE11 can't handle window.fetch()
       '@babel/polyfill', // < Pass our source through a polyfill transformation
       './src/site.js',
+    ],
+    'proxy-error': [
+      'whatwg-fetch',    // < IE11 can't handle window.fetch()
+      '@babel/polyfill', // < Pass our source through a polyfill transformation
+      './src/proxy-error.js',
+    ],
+    'proxy-auth': [
+      'whatwg-fetch',    // < IE11 can't handle window.fetch()
+      '@babel/polyfill', // < Pass our source through a polyfill transformation
+      './src/proxy-auth.js',
     ],
   },
 

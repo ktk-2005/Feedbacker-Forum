@@ -100,5 +100,15 @@ CREATE TABLE instance_runners (
   UNIQUE (tag, user_id) ON CONFLICT ROLLBACK
 );
 
+-- Table: Authorization
+CREATE TABLE container_auth (
+  subdomain  VARCHAR(32) NOT NULL,
+  user_id    CHAR(8) NOT NULL,
+
+  FOREIGN KEY (subdomain) REFERENCES containers(subdomain),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+
+  UNIQUE (subdomain, user_id) ON CONFLICT ROLLBACK
+);
 
 COMMIT TRANSACTION;
