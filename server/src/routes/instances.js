@@ -83,20 +83,15 @@ router.get('/logs/:name', catchErrors(async (req, res) => {
 // Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 router.post('/new', catchErrors(async (req, res) => {
   const {
-    url, version, type, name, port, password,
+    url, envs, type, name, port, password,
   } = req.body
 
   const { userId } = await reqUser(req)
 
-  if (!url) {
-    throw new HttpError(400, 'No git url given')
-  }
-  if (!version && type !== 'site') {
-    throw new HttpError(400, 'No git version given')
-  }
   if (name.length < 3 || name.length > 20) {
     throw new HttpError(400, `Name too short or long: ${name}`)
   }
+
   if (!name.match(/[a-z0-9](-?[a-z0-9])*/)) {
     throw new HttpError(400, `Bad container name: ${name}`)
   }
@@ -121,7 +116,7 @@ router.post('/new', catchErrors(async (req, res) => {
 
     await attempt(async () => {
       const subdomain = `${name}-${uuid(5)}`
-      const id = uuid(8)
+      const id = uuid(64)
       const containerInfo = await addSite({
         id,
         subdomain,
@@ -132,14 +127,20 @@ router.post('/new', catchErrors(async (req, res) => {
       })
       res.json({ containerInfo, redirectPath })
     })
-  } else {
+  } else if (type === 'node-runner') {
+    if (!envs || !envs.GIT_CLONE_URL || !envs.GIT_VERSION_HASH) {
+      throw new HttpError(400, 'Type `application` requires the following environment variables to be set: `GIT_CLONE_URL` and `GIT_VERSION_HASH`')
+    }
+
     await attempt(async () => {
       const suffixedName = `${name}-${uuid(5)}`
       const containerInfo = await createNewContainer(
-        url, version, type, suffixedName, port, userId, hashedPassword
+        envs, type, suffixedName, port, userId, hashedPassword
       )
       res.json({ containerInfo })
     })
+  } else {
+    throw new HttpError(400, `Unsupported type: "${type}"`)
   }
 }))
 

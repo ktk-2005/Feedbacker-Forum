@@ -92,7 +92,7 @@ export async function getContainerLogs(id) {
 
 /* Operational methods */
 
-export async function createNewContainer(url, version, type, name, port, userId, hashedPassword) {
+export async function createNewContainer(envs, type, name, port, userId, hashedPassword) {
   // Check if the specified instance runner exists AND if it's a custom runner, that
   // the user has created it themselves.
 
@@ -110,6 +110,9 @@ export async function createNewContainer(url, version, type, name, port, userId,
   // don't support connecting directly to different container IPs.
   const hostPort = Math.floor(20000 + Math.random() * 9999) || 0
 
+  // Parse the env var dictionary to the list format used by the Docker API.
+  const envsList = R.keys(envs).map(key => `${key}=${envs[key]}`)
+
   // Caveat: this binds the port on *all* interfaces. This is a security risk, because
   // you can get access to all containers by just bruteforcing the port on the host.
   const opts = {
@@ -121,10 +124,7 @@ export async function createNewContainer(url, version, type, name, port, userId,
         [`${port}/tcp`]: [{ HostPort: `${hostPort}` }],
       },
     },
-    Env: [
-      `GIT_CLONE_URL=${url}`,
-      `GIT_VERSION_HASH=${version}`,
-    ],
+    Env: envsList,
   }
 
   // Create the container and start it. We'll get the unique id

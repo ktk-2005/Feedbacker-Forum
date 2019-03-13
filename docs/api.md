@@ -283,7 +283,7 @@ Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L173)
+### [POST /api/instances/start](../server/src/routes/instances.js#L174)
 
 Start a stopped container.
 
@@ -296,7 +296,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L154)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L155)
 
 Stop a running container.
 
@@ -309,7 +309,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L192)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L193)
 
 Delete a container
 

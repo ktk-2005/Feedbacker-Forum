@@ -1,0 +1,2 @@
+ALTER TABLE threads ALTER COLUMN container_id TYPE VARCHAR(64);
+ALTER TABLE questions ALTER COLUMN container_id TYPE VARCHAR(64);

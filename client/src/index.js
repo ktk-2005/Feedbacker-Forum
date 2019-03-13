@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 // Redux
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 // External libraries & helpers
 import * as R from 'ramda'
 import { ToastContainer } from 'react-toastify'
@@ -19,6 +19,7 @@ import SurveyPanel from './feedbacker-components/survey-panel/survey-panel'
 import OpenCommentPanelButton from './feedbacker-components/open-comment-panel-button/open-comment-panel-button'
 import CommentPanel from './feedbacker-components/comment-panel/comment-panel'
 import Onboarding from './feedbacker-components/onboarding/onboarding'
+import DashboardLink from './feedbacker-components/dashboard-link/dashboard-link'
 
 // Internal js
 import { setupPersist } from './persist'
@@ -99,6 +100,8 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
+const mapStateToProps = state => ({ role: state.role })
+
 class MainView extends React.Component {
   constructor(props) {
     super(props)
@@ -128,6 +131,7 @@ class MainView extends React.Component {
     const { surveyPanelIsHidden, commentPanelIsHidden } = this.state
     updateSession({ surveyPanelIsHidden, commentPanelIsHidden })
   }
+
 
   handleSurveyPanelClick() {
     this.setState(state => ({
@@ -195,6 +199,10 @@ class MainView extends React.Component {
           onClick={this.handleCommentPanelClick}
           animation={commentButtonAnimation}
         />
+        { this.props.role === 'dev' ? (
+          <DashboardLink />
+        ) : null
+        }
         <SurveyPanel
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
@@ -222,6 +230,8 @@ class MainView extends React.Component {
     )
   }
 }
+
+const ConnectedMainView = connect(mapStateToProps)(MainView)
 
 const getComments = () => {
   apiCall('GET', '/comments')
@@ -303,7 +313,7 @@ const initialize = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <MainView />
+      <ConnectedMainView />
     </Provider>,
     root
   )
