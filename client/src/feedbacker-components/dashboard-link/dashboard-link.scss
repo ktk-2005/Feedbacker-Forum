@@ -1,0 +1,13 @@
+@import '../../scss/compulsory';
+@import '../../scss/animations';
+@import '../../scss/atoms-organisms/button';
+
+@import '../open-comment-panel-button/open-comment-panel-button.scss';
+
+.dashboard-button {
+  @extend .open-button;
+  @extend %anchor-button;
+  bottom: 19%;
+  color: $palette-dark;
+  background-color: $palette-white;
+}
