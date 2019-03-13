@@ -1,6 +1,6 @@
 # Styling
 
-All styling is done with [SASS](https://sass-lang.com/) using the `scss` syntax. We partly follow [atomic design](https://bradfrost.com/blog/post/atomic-web-design/) with reusable atoms and organisms.
+All styling is done with [Sass](https://sass-lang.com/) using the `scss` syntax. We partly follow [atomic design](https://bradfrost.com/blog/post/atomic-web-design/) with reusable atoms and organisms.
 React components have their own styling files in the same directory as the component and are imported and linked to elements using [classNames](https://github.com/JedWatson/classnames).
 
 ### Styling for Components 
