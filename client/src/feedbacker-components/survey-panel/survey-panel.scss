@@ -1,7 +1,7 @@
 @import '../../scss/compulsory';
 
 @import '../../scss/atoms/button';
-@import '../../scss/atoms/panel-header';
+@import '../../scss/organisms/panel';
 
 .panel-container {
   @include display-and-animate();
@@ -31,10 +31,7 @@
 }
 
 .panel-body {
-  flex: 1;
-  min-height: 0; // Firefox shrink bug
-  overflow-y: scroll;
-  padding: $baseline $spacer;
+  @extend %panel-body;
 }
 
 .edit-container {

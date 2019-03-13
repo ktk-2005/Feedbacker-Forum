@@ -97,6 +97,11 @@
   padding: 0;
   margin-right: -5px; // As icon is not right aligned, align it correctly to right
 
+  &:hover {
+    box-shadow: none;
+    transform: none;
+  }
+
   i {
     display: block;
     width: $icon-dimension-default;

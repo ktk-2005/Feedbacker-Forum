@@ -1,7 +1,7 @@
 @import '../../scss/compulsory';
 
 @import '../../scss/atoms/button';
-@import '../../scss/atoms/panel-header';
+@import '../../scss/organisms/panel';
 @import '../../scss/organisms/forms';
 
 $panel-min-width: 300px;
@@ -36,25 +36,14 @@ $panel-min-width: 300px;
 }
 
 .panel-body {
-  display: flex;
-  flex: 1;
-  flex-flow: column;
-  min-height: 0; // Firefox shrink bug
-  justify-content: flex-start;
-  overflow-y: scroll;
-  padding: $baseline $spacer;
-}
-
-.panel-body, .panel-header {
+  @extend %panel-body;
+  overflow-y: hidden;
 }
 
 .thread-container {
-  display: flex;
-  flex-flow: column;
+  @extend %panel-body;
   flex-grow: 1;
   flex-shrink: 1;
-  min-height: 0; // Firefox shrink bug
-  overflow-y: scroll;
   // Make sure box-shadow is not cut-off
   padding: $baseline;
   margin: 0 (-$baseline);
