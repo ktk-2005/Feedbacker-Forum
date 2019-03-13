@@ -2,6 +2,7 @@
 
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/tooltip';
+@import '../../scss/atoms/button-container';
 
 .instance-card {
   flex: 1;
@@ -32,6 +33,13 @@
       button {
         @extend %icon-button;
       }
+    }
+  }
+
+  .button-container {
+    @extend %button-container;
+    & a:only-child {
+      margin-left: auto;
     }
   }
 
