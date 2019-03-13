@@ -1,9 +1,9 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 
-import { shadowDocument } from './shadowDomHelper'
-import apiCall from './api-call'
-import styles from './scss/views/auth-view.scss'
+import { shadowDocument } from '../../shadowDomHelper'
+import apiCall from '../../api-call'
+import styles from './authorization-view.scss'
 
 const css = classNames.bind(styles)
 
