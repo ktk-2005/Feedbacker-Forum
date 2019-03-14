@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
-import apiCall from '../api-call'
+import apiCall from '../../api-call'
 import styles from './sign-in-slack.scss'
 
 const css = classNames.bind(styles)
