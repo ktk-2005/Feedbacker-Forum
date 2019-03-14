@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
-import apiCall from '../api-call'
+import apiCall from '../../api-call'
 // Styles
-import styles from '../scss/views/dashboard-view.scss'
-import CloseIcon from '../assets/svg/baseline-close-24px.svg'
-import StartIcon from '../assets/svg/baseline-play_arrow-24px.svg'
-import StopIcon from '../assets/svg/baseline-stop-24px.svg'
+import styles from './container-card.scss'
+// Icons
+import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
+import StopIcon from '../../assets/svg/baseline-stop-24px.svg'
 
 const css = classNames.bind(styles)
 

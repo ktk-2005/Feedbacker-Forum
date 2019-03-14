@@ -1,12 +1,10 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/compulsory';
 
+@import '../../scss/atoms/button';
 
 .developer-label {
   position: absolute;
-  left: -$baseline;
+  left: -($baseline + 2px);
   font-size: $font-size-small;
   writing-mode: tb;
   color: $palette-accent;

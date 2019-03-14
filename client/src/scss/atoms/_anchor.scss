@@ -1,7 +1,4 @@
-// TODO: refactor to new import style
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../compulsory';
 
 a {
   position: relative;

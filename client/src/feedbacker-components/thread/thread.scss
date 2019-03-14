@@ -1,7 +1,6 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms/button';
 
 .sub-thread {
   margin-bottom: $spacer;

@@ -1,10 +1,9 @@
 @import '../../scss/compulsory';
 @import '../../scss/animations';
-@import '../../scss/atoms-organisms/button';
 
-@import '../open-comment-panel-button/open-comment-panel-button.scss';
+@import '../../scss/atoms/button';
 
 .button {
-  @extend .open-button;
-  bottom: 5%;
+  @include open-panel-button(5%);
 }
+

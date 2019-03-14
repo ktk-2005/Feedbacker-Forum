@@ -9,14 +9,14 @@ import * as R from 'ramda'
 import classNames from 'classnames/bind'
 
 import { setupPersist } from './persist'
-import AuthenticationView from './authorization-view'
+import AuthenticationView from './dev-components/authorization-view/authorization-view'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import apiCall from './api-call'
 import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
-import './scss/atoms-organisms/_toast.scss'
+import './scss/atoms/_toast.scss'
 
 const css = classNames.bind(styles)
 

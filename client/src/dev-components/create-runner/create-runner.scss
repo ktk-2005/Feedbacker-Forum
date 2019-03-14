@@ -1,21 +1,17 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 
-@import '../atoms-organisms/tooltip';
-@import './create.scss';
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/button-container';
+@import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/forms';
 
 .runner-view-container {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
+  @extend %center-view;
 }
 
 .inner-container {
-  @extend .create-view;
+  @extend %view-container;
 
   line-height: 1.5;
 
@@ -31,11 +27,29 @@
   margin-bottom: $spacer;
 }
 
+.dashboard-button {
+  @extend %anchor-button;
+}
+
 .form-create-runner {
-  @extend .form-create;
+  @extend %form;
+  line-height: 2;
 
   label[for="tag"] {
     margin-bottom: 0;
+  }
+
+  input[type="text"] {
+    @extend %generic-input;
+  }
+
+  .button-container {
+    @extend %button-container;
+  }
+
+  button[type="submit"] {
+    @extend %anchor-button-accent;
+    align-self: flex-end;
   }
 }
 

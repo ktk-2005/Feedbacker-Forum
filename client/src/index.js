@@ -26,8 +26,8 @@ import { setupPersist } from './persist'
 import { getSession, updateSession } from './session'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
-import './scss/atoms-organisms/_toast.scss'
 import styles from './scss/_base.scss'
+import './scss/atoms/_toast.scss'
 
 const css = classNames.bind(styles)
 

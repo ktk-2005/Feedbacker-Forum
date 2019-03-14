@@ -3,7 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
 // Styles
-import styles from '../scss/views/404-view.scss'
+import styles from './404-view.scss'
 
 const css = classNames.bind(styles)
 

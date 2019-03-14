@@ -1,46 +1,14 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms/button';
+@import '../../scss/organisms/toggle-buttons';
 
 .reactions {
-  display: flex;
-  margin-top: $spacer;
+  @extend %toggle-container;
 }
 
-$toggled-inset-shadow: inset 0 1px 20px;
-$reaction-border: 1px solid $palette-light;
 .reaction {
-  @include reset-button;
-  display: flex;
-  flex-grow: 1;
-  align-content: center;
-  justify-content: center;
-  height: auto;
-  margin: 0;
-  padding: $baseline;
-  border: $reaction-border;
-  border-right: 0;
-  outline: none;
-  box-shadow: $toggled-inset-shadow transparent;
-  background: $palette-white;
-  overflow: visible;
-  transition: $transition-default-all;
-  transition-property: box-shadow;
-
-  &:focus {
-    background-color: rgba($palette-light, 0.3);
-  }
-}
-
-.reaction:first-of-type {
-  border-bottom-left-radius: $border-radius-default;
-  border-top-left-radius: $border-radius-default;
-}
-
-.reaction:last-of-type {
-  border-right: $reaction-border;
-  border-bottom-right-radius: $border-radius-default;
-  border-top-right-radius: $border-radius-default;
+  @extend %toggle-button;
 }
 
 $symbol-height: 1em;
@@ -62,8 +30,7 @@ $symbol-height: 1em;
 }
 
 .toggled {
-  box-shadow: $toggled-inset-shadow $palette-light;
-  transition: $transition-default-all;
+  @extend %toggled
 }
 
 .counter {
