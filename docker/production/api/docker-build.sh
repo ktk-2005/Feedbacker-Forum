@@ -3,7 +3,7 @@ set -u
 
 cp /prod/config.json /app/config.json
 
-apk add --no-cache git
+apk add --no-cache git build-base python
 
 rm -rf node_modules/
 npm install

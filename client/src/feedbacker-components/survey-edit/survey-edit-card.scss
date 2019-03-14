@@ -1,11 +1,8 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
-
-@import '../../scss/views/dashboard-view';
-@import '../../scss/atoms-organisms/forms';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/textarea';
+@import '../../scss/atoms/generic_input';
 
 .survey-edit-card {
   margin-bottom: $spacer;

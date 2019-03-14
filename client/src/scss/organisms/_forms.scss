@@ -1,0 +1,21 @@
+@import '../compulsory';
+
+@import '../atoms/button';
+@import '../atoms/textarea';
+
+%form {
+  display: flex;
+  flex-flow: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  justify-content: center;
+
+  textarea {
+    @extend %textarea;
+    margin-bottom: $baseline;
+  }
+
+  input[type="submit"] {
+    @extend %submit-button;
+  }
+}

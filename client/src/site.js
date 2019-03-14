@@ -12,19 +12,18 @@ import {
 } from 'react-router-dom'
 
 import { setupPersist } from './persist'
-import Dashboard from './dev-components/dashboard-view'
-import Create from './dev-components/create'
-import Build from './dev-components/build-view'
-import InvalidContainer from './invalid-container'
-import View404 from './dev-components/404-view'
+import Dashboard from './dev-components/dashboard-view/dashboard-view'
+import Create from './dev-components/create/create'
+import Build from './dev-components/build-view/build-view'
+import View404 from './dev-components/404-view/404-view'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import apiCall from './api-call'
 import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
-import './scss/atoms-organisms/_toast.scss'
-import CreateRunner from './dev-components/create-runner'
+import './scss/atoms/_toast.scss'
+import CreateRunner from './dev-components/create-runner/create-runner'
 
 const css = classNames.bind(styles)
 
@@ -117,7 +116,6 @@ const initialize = () => {
               <Route exact path="/create" component={Create} />
               <Route exact path="/create-runner" component={CreateRunner} />
               <Route exact path="/logs/:name" component={Build} />
-              <Route exact path="/invalid-container/:name" component={InvalidContainer} />
               <Route exact path="*" component={View404} />
             </Switch>
           </div>

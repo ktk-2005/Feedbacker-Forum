@@ -8,6 +8,7 @@ INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APD-
 INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APD-2222-681e-4876-84bb-7316886551bf111e9f8f-9e62-4aed-b797-11b8', 'dtwo', 'http://dockerhost:10002', 'da776df3', 'site', NULL);
 INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APP-TEST-b4a8-4fc4-8685-4c3277e43f8e7ef2f33f-4ed9-409e-9404-6e85', 'test', 'http://localhost:8080', 'da776df3', 'site', NULL);
 INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APP-OTHR-0e90-48c8-b060-8cef900f0fb84c9d244a-b80c-45d5-a308-961b', 'other', 'http://localhost:8080', 'da776df3', 'site', NULL);
+INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APP-AUTH-70cb-479c-b457-b23dd64f8b69a0d98a47-be8d-4b12-adc8-985a', 'authorized', 'http://localhost:8080', 'da776df3', 'site', '{"auth": {"password": "$2a$10$Hr8a20CYZbBrSsnjAWQfu.l/v471fhXdwMbQc3Pgpqs.He.JVUwbu"}}');
 
 INSERT INTO threads (id, container_id, blob) VALUES ('THR-1234', 'APP-TEST-b4a8-4fc4-8685-4c3277e43f8e7ef2f33f-4ed9-409e-9404-6e85', NULL);
 

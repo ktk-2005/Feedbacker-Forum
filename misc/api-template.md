@@ -80,3 +80,7 @@ Authentication is done using a custom `X-Feedback-Auth` header. The content of t
 @api /api/instanceRunners/new
 
 @api /api/instanceRunners/delete
+
+## Authorization
+
+@api /api/authorization

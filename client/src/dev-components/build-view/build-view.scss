@@ -1,12 +1,14 @@
 @import '../../scss/compulsory';
 
-@import './create.scss';
-@import './dashboard-view.scss';
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
 
-$palette-console: #0D1323;
+.center-center-block {
+  @extend %center-view;
+}
 
 .build-view {
-  @extend .create-view;
+  @extend %view-container;
 
   h2 {
     margin-bottom: $spacer;

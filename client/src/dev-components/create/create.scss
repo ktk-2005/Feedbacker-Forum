@@ -1,22 +1,14 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/forms';
-
-@import './dashboard-view.scss';
-@import '../../feedbacker-components/reactions/reactions';
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/button-container';
+@import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
 
 .center-center-block {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-
-  > * {
-    display: flex;
-    flex-flow: column;
-    flex: 1;
-  }
+  @extend %center-view;
 }
 
 .dashboard-button, .new-runner-button {
@@ -24,11 +16,7 @@
 }
 
 .create-view {
-  max-width: 700px;
-  padding: $spacer * 4;
-  border-radius: $border-radius-default;
-  box-shadow: 0 2px 10px $palette-shadow-default;
-  background-color: $palette-lighter;
+  @extend %view-container;
 
   h2 {
     margin-bottom: $spacer;
@@ -36,22 +24,20 @@
 }
 
 .selection-tabs {
-  @extend .reactions;
+  @extend %toggle-container;
   button {
-    @extend .reaction;
+    @extend %toggle-button;
     margin-top: $baseline;
     margin-bottom: $spacer;
 
     &.current {
-      @extend .toggled;
+      @extend %toggled;
     }
   }
 }
 
 .form-create {
-  display: flex;
-  flex-shrink: 0;
-  flex-flow: column;
+  @extend %form;
   line-height: 2;
 
   label {
@@ -66,6 +52,9 @@
     background: $palette-white;
     appearance: none;
     margin-right: $baseline;
+  }
+  .button-container {
+    @extend %button-container;
   }
 
   button[type="submit"] {
