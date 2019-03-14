@@ -1,6 +1,7 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms/button';
+@import '../../scss/organisms/panel';
 
 .panel-container {
   @include display-and-animate();
@@ -26,36 +27,11 @@
 }
 
 .panel-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  border-bottom: 1px solid $palette-light;
-  border-top-right-radius: $border-radius-default;
-  border-top-left-radius: $border-radius-default;
-  background-color: $palette-lighter;
-  cursor: move; // IE11
-  cursor: grab;
-
-  .heading {
-    margin: 0;
-    margin-right: auto;
-  }
-
-  button {
-    @extend %icon-button;
-  }
-}
-
-.panel-body, .panel-header {
-  flex: none;
-  padding: $baseline $spacer;
+  @extend %panel-header;
 }
 
 .panel-body {
-  flex: 1;
-  min-height: 0; // Firefox shrink bug
-  overflow-y: scroll;
+  @extend %panel-body;
 }
 
 .edit-container {

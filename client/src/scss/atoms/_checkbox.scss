@@ -1,3 +1,5 @@
+@import '../compulsory';
+
 $checkbox-width: $baseline * 3;
 
 input[type="checkbox"], %checkbox {
@@ -55,5 +57,11 @@ input[type="checkbox"], %checkbox {
     }
   }
 
-  // TODO: focus state for checkbox
+  &:focus + label {
+    &:before {
+      @include shadow-outline($fade: $baseline);
+      outline: none;
+      transition: $transition-default-all;
+    }
+  }
 }

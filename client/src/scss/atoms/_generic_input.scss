@@ -1,0 +1,22 @@
+@import '../compulsory';
+
+%generic-input {
+  display: block;
+  width: 100%;
+  margin-top: $baseline;
+  padding: $baseline $spacer;
+  border: none;
+  border-radius: $border-radius-default;
+  line-height: normal;
+  box-shadow: 0 2px 5px $palette-shadow-light;
+
+  &:focus {
+    outline: none;
+    @include shadow-outline($fade: $baseline);
+  }
+
+  &:disabled {
+    background-color: $palette-medium;
+    cursor: not-allowed;
+  }
+}

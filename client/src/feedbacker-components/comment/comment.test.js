@@ -29,7 +29,6 @@ beforeEach(() => {
 })
 
 test('Comment should mount with correct text', () => {
-  const initialState = { comments: [] }
   const store = mockStore()
   const comment = mount(
     <Provider store={store}>

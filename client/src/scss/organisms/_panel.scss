@@ -1,0 +1,36 @@
+@import '../compulsory';
+
+@import '../atoms/button';
+
+%panel-body {
+  display: flex;
+  flex: 1;
+  flex-flow: column;
+  min-height: 0; // Firefox shrink bug
+  justify-content: flex-start;
+  overflow-y: scroll;
+  padding: $baseline $spacer;
+}
+
+%panel-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: none;
+  width: 100%;
+  border-bottom: 1px solid $palette-light;
+  border-top-right-radius: $border-radius-default;
+  border-top-left-radius: $border-radius-default;
+  background-color: $palette-lighter;
+  padding: $baseline $spacer;
+  cursor: move; // IE11
+  cursor: grab;
+
+  .heading {
+    margin: 0 auto 0 0;
+  }
+
+  button {
+    @extend %icon-button;
+  }
+}

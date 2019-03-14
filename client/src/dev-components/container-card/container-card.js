@@ -4,15 +4,17 @@ import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
-import apiCall from '../api-call'
+import apiCall from '../../api-call'
 // Styles
-import '../scss/atoms-organisms/_toast.scss'
+import '../scss/atoms/_toast.scss'
 import styles from '../scss/views/dashboard-view.scss'
-import CloseIcon from '../assets/svg/baseline-close-24px.svg'
-import StartIcon from '../assets/svg/baseline-play_arrow-24px.svg'
-import StopIcon from '../assets/svg/baseline-stop-24px.svg'
 import SlackIcon from '../assets/svg/baseline-slack-24px.svg'
 import { shareSlack } from '../globals'
+import styles from './container-card.scss'
+// Icons
+import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
+import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
+import StopIcon from '../../assets/svg/baseline-stop-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -20,8 +22,13 @@ class ContainerCard extends React.Component {
   constructor(props) {
     super(props)
     this.instance = this.props.instance
-    this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
+
+    this.instanceUrl = `//${this.instance.subdomain}.${window.location.host}`
+    const { blob } = this.instance
+    if (blob.path) {
+      this.instanceUrl += blob.path
+    }
 
     this.state = {
       containerRunning: this.instance.running,
@@ -77,6 +84,8 @@ class ContainerCard extends React.Component {
   render() {
     const { instance } = this.props
 
+    const typeText = instance.runner === 'site' ? 'External site' : 'Instance'
+
     return (
       <div key={instance.id} className={css('instance-card')}>
         <div className={css('header-container')}>
@@ -111,9 +120,14 @@ class ContainerCard extends React.Component {
               <InlineSVG src={CloseIcon} />
             </button>
           </div>
-          <h5>Instance: {instance.subdomain}</h5>
+          <h5>{typeText}: {instance.subdomain}</h5>
         </div>
         <div className={css('button-container')}>
+          {instance.runner !== 'site' ? (
+            <Link to={`/logs/${instance.subdomain}`}>
+              Open instance logs
+            </Link>
+          ) : null}
           {this.props.slackAuth
             ? (
               <button
@@ -131,7 +145,7 @@ class ContainerCard extends React.Component {
             Open instance logs
           </Link>
           <a
-            href={this.instance.url}
+            href={this.instanceUrl}
             target="_blank"
             rel="noreferrer noopener"
             className={css('accent')}

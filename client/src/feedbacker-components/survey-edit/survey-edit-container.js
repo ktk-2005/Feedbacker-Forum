@@ -102,6 +102,7 @@ export default class SurveyEditContainer extends React.Component {
     this.editCancel = this.editCancel.bind(this)
     this.editChange = this.editChange.bind(this)
     this.sortEnd = this.sortEnd.bind(this)
+    this.refetch = this.refetch.bind(this)
 
     this.addTextQuestion = () => this.addQuestion('text')
     this.addOptionQuestion = () => this.addQuestion('option')
@@ -115,12 +116,47 @@ export default class SurveyEditContainer extends React.Component {
       disableSlack: false,
       slackAuth: false,
     }
+
+    this.interval = null
   }
 
   async componentDidMount() {
     const questions = await apiCall('GET', '/questions')
     const { slackAuth } = await apiCall('GET', '/slack/auth')
     this.setState({ questions, slackAuth })
+  }
+
+  componentDidUpdate() {
+    const { open } = this.props
+    if (open && !this.interval) {
+      this.refetch()
+      this.interval = window.setInterval(this.refetch, 10000)
+    } else if (!open && this.interval) {
+      window.clearInterval(this.interval)
+      this.interval = null
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.interval) {
+      window.clearInterval(this.interval)
+      this.interval = null
+    }
+  }
+
+  async refetch() {
+    const fetchedQuestions = await apiCall('GET', '/questions')
+    const pending = this.state.questions.filter(q => q.id === PENDING_ID)
+    const questions = [...fetchedQuestions, ...pending]
+    this.setState({ questions })
+
+    const { edit, openId } = this.state
+    if (edit && edit.id && !questions.some(q => q.id === edit.id)) {
+      this.setState({ edit: { } })
+    }
+    if (openId && !questions.some(q => q.id === openId)) {
+      this.setState({ openId: null })
+    }
   }
 
   isBusy() {
@@ -195,6 +231,8 @@ export default class SurveyEditContainer extends React.Component {
   async sortEnd({ oldIndex, newIndex }) {
     if (this.isBusy()) return
     if (oldIndex === newIndex) return
+    if (oldIndex >= this.state.questions.length) return
+    if (newIndex >= this.state.questions.length) return
 
     try {
       // eslint-disable-next-line react/no-access-state-in-setstate

@@ -1,5 +1,4 @@
-@import '../variables';
-@import '../colors';
+@import '../compulsory';
 @import '../typography';
 
 $rt-z-index: map-get($z-index-levels, 5);
@@ -8,7 +7,7 @@ $rt-color-default: $palette-white;
 $rt-color-error: $palette-error-dark;
 $rt-color-progress-default: $palette-light-medium;
 
-@import '../../../node_modules/react-toastify/scss/main.scss';
+@import '../../../node_modules/react-toastify/scss/main';
 
 .#{$rt-namespace}__toast-container {
   color: $palette-dark;

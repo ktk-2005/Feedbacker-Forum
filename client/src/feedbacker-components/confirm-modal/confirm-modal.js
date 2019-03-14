@@ -20,12 +20,7 @@ const ConfirmModal = ({ text, action, isOpen, toggle }) => (
     shouldCloseOnOverlayClick
     shouldCloseOnEsc
   >
-    <h4 className={css('header')}>Confirm</h4>
-    <div className={css('body')}>
-      <div className={css('text')}>
-        {text}
-      </div>
-    </div>
+    <h3>{text}</h3>
     <div className={css('button-container')}>
       <button
         type="button"

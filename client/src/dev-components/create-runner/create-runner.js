@@ -4,11 +4,11 @@ import * as R from 'ramda'
 // Helpers
 import Moment from 'react-moment'
 import classNames from 'classnames/bind'
-import apiCall from '../api-call'
-import { subscribeUsers, unsubscribeUsers } from '../globals'
-import { shadowDocument } from '../shadowDomHelper'
+import apiCall from '../../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../../globals'
+import { shadowDocument } from '../../shadowDomHelper'
 // Styles
-import styles from '../scss/views/create-runner.scss'
+import styles from './create-runner.scss'
 
 const css = classNames.bind(styles)
 

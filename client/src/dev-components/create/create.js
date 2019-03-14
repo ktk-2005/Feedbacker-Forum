@@ -2,11 +2,11 @@ import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
-import { shadowDocument } from '../shadowDomHelper'
-import apiCall from '../api-call'
-import { subscribeUsers, unsubscribeUsers } from '../globals'
+import { shadowDocument } from '../../shadowDomHelper'
+import apiCall from '../../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Styles
-import styles from '../scss/views/create.scss'
+import styles from './create.scss'
 
 const css = classNames.bind(styles)
 
@@ -26,6 +26,7 @@ class Create extends React.Component {
       instanceRunners: [],
       redirectContainer: false,
       containerForm: true,
+      busy: false,
     }
   }
 
@@ -59,18 +60,29 @@ class Create extends React.Component {
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
-    const json = await apiCall('POST', '/instances/new', {
-      url: inputValue('url'),
-      version: inputValue('version'),
-      type: inputValue('application'),
-      port: inputValue('port'),
-      name: inputValue('name').toLowerCase(),
-    })
+    this.setState({ busy: true })
 
-    this.setState({
-      containerName: json.containerInfo.name,
-      redirectContainer: true,
-    })
+    try {
+      const json = await apiCall('POST', '/instances/new', {
+        envs: {
+          GIT_CLONE_URL: inputValue('url'),
+          GIT_VERSION_HASH: inputValue('version'),
+        },
+        type: inputValue('application'),
+        port: inputValue('port'),
+        name: inputValue('name').toLowerCase(),
+        password: inputValue('password'),
+      })
+
+      this.setState({
+        containerName: json.containerInfo.name,
+        redirectContainer: true,
+        busy: false,
+      })
+    } catch (error) {
+      console.error('Failed to create container', error)
+      this.setState({ busy: false })
+    }
   }
 
   async postSite(event) {
@@ -79,16 +91,25 @@ class Create extends React.Component {
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
 
-    const json = await apiCall('POST', '/instances/new', {
-      url: inputValue('url'),
-      name: inputValue('name').toLowerCase(),
-      type: 'site',
-    })
+    this.setState({ busy: true })
 
-    window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}`)
+    try {
+      const json = await apiCall('POST', '/instances/new', {
+        url: inputValue('url'),
+        name: inputValue('name').toLowerCase(),
+        type: 'site',
+      })
+
+      this.setState({ busy: false })
+      window.location.replace(`//${json.containerInfo.subdomain}.${window.location.host}${json.redirectPath}`)
+    } catch (error) {
+      console.error('Failed to create container', error)
+      this.setState({ busy: false })
+    }
   }
 
   containerForm() {
+    const { busy } = this.state
     return (
       <form
         className={css('form-create')}
@@ -128,11 +149,25 @@ class Create extends React.Component {
         </label>
         <label
           htmlFor="port"
-          data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
-          data-tooltip-width="250px"
         >
           Port
-          <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+          <div
+            data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
+            data-tooltip-width="250px"
+          >
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+          </div>
+        </label>
+        <label
+          htmlFor="password"
+        >
+          Password
+          <div
+            data-tooltip="If a password is set, the container can't be viewed without it."
+            data-tooltip-width="250px"
+          >
+            <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+          </div>
         </label>
         <div className={css('button-container')}>
           <Link to="/">
@@ -142,7 +177,7 @@ class Create extends React.Component {
             >Back to dashboard
             </button>
           </Link>
-          <button type="submit">
+          <button type="submit" disabled={busy}>
             Create
           </button>
         </div>
@@ -151,7 +186,7 @@ class Create extends React.Component {
   }
 
   siteForm() {
-    // TODO: Add tooltip to warn about live url redirection
+    const { busy } = this.state
     return (
       <form
         className={css('form-create')}
@@ -160,17 +195,20 @@ class Create extends React.Component {
       >
         <label
           htmlFor="url"
-          data-tooltip="Does not work if the website has absolute redirect."
-          data-tooltip-width="250px"
         >
           Live website URL
-          <input
-            type="text"
-            name="url"
-            id="url"
-            placeholder="https://codeberry.fi"
-            required
-          />
+          <div
+            data-tooltip="Does not work if the website has absolute redirect."
+            data-tooltip-width="250px"
+          >
+            <input
+              type="url"
+              name="url"
+              id="url"
+              placeholder="https://codeberry.fi"
+              required
+            />
+          </div>
         </label>
         <label htmlFor="name">
           Name
@@ -195,6 +233,7 @@ class Create extends React.Component {
             type="submit"
             data-tooltip="Build can take a while, check again later if site unavailable"
             data-tooltip-width="220px"
+            disabled={busy}
           >
             Create
           </button>
@@ -213,8 +252,10 @@ class Create extends React.Component {
       )
     }
 
+    const { busy } = this.state
+
     return (
-      <div className={css('center-center-block')}>
+      <div className={css('center-center-block', { busy })}>
         <div className={css('create-view')}>
           <h2>Create an instance</h2>
           <div className={css('selection-tabs')}>

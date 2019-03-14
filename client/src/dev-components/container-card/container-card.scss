@@ -1,0 +1,52 @@
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/button-container';
+
+.instance-card {
+  flex: 1;
+  padding: $spacer;
+  margin: $spacer;
+  border-radius: $border-radius-default;
+  box-shadow: 0 0 10px $palette-shadow-default;
+
+  &:not(:first-of-type) {
+    margin-top: 0;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-flow: row-reverse wrap;
+
+    h5 {
+      text-transform: capitalize;
+      margin-right: auto;
+    }
+
+    .header-button-container {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        @extend %icon-button;
+      }
+    }
+  }
+
+  .button-container {
+    @extend %button-container;
+    & a:only-child {
+      margin-left: auto;
+    }
+  }
+
+  a {
+    @extend %anchor-button;
+
+    &.accent {
+      @extend %accent;
+    }
+  }
+}

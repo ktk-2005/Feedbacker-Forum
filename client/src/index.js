@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 // Redux
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 // External libraries & helpers
 import * as R from 'ramda'
 import { ToastContainer } from 'react-toastify'
@@ -19,13 +19,15 @@ import SurveyPanel from './feedbacker-components/survey-panel/survey-panel'
 import OpenCommentPanelButton from './feedbacker-components/open-comment-panel-button/open-comment-panel-button'
 import CommentPanel from './feedbacker-components/comment-panel/comment-panel'
 import Onboarding from './feedbacker-components/onboarding/onboarding'
+import DashboardLink from './feedbacker-components/dashboard-link/dashboard-link'
 
 // Internal js
 import { setupPersist } from './persist'
+import { getSession, updateSession } from './session'
 import { loadPersistData, setPersistData, loadComments, updateRole } from './actions'
 // Styles
-import './scss/atoms-organisms/_toast.scss'
 import styles from './scss/_base.scss'
+import './scss/atoms/_toast.scss'
 
 const css = classNames.bind(styles)
 
@@ -98,6 +100,8 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
+const mapStateToProps = state => ({ role: state.role })
+
 class MainView extends React.Component {
   constructor(props) {
     super(props)
@@ -108,24 +112,49 @@ class MainView extends React.Component {
     this.handleElementTagged = this.handleElementTagged.bind(this)
     this.unsetTaggedElement = this.unsetTaggedElement.bind(this)
 
+    const {
+      surveyPanelIsHidden = true,
+      commentPanelIsHidden = true,
+    } = getSession()
+
     this.state = {
-      surveyPanelIsHidden: true,
-      commentPanelIsHidden: true,
+      surveyPanelIsHidden,
+      commentPanelIsHidden,
+      surveyButtonAnimation: false,
+      commentButtonAnimation: false,
       taggingModeActive: false,
       taggedElementXPath: '',
     }
   }
 
+  componentDidUpdate() {
+    const { surveyPanelIsHidden, commentPanelIsHidden } = this.state
+    updateSession({ surveyPanelIsHidden, commentPanelIsHidden })
+  }
+
+
   handleSurveyPanelClick() {
     this.setState(state => ({
       surveyPanelIsHidden: !state.surveyPanelIsHidden,
     }))
+    if (this.state.surveyPanelIsHidden) {
+      this.setState({ surveyButtonAnimation: true })
+      setTimeout(() => {
+        this.setState({ surveyButtonAnimation: false })
+      }, 3000)
+    }
   }
 
   handleCommentPanelClick() {
     this.setState(state => ({
       commentPanelIsHidden: !state.commentPanelIsHidden,
     }))
+    if (this.state.commentPanelIsHidden) {
+      this.setState({ commentButtonAnimation: true })
+      setTimeout(() => {
+        this.setState({ commentButtonAnimation: false })
+      }, 3000)
+    }
   }
 
   toggleTagElementState() {
@@ -151,6 +180,8 @@ class MainView extends React.Component {
     const {
       surveyPanelIsHidden,
       commentPanelIsHidden,
+      surveyButtonAnimation,
+      commentButtonAnimation,
       taggingModeActive,
     } = this.state
 
@@ -161,11 +192,17 @@ class MainView extends React.Component {
         <OpenSurveyPanelButton
           hidden={!surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
+          animation={surveyButtonAnimation}
         />
         <OpenCommentPanelButton
           hidden={!commentPanelIsHidden}
           onClick={this.handleCommentPanelClick}
+          animation={commentButtonAnimation}
         />
+        { this.props.role === 'dev' ? (
+          <DashboardLink />
+        ) : null
+        }
         <SurveyPanel
           hidden={surveyPanelIsHidden}
           onClick={this.handleSurveyPanelClick}
@@ -193,6 +230,8 @@ class MainView extends React.Component {
     )
   }
 }
+
+const ConnectedMainView = connect(mapStateToProps)(MainView)
 
 const getComments = () => {
   apiCall('GET', '/comments')
@@ -274,7 +313,7 @@ const initialize = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <MainView />
+      <ConnectedMainView />
     </Provider>,
     root
   )

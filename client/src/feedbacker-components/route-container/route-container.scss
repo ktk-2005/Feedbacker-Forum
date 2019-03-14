@@ -1,10 +1,7 @@
-// TODO: refactor to new import style
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/anchor';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/anchor';
 
 .route-container {
   position: relative;
@@ -42,7 +39,6 @@
     }
 
     &:after {
-      // TODO: make backdrop blur effect when surveys merged
       content: 'Click to see comments on other pages';
       height: 100%;
       width: 100%;
@@ -53,15 +49,8 @@
   }
 
   button {
-    // TODO: refactor to @extend %anchor-button;
-    @include button();
-    display: inline-block;
-    text-decoration: none;
-    align-self: end;
+    @extend %anchor-button;
     margin-bottom: $baseline;
-    padding: $baseline $spacer;
-    box-shadow: 0 1px 5px $palette-shadow-light;
-    color: $palette-dark;
     background: $palette-white;
   }
 }

@@ -1,0 +1,8 @@
+@import '../../scss/compulsory';
+@import '../../scss/animations';
+@import '../../scss/atoms/button';
+
+.dashboard-button {
+  @include open-panel-button(19%, true);
+  @extend %anchor-button;
+}

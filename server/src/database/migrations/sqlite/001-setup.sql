@@ -15,7 +15,7 @@ CREATE TABLE users (
 
 -- Table: containers
 CREATE TABLE containers (
-  id            CHAR(8) UNIQUE NOT NULL,
+  id            VARCHAR(64) UNIQUE NOT NULL,
   subdomain     VARCHAR(32) UNIQUE NOT NULL,
   url           VARCHAR(255) NOT NULL,
   user_id       CHAR(8) NOT NULL,
@@ -109,5 +109,15 @@ CREATE TABLE slack_users (
   slack_user_id   VARCHAR(32)
 );
 
+-- Table: Authorization
+CREATE TABLE container_auth (
+  subdomain  VARCHAR(32) NOT NULL,
+  user_id    CHAR(8) NOT NULL,
+
+  FOREIGN KEY (subdomain) REFERENCES containers(subdomain),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+
+  UNIQUE (subdomain, user_id) ON CONFLICT ROLLBACK
+);
 
 COMMIT TRANSACTION;

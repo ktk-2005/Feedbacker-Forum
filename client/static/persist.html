@@ -46,8 +46,8 @@ if (typeof Object.assign != 'function') {
   });
 }
 
-var storageKey = 'storage'
-var cookieRegex = /persist\s*=(\s*[A-Za-z0-9-_.!~*'()]+)/
+var storageKey = 'FeedbackerForum_persist'
+var cookieRegex = /FeedbackerForum_persist\s*=(\s*[A-Za-z0-9-_.!~*'()]+)/
 
 function saveLocalState(json) {
   window.localStorage.setItem(storageKey, json)

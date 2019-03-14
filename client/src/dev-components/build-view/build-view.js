@@ -2,10 +2,10 @@ import React from 'react'
 // Helpers
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import apiCall from '../api-call'
-import { subscribeUsers, unsubscribeUsers } from '../globals'
+import apiCall from '../../api-call'
+import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Styles
-import styles from '../scss/views/build-view.scss'
+import styles from './build-view.scss'
 
 const css = classNames.bind(styles)
 

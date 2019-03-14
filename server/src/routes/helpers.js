@@ -68,10 +68,8 @@ export async function reqContainer(req) {
 }
 
 export async function reqUser(req) {
-  const auth = req.get('Authorization')
-  if (!auth) throw new HttpError(401, 'No Authorization header')
-  const [scheme, token] = auth.split(' ')
-  if (scheme !== 'Feedbacker') throw new HttpError(401, 'Unsupported Authorization scheme')
+  const token = req.get('X-Feedback-Auth')
+  if (!token) throw new HttpError(401, 'No X-Feedback-Auth header')
   const users = JSON.parse(Buffer.from(token, 'base64').toString())
   const verifiedUsers = { }
 

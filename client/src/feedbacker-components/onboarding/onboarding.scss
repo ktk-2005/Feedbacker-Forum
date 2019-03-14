@@ -1,8 +1,8 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/modal';
+@import '../../scss/compulsory';
+@import '../../scss/animations';
+
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/modal';
 
 @import '../survey-panel/survey-panel.scss';
 
@@ -96,19 +96,5 @@
 
 [animation-pulse="true"] {
   animation: pulse 1.5s infinite;
-  box-shadow: 0 0 0 0 $palette-accent;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(.9);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 3em rgba($palette-accent, 0);
-  }
-  100% {
-    transform: scale(.9);
-    box-shadow: 0 0 0 0 rgba($palette-accent, 0);
-  }
+  box-shadow: 0 0 0 0 rgba($palette-accent, 0.3);
 }
