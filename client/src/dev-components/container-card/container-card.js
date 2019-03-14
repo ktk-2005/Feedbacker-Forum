@@ -6,7 +6,6 @@ import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
 // Styles
-import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 import { shareSlack } from '../../globals'
 import styles from './container-card.scss'
 import '../../scss/atoms/_toast.scss'
@@ -14,6 +13,7 @@ import '../../scss/atoms/_toast.scss'
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
 import StopIcon from '../../assets/svg/baseline-stop-24px.svg'
+import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -122,11 +122,6 @@ class ContainerCard extends React.Component {
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
         <div className={css('button-container')}>
-          {instance.runner !== 'site' ? (
-            <Link to={`/logs/${instance.subdomain}`}>
-              Open instance logs
-            </Link>
-          ) : null}
           {this.props.slackAuth
             ? (
               <button
@@ -137,12 +132,14 @@ class ContainerCard extends React.Component {
                 data-tooltip="Share in Slack"
                 data-tooltip-width="130px"
               >
-                {<InlineSVG src={SlackIcon} />}
+                <InlineSVG src={SlackIcon} />
               </button>)
             : null}
-          <Link to={`/logs/${instance.subdomain}`}>
-            Open instance logs
-          </Link>
+          {instance.runner !== 'site' ? (
+            <Link to={`/logs/${instance.subdomain}`}>
+              Open instance logs
+            </Link>
+          ) : null}
           <a
             href={this.instanceUrl}
             target="_blank"

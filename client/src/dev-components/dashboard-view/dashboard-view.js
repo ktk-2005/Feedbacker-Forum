@@ -7,6 +7,7 @@ import apiCall from '../../api-call'
 import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Components
 import ContainerCard from '../container-card/container-card'
+import slackSignButton from '../sign-in-slack/sign-in-slack'
 // Styles
 import styles from './dashboard-view.scss'
 
