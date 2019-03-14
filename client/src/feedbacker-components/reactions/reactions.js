@@ -70,7 +70,7 @@ class Reactions extends Component {
   }
 
   render() {
-    const reactionTypes = ['up', 'down', 'party', 'eyes']
+    const reactionTypes = ['up', 'down', 'party', 'lightbulb']
     return (
       <div className={css('reactions')}>
         {reactionTypes.map(reaction => this.reactionButton(reaction))}
