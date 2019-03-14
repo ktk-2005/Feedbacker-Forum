@@ -8,15 +8,15 @@
 
 .survey-container {
   padding: $baseline 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .question {
   p {
     color: $palette-grey;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
   }
 }
 
