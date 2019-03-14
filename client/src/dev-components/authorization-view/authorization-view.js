@@ -19,13 +19,22 @@ function AuthorizationView() {
   }
 
   return (
-    <div className={css('auth-container')}>
-      <div className={css('dialog')}>
+    <div className={css('center-center-block')}>
+      <div className={css('login-view')}>
         <h1>Authorization</h1>
         <p>You are not authorized to access the container <code>{subdomain}</code></p>
         <form className={css('form')}>
-          <input type="password" placeholder="Password" id="password" />
-          <input type="submit" onClick={submitAuthTry} />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            className={css('input')}
+          />
+          <input
+            type="submit"
+            onClick={submitAuthTry}
+            className={css('submit-button')}
+          />
         </form>
       </div>
     </div>
