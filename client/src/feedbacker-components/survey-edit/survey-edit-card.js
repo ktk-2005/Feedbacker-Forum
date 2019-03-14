@@ -185,7 +185,7 @@ class SurveyEditCard extends React.Component {
               <textarea
                 value={question.text}
                 onChange={this.handleTextEdit}
-                placeholder={question.type !== 'text' || question.type !== 'option' ? 'Add text explanation' : 'Write a question...'}
+                placeholder={question.type !== 'text' && question.type !== 'option' ? 'Add text explanation' : 'Write a question...'}
                 autoFocus
                 onKeyPress={this.handleKeyPress}
                 disabled={commit}
