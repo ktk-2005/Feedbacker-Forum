@@ -166,7 +166,7 @@ class Create extends React.Component {
             data-tooltip="If a password is set, the container can't be viewed without it."
             data-tooltip-width="250px"
           >
-          <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+            <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
           </div>
         </label>
         <div className={css('button-container')}>
