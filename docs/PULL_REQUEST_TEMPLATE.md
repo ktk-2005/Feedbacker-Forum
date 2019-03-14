@@ -9,4 +9,5 @@
 - [ ] New frontend features have Enzyme tests
 - [ ] No unnecessary or debugging code
 - [ ] Questionable code is clearly marked with comments
+- [ ] Manually tested with latest Firefox, Safari and Chrome
 
