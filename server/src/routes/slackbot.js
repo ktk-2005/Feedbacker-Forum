@@ -7,22 +7,15 @@ import {
   linkSlackToUser,
   setSlackUser,
   getSlackUser,
-  confirmContainerOwnership
+  confirmContainerOwnership,
+  isLinkedToSlack,
 } from '../database'
+import * as config from '../../local.json'
 
 const router = express.Router()
 
-// TODO: Define these, gotten from Slack api, move to env
-// CHANGE THESE TO MATCH USED SLACK APP
-
-// Doesn't need to be private
-const clientId = '563857873046.569019332453'
-// Needs to be private
-const clientSecret = 'ad1592debf2b5dd6ab7dd762e2953826'
-// Bot token can be obtained via Add to Slack -button
-const token = 'xoxb-563857873046-570133284070-d05OPITH7fjvxONFhNZVOWOX'
-// Doesn't need to be private
-const webhookURL = 'https://hooks.slack.com/services/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'
+// CHANGE THESE TO MATCH USED SLACK APP IN ../../local.json
+const { clientId, clientSecret, webhookURL } = config
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
@@ -30,7 +23,6 @@ const webhookURL = 'https://hooks.slack.com/services/TGKR7RP1C/BGS7MAQUW/fZETE2g
 //
 // Returns error if authentication failed or redirects back to dashboard otherwise
 router.get('/oauth', catchErrors(async (req, res) => {
-  // Make updates to database with state(=slack_users.id)
   const { state } = req.query
   const options = {
     uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${clientId}+'&client_secret=${clientSecret}`,
@@ -43,7 +35,6 @@ router.get('/oauth', catchErrors(async (req, res) => {
         .status(200)
         .end()
     } else {
-      // DO SOMETHING WITH USER INFO (UPDATE SLACK_USERS TABLE)
       await setSlackUser(state, parsedBody.user.name, parsedBody.user.id)
       res.redirect('/')
     }
@@ -82,29 +73,19 @@ router.get('/auth', catchErrors(async (req, res) => {
   res.json({ slackAuth: false })
 }))
 
-// @api GET /api/slack/command/help
-// Slack slash help command, should only be called from Slack.
-//
-// Returns text explanation of how this Slack bot works.
-router.get('/command/help', catchErrors((req, res) => {
-  // TODO: What should help command return?
-  const help = 'Help command'
-  res.send(help)
-}))
-
 // @api GET /api/slack/command/status
 // Slack slash status command, should only be called from Slack.
 //
 // Returns status check if user has connected Slack account to Feedbacker forum.
-router.get('/command/status', catchErrors((req, res) => {
-  // CHecks if connected
-  // if not "go to url domain and link ur account"
-  // else all set
-  console.log(req.body)
+router.post('/command/status', catchErrors(async (req, res) => {
   const username = req.body.user_name
   const userId = req.body.user_id
-  const status = `Status check for ${username}, id: ${userId}`
-  res.send(status)
+  const slackUser = await isLinkedToSlack(username, userId)
+  if (slackUser.length > 0) {
+    res.send('Slack user linked to Feedbacker Forum!')
+  } else {
+    res.send('You haven\'t yet linked your Slack user to Feedbacker Forum. You can do this by visiting Feedbacker Forum and clicking \'Sign in with Slack\' button!')
+  }
 }))
 
 // @api GET /api/slack/notify/:container/:domain
@@ -130,35 +111,9 @@ router.get('/notify/:url', catchErrors(async (req, res) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      // TODO: Right notification message
-      text: `Check this new feedbacker instance out: http://${url}`,
+      text: `Check this new feedbacker instance out: https://${url}`,
     }),
   })
-
-  // For private messages
-  request({
-    url: `https://slack.com/api/im.open?token=${token}&user=UGKEJFTEK`,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }, (error, response, body) => {
-    const JSONres = JSON.parse(body)
-    if (JSONres.ok) {
-      const channel = JSONres.channel.id
-      const message = 'Sup dude, you got a new comment'
-      request({
-        url: `https://slack.com/api/chat.postMessage?token=${token}&channel=${channel}&text=${message}&pretty=1`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-    } else {
-      console.log('Failed')
-    }
-  })
-  //
 
   res.json({ success: true })
 }))
