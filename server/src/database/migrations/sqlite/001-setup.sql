@@ -65,8 +65,8 @@ CREATE TABLE reactions (
     emoji      VARCHAR(32) NOT NULL,
     user_id    CHAR(8) NOT NULL,
     comment_id CHAR(8) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (comment_id) REFERENCES comments(id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
 
     UNIQUE (emoji, user_id, comment_id) ON CONFLICT ROLLBACK
 );
