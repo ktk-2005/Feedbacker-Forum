@@ -10,12 +10,12 @@ import {
   confirmContainerOwnership,
   isLinkedToSlack,
 } from '../database'
-import * as config from '../../local.json'
+import { config } from '../globals'
 
 const router = express.Router()
 
 // CHANGE THESE TO MATCH USED SLACK APP IN ../../local.json
-const { clientId, clientSecret, webhookURL } = config.slack
+const { clientId, clientSecret, webhookURL } = config.slack || {}
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
