@@ -119,6 +119,10 @@
   margin-right: $spacer-x;
   padding: -$spacer-x; // -- => +
   border-bottom: 1px solid rgba($palette-light, 0.4);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 
   &:last-of-type {
     border-bottom: none;
