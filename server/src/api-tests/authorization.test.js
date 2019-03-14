@@ -1,4 +1,3 @@
-import assert from 'assert'
 import apiRequest from './api-request'
 
 describe('/api/authorization', () => {
