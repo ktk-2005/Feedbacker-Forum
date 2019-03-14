@@ -7,15 +7,9 @@ import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import * as R from 'ramda'
 import classNames from 'classnames/bind'
-import {
-  BrowserRouter as Router, Route, Switch
-} from 'react-router-dom'
 
 import { setupPersist } from './persist'
-import Dashboard from './dev-components/dashboard-view'
-import Create from './dev-components/create'
-import Build from './dev-components/build-view'
-import View404 from './dev-components/404-view'
+import AuthenticationView from './authorization-view'
 import { prepareReactRoot } from './shadowDomHelper'
 import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
 import apiCall from './api-call'
@@ -23,7 +17,6 @@ import { setPersistData } from './actions'
 // Styles
 import styles from './scss/_base.scss'
 import './scss/atoms-organisms/_toast.scss'
-import CreateRunner from './dev-components/create-runner'
 
 const css = classNames.bind(styles)
 
@@ -109,17 +102,7 @@ const initialize = () => {
         progressClassName={css('toast-progress')}
       />
       <Provider store={store}>
-        <Router>
-          <div className={css('feedback-app-container', 'site-views')}>
-            <Switch>
-              <Route exact path="/" component={Dashboard} />
-              <Route exact path="/create" component={Create} />
-              <Route exact path="/create-runner" component={CreateRunner} />
-              <Route exact path="/logs/:name" component={Build} />
-              <Route exact path="*" component={View404} />
-            </Switch>
-          </div>
-        </Router>
+        <AuthenticationView />
       </Provider>
     </div>,
     prepareReactRoot()
@@ -129,3 +112,4 @@ const initialize = () => {
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
 window.addEventListener('load', initialize)
+
