@@ -133,13 +133,6 @@ class CommentPanel extends React.Component {
     if (el) el.scrollTop = el.scrollHeight
   }
 
-  showPanel() {
-    this.setState({
-      hide: false,
-      buttonHidden: true,
-    })
-  }
-
   hidePanel() {
     this.setState({
       hide: true,
@@ -147,20 +140,31 @@ class CommentPanel extends React.Component {
     })
 
     const intervalId = setInterval(() => {
-      this.updateCounter(intervalId)
+      this.updateCounter()
     }, 1000)
+
+    this.setState({ lastIntervalId: intervalId })
   }
 
-  updateCounter(id) {
+  updateCounter() {
     if (this.state.counter === 1) {
-      this.setState({ counter: 4 })
       this.showPanel()
-      clearInterval(id)
     } else {
       this.setState(state => ({
         counter: state.counter - 1,
       }))
     }
+  }
+
+  showPanel() {
+    clearInterval(this.state.lastIntervalId)
+    this.setState({
+      hide: false,
+      buttonHidden: true,
+      counter: 4,
+      highlightedId: '',
+    })
+    DomTagging.clearAll()
   }
 
   updateTagButtonStatus(id) {
