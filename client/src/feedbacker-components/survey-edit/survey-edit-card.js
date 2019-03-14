@@ -45,6 +45,7 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
               type="text"
               key={index}
               value={option}
+              maxLength="9"
               placeholder={`Option ${index + 1}`}
               onChange={handleChange(index)}
               onKeyPress={onKeyPress}
@@ -239,4 +240,3 @@ class SurveyEditCard extends React.Component {
 }
 
 export default SortableElement(SurveyEditCard)
-
