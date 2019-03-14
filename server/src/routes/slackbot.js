@@ -15,7 +15,7 @@ import * as config from '../../local.json'
 const router = express.Router()
 
 // CHANGE THESE TO MATCH USED SLACK APP IN ../../local.json
-const { clientId, clientSecret, webhookURL } = config
+const { clientId, clientSecret, webhookURL } = config.slack
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
