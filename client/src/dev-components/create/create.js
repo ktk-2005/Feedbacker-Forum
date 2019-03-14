@@ -149,19 +149,25 @@ class Create extends React.Component {
         </label>
         <label
           htmlFor="port"
-          data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
-          data-tooltip-width="250px"
         >
           Port
-          <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+          <div
+            data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
+            data-tooltip-width="250px"
+          >
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+          </div>
         </label>
         <label
           htmlFor="password"
-          data-tooltip="If a password is set, the container can't be viewed without it."
-          data-tooltip-width="250px"
         >
           Password
+          <div
+            data-tooltip="If a password is set, the container can't be viewed without it."
+            data-tooltip-width="250px"
+          >
           <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+          </div>
         </label>
         <div className={css('button-container')}>
           <Link to="/">
@@ -181,7 +187,6 @@ class Create extends React.Component {
 
   siteForm() {
     const { busy } = this.state
-    // TODO: Add tooltip to warn about live url redirection
     return (
       <form
         className={css('form-create')}
@@ -190,17 +195,20 @@ class Create extends React.Component {
       >
         <label
           htmlFor="url"
-          data-tooltip="Does not work if the website has absolute redirect."
-          data-tooltip-width="250px"
         >
           Live website URL
-          <input
-            type="url"
-            name="url"
-            id="url"
-            placeholder="https://codeberry.fi"
-            required
-          />
+          <div
+            data-tooltip="Does not work if the website has absolute redirect."
+            data-tooltip-width="250px"
+          >
+            <input
+              type="url"
+              name="url"
+              id="url"
+              placeholder="https://codeberry.fi"
+              required
+            />
+          </div>
         </label>
         <label htmlFor="name">
           Name
