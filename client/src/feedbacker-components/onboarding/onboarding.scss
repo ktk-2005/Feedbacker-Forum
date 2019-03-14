@@ -33,14 +33,18 @@
   flex: 0;
   padding: 0 $padding;
 
-  button {
-    @extend %icon-button;
-    margin: 0;
-  }
-
   .next-button {
     transform: rotateY(180deg);
     margin-left: auto;
+
+    &:hover {
+      transform: rotateY(180deg);
+    }
+  }
+
+  button {
+    @extend %icon-button;
+    margin: 0;
   }
 }
 
