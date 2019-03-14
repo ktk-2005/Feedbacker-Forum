@@ -1,16 +1,19 @@
 import React from 'react'
 import * as R from 'ramda'
 import { SortableContainer, arrayMove } from 'react-sortable-hoc'
-import classNames from 'classnames/bind'
-import ReactModal from 'react-modal'
-
 import InlineSVG from 'svg-inline-react'
-import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
-import SurveyEditCard from './survey-edit-card'
+import ReactModal from 'react-modal'
+// Helpers
+import classNames from 'classnames/bind'
 import { shadowModalRoot } from '../../shadowDomHelper'
-import styles from './survey-edit-container.scss'
 import apiCall from '../../api-call'
 import { shareSlack } from '../../globals'
+// Components
+import SurveyEditCard from './survey-edit-card'
+// Styles
+import styles from './survey-edit-container.scss'
+// Icons
+import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
 

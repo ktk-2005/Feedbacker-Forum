@@ -5,14 +5,15 @@ import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../api-call'
+import { shareSlack } from '../globals'
 // Styles
 import '../scss/atoms-organisms/_toast.scss'
 import styles from '../scss/views/dashboard-view.scss'
+// Icons
 import CloseIcon from '../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../assets/svg/baseline-play_arrow-24px.svg'
 import StopIcon from '../assets/svg/baseline-stop-24px.svg'
 import SlackIcon from '../assets/svg/baseline-slack-24px.svg'
-import { shareSlack } from '../globals'
 
 const css = classNames.bind(styles)
 
@@ -120,7 +121,11 @@ class ContainerCard extends React.Component {
                 type="button"
                 className={css('slack-share')}
                 disabled={this.state.disableSlack}
-                onClick={() => shareSlack(this, `${this.instance.name}.${window.location.host}`, apiCall)}
+                onClick={() => shareSlack(
+                  this,
+                  `${this.instance.name}.${window.location.host}`,
+                  apiCall
+                )}
                 data-tooltip="Share in Slack"
                 data-tooltip-width="130px"
               >
