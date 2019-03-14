@@ -7,10 +7,12 @@
 %target-icon {
   @include reset-button();
   display: flex;
+  padding: 4px;
+  border-radius: 100%;
   cursor: pointer;
 
   svg {
-    $target-icon-dimension: $icon-dimension-default / 2;
+    $target-icon-dimension: 14px;
     width: $target-icon-dimension;
     height: $target-icon-dimension;
     fill: $palette-dark;
@@ -27,10 +29,14 @@
     transition: fill $transition-default-tail
   }
 
-  &.highlighted svg {
-    @include media-query(wide-screens) {
-      //fill: $palette-accent;
-      background: $palette-accent;
+  &.highlighted {
+    border: 1px solid $palette-accent;
+
+    svg {
+      $target-icon-dimension: 13px;
+      width: $target-icon-dimension;
+      height: $target-icon-dimension;
+      fill: $palette-black;
     }
   }
 }

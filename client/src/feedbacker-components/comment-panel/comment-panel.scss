@@ -73,8 +73,8 @@ $panel-min-width: 300px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 7 * $spacer;
-  padding: 0.75 * $spacer $spacer;
+  width: 78px;
+  padding: $baseline $spacer;
   box-shadow: 0 2px 5px $palette-medium;
   border-radius: 25px;
   background: $palette-lighter;
@@ -83,6 +83,11 @@ $panel-min-width: 300px;
 
   &.buttonHidden{
     display: none;
+  }
+
+  h3 {
+    font-variant-numeric: tabular-nums;
+    margin-left: 3px;
   }
 
 }
