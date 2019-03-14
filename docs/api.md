@@ -367,7 +367,7 @@ This path should only be called by Slack oauth after pressing 'Sign in with Slac
 
 Returns error if authentication failed or redirects back to dashboard otherwise
 
-### [GET /api/slack/oauth/connect](../server/src/routes/slackbot.js#L48)
+### [POST /api/slack/oauth/connect](../server/src/routes/slackbot.js#L48)
 
 For letting our slack authentication know who user clicked 'Sign in with Slack'-button
 
@@ -380,13 +380,13 @@ For checking if user has connected to Slack
 Returns json containing boolean indicating whether connected or not.
 Contains slack username and user id if connected as well.
 
-### [GET /api/slack/command/status](../server/src/routes/slackbot.js#L80)
+### [POST /api/slack/command/status](../server/src/routes/slackbot.js#L80)
 
 Slack slash status command, should only be called from Slack.
 
 Returns status check if user has connected Slack account to Feedbacker forum.
 
-### [GET /api/slack/notify/:container/:domain](../server/src/routes/slackbot.js#L95)
+### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L95)
 
 Used for sending slack notifications by webhook when wanting to share published instance.
 

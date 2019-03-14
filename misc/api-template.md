@@ -91,4 +91,4 @@ Authentication is done using the standard `Authorization` header with a non-stan
 
 @api /api/slack/command/status
 
-@api /api/slack/notify/:container/:domain
+@api /api/slack/notify/:url

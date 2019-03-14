@@ -41,7 +41,7 @@ router.get('/oauth', catchErrors(async (req, res) => {
   })
 }))
 
-// @api GET /api/slack/oauth/connect
+// @api POST /api/slack/oauth/connect
 // For letting our slack authentication know who user clicked 'Sign in with Slack'-button
 //
 // Returns redirect to Slack's oauth.
@@ -73,7 +73,7 @@ router.get('/auth', catchErrors(async (req, res) => {
   res.json({ slackAuth: false })
 }))
 
-// @api GET /api/slack/command/status
+// @api POST /api/slack/command/status
 // Slack slash status command, should only be called from Slack.
 //
 // Returns status check if user has connected Slack account to Feedbacker forum.
@@ -88,7 +88,7 @@ router.post('/command/status', catchErrors(async (req, res) => {
   }
 }))
 
-// @api GET /api/slack/notify/:container/:domain
+// @api GET /api/slack/notify/:url
 // Used for sending slack notifications by webhook when wanting to share published instance.
 //
 // Returns json object with 'success' boolean field indicating whether notification was send or not.
