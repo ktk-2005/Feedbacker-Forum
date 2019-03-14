@@ -80,3 +80,15 @@ Authentication is done using the standard `Authorization` header with a non-stan
 @api /api/instanceRunners/new
 
 @api /api/instanceRunners/delete
+
+## Slackbot
+
+@api /api/slack/oauth
+
+@api /api/slack/oauth/connect
+
+@api /api/slack/auth
+
+@api /api/slack/command/status
+
+@api /api/slack/notify/:container/:domain
