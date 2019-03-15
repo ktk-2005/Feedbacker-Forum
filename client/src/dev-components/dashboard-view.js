@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
 
     this.refreshInstances = this.refreshInstances.bind(this)
     this.removeContainerCallback = this.removeContainerCallback.bind(this)
+    this.loginWithGithub = this.loginWithGithub.bind(this)
 
     this.state = {
       instances: [],
@@ -49,6 +50,11 @@ class Dashboard extends React.Component {
     })
   }
 
+  async loginWithGithub() {
+    const { url } = await apiCall('GET', '/github/oauth2login')
+    window.location.assign(url)
+  }
+
   render() {
     const { instances } = this.state
 
@@ -74,6 +80,12 @@ class Dashboard extends React.Component {
             >New instance
             </button>
           </Link>
+          <button
+            className={css('create-button')}
+            type="button"
+            onClick={this.loginWithGithub}
+          >GitHub
+          </button>
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>

@@ -144,13 +144,7 @@ export async function startup() {
   Object.assign(config, configToSet)
   overrideConfigFromEnv()
 
-  if (config.github && config.github.id && config.github.privateKey) {
-    initializeGitHubApp(config.github.id, config.github.privateKey)
-    logger.info('GitHub App support initialized.')
-    console.log(await getCloneUrlForOwnerAndRepo('quvide', 'a-private-repo'))
-  } else {
-    logger.warn('GitHub App support is not initialized. Missing or invalid configuration.')
-  }
+  initializeGitHubApp()
 
   await initializeDatabase()
   logger.info('Database initialized.')

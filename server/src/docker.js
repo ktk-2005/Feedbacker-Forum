@@ -114,17 +114,18 @@ export async function createNewContainer(envs, type, name, port, userId, hashedP
   // Copy envs so we can modify them
   const envsCopy = envs
 
-  // UNSAFE
   if (type === 'node-runner') {
-    const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.*)(\.git)?$/
+    const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.*?)(\.git)?$/
     const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
 
     try {
-      const cloneUrl = await getCloneUrlForOwnerAndRepo(owner, repoName)
+      const cloneUrl = await getCloneUrlForOwnerAndRepo(owner, repoName, userId)
       envsCopy.GIT_CLONE_URL = cloneUrl
       logger.info('Changed Git URL in-place to include access token.')
     } catch (error) {
-      // We don't have access to the repo via the app, too bad
+      // We don't have access to the repo via the app, too bad.
+      // Don't forward any information to the user about trying private access.
+      logger.error(new NestedError("Couldn't get private clone url for repo", error, { owner, repoName }))
     }
   }
 

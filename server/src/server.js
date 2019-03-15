@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import fs from 'fs'
 import { promisify } from 'util'
@@ -62,6 +63,7 @@ export function startServer() {
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
+  app.use(cookieParser())
 
   if (!args.testApi) {
     app.use(morgan('dev'))

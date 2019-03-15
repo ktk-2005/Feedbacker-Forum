@@ -11,5 +11,6 @@ router.use('/instances', require('./instances'))
 router.use('/answers', require('./answers'))
 router.use('/instanceRunners', require('./instanceRunners'))
 router.use('/authorization', require('./authorization'))
+router.use('/github', require('./github'))
 
 module.exports = router
