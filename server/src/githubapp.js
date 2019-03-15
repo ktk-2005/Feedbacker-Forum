@@ -1,6 +1,7 @@
 import App from '@octokit/app'
 import Octokit from '@octokit/rest'
 import ClientOAuth2 from 'client-oauth2'
+import crypto from 'crypto'
 import * as R from 'ramda'
 import { NestedError, HttpError } from './errors'
 import { config } from './globals'
@@ -88,8 +89,8 @@ export async function getCloneUrlForOwnerAndRepo(owner, repoName, userId) {
   return `https://x-access-token:${accessToken}@github.com/${owner}/${repoName}.git`
 }
 
-function generateNewState(userId) {
-  const state = 'todorandomgenthis' // TODO RANDOM GENERATE
+async function generateNewState(userId) {
+  const state = await crypto.randomBytes(32).toString('base64')
   stateStore[userId] = state
   return state
 }
@@ -106,7 +107,7 @@ function getStateForUser(userId) {
 }
 
 export async function getOAuthRedirectUrl(userId) {
-  return githubAuth.code.getUri({ state: generateNewState(userId) })
+  return githubAuth.code.getUri({ state: await generateNewState(userId) })
 }
 
 export async function oAuthCallback(url, userId) {
