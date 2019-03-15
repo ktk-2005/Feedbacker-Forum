@@ -25,7 +25,7 @@ export function initializeGitHubApp() {
   })
 }
 
-export function getAccessTokenForUser(userId) {
+function getAccessTokenForUser(userId) {
   if (accessTokenStore.hasOwnProperty(userId)) {
     return accessTokenStore[userId]
   }
@@ -40,13 +40,13 @@ function getOctokitForUser(userId) {
   })
 }
 
-export async function getInstallationsWithAccess(userId) {
+async function getInstallationsWithAccess(userId) {
   const octokit = getOctokitForUser(userId)
   const result = await octokit.apps.listInstallationsForAuthenticatedUser()
   return result.data.installations
 }
 
-export async function getReposOfInstallation(installationId, userId) {
+async function getReposOfInstallation(installationId, userId) {
   const octokit = getOctokitForUser(userId)
   const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
     installation_id: installationId,
@@ -67,8 +67,13 @@ async function getInstallationIdForOwnerAndRepo(owner, repoName) {
 
 async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId) {
   // Resolve our installation id from the clone url, this will throw if the app
-  // installed for the repo or it doesn't exist.
-  const installationId = await getInstallationIdForOwnerAndRepo(owner, repoName)
+  // isn't installed for the repo or it doesn't exist.
+  let installationId
+  try {
+    installationId = await getInstallationIdForOwnerAndRepo(owner, repoName)
+  } catch (error) {
+    throw new NestedError('No installation found for the owner/repo combination.', error, { owner, repoName })
+  }
 
   // The user is authorized to access these installations.
   const authorizedInstallationsForVerifiedUser = await getInstallationsWithAccess(userId)
@@ -81,7 +86,7 @@ async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId
     return accessToken
   }
 
-  throw new NestedError('Private repository')
+  throw new NestedError("Installation found but user doesn't have access to it.", null, { userId, owner, repoName })
 }
 
 export async function getCloneUrlForOwnerAndRepo(owner, repoName, userId) {

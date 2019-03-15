@@ -125,7 +125,7 @@ export async function createNewContainer(envs, type, name, port, userId, hashedP
     } catch (error) {
       // We don't have access to the repo via the app, too bad.
       // Don't forward any information to the user about trying private access.
-      logger.error(new NestedError("Couldn't get private clone url for repo", error, { owner, repoName }))
+      logger.error(new NestedError("Couldn't get private clone url for repo", error, { userId, owner, repoName }))
     }
   }
 
