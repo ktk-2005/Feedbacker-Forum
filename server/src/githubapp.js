@@ -5,15 +5,28 @@ import crypto from 'crypto'
 import * as R from 'ramda'
 import { NestedError, HttpError } from './errors'
 import { config } from './globals'
+import logger from './logger'
 
 let githubApp = null
 let githubAuth = null
+
+export function isGithubAppInitialized() {
+  return githubApp && githubAuth
+}
 
 const stateStore = {}
 const accessTokenStore = {}
 
 export function initializeGitHubApp() {
+  if (!config.github) {
+    logger.warn('GitHub integration not initialized, missing config.')
+    return
+  }
   const { id, privateKey, clientId, clientSecret } = config.github
+  if (!(id && privateKey && clientId && clientSecret)) {
+    logger.warn('Invalid GitHub config, not initialized.')
+    return
+  }
 
   githubApp = new App({ id, privateKey })
   githubAuth = new ClientOAuth2({
@@ -90,6 +103,8 @@ async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId
 }
 
 export async function getCloneUrlForOwnerAndRepo(owner, repoName, userId) {
+  if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
+
   const accessToken = await getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId)
   return `https://x-access-token:${accessToken}@github.com/${owner}/${repoName}.git`
 }
@@ -112,10 +127,14 @@ function getStateForUser(userId) {
 }
 
 export async function getOAuthRedirectUrl(userId) {
+  if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
+
   return githubAuth.code.getUri({ state: await generateNewState(userId) })
 }
 
 export async function oAuthCallback(url, userId) {
+  if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
+
   const accessToken = await githubAuth.code.getToken(url, { state: getStateForUser(userId) })
   accessTokenStore[userId] = accessToken
 }
