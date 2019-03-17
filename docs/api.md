@@ -17,7 +17,7 @@ Instance specific endpoints like comments expect the current instance to be pass
 
 ### Authentication
 
-Authentication is done using a custom `X-Feedback-Auth` header. The content of the custom authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
+Authentication is done using the standard `Authorization` header with a non-standard `Feedbacker` scheme. The content of the authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
 
 ```json
 {
@@ -42,7 +42,7 @@ Example response
 
 ## Comments
 
-### [GET /api/comments](../server/src/routes/comments.js#L51)
+### [GET /api/comments](../server/src/routes/comments.js#L46)
 
 Retrieve all comments of the current container instance.
 
@@ -52,21 +52,18 @@ returns JSON array of all comments grouped with reactions in database
     "1bd8052b": {
         "id": "1bd8052b",
         "time": "2018-11-14 16:35:27",
-        "text": "comment text",
+        "text": "skrattia",
         "userId": "da776df3",
-        "username": "TestUser",
+        "username": "jaba",
         "threadId": "3blkj3ad",
         "hideName": false,
-        "blob": {
-           "path": "/path/to/comment",
-           "route": "/route/to/comment"
-        },
+        "blob": "",
         "reactions": [
             {
                 "id": "1ddb07c8",
                 "time": "2019-01-16 16:43:21",
                 "userId": "da776df3",
-                "emoji": "up",
+                "emoji": "🍑",
                 "commentId": "1bd8052b"
             }
          ]
@@ -74,46 +71,38 @@ returns JSON array of all comments grouped with reactions in database
     "cb38e8f6": {
         "id": "cb38e8f6",
         "time": "2018-11-14 17:10:42",
-        "text": "other comment",
+        "text": "tröttistä",
         "userId": "da776df3",
-        "username": "NewUser",
+        "username": "jaba",
         "threadId": "3blkj3ad",
-        "blob": {
-           "route": "/"
-        },
+        "blob": "",
         "reactions": []
     }
 }
 ```
-### [POST /api/comments](../server/src/routes/comments.js#L105)
+### [POST /api/comments](../server/src/routes/comments.js#L94)
 
 Adds comment to the current container instance.
 
 Example body for a root comment
 ```json
 {
-  "text": "comment",
-  "blob": {
-     "route": "/",
-     "path": "/path/to/element"
-   }
+  "text": "minttua",
+  "blob": {"path": "/path/to/element"}
 }
 ```
 comments can be linked to a thread with
 ```json
 {
-  "text": "thread comment",
+  "text": "minttua",
   "threadId": "1234",
-  "blob": {
-     "route": "/",
-     "path": "/path/to/element"
-   }
+  "blob": {"path": "/path/to/element"}
 }
 ```
 
 Returns `{ id, threadId }` of the new comment
 
-### [DELETE /api/comments/:id](../server/src/routes/comments.js#L151)
+### [DELETE /api/comments/:id](../server/src/routes/comments.js#L140)
 
 Tries to delete a comment. Only successful if the userId of the comment is the same
 as the user trying to delete the comment, or if the user is a dev.
@@ -128,7 +117,7 @@ e.g.
 }
 ```
 
-### [GET /api/comments/:threadId](../server/src/routes/comments.js#L131)
+### [GET /api/comments/:threadId](../server/src/routes/comments.js#L120)
 
 Get comments by `threadId`
 
@@ -140,7 +129,7 @@ returns JSON array of all comments in thread
 
 Retrieve all questions in the current container instance.
 
-returns JSON array of all questions of instance
+returns JSON array of all questions in database
 ### [POST /api/questions](../server/src/routes/questions.js#L54)
 
 adds question to database.
@@ -148,8 +137,8 @@ adds question to database.
 Example body
 ```json
 {
-  "text": "What do you think?",
-  "type": "text"
+  "text": "What?",
+  "blob": {"path": "/path/to/element"}
 }
 ```
 
@@ -195,7 +184,7 @@ add reaction to a comment.
 Example body
 ```json
 {
-  "emoji": "up",
+  "emoji": "fire",
   "commentId": "1bd8052b"
 }
 ```
@@ -205,21 +194,20 @@ Returns `{ id }` of the reaction
 
 Remove reaction from a comment.
 
-Returns empty JSON if deletion was succesful
+Returns JSON indicating whether deletion was successful or not
 
 ## Users
 
-### [POST /api/users](../server/src/routes/users.js#L24)
+### [POST /api/users](../server/src/routes/users.js#L23)
 
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
 The body can be empty to create a new anonymous user which is the default
 mode of interaction in the frontend.
-Alternatively you can specify properties for the new user,
-eg.
+Alternatively you can specify properties for the new user, eg.
 ```json
 {
-  "name": "testuser"
+  "name": "salaattipoika"
 }
 ```
 
@@ -230,10 +218,10 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-### [PUT /api/users](../server/src/routes/users.js#L45)
+### [PUT /api/users](../server/src/routes/users.js#L44)
 
 Change username of existing user.
-The user is specified using the X-Feedback-Auth header as with other endpoints
+The user is specified using the Authorization header as with other endpoints
 and the body should contain the new name eg.
 ```json
 {
@@ -241,7 +229,7 @@ and the body should contain the new name eg.
 }
 ```
 
-### [GET /api/users/role](../server/src/routes/users.js#L75)
+### [GET /api/users/role](../server/src/routes/users.js#L74)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
@@ -255,15 +243,15 @@ Example body
 
 ## Instances
 
-### [GET /api/instances](../server/src/routes/instances.js#L49)
+### [GET /api/instances](../server/src/routes/instances.js#L25)
 
 Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L84)
+### [POST /api/instances/new](../server/src/routes/instances.js#L60)
 
-Create a new instance.
+Create a new container.
 
 Currently the only parameter considered is `instance_image`. The name and subdomain are
 generated automatically.
@@ -277,13 +265,13 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L62)
+### [GET /api/instances/logs/:name](../server/src/routes/instances.js#L38)
 
 Retrieve logs of an instance.
 
 Returns 200 OK and a string with logs or 500 ISE if an error occurred.
 
-### [POST /api/instances/start](../server/src/routes/instances.js#L174)
+### [POST /api/instances/start](../server/src/routes/instances.js#L127)
 
 Start a stopped container.
 
@@ -296,7 +284,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/stop](../server/src/routes/instances.js#L155)
+### [POST /api/instances/stop](../server/src/routes/instances.js#L108)
 
 Stop a running container.
 
@@ -309,7 +297,7 @@ Example body
 
 Returns 200 OK if the operation completed successfully and 500 ISE if an error occurred.
 
-### [POST /api/instances/delete](../server/src/routes/instances.js#L193)
+### [POST /api/instances/delete](../server/src/routes/instances.js#L146)
 
 Delete a container
 
@@ -324,7 +312,7 @@ Returns 200 OK if the operation completed successfully and 500 ISE if an error o
 
 ## Instance runners
 
-### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L21)
+### [GET /api/instanceRunners](../server/src/routes/instanceRunners.js#L22)
 
 Retrieve all instance runners in the database and configured system default
 runners.
@@ -336,7 +324,7 @@ if
   a) the user doesn't have any custom runners or
   b) the user isn't authenticated properly
 
-### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L47)
+### [POST /api/instanceRunners/new](../server/src/routes/instanceRunners.js#L48)
 
 Create a new instance runner for the user. The image is pulled from the
 Docker Hub. There is currently no limitations on how large or many images a
@@ -353,7 +341,7 @@ Example request body:
 Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
 in the `status` field.
 
-### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L65)
+### [POST /api/instanceRunners/delete](../server/src/routes/instanceRunners.js#L66)
 
 Deletes an instance runner. This will also cleanup space used on disk, so
 if per-user quotas are implemented later, this is the way instance runner
@@ -370,19 +358,36 @@ Example request body:
 Always returns 200 OK. Readiness should be monitored from `/api/instanceRunners`
 in the `status` field.
 
-## Authorization
+## Slackbot
 
-### [POST /api/authorization](../server/src/routes/authorization.js#L18)
+### [GET /api/slack/oauth](../server/src/routes/slackbot.js#L25)
 
-Authorize user for accessing the specified container.
-Required fields in the body: [password, subdomain]
-Example request:
-```json
-{
-  "password": "correct horse battery staple",
-  "subdomain": "hello-world-abcd23"
-}
-```
+Authentication with Slack sign in.
+This path should only be called by Slack oauth after pressing 'Sign in with Slack'-button.
 
-Returns 200 OK and an empty JSON object if the authorization was succesful.
-Returns 401 if the authorization was not succesful.
+Returns error if authentication failed or redirects back to dashboard otherwise
+
+### [POST /api/slack/oauth/connect](../server/src/routes/slackbot.js#L48)
+
+For letting our slack authentication know who user clicked 'Sign in with Slack'-button
+
+Returns redirect to Slack's oauth.
+
+### [GET /api/slack/auth](../server/src/routes/slackbot.js#L64)
+
+For checking if user has connected to Slack
+
+Returns json containing boolean indicating whether connected or not.
+Contains slack username and user id if connected as well.
+
+### [POST /api/slack/command/status](../server/src/routes/slackbot.js#L80)
+
+Slack slash status command, should only be called from Slack.
+
+Returns status check if user has connected Slack account to Feedbacker forum.
+
+### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L95)
+
+Used for sending slack notifications by webhook when wanting to share published instance.
+
+Returns json object with 'success' boolean field indicating whether notification was send or not.

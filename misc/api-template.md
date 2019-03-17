@@ -14,7 +14,7 @@ Instance specific endpoints like comments expect the current instance to be pass
 
 ### Authentication
 
-Authentication is done using a custom `X-Feedback-Auth` header. The content of the custom authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
+Authentication is done using the standard `Authorization` header with a non-standard `Feedbacker` scheme. The content of the authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
 
 ```json
 {
@@ -81,6 +81,14 @@ Authentication is done using a custom `X-Feedback-Auth` header. The content of t
 
 @api /api/instanceRunners/delete
 
-## Authorization
+## Slackbot
 
-@api /api/authorization
+@api /api/slack/oauth
+
+@api /api/slack/oauth/connect
+
+@api /api/slack/auth
+
+@api /api/slack/command/status
+
+@api /api/slack/notify/:url
