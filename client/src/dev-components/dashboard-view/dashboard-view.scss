@@ -3,31 +3,6 @@
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/tooltip';
 
-// Placeholders
-
-%accent {
-  box-shadow: 0 2px 5px $palette-shadow-default;
-  background: $palette-accent;
-  color: $palette-lighter;
-}
-
-%anchor-button-accent {
-  @extend %anchor-button;
-  @extend %accent;
-}
-
-.slack-share i {
-  $dimension: 20px;
-  height: $dimension;
-  width: $dimension;
-
-  // Visually centered vertically
-  &svg {
-    position: relative;
-    top: -1px;
-  }
-}
-
 .top-section {
   display: flex;
   align-items: center;
