@@ -8,16 +8,6 @@
 @import '../../scss/organisms/toggle-buttons';
 
 .center-center-block {
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-
-  > * {
-    display: flex;
-    flex-flow: column;
-    flex: 1;
-  }
   @extend %center-view;
 }
 
