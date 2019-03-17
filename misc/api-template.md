@@ -81,6 +81,10 @@ Authentication is done using the standard `Authorization` header with a non-stan
 
 @api /api/instanceRunners/delete
 
+## Authorization
+
+@api /api/authorization
+
 ## Slackbot
 
 @api /api/slack/oauth
