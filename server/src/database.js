@@ -289,6 +289,7 @@ export async function setInstanceRunnerStatusFail(dockerTag, userId) {
 // Returns false if the user doesn't own the claimed container, or the owener id elsewise.
 export async function confirmContainerOwnership(name, users) {
   const rows = await db.query('SELECT user_id FROM containers WHERE subdomain=? LIMIT 1', [name])
+
   if (rows && rows.length > 0) {
     const ownerUserId = rows[0].user_id
     if (users.hasOwnProperty(ownerUserId)) {

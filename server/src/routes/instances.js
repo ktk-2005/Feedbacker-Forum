@@ -193,11 +193,9 @@ router.post('/start', catchErrors(async (req, res) => {
 router.post('/delete', catchErrors(async (req, res) => {
   const { name } = req.body
   const { users } = await reqUser(req)
-  console.log(users)
-  console.log(name)
 
   await confirmContainerOwnership(name, users)
-  console.log("after confirm")
+
   await deleteContainer(name)
   logger.info(`Deleted container with name ${name}`)
   res.send({})
