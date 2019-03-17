@@ -22,8 +22,6 @@
 
 .options {
   @extend %toggle-container;
-
-  @extend .reactions;
   button {
     @extend %toggle-button;
   }
