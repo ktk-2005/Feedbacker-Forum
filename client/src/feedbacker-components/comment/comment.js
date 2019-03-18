@@ -6,6 +6,7 @@ import * as R from 'ramda'
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import * as DomTagging from '../../dom-tagging'
+import { isMobileViewport } from '../../globals'
 
 // Components
 import Reactions from '../reactions/reactions'
@@ -28,7 +29,7 @@ class Comment extends React.Component {
   }
 
   handleToggleHighlight(xPath, hidePanel) {
-    if (window.innerWidth < 500) {
+    if (isMobileViewport()) {
       hidePanel()
     }
     const element = DomTagging.getElementByXPath(xPath)

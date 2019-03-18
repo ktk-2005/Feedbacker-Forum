@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify'
 import classNames from 'classnames/bind'
 import * as DomTagging from './dom-tagging'
 import apiCall from './api-call'
-import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast } from './globals'
+import { setUsers, subscribeUpdateUsers, setUserName, showCookieToast, isMobileViewport } from './globals'
 import { prepareReactRoot } from './shadowDomHelper'
 
 // Components
@@ -145,7 +145,7 @@ class MainView extends React.Component {
       }, 3000)
     }
 
-    if (window.innerWidth < 500 && !this.state.commentPanelIsHidden) {
+    if (isMobileViewport() && !this.state.commentPanelIsHidden) {
       this.setState({ commentPanelIsHidden: true })
     }
   }
@@ -162,7 +162,7 @@ class MainView extends React.Component {
       }, 3000)
     }
 
-    if (window.innerWidth < 500 && !this.state.surveyPanelIsHidden) {
+    if (isMobileViewport() && !this.state.surveyPanelIsHidden) {
       this.setState({ surveyPanelIsHidden: true })
     }
   }
