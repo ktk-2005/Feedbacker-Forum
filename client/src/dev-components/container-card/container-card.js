@@ -5,8 +5,8 @@ import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
-// Styles
 import { shareSlack } from '../../globals'
+// Styles
 import styles from './container-card.scss'
 import '../../scss/atoms/_toast.scss'
 // Icons
