@@ -35,7 +35,8 @@ router.get('/oauth', catchErrors(async (req, res) => {
         .status(200)
         .end()
     } else {
-      await setSlackUser(state, parsedBody.user.name, parsedBody.user.id)
+      const { name, id } = parsedBody.user
+      await setSlackUser(state, name, id)
       res.redirect('/')
     }
   })
