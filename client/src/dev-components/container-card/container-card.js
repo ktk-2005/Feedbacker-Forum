@@ -134,9 +134,11 @@ class ContainerCard extends React.Component {
                 {<InlineSVG src={SlackIcon} />}
               </button>)
             : null}
-          <Link to={`/logs/${instance.subdomain}`}>
-            Open instance logs
-          </Link>
+          {instance.runner !== 'site' ? (
+            <Link to={`/logs/${instance.subdomain}`}>
+              Open instance logs
+            </Link>
+          ) : null}
           <a
             href={this.instance.url}
             target="_blank"
