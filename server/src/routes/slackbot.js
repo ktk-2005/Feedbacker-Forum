@@ -14,7 +14,7 @@ import { config } from '../globals'
 
 const router = express.Router()
 
-// CHANGE THESE TO MATCH USED SLACK APP IN ../../local.json
+// CHANGE clientId, clientSecret and webhookURL TO MATCH USED SLACK APP IN ../../local.json
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
