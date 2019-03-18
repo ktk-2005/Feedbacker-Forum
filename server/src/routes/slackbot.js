@@ -15,7 +15,6 @@ import { config } from '../globals'
 const router = express.Router()
 
 // CHANGE THESE TO MATCH USED SLACK APP IN ../../local.json
-const { clientId, clientSecret, webhookURL } = config.slack || {}
 
 // @api GET /api/slack/oauth
 // Authentication with Slack sign in.
@@ -23,6 +22,7 @@ const { clientId, clientSecret, webhookURL } = config.slack || {}
 //
 // Returns error if authentication failed or redirects back to dashboard otherwise
 router.get('/oauth', catchErrors(async (req, res) => {
+  const { clientId, clientSecret } = config.slack || {}
   const { state } = req.query
   const options = {
     uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${clientId}+'&client_secret=${clientSecret}`,
@@ -46,6 +46,7 @@ router.get('/oauth', catchErrors(async (req, res) => {
 //
 // Returns redirect to Slack's oauth.
 router.post('/oauth/connect', catchErrors(async (req, res) => {
+  const { clientId } = config.slack || {}
   const { users } = await reqUser(req)
   const id = uuid(8)
   await addSlackUser(id)
@@ -93,6 +94,7 @@ router.post('/command/status', catchErrors(async (req, res) => {
 //
 // Returns json object with 'success' boolean field indicating whether notification was send or not.
 router.get('/notify/:url', catchErrors(async (req, res) => {
+  const { webhookURL } = config.slack || {}
   let { url } = req.params
   const { users } = await reqUser(req)
   url = url.split('.').filter(x => x !== 'dev').join('.')
