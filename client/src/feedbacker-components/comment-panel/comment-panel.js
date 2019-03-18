@@ -218,8 +218,9 @@ class CommentPanel extends React.Component {
   }
 
   render() {
-    const { hidden, onClick } = this.props
+    const { onClick } = this.props
     const { hide, buttonHidden, counter } = this.state
+    const hidden = this.props.hidden || hide
 
     return (
       <>
@@ -232,7 +233,7 @@ class CommentPanel extends React.Component {
           <InlineSVG src={CloseIcon} />
         </button>
         <div
-          className={css('panel-container', { hidden }, { hide })}
+          className={css('panel-container', { hidden })}
         >
           <div
             className={css('comment-panel')}

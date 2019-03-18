@@ -8,7 +8,7 @@ $panel-min-width: 300px;
 
 .panel-container {
   @include display-and-animate;
-  &.hidden, &.hide {
+  &.hidden {
     @include hide-and-animate;
   }
 }
