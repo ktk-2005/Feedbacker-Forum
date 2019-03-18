@@ -46,20 +46,9 @@
   }
 }
 
-// TODO: these styles to be abstracted to organisms later, DONE? - Joona
-
 .overlay {
   @extend %overlay;
   background-color: rgba($palette-dark, 0.3);
-  // Can this be removed?
-  &.first {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
 }
 
 // TODO: abstract to upper levels
