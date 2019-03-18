@@ -10,7 +10,7 @@ const startOauth = async () => {
   window.location.replace(url)
 }
 
-const slackSignButton = () => (
+const SlackSignButton = () => (
   <button
     onClick={startOauth}
     type="button"
@@ -24,4 +24,4 @@ const slackSignButton = () => (
   </button>
 )
 
-export default slackSignButton
+export default SlackSignButton

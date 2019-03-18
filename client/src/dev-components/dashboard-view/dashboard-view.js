@@ -7,7 +7,7 @@ import apiCall from '../../api-call'
 import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Components
 import ContainerCard from '../container-card/container-card'
-import slackSignButton from '../sign-in-slack/sign-in-slack'
+import SlackSignButton from '../sign-in-slack/sign-in-slack'
 // Styles
 import styles from './dashboard-view.scss'
 
@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
         <div className={css('top-section')}>
           <h2>Dashboard</h2>
           <div className={css('top-section-buttons')}>
-            {this.state.slackAuth ? null : slackSignButton()}
+            {this.state.slackAuth ? null : SlackSignButton()}
             <Link to="/create">
               <button
                 className={css('create-button')}
