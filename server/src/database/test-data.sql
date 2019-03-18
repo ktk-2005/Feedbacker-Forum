@@ -12,9 +12,9 @@ INSERT INTO containers (id, subdomain, url, user_id, runner, blob) VALUES ('APP-
 
 INSERT INTO threads (id, container_id, blob) VALUES ('THR-1234', 'APP-TEST-b4a8-4fc4-8685-4c3277e43f8e7ef2f33f-4ed9-409e-9404-6e85', NULL);
 
-INSERT INTO comments (id, time, text, user_id, thread_id, anonymous, blob) VALUES ('1bd8052b', '2018-11-14 16:35:27', 'skrattia', 'da776df3', 'THR-1234', 0, '{"route":"/"}');
-INSERT INTO comments (id, time, text, user_id, thread_id, anonymous, blob) VALUES ('cb38e8f6', '2018-11-14 17:10:42', 'tröttistä', 'da776df3', 'THR-1234', 1, '{"route":"/"}');
-INSERT INTO comments (id, time, text, user_id, thread_id, anonymous, blob) VALUES ('13adr8sa', '2019-3-14 16:51:12', 'jaahaa', 'da776df3', 'THR-1234', 0, '{"route":"/"}');
+INSERT INTO comments (id, time, text, user_id, thread_id, anonymous, blob) VALUES ('1bd8052b', '2018-11-14 16:35:27', 'skrattia', 'da776df3', 'THR-1234', 'f', '{"route":"/"}');
+INSERT INTO comments (id, time, text, user_id, thread_id, anonymous, blob) VALUES ('cb38e8f6', '2018-11-14 17:10:42', 'tröttistä', 'da776df3', 'THR-1234', 't', '{"route":"/"}');
+INSERT INTO comments (id, time, text, user_id, thread_id, anonymous, blob) VALUES ('13adr8sa', '2019-3-14 16:51:12', 'jaahaa', 'da776df3', 'THR-1234', 'f', '{"route":"/"}');
 
 
 INSERT INTO questions (id, time, text, type, user_id, container_id, blob, order_id) VALUES ('eb1de3fc', '2018-11-14 17:40:09', 'Mitä tänään syötäisiin?', 'text', 'da776df3', 'APP-TEST-b4a8-4fc4-8685-4c3277e43f8e7ef2f33f-4ed9-409e-9404-6e85', NULL, 1);
