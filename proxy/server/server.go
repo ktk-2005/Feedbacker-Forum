@@ -18,6 +18,7 @@ import (
 	"net/http/httputil"
 	"regexp"
 	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
+	"sort"
 )
 
 // -- Public API
@@ -37,10 +38,9 @@ func StartServing(config *Config) error {
 	proxyPort := config.ProxyPort
 
 	doctypeInjectString = "<!DOCTYPE html>"
-	doctypeInjectLength = len([]byte(doctypeInjectString))
-
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
-	scriptInjectLength = len([]byte(scriptInjectString))
+	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
+	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString);
 
 	var err error
 	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/error", errPort))
@@ -95,10 +95,13 @@ const htmlTemplate = `<!DOCTYPE html>
 // `scriptInjectString` is injected before `injectPositionRegex`
 var doctypeRegex = regexp.MustCompile("(?i)<!doctype")
 var injectPositionRegex = regexp.MustCompile("(?i)</body>")
+var viewportRegex = regexp.MustCompile("(?i)<meta[^>]*viewport[^>]*>")
+var viewportInjectPositionRegex = regexp.MustCompile("(?i)</head>")
+var viewportAltInjectPositionRegex = regexp.MustCompile("(?i)<body>")
 var doctypeInjectString string
-var doctypeInjectLength int
 var scriptInjectString string
-var scriptInjectLength int
+var viewportInjectString string
+var viewportInjectStringWithHead string
 var errorHtml string
 var authHtml string
 
@@ -143,6 +146,11 @@ func redirectRequest(req *http.Request) {
 	}
 }
 
+type injectFragment struct {
+	Position int
+	Text string
+}
+
 func modifyResponse(res *http.Response) error {
 
 	// Only modify responses with Content-Type: text/html
@@ -181,27 +189,65 @@ func modifyResponse(res *http.Response) error {
 		body := string(bodyBytes)
 		length = len(bodyBytes)
 
-		// Insert the injected script after <head>
-		match := injectPositionRegex.FindStringIndex(body)
-		if match != nil {
-			loc := match[0]
-			result = io.MultiReader(
-				bytes.NewReader([]byte(body[:loc])),
-				bytes.NewReader([]byte(scriptInjectString)),
-				bytes.NewReader([]byte(body[loc:])))
-
-			length += scriptInjectLength
-		} else {
-			result = bytes.NewReader(bodyBytes)
-		}
+		injectFragments := make([]injectFragment, 0)
 
 		// Insert <!DOCTYPE html> if necessary
-		match = doctypeRegex.FindStringIndex(body)
+		match := doctypeRegex.FindStringIndex(body)
 		if match == nil {
-			prefix := bytes.NewReader([]byte(doctypeInjectString))
-			result = io.MultiReader(prefix, result)
+			injectFragments = append(injectFragments, injectFragment{
+				Position: 0,
+				Text: doctypeInjectString,
+			})
+		}
 
-			length += doctypeInjectLength
+		// Insert viewport if necessary
+		match = viewportRegex.FindStringIndex(body)
+		if match == nil {
+			match = viewportInjectPositionRegex.FindStringIndex(body)
+			if match != nil {
+				injectFragments = append(injectFragments, injectFragment{
+					Position: match[0],
+					Text: viewportInjectString,
+				})
+			} else {
+				match = viewportAltInjectPositionRegex.FindStringIndex(body)
+				if match != nil {
+					injectFragments = append(injectFragments, injectFragment{
+						Position: match[0],
+						Text: viewportInjectStringWithHead,
+					})
+				}
+			}
+		}
+
+		// Insert the injected script before </body>
+		match = injectPositionRegex.FindStringIndex(body)
+		if match != nil {
+			injectFragments = append(injectFragments, injectFragment{
+				Position: match[0],
+				Text: scriptInjectString,
+			})
+		}
+
+		if len(injectFragments) > 0 {
+			sort.SliceStable(injectFragments, func(i, j int) bool {
+				return injectFragments[i].Position < injectFragments[j].Position
+			})
+
+			parts := make([]io.Reader, 0, len(injectFragments) * 2 + 1)
+			prev := 0
+			for _, fragment := range injectFragments {
+				pos := fragment.Position
+				parts = append(parts, bytes.NewReader([]byte(body[prev:pos])))
+				parts = append(parts, bytes.NewReader([]byte(fragment.Text)))
+				length += len([]byte(fragment.Text))
+				prev = pos
+			}
+			parts = append(parts, bytes.NewReader([]byte(body[prev:])))
+
+			result = io.MultiReader(parts...)
+		} else {
+			result = bytes.NewReader(bodyBytes)
 		}
 
 	} else {
