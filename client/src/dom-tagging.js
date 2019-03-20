@@ -146,20 +146,21 @@ const includeDomTaggingCss = () => {
   <style>
     @keyframes pulse {
       0% {
-        box-shadow: 0 0 3px ${ accentColor };
+        box-shadow: 0 0 0 0 rgba(0, 191, 201, 0.5);
       }
       70% {
-        box-shadow: 0 0 6px ${ accentColor };
+        box-shadow: 0 0 0 10px rgba(0, 191, 201, 0);
       }
       100% {
         transform: scale(1);
-        box-shadow: 0 0 3px ${ accentColor };
+        box-shadow: 0 0 0 0 rgba(0, 191, 201, 0);
       }
     }
 
     .dom-tagging-element-highlighted {
-      box-shadow: 0 0 3px ${ accentColor };
-      animation: pulse 4s infinite;
+      border: solid 2px rgba(0, 191, 201, 0.5);
+      box-shadow: 0 0 0 0 rgba(0, 191, 201, 0.5);
+      animation: pulse 3.5s infinite;
     }
   </style>
   `
