@@ -100,4 +100,7 @@ export async function shareSlack(that, path, apiCall) {
       autoClose: 2000,
     })
   }
+
+export function isMobileViewport() {
+  return window.innerWidth < 500 // Same as in variables.scss
 }
