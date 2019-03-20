@@ -45,6 +45,27 @@ class CommentPanel extends React.Component {
     this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
+
+    this.interval = null
+  }
+
+  componentDidUpdate() {
+    if (!this.interval) {
+      this.interval = window.setInterval(this.fetchComments, 3000)
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.interval) {
+      window.clearInterval(this.interval)
+      this.interval = null
+    }
+  }
+
+  async fetchComments() {
+    const comments = await apiCall('GET', '/comments')
+    this.props.dispatch(loadComments(comments))
+    this.scrollToBottom()
   }
 
   updateCurrentThread(threadId) {
@@ -97,12 +118,6 @@ class CommentPanel extends React.Component {
   async toggleUsernameModal() {
     if (this.state.usernameModalIsOpen) await this.fetchComments()
     this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
-  }
-
-  async fetchComments() {
-    const comments = await apiCall('GET', '/comments')
-    this.props.dispatch(loadComments(comments))
-    await this.scrollToBottom()
   }
 
   toggleDeleteModal(comment) {
