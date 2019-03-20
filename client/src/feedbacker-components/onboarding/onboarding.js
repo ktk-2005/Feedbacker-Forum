@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import ReactModal from 'react-modal'
-import { toast } from 'react-toastify'
 // Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
