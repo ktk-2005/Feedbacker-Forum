@@ -39,6 +39,8 @@ Configuration is done using environment variables:
 | `FFGP_PROXY_PORT` | `8086` | Port the proxy is served at |
 | `FFGP_ERROR_PORT` | `8087` | Port the error site is served at |
 | `FFGP_INJECT_SCRIPT` | `http://localhost:8080/embed.js` | Source of the injected script element |
+| `FFGP_ERROR_SCRIPT` | `https://feedbacker.site/proxy-error.js` | Source of error script |
+| `FFGP_AUTH_SCRIPT` | `https://feedbacker.site/proxy-auth.js` | Source of authorization script |
 
 [go]: https://golang.org/
 

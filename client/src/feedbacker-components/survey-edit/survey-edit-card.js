@@ -45,6 +45,7 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
               type="text"
               key={index}
               value={option}
+              maxLength="9"
               placeholder={`Option ${index + 1}`}
               onChange={handleChange(index)}
               onKeyPress={onKeyPress}
@@ -185,7 +186,7 @@ class SurveyEditCard extends React.Component {
               <textarea
                 value={question.text}
                 onChange={this.handleTextEdit}
-                placeholder="Write a question..."
+                placeholder={question.type !== 'text' && question.type !== 'option' ? 'Add text explanation' : 'Write a question...'}
                 autoFocus
                 onKeyPress={this.handleKeyPress}
                 disabled={commit}
@@ -239,4 +240,3 @@ class SurveyEditCard extends React.Component {
 }
 
 export default SortableElement(SurveyEditCard)
-

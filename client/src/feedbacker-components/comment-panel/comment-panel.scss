@@ -56,3 +56,30 @@ $panel-min-width: 300px;
     margin-top: $spacer;
   }
 }
+
+.close-mobile-mode {
+  @extend %icon-button;
+  @include display-and-animate();
+  @include z-level(3);
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 78px;
+  padding: $baseline $spacer;
+  box-shadow: 0 2px 5px $palette-medium;
+  border-radius: 25px;
+  background: $palette-lighter;
+  top: 5%;
+  right: 5%;
+
+  &.buttonHidden{
+    display: none;
+  }
+
+  h3 {
+    font-variant-numeric: tabular-nums;
+    margin-left: 3px;
+  }
+
+}
