@@ -1,7 +1,7 @@
 @import '../../scss/compulsory';
 
 @import '../../scss/atoms/button';
-@import '../../scss/atoms/button-container';
+@import '../../scss/atoms/tooltip';
 
 .top-section {
   display: flex;
@@ -10,6 +10,11 @@
 
   padding: $spacer * 3;
   box-shadow: 0 0 10px $palette-shadow-light;
+
+  .top-section-buttons {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .create-button {
@@ -34,8 +39,3 @@
     flex-direction: column-reverse;
   }
 }
-
-.button-container {
-  @extend %button-container;
-}
-

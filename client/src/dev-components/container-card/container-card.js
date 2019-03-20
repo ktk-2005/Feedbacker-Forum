@@ -5,12 +5,15 @@ import InlineSVG from 'svg-inline-react'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
+import { shareSlack } from '../../globals'
 // Styles
 import styles from './container-card.scss'
+import '../../scss/atoms/_toast.scss'
 // Icons
 import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
 import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
 import StopIcon from '../../assets/svg/baseline-stop-24px.svg'
+import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -18,12 +21,12 @@ class ContainerCard extends React.Component {
   constructor(props) {
     super(props)
     this.instance = this.props.instance
+    this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
 
-    this.instanceUrl = `//${this.instance.subdomain}.${window.location.host}`
     const { blob } = this.instance
     if (blob.path) {
-      this.instanceUrl += blob.path
+      this.instance.url += blob.path
     }
 
     this.state = {
@@ -31,6 +34,7 @@ class ContainerCard extends React.Component {
       startPending: false,
       stopPending: false,
       removePending: false,
+      disableSlack: false,
     }
 
     this.startContainer = this.startContainer.bind(this)
@@ -118,13 +122,30 @@ class ContainerCard extends React.Component {
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
         <div className={css('button-container')}>
+          {this.props.slackAuth
+            ? (
+              <button
+                type="button"
+                className={css('slack-share')}
+                disabled={this.state.disableSlack}
+                onClick={() => shareSlack(
+                  this,
+                  `${this.instance.name}.${window.location.host}`,
+                  apiCall
+                )}
+                data-tooltip="Share in Slack"
+                data-tooltip-width="130px"
+              >
+                {<InlineSVG src={SlackIcon} />}
+              </button>)
+            : null}
           {instance.runner !== 'site' ? (
             <Link to={`/logs/${instance.subdomain}`}>
               Open instance logs
             </Link>
           ) : null}
           <a
-            href={this.instanceUrl}
+            href={this.instance.url}
             target="_blank"
             rel="noreferrer noopener"
             className={css('accent')}
