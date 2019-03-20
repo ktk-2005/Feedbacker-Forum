@@ -66,6 +66,7 @@ class Create extends React.Component {
     event.nativeEvent.stopImmediatePropagation()
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
+    const usePass = this.state.usePassphrase
 
     this.setState({ busy: true })
 
@@ -78,7 +79,7 @@ class Create extends React.Component {
         type: inputValue('application'),
         port: inputValue('port'),
         name: inputValue('name').toLowerCase(),
-        password: inputValue('password'),
+        password: usePass ? inputValue('password') : '',
       })
 
       this.setState({
@@ -306,5 +307,6 @@ class Create extends React.Component {
     )
   }
 }
+
 
 export default Create
