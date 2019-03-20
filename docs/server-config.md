@@ -16,11 +16,11 @@ environment variables. You can specify the configuration file to use with the `-
 | `dockerWindows` | | `Boolean` | Set this to true if you're using Docker for Windows (Only Win10 Pro/Education). If you're using Docker Toolbox (other Windows versions), leave this to false. Default is false. |
 | `runners` | | `List[Object]` | List of objects that describe the system-provided runners. For example `[{"name": "npm run start","tag": "node-runner"}]` |
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
+| `slack` | | `Object` | [Slack](#slack) app configuration. |
 ### Slack
 
 | Property | Env | Type | Description |
 | --- | --- | --- | --- |
-| `slack` | | `Object` | [Slack](#slack) app configuration. |
 | `clientId` | | `String` | Id for identifying [Slack](#slack) app on Slack. |
 | `clientSecret` | | `String` | Secret for identifying [Slack](#slack) app on Slack together with `clientId`. |
 | `webhookURL` | | `String` | Webhook URL that allows [Slack](#slack) app to post on a specific Slack channel. This channel is specified in Slack api. |
