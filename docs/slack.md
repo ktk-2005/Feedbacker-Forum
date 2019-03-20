@@ -25,7 +25,7 @@ and authorization for creation of the webhook. After clicking `Authorization` We
 ### Setting up configs
 
 Running either locally or on cloud provider, webhook, clientId and clientSecret
-needs to be specified for Feedbacker Forum on some `json` config file used.
+needs to be specified for Feedbacker Forum on some used `json` config file.
 Add `"slack": { "clientId: "CLIENTID HERE", "clientSecret": "CLIENTSECRET HERE, "webhookURL": "WEBHOOKURL HERE"}` object to this `json`-file. More documentation
 on this is available on `server-config.md`. Locally this should be done to
 `/server/local.json` and then run `npm run watch -- -c local.json`. `webhookURL`
