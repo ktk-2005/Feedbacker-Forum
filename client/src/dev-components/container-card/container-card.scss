@@ -40,13 +40,18 @@
     & a:only-child {
       margin-left: auto;
     }
-  }
 
-  a {
-    @extend %anchor-button;
+    a {
+      @extend %anchor-button;
 
-    &.accent {
-      @extend %accent;
+      &.accent {
+        @extend %accent;
+      }
     }
   }
+
+  .source-link {
+    margin-left: auto;
+  }
+
 }

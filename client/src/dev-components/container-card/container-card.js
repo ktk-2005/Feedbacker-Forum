@@ -117,6 +117,7 @@ class ContainerCard extends React.Component {
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
+        <a href={instance.origin}>Go to source {instance.runner === 'site' ? 'site' : 'repo'}: {new URL(instance.origin).hostname}</a>
         <div className={css('button-container')}>
           {instance.runner !== 'site' ? (
             <Link to={`/logs/${instance.subdomain}`}>

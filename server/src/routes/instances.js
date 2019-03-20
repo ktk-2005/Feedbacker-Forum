@@ -69,7 +69,6 @@ router.get('/logs/:name', catchErrors(async (req, res) => {
   res.type('txt')
   res.send(logs)
 }))
-
 // @api POST /api/instances/new
 // Create a new instance.
 //
@@ -123,6 +122,7 @@ router.post('/new', catchErrors(async (req, res) => {
         userId,
         type,
         url: rootUrl,
+        origin: rootUrl,
         blob: JSON.stringify({ path: redirectPath }),
       })
       res.json({ containerInfo, redirectPath })
