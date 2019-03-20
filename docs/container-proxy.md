@@ -42,5 +42,33 @@ Configuration is done using environment variables:
 | `FFGP_ERROR_SCRIPT` | `https://feedbacker.site/proxy-error.js` | Source of error script |
 | `FFGP_AUTH_SCRIPT` | `https://feedbacker.site/proxy-auth.js` | Source of authorization script |
 
+## Injection details
+
+In addition to proxying requests to their corresponding containers the proxy also performs
+a series of injections to HTML files. The injections are only performed if either the `Accept`
+or `Content-Type` headers contain the string `text/html`. For potentially injected requests
+the `Accept-Encoding` header is deleted and the request is forced to be uncompressed.
+
+### Feedbacker Script
+
+The most important injection is our feedback tool `embed.js` script. It is injected to every
+HTML response regardless of its contents. The script is injected before the closing `</body>`
+tag.
+
+### HTML Doctype
+
+Our styles break if there is no `<!DOCTYPE>` tag in the page on some browsers. If the HTML file
+does not contain the case insensitive substring `<!doctype` the default HTML5 doctype
+`<!DOCTYPE html>` is injected to the beginning of the HTML file.
+
+### Meta viewport tag
+
+Our responsive CSS breaks if there is no `<meta name="viewport">` tag in `<head>`. The HTML
+file is loosely scanned for a viewport meta tag, since having false positives is better than
+inserting two competing viewport tags. If absent a relatively harmless
+`<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">`
+tag is inserted before the closing `</head>` tag. If the whole
+head is missing an almost empty `<head>` pair is inserted containing the viewport tag before `<body>` if found.
+
 [go]: https://golang.org/
 
