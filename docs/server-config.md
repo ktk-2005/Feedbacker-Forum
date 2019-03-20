@@ -17,6 +17,9 @@ environment variables. You can specify the configuration file to use with the `-
 | `runners` | | `List[Object]` | List of objects that describe the system-provided runners. For example `[{"name": "npm run start","tag": "node-runner"}]` |
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
 ### Slack
+
+| Property | Env | Type | Description |
+| --- | --- | --- | --- |
 | `slack` | | `Object` | [Slack](#markdown-header-slack) app configuration. |
 | `clientId` | | `String` | Id for identifying [Slack](#markdown-header-slack) app on Slack. |
 | `clientSecret` | | `String` | Secret for identifying [Slack](#markdown-header-slack) app on Slack together with `clientId`. |
