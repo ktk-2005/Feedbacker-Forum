@@ -44,8 +44,8 @@ Slash commands can be created at `Slash Commands`-section. All available api-end
 
 ### OAuth and permissions
 
-On section `OAuth & Permissions` needs to be created some `Redirect URLs`and `Scopes`. Click on `Add New Redirect URL` to add redirect url for Slack authentication on Feedbacker Forum. This should be `https://DOMAIN_HERE/api/slack/oauth`. Next add permission by scope from dropdown menu and select `Confirm user's identity       identity.basic`-option. Click `Save Changes`.
+`Redirect URLs`and `Scopes` needs to be created in section `OAuth & Permissions`. Click on `Add New Redirect URL` to add redirect url for Slack authentication on Feedbacker Forum. This should be `https://DOMAIN_HERE/api/slack/oauth`. Next add permission by scope from dropdown menu and select `Confirm user's identity       identity.basic`-option. Click `Save Changes`.
 
 ## Installing Slack app
 
-On section `Install App` click `Install App to Workspace`-button and authorize Slack app's installment to specified Slack workspace. Now Slack is ready to be used with Feedbacker Forum.
+In section `Install App` click `Install App to Workspace`-button and authorize Slack app's installment to specified Slack workspace. Now Slack is ready to be used with Feedbacker Forum.
