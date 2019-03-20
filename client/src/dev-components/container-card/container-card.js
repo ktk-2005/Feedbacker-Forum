@@ -8,9 +8,9 @@ import apiCall from '../../api-call'
 // Styles
 import styles from './container-card.scss'
 // Icons
-import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
-import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
-import StopIcon from '../../assets/svg/baseline-stop-24px.svg'
+import DeleteIcon from '../../assets/svg/baseline-delete-24px.svg'
+import StartIcon from '../../assets/svg/baseline-cloud_queue-24px.svg'
+import StopIcon from '../../assets/svg/baseline-cloud_off-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -112,7 +112,7 @@ class ContainerCard extends React.Component {
               data-tooltip="Remove"
               data-tooltip-width="100px"
             >
-              <InlineSVG src={CloseIcon} />
+              <InlineSVG src={DeleteIcon} />
             </button>
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>

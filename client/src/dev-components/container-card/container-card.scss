@@ -25,12 +25,20 @@
       margin-right: auto;
     }
 
-    .header-button-container {
-      display: flex;
-      justify-content: space-between;
+  }
 
-      button {
-        @extend %icon-button;
+  .header-button-container {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      @extend %icon-button;
+      margin-left: $spacer;
+
+      &:focus {
+        svg {
+          fill: $palette-dark;
+        }
       }
     }
   }

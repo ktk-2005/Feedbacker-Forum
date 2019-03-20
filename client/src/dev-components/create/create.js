@@ -126,7 +126,7 @@ class Create extends React.Component {
                 <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
               ))}
             </select>
-            <Link to="/create-runner">
+            <Link to="/create-runner" tabIndex="-1">
               <button
                 className={css('new-runner-button')}
                 type="button"
@@ -166,11 +166,11 @@ class Create extends React.Component {
             data-tooltip="If a password is set, the container can't be viewed without it."
             data-tooltip-width="250px"
           >
-            <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+            <input type="password" id="password" name="password" placeholder="passphrase" minLength="5" maxLength="64" />
           </div>
         </label>
         <div className={css('button-container')}>
-          <Link to="/">
+          <Link to="/" tabIndex="-1">
             <button
               className={css('dashboard-button')}
               type="button"

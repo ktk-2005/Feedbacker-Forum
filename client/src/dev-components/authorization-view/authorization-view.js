@@ -26,7 +26,7 @@ function AuthorizationView() {
         <form className={css('form')}>
           <input
             type="password"
-            placeholder="Password"
+            placeholder="passphrase"
             id="password"
             className={css('input')}
           />

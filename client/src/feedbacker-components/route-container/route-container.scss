@@ -53,4 +53,13 @@
     margin-bottom: $baseline;
     background: $palette-white;
   }
+
+  &:focus {
+    outline: none;
+  }
+  
+  a:focus {
+    outline: none;
+    text-decoration: underline;
+  }
 }
