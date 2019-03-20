@@ -16,6 +16,7 @@ CREATE TABLE users (
 -- Table: containers
 CREATE TABLE containers (
   id            VARCHAR(64) UNIQUE NOT NULL,
+  time       VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL, -- Postgres CURRENT_TIMESTAMP is 29 chars long
   subdomain     VARCHAR(32) UNIQUE NOT NULL,
   url           VARCHAR(255) NOT NULL,
   user_id       CHAR(8) NOT NULL,
