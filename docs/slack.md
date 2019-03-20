@@ -19,8 +19,8 @@ work with Feedbacker Forum.
 A webhook is used so that Feedbacker Forum can post messages to some Slack
 channel via Slack app. Go to `Incoming Webhooks`, press toggle slide from
 `off` to `on` and click `Add New Webhook to Workspace`. This redirects to
-the Slack workspace and asks to which channel is Slack app allowed to post
-and authorization. After clicking `Authorization` Webhook URL is created.
+the Slack workspace and asks which channel Slack app is allowed to post
+and authorization for creation of the webhook. After clicking `Authorization` Webhook URL is created.
 
 ### Setting up configs
 
