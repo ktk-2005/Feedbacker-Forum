@@ -83,3 +83,25 @@ export function keyPressSubmit(e) {
     if (submit) submit.click()
   }
 }
+
+export async function shareSlack(that, path, apiCall) {
+  that.setState({ disableSlack: true })
+  let succ = null
+  try {
+    const { success } = await apiCall('GET', `/slack/notify/${path}`)
+    succ = success
+  } catch (error) {
+    // Do nothing
+  }
+  that.setState({ disableSlack: false })
+  if (succ) {
+    const message = 'Slack notification sent.'
+    toast(message, {
+      autoClose: 2000,
+    })
+  }
+}
+
+export function isMobileViewport() {
+  return window.innerWidth < 500 // Same as in variables.scss
+}

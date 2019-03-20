@@ -21,6 +21,12 @@
   h2 {
     margin-bottom: $spacer;
   }
+
+  @include media-query(mobile) {
+    padding: $spacer * 2;
+    box-shadow: none;
+    background: inherit;
+  }
 }
 
 .selection-tabs {

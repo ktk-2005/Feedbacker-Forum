@@ -41,6 +41,10 @@
       margin-left: auto;
     }
 
+    button {
+      @extend %icon-button;
+    }
+
     a {
       @extend %anchor-button;
 
@@ -54,4 +58,17 @@
     margin-left: auto;
   }
 
+}
+
+.slack-share i {
+  $dimension: 20px;
+  height: $dimension;
+  width: $dimension;
+  margin-right: $spacer;
+
+  // Visually centered vertically
+  &svg {
+    position: relative;
+    top: -1px;
+  }
 }

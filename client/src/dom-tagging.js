@@ -68,7 +68,7 @@ const getXPathByElement = (event) => {
 
 // State
 let markingMode = false
-
+let currentCommentId
 // Helper
 
 const isMarkable = el => (
@@ -83,13 +83,13 @@ const setElementTaggedCallback = callback => callbacks.elementTagged = callback
 // eslint-disable-next-line
 const setToggleTagElementStateCallback = callback => callbacks.toggleActiveState = callback
 
-const toggleHighlightElement = (el, forceAdd = false) => {
+const toggleHighlightElement = (el, forceAdd = false, commentId = '') => {
   const className = 'dom-tagging-element-highlighted'
   // SVG should never be tagged
   el = getSVGParent(el)
   // Check that two tags cannot be present at same time
   document.querySelectorAll(`.${ className }`).forEach( taggedEl => {
-    if (taggedEl !== el) toggleHighlightElement(taggedEl)
+    if (taggedEl !== el) taggedEl.classList.remove(className)
   })
 
   // Force for highlight element on click for comment targets
@@ -97,7 +97,21 @@ const toggleHighlightElement = (el, forceAdd = false) => {
     if(!el.classList.contains(className)){
       el.classList.add(className)
     }
-  } else el.classList.toggle(className)
+  } else {
+    if (el.classList.contains(className) && currentCommentId === commentId) {
+      el.classList.remove(className)
+    } else {
+      el.classList.add(className)
+      currentCommentId = commentId
+    }
+  }
+}
+
+const clearAll = () => {
+  const className = 'dom-tagging-element-highlighted'
+  document.querySelectorAll(`.${ className }`).forEach( taggedEl => {
+    taggedEl.classList.remove(className)
+  })
 }
 
 // Hover
@@ -161,7 +175,8 @@ export {
   toggleMarkingMode,
   getXPathByElement,
   getElementByXPath,
-  toggleHighlightElement
+  toggleHighlightElement,
+  clearAll,
 }
 
 // TODO: Not in use below
