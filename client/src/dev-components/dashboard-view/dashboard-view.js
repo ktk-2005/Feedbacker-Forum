@@ -7,6 +7,7 @@ import apiCall from '../../api-call'
 import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Components
 import ContainerCard from '../container-card/container-card'
+import SlackSignButton from '../sign-in-slack/sign-in-slack'
 // Styles
 import styles from './dashboard-view.scss'
 
@@ -21,11 +22,14 @@ class Dashboard extends React.Component {
 
     this.state = {
       instances: [],
+      slackAuth: false,
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.userSub = subscribeUsers(this.refreshInstances)
+    const { slackAuth } = await apiCall('GET', '/slack/auth')
+    this.setState({ slackAuth })
   }
 
   componentWillUnmount() {
@@ -55,13 +59,16 @@ class Dashboard extends React.Component {
       <>
         <div className={css('top-section')}>
           <h2>Dashboard</h2>
-          <Link to="/create">
-            <button
-              className={css('create-button')}
-              type="button"
-            >New instance
-            </button>
-          </Link>
+          <div className={css('top-section-buttons')}>
+            {this.state.slackAuth ? null : SlackSignButton()}
+            <Link to="/create">
+              <button
+                className={css('create-button')}
+                type="button"
+              >New instance
+              </button>
+            </Link>
+          </div>
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>
@@ -72,6 +79,7 @@ class Dashboard extends React.Component {
                   key={instance.id}
                   removeContainerCallback={this.refreshInstances}
                   instance={instance}
+                  slackAuth={this.state.slackAuth}
                 />
               ))
             }
