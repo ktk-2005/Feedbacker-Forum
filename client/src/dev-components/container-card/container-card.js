@@ -24,6 +24,11 @@ class ContainerCard extends React.Component {
     this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
 
+    const { blob } = this.instance
+    if (blob.path) {
+      this.instance.url += blob.path
+    }
+
     this.state = {
       containerRunning: this.instance.running,
       startPending: false,
