@@ -72,9 +72,9 @@ class Dashboard extends React.Component {
         </div>
         <div className={css('instances-container')}>
           <h2>Your instances</h2>
-          <div className={css('reverse')}>
+          <div>
             {
-              instances.map(instance => (
+              instances.reverse().map(instance => (
                 <ContainerCard
                   key={instance.id}
                   removeContainerCallback={this.refreshInstances}
@@ -83,8 +83,8 @@ class Dashboard extends React.Component {
                 />
               ))
             }
+            { noInstances() }
           </div>
-          { noInstances() }
         </div>
       </>
     )
