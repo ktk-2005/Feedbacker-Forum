@@ -49,3 +49,7 @@ Slash commands can be created at `Slash Commands`-section. All available api-end
 ## Installing Slack app
 
 In section `Install App` click `Install App to Workspace`-button and authorize Slack app's installment to specified Slack workspace. Now Slack is ready to be used with Feedbacker Forum.
+
+## Sending the first Slack message through the bot
+
+When Slack app is up and running, go to running Feedbacker Forum instance dev dashboard and click `Sign in With Slack`. Afterwards container instances and survey edit pages show Slack icon or `Share in Slack` button. Clicking these buttons share the container instance on webhook's Slack channel.
