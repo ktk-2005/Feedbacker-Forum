@@ -19,7 +19,6 @@ class Dashboard extends React.Component {
     super(props)
 
     this.refreshInstances = this.refreshInstances.bind(this)
-    this.removeContainerCallback = this.removeContainerCallback.bind(this)
 
     this.state = {
       instances: [],
@@ -40,17 +39,6 @@ class Dashboard extends React.Component {
   async refreshInstances() {
     const instances = await apiCall('GET', '/instances')
     this.setState({ instances })
-  }
-
-  removeContainerCallback(containerName) {
-    this.setState((prevState) => {
-      // TODO: should fetch and not just filter
-      const instancesWithoutDeletedOne = R.reject(
-        instance => instance.name === containerName,
-        prevState.instances
-      )
-      return { instances: instancesWithoutDeletedOne }
-    })
   }
 
   render() {
@@ -89,7 +77,7 @@ class Dashboard extends React.Component {
               instances.map(instance => (
                 <ContainerCard
                   key={instance.id}
-                  removeContainerCallback={this.removeContainerCallback}
+                  removeContainerCallback={this.refreshInstances}
                   instance={instance}
                   slackAuth={this.state.slackAuth}
                 />

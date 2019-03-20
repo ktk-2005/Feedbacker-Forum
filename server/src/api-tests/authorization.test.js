@@ -14,9 +14,12 @@ describe('/api/authorization', () => {
   })
 
   it('should return 200 for correct password/subdomain combination', async () => {
+    // Post with different users every test to avoid duplicates in database
+    const { id, secret } = await apiRequest('POST', '/api/users')
+
     await apiRequest('POST', '/api/authorization', {
       password: 'correct',
       subdomain: 'authorized',
-    })
+    }, { users: { [id]: secret } })
   })
 })
