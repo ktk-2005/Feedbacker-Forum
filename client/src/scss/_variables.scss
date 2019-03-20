@@ -24,10 +24,6 @@ $z-index-levels: (
   5: 500000,
 );
 
-@function static-url($path) {
-  @return url($static-url + $path);
-}
-
 // Responsivity
 
 $mobile-break-point: 500px; // Same as in globals.js
