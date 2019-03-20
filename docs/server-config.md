@@ -20,7 +20,7 @@ environment variables. You can specify the configuration file to use with the `-
 
 | Property | Env | Type | Description |
 | --- | --- | --- | --- |
-| `slack` | | `Object` | [Slack](#markdown-header-slack) app configuration. |
-| `clientId` | | `String` | Id for identifying [Slack](#markdown-header-slack) app on Slack. |
-| `clientSecret` | | `String` | Secret for identifying [Slack](#markdown-header-slack) app on Slack together with `clientId`. |
-| `webhookURL` | | `String` | Webhook URL that allows [Slack](#markdown-header-slack) app to post on a specific Slack channel. This channel is specified in Slack api. |
+| `slack` | | `Object` | [Slack](#slack) app configuration. |
+| `clientId` | | `String` | Id for identifying [Slack](#slack) app on Slack. |
+| `clientSecret` | | `String` | Secret for identifying [Slack](#slack) app on Slack together with `clientId`. |
+| `webhookURL` | | `String` | Webhook URL that allows [Slack](#slack) app to post on a specific Slack channel. This channel is specified in Slack api. |
