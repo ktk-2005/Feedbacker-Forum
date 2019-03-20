@@ -61,7 +61,7 @@ func Initialize(config *Config) error {
 		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = ? AND user_id = ?"
 	} else if config.DbDriver == "postgres" {
 		dbQueryString = "SELECT subdomain, url, blob FROM containers WHERE subdomain = $1"
-		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = $? AND user_id = $?"
+		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = $1 AND user_id = $2"
 	} else {
 		log.Fatalf("Unsupported database driver '%s'", config.DbDriver)
 	}
