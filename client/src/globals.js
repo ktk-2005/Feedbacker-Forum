@@ -85,5 +85,5 @@ export function keyPressSubmit(e) {
 }
 
 export function isMobileViewport() {
-  return window.innerWidth < 500
+  return window.innerWidth < 500 // Same as in variables.scss
 }
