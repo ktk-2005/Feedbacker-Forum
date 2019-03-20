@@ -28,3 +28,6 @@ proxy/proxy
 
 # Vim binaries on mac
 *.swp
+
+# Local config
+local.json
