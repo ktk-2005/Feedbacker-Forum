@@ -39,7 +39,7 @@ Default username can be specified and whether the bot is always shown online or 
 
 ### Slash commands
 
-Slash commands can be created at `Slash Commands`-section. All available api-endpoints for slash commands can be seen on `api.md` and the path is of type
+Slash commands can be created at `Slash Commands`-section. All available api-endpoints for slash commands can be seen on [docs/api.md](docs/api.md) and the path is of type
 `/api/slack/commands/SOME_COMMAND`. On Slack app's `Slash Commands`-section corresponding slash commands can be created by `Create New Command`. Command, request URL to the slash command endpoint (like specified above) and short description of slash command needs to be specified here.
 
 ### OAuth and permissions
