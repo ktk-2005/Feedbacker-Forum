@@ -72,7 +72,6 @@ class CommentPanel extends React.Component {
   async fetchComments() {
     const comments = await apiCall('GET', '/comments')
     this.props.dispatch(loadComments(comments))
-    this.scrollToBottom()
   }
 
   updateCurrentThread(threadId) {
@@ -113,16 +112,21 @@ class CommentPanel extends React.Component {
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
     await this.fetchComments()
+    this.scrollToBottom()
 
     if (!this.props.name) {
       await this.toggleUsernameModal()
     } else {
       await this.fetchComments()
+      this.scrollToBottom()
     }
   }
 
   async toggleUsernameModal() {
-    if (this.state.usernameModalIsOpen) await this.fetchComments()
+    if (this.state.usernameModalIsOpen) {
+      await this.fetchComments()
+      this.scrollToBottom()
+    }
     this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
 
