@@ -124,7 +124,7 @@ class ContainerCard extends React.Component {
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
         <p>
-          Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={instance.origin}>{new URL(instance.origin).hostname}</a>
+          Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={instance.origin}>{new URL(instance.origin).hostname.split('.').reverse()[1]}</a>
         </p>
         <p>
           {'Created on:  '}
