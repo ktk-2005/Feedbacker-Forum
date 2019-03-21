@@ -225,9 +225,9 @@ export async function addUsername({ id, name, secret }) { return db.query('UPDAT
 // Containers/Instances
 
 export async function addContainer({
-  id, subdomain, userId, blob, type, url,
+  id, subdomain, userId, blob, type, url, origin,
 }) {
-  return db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, JSON.stringify(blob)])
+  return db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, origin, blob) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, origin, JSON.stringify(blob)])
 }
 
 export async function resolveContainer(subdomain) {
@@ -242,7 +242,7 @@ export async function resolveContainer(subdomain) {
 }
 
 export async function listContainersByUser(values = []) {
-  return db.query('SELECT id, subdomain, runner, blob FROM containers WHERE user_id=?', values)
+  return db.query('SELECT id, time, subdomain, runner, origin, blob FROM containers WHERE user_id=?', values)
 }
 
 export async function removeContainer(name) {
@@ -264,9 +264,9 @@ export async function authenticateUserForContainerAccess(subdomain, userId) {
 // External site
 
 export async function addSite({
-  id, subdomain, userId, url, type, blob,
+  id, subdomain, userId, url, type, origin, blob,
 }) {
-  db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, blob) VALUES (?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, blob])
+  db.run('INSERT INTO containers(id, subdomain, url, user_id, runner, origin, blob) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, subdomain, url, userId, type, origin, blob])
   return {
     subdomain,
   }

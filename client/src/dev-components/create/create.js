@@ -1,12 +1,15 @@
 import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 // Helpers
+import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../../shadowDomHelper'
 import apiCall from '../../api-call'
 import { subscribeUsers, unsubscribeUsers } from '../../globals'
 // Styles
 import styles from './create.scss'
+// Icons
+import eyeIcon from '../../assets/svg/baseline-remove_red_eye-24.svg'
 
 const css = classNames.bind(styles)
 
@@ -21,12 +24,16 @@ class Create extends React.Component {
     this.siteForm = this.siteForm.bind(this)
     this.activateContainerForm = this.activateContainerForm.bind(this)
     this.activateSiteForm = this.activateSiteForm.bind(this)
+    this.togglePassphrase = this.togglePassphrase.bind(this)
+    this.toggleShowPassphrase = this.toggleShowPassphrase.bind(this)
 
     this.state = {
       instanceRunners: [],
       redirectContainer: false,
       containerForm: true,
       busy: false,
+      usePassphrase: false,
+      passphraseInputType: 'password',
     }
   }
 
@@ -59,6 +66,7 @@ class Create extends React.Component {
     event.nativeEvent.stopImmediatePropagation()
     const doc = shadowDocument()
     const inputValue = name => doc.getElementById(name).value
+    const usePass = this.state.usePassphrase
 
     this.setState({ busy: true })
 
@@ -71,7 +79,7 @@ class Create extends React.Component {
         type: inputValue('application'),
         port: inputValue('port'),
         name: inputValue('name').toLowerCase(),
-        password: inputValue('password'),
+        password: usePass ? inputValue('password') : '',
       })
 
       this.setState({
@@ -106,6 +114,18 @@ class Create extends React.Component {
       console.error('Failed to create container', error)
       this.setState({ busy: false })
     }
+  }
+
+  togglePassphrase() {
+    this.setState(prevState => (
+      { usePassphrase: !prevState.usePassphrase }
+    ))
+  }
+
+  toggleShowPassphrase() {
+    this.setState(prevState => (
+      { passphraseInputType: prevState.passphraseInputType === 'password' ? 'input' : 'password'  }
+    ))
   }
 
   containerForm() {
@@ -161,12 +181,19 @@ class Create extends React.Component {
         <label
           htmlFor="password"
         >
-          Password
+          Instance access restriction
           <div
             data-tooltip="If a password is set, the container can't be viewed without it."
             data-tooltip-width="250px"
           >
-            <input type="password" id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+            <div className={css('selection-tabs')}>
+              <button className={css({ 'current': !this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Link access (default)</button>
+              <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Passphrase protected</button>
+            </div>
+            <div className={css('passphrase-field', { 'hidden': !this.state.usePassphrase })}>
+              <input type={this.state.passphraseInputType} id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+              <button className={css('show-button', { 'toggled': this.state.passphraseInputType !== 'password' })} type="button" onClick={this.toggleShowPassphrase}><InlineSVG src={eyeIcon} /></button>
+            </div>
           </div>
         </label>
         <div className={css('button-container')}>
@@ -280,5 +307,6 @@ class Create extends React.Component {
     )
   }
 }
+
 
 export default Create

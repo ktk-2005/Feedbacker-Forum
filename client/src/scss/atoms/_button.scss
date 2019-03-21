@@ -134,6 +134,10 @@
   box-shadow: 0 1px 5px $palette-shadow-light;
   text-decoration: none;
   color: $palette-dark;
+
+  &:hover:after {
+    opacity: 0;
+  }
 }
 
 %accent {
