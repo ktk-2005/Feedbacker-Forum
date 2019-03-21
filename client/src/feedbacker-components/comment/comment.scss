@@ -104,5 +104,9 @@
     &:only-of-type {
       margin-left: auto;
     }
+
+    &:focus {
+      color: $palette-dark;
+    }
   }
 }

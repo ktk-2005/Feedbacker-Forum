@@ -102,7 +102,9 @@ const initialize = () => {
         progressClassName={css('toast-progress')}
       />
       <Provider store={store}>
-        <AuthenticationView />
+        <div className={css('feedback-app-container', 'site-views')}>
+          <AuthenticationView />
+        </div>
       </Provider>
     </div>,
     prepareReactRoot()
@@ -112,4 +114,3 @@ const initialize = () => {
 initialize()
 document.addEventListener('DOMContentLoaded', initialize)
 window.addEventListener('load', initialize)
-
