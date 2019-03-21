@@ -5,7 +5,7 @@ a {
   text-decoration: none;
   color: $palette-accent;
 
-  &:not([tabindex="-1"]) {
+  &:not([tabIndex="-1"]) {
     &:after {
       content: '';
       position: absolute;

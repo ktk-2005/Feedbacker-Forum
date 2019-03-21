@@ -57,7 +57,7 @@ class Build extends React.Component {
             </pre>
           </div>
           <div className={css('button-container')}>
-            <Link to="/">
+            <Link to="/" tabIndex="-1">
               <button
                 className={css('dashboard-button')}
                 type="button"
