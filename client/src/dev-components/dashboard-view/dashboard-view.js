@@ -1,5 +1,4 @@
 import React from 'react'
-import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 // Helpers
 import classNames from 'classnames/bind'
@@ -61,7 +60,7 @@ class Dashboard extends React.Component {
           <h2>Dashboard</h2>
           <div className={css('top-section-buttons')}>
             {this.state.slackAuth ? null : SlackSignButton()}
-            <Link to="/create" tabindex="-1">
+            <Link to="/create" tabIndex="-1">
               <button
                 className={css('create-button')}
                 type="button"

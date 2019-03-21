@@ -15,6 +15,7 @@ import '../../scss/atoms/_toast.scss'
 import DeleteIcon from '../../assets/svg/baseline-delete-24px.svg'
 import StartIcon from '../../assets/svg/baseline-cloud_queue-24px.svg'
 import StopIcon from '../../assets/svg/baseline-cloud_off-24px.svg'
+import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -154,7 +155,7 @@ class ContainerCard extends React.Component {
               </button>)
             : null}
           {instance.runner !== 'site' ? (
-            <Link to={`/logs/${instance.subdomain}`}>
+            <Link to={`/logs/${instance.subdomain}`} tabIndex="-1">
               Open instance logs
             </Link>
           ) : null}

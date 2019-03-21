@@ -251,7 +251,7 @@ class Create extends React.Component {
           />
         </label>
         <div className={css('button-container')}>
-          <Link to="/">
+          <Link to="/" tabIndex="-1">
             <button className={css('dashboard-button')} type="button">
               Back to dashboard
             </button>
