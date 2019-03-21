@@ -67,10 +67,7 @@ export async function reqContainer(req) {
   return { container: id, owner: userId }
 }
 
-export async function reqUser(req) {
-  const token = req.get('X-Feedback-Auth')
-  if (!token) throw new HttpError(401, 'No X-Feedback-Auth header')
-  const users = JSON.parse(Buffer.from(token, 'base64').toString())
+async function verify(users) {
   const verifiedUsers = { }
 
   for (const user in users) {
@@ -95,4 +92,18 @@ export async function reqUser(req) {
     userId: keys[0],
     secret: verifiedUsers[keys[0]],
   }
+}
+
+export async function reqUser(req) {
+  const token = req.get('X-Feedback-Auth')
+  if (!token) throw new HttpError(401, 'No X-Feedback-Auth header')
+  const users = JSON.parse(Buffer.from(token, 'base64').toString())
+
+  return verify(users)
+}
+
+export async function reqUserFromCookie(req) {
+  const { users } = JSON.parse(req.cookies.FeedbackerForum_persist)
+
+  return verify(users)
 }
