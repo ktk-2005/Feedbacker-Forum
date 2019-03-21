@@ -17,6 +17,7 @@ const SlackSignButton = () => (
     className={css('slack-sign-button')}
   >
     <img
+      src="/slack/sign_in_with_slack.png"
       alt="Sign in with Slack"
     />
   </button>
