@@ -157,7 +157,7 @@ class Create extends React.Component {
         </label>
         <label htmlFor="url">
           Git URL
-          <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
+          <input key="url" type="url" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
         </label>
         <label htmlFor="version">
           Git Hash
@@ -165,7 +165,7 @@ class Create extends React.Component {
         </label>
         <label htmlFor="name">
           Name
-          <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
+          <input key="name" type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
         </label>
         <label
           htmlFor="port"
@@ -229,6 +229,7 @@ class Create extends React.Component {
             data-tooltip-width="250px"
           >
             <input
+              key="url"
               type="url"
               name="url"
               id="url"
@@ -240,6 +241,7 @@ class Create extends React.Component {
         <label htmlFor="name">
           Name
           <input
+            key="name"
             type="text"
             id="name"
             name="name"
