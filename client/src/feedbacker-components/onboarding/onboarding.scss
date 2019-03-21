@@ -8,6 +8,10 @@
 
 .intro-modal {
   @extend %modal;
+
+  @include media-query(wide-screens) {
+    width: 400px;
+  }
 }
 
 .modal-header {
@@ -54,10 +58,14 @@
 }
 
 .skip-button {
-  @include button();
+  @include reset-button();
   margin-bottom: $spacer;
   color: $palette-medium;
   font-weight: 600;
+
+  &:hover {
+    color: $palette-dark;
+  }
 }
 
 .done-button {

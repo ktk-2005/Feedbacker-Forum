@@ -37,7 +37,11 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
   }
 
   return (
-    <div className={css('options-container')}>
+    <div
+      className={css('options-container')}
+      data-tooltip="You can edit the default options"
+      data-tooltip-width="150px"
+    >
       {
         options.map(
           (option, index) => (

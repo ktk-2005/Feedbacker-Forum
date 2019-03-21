@@ -35,12 +35,16 @@ $toggle-button-border: 1px solid $palette-light;
   &:first-of-type {
     border-bottom-left-radius: $border-radius-default;
     border-top-left-radius: $border-radius-default;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
   }
 
   &:last-of-type {
     border-right: $toggle-button-border;
     border-bottom-right-radius: $border-radius-default;
     border-top-right-radius: $border-radius-default;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0; 
   }
 }
 

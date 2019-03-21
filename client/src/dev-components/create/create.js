@@ -146,7 +146,7 @@ class Create extends React.Component {
                 <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
               ))}
             </select>
-            <Link to="/create-runner">
+            <Link to="/create-runner" tabIndex="-1">
               <button
                 className={css('new-runner-button')}
                 type="button"
@@ -191,13 +191,13 @@ class Create extends React.Component {
               <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Passphrase protected</button>
             </div>
             <div className={css('passphrase-field', { 'hidden': !this.state.usePassphrase })}>
-              <input type={this.state.passphraseInputType} id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+              <input type={this.state.passphraseInputType} id="password" name="password" placeholder="passphrase" minLength="5" maxLength="64" />
               <button className={css('show-button', { 'toggled': this.state.passphraseInputType !== 'password' })} type="button" onClick={this.toggleShowPassphrase}><InlineSVG src={eyeIcon} /></button>
             </div>
           </div>
         </label>
         <div className={css('button-container')}>
-          <Link to="/">
+          <Link to="/" tabIndex="-1">
             <button
               className={css('dashboard-button')}
               type="button"
@@ -251,7 +251,7 @@ class Create extends React.Component {
           />
         </label>
         <div className={css('button-container')}>
-          <Link to="/">
+          <Link to="/" tabIndex="-1">
             <button className={css('dashboard-button')} type="button">
               Back to dashboard
             </button>
@@ -307,6 +307,5 @@ class Create extends React.Component {
     )
   }
 }
-
 
 export default Create
