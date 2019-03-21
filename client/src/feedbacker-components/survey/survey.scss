@@ -1,13 +1,17 @@
 @import '../../scss/compulsory';
-// Atoms
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/forms';
-@import '../../scss/atoms-organisms/progress-bar';
 
-@import '../reactions/reactions';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/progress-bar';
+@import '../../scss/atoms/button-container';
+@import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
 
 .survey-container {
   padding: $baseline 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .question {
@@ -17,14 +21,14 @@
 }
 
 .options {
-  @extend .reactions;
+  @extend %toggle-container;
   button {
-    @extend .reaction;
+    @extend %toggle-button;
   }
 
   // Options cannot be toggled off
   .chosen {
-    @extend .toggled;
+    @extend %toggled;
   }
 }
 
@@ -91,9 +95,7 @@ form.answer-form {
 }
 
 .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: $spacer;
+  @extend %button-container;
 
   .answer-form + & {
     margin-top: $baseline;

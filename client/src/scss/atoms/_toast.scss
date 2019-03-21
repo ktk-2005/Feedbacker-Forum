@@ -1,0 +1,37 @@
+@import '../compulsory';
+@import '../typography';
+
+$rt-z-index: map-get($z-index-levels, 5);
+$rt-font-family: $font-default;
+$rt-color-default: $palette-white;
+$rt-color-error: $palette-error-dark;
+$rt-color-progress-default: $palette-light-medium;
+
+@import '../../../node_modules/react-toastify/scss/main';
+
+.#{$rt-namespace}__toast-container {
+  color: $palette-dark;
+}
+
+.#{$rt-namespace}__toast {
+  padding: $spacer;
+  border-radius: $border-radius-default;
+
+  &--default {
+    color: $palette-dark;
+  }
+
+  &--error {
+    color: $palette-white
+  }
+
+  &-body {
+    padding: $spacer;
+  }
+}
+
+.#{$rt-namespace}__progress-bar {
+  &--animated {
+    animation: #{$rt-namespace}__trackProgress linear 1 forwards;
+  }
+}

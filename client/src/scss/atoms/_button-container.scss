@@ -1,0 +1,11 @@
+@import '../compulsory';
+
+%button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacer;
+
+  > *:not(:first-of-type) {
+    margin-left: $spacer;
+  }
+}

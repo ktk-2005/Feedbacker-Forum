@@ -45,6 +45,9 @@ jobs:
         - pushd misc/two
         - python -m SimpleHTTPServer 10002 &
         - popd
+        - pushd misc/three
+        - python -m SimpleHTTPServer 10003 &
+        - popd
 
         # Lint server and client
         - npm --prefix client run lint:ci
@@ -79,6 +82,8 @@ jobs:
         - diff misc/one/test-injected.html build/one.html
         - curl two.localhost:8086/test.html -o build/two.html
         - diff misc/two/test-injected.html build/two.html
+        - curl three.localhost:8086/test.html -o build/three.html
+        - diff misc/three/test-injected.html build/three.html
 
     - name: Docker development
       script:
@@ -92,6 +97,9 @@ jobs:
         - pushd misc/two
         - python -m SimpleHTTPServer 10002 &
         - popd
+        - pushd misc/three
+        - python -m SimpleHTTPServer 10003 &
+        - popd
 
         # Test development Docker
         - pushd docker/development
@@ -102,6 +110,8 @@ jobs:
         - diff misc/one/test-injected.html build/one.html
         - curl dtwo.localhost:8080/test.html -o build/two.html
         - diff misc/two/test-injected.html build/two.html
+        - curl dthree.localhost:8080/test.html -o build/three.html
+        - diff misc/three/test-injected.html build/three.html
         - pushd docker/development
         - docker-compose down
         - popd
@@ -120,6 +130,9 @@ jobs:
         - pushd misc/two
         - python -m SimpleHTTPServer 10002 &
         - popd
+        - pushd misc/three
+        - python -m SimpleHTTPServer 10003 &
+        - popd
 
         # Test production Docker
         - pushd docker/production
@@ -128,6 +141,8 @@ jobs:
         - APP_SERVER_PORT=8080 bash misc/test-server.sh
         - curl done.localhost:8080/test.html -o build/one.html
         - diff misc/one/test-injected.html build/one.html
+        - curl dtwo.localhost:8080/test.html -o build/two.html
+        - diff misc/two/test-injected.html build/two.html
         - curl dtwo.localhost:8080/test.html -o build/two.html
         - diff misc/two/test-injected.html build/two.html
         - pushd docker/production

@@ -1,8 +1,8 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/modal';
+@import '../../scss/atoms/button-container';
 
 .drag-helper {
   @include z-level(1);
@@ -13,8 +13,8 @@
 }
 
 .add-button {
-  @include button();
-  background: $palette-light;
+  @extend %anchor-button;
+  background: $palette-white;
   display: block;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -25,47 +25,41 @@
   }
 }
 
-// TODO: these styles to be abstracted to organisms later
+.slack-button {
+  align-items: center;
+  display: flex;
+  background: #00c2cc;
+  justify-content: center;
+
+  span {
+    color: white;
+  }
+
+  // Visually centered vertically
+  svg {
+    fill: white;
+    position: relative;
+    height: 17px;
+    width: 17px;
+    top: 1.1px;
+    margin: 3.5px;
+  }
+}
 
 .overlay {
-  @include z-level(2);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @extend %overlay;
   background-color: rgba($palette-dark, 0.3);
-  &.first {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
 }
 
 // TODO: abstract to upper levels
 .modal {
-  @include z-level(3);
+  @extend %modal;
   @include shadow-outline();
-  outline: none; // TODO: refactor this
-  display: flex;
-  flex-flow: column;
   justify-content: space-between;
   min-width: 40vw;
-  max-width: 500px;
-  padding: $spacer * 2;
-  border-radius: $border-radius-default;
-  background-color: $palette-lighter;
 
   .button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: $spacer;
+    @extend %button-container;
   }
 
   button {

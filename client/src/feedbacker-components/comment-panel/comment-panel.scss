@@ -1,10 +1,8 @@
 @import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/forms';
-
-@import '../survey-panel/survey-panel.scss';
-@import '../comment/comment.scss';
+@import '../../scss/atoms/button';
+@import '../../scss/organisms/panel';
+@import '../../scss/organisms/forms';
 
 $panel-min-width: 300px;
 
@@ -33,25 +31,19 @@ $panel-min-width: 300px;
 }
 
 .panel-header {
-  @extend .panel-header;
+  @extend %panel-header;
   cursor: unset;
 }
 
 .panel-body {
-  @extend .panel-body;
-  display: flex;
-  flex: 1;
-  flex-flow: column;
-  justify-content: flex-start;
+  @extend %panel-body;
+  overflow-y: hidden;
 }
 
 .thread-container {
-  display: flex;
-  flex-flow: column;
+  @extend %panel-body;
   flex-grow: 1;
   flex-shrink: 1;
-  min-height: 0; // Firefox shrink bug
-  overflow-y: scroll;
   // Make sure box-shadow is not cut-off
   padding: $baseline;
   margin: 0 (-$baseline);
@@ -63,4 +55,31 @@ $panel-min-width: 300px;
   textarea {
     margin-top: $spacer;
   }
+}
+
+.close-mobile-mode {
+  @extend %icon-button;
+  @include display-and-animate();
+  @include z-level(3);
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 78px;
+  padding: $baseline $spacer;
+  box-shadow: 0 2px 5px $palette-medium;
+  border-radius: 25px;
+  background: $palette-lighter;
+  top: 5%;
+  right: 5%;
+
+  &.buttonHidden{
+    display: none;
+  }
+
+  h3 {
+    font-variant-numeric: tabular-nums;
+    margin-left: 3px;
+  }
+
 }

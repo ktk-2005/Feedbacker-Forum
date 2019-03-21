@@ -1,0 +1,92 @@
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/button-container';
+@import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/forms';
+@import '../../scss/organisms/toggle-buttons';
+
+.center-center-block {
+  @extend %center-view;
+}
+
+.dashboard-button, .new-runner-button {
+  @extend %anchor-button;
+}
+
+.create-view {
+  @extend %view-container;
+
+  h2 {
+    margin-bottom: $spacer;
+  }
+
+  @include media-query(mobile) {
+    padding: $spacer * 2;
+    box-shadow: none;
+    background: inherit;
+  }
+}
+
+.selection-tabs {
+  @extend %toggle-container;
+  button {
+    @extend %toggle-button;
+    margin-top: $baseline;
+    margin-bottom: $spacer;
+
+    &.current {
+      @extend %toggled;
+    }
+  }
+}
+
+.form-create {
+  @extend %form;
+  line-height: 2;
+
+  label {
+    margin-bottom: $spacer;
+  }
+
+  input:not([type="submit"]), select {
+    @extend %generic-input;
+  }
+
+  select {
+    background: $palette-white;
+    appearance: none;
+    margin-right: $baseline;
+  }
+  .button-container {
+    @extend %button-container;
+  }
+
+  button[type="submit"] {
+    @extend %anchor-button-accent;
+    align-self: flex-end;
+  }
+}
+
+.busy * {
+  cursor: wait;
+}
+
+.inline-button {
+  display: flex;
+  align-items: baseline;
+
+  select {
+    flex-shrink: 1;
+    flex-grow: 0;
+  }
+  a {
+    flex-shrink: 0;
+    flex-grow: 1;
+  }
+}
+
+.success-border {
+  border: 1px solid lightgreen;
+}

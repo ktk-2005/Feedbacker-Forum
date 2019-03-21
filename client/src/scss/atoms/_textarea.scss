@@ -1,0 +1,23 @@
+@import '../compulsory';
+
+%textarea {
+  padding: $spacer;
+  border-radius: $border-radius-default;
+  background: $palette-white;
+  @include shadow-outline(1px);
+  display: block;
+  min-height: 3em;
+  resize: vertical;
+  border: none;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 2px 10px $palette-shadow-default;
+  }
+
+  &:disabled {
+    background-color: $palette-medium;
+    cursor: not-allowed;
+  }
+}
+

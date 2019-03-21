@@ -1,0 +1,48 @@
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
+
+.center-center-block {
+  @extend %center-view;
+}
+
+.build-view {
+  @extend %view-container;
+  width: 100%;
+
+  h2 {
+    margin-bottom: $spacer;
+  }
+
+  pre {
+    max-height: 50vh;
+    padding: $spacer;
+    border-radius: $border-radius-default;
+    font-family: monospace;
+    font-size: $baseline * 1.5;
+    line-height: 250%;
+    overflow-wrap: break-word;
+    background-color: $palette-console;
+    color: $palette-white;
+  }
+
+}
+
+.label-text {
+  margin-right: $spacer;
+}
+
+.button-container {
+  flex-wrap: wrap;
+}
+
+.dashboard-button {
+  margin-right: $spacer;
+  margin-bottom: $spacer;
+}
+
+.container-link {
+  @extend %anchor-button-accent;
+  color: $palette-white;
+}

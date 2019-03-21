@@ -1,0 +1,67 @@
+@import '../compulsory';
+
+$checkbox-width: $baseline * 3;
+
+input[type="checkbox"], %checkbox {
+  position: absolute;
+  left: -100vw;
+
+  & + label {
+    position: relative;
+    display: block;
+    padding-left: 4 * $baseline;
+    line-height: $checkbox-width; // Same as checkbox height
+    cursor: pointer;
+
+    // Checkbox
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      width: $checkbox-width;
+      height: $checkbox-width;
+      border-radius: $border-radius-default;
+
+      background-color: $palette-light;
+      background-position: 45% center;
+      background-repeat: no-repeat;
+      background-size: $spacer;
+    }
+  }
+
+  &:disabled {
+    & + label {
+      cursor: not-allowed;
+
+      &:before {
+        background-color: $palette-medium;
+      }
+    }
+
+    // Disabled checked
+    &:checked + label {
+      &:before {
+        background-color: $palette-medium;
+        background-image: static-url('/svg/baseline-check-24px.svg');
+      }
+    }
+  }
+
+  // Checked
+  &:checked + label {
+    &:before {
+      background-color: $palette-accent;
+      background-image: static-url('/svg/baseline-check-24px.svg');
+    }
+  }
+
+  &:focus + label {
+    &:before {
+      @include shadow-outline($fade: $baseline);
+      outline: none;
+      transition: $transition-default-all;
+    }
+  }
+}

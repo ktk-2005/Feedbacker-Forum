@@ -84,3 +84,15 @@ Authentication is done using a custom `X-Feedback-Auth` header. The content of t
 ## Authorization
 
 @api /api/authorization
+
+## Slackbot
+
+@api /api/slack/oauth
+
+@api /api/slack/oauth/connect
+
+@api /api/slack/auth
+
+@api /api/slack/command/status
+
+@api /api/slack/notify/:url

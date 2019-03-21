@@ -1,0 +1,149 @@
+@import '../compulsory';
+
+@mixin reset-button() {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  outline: none;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+}
+
+@mixin button(
+  $border-radius: $border-radius-default,
+  $states: true,
+  $transition: true
+) {
+  @include reset-button();
+  border: none;
+  border-radius: $border-radius;
+  outline: none;
+  padding: $baseline;
+  @if $transition {
+    transition: $transition-default-all;
+  }
+
+  &:hover {
+    box-shadow: 0 2px $spacer $palette-shadow-default;
+    transform: translateY(-1px);
+  }
+
+  @if $states {
+    &:hover {
+      @if $transition {
+        transition: $transition-default-all;
+      }
+    }
+
+    &:focus {
+      @include shadow-outline($fade: $baseline);
+      outline: none;
+      @if $transition {
+        transition: $transition-default-all;
+      }
+    }
+
+    &:disabled {
+      background: $palette-light;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@mixin open-panel-button($bottom-padding, $anchor: false) {
+  @include button(2px);
+  @include display-and-animate();
+  position: fixed;
+  bottom: $bottom-padding;
+  left: 3%;
+  padding: $baseline $spacer;
+  box-shadow: 0 2px 5px $palette-medium;
+  color: $palette-lighter;
+  background: $palette-accent;
+  @if $anchor {
+    color: $palette-dark;
+    background: $palette-white;
+
+    &:after {
+      background: $palette-shadow-default;
+    }
+  }
+  &.hidden {
+    @include hide-and-animate();
+  }
+
+  @at-root[data-animation="true"] {
+    animation: close-pulse 0.7s 2;
+  }
+
+}
+
+
+%icon-button {
+  @include button($states: false, $transition: false);
+  background: transparent;
+  padding: 0;
+  margin-right: -5px; // As icon is not right aligned, align it correctly to right
+
+  &:hover {
+    box-shadow: none;
+    transform: none;
+  }
+
+  i {
+    display: block;
+    width: $icon-dimension-default;
+    height: $icon-dimension-default;
+    fill: $palette-medium;
+  }
+
+  &:disabled i {
+    fill: $palette-light;
+  }
+
+  &:enabled:hover i {
+    fill: $palette-dark;
+  }
+}
+
+%submit-button {
+  @include button();
+  align-self: flex-end;
+  padding: $baseline $spacer;
+  background: $palette-accent;
+  color: $palette-lighter;
+}
+
+%anchor-button {
+  @include button();
+  display: inline-block;
+  align-self: end;
+  padding: $baseline $spacer;
+  box-shadow: 0 1px 5px $palette-shadow-light;
+  text-decoration: none;
+  color: $palette-dark;
+}
+
+%accent {
+  box-shadow: 0 2px 5px $palette-shadow-default;
+  background: $palette-accent;
+  color: $palette-lighter;
+}
+
+%anchor-button-accent {
+  @extend %anchor-button;
+  @extend %accent;
+}
+

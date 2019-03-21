@@ -1,0 +1,50 @@
+@import '../compulsory';
+
+@import '../atoms/button';
+
+$toggled-inset-shadow: inset 0 1px 20px;
+$toggle-button-border: 1px solid $palette-light;
+
+%toggle-container {
+  display: flex;
+  margin-top: $spacer;
+}
+
+%toggle-button {
+  @include reset-button;
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  justify-content: center;
+  height: auto;
+  margin: 0;
+  padding: $baseline;
+  border: $toggle-button-border;
+  border-right: 0;
+  outline: none;
+  box-shadow: $toggled-inset-shadow transparent;
+  background: $palette-white;
+  overflow: visible;
+  transition: $transition-default-all;
+  transition-property: box-shadow;
+
+  &:focus {
+    background-color: rgba($palette-light, 0.3);
+  }
+
+  &:first-of-type {
+    border-bottom-left-radius: $border-radius-default;
+    border-top-left-radius: $border-radius-default;
+  }
+
+  &:last-of-type {
+    border-right: $toggle-button-border;
+    border-bottom-right-radius: $border-radius-default;
+    border-top-right-radius: $border-radius-default;
+  }
+}
+
+%toggled {
+  box-shadow: $toggled-inset-shadow $palette-light;
+  transition: $transition-default-all;
+}

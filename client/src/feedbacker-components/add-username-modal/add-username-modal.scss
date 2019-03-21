@@ -1,12 +1,9 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/forms';
-@import '../../scss/atoms-organisms/button';
-@import '../../scss/atoms-organisms/modal';
-
-@import '../comment/comment.scss';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/modal';
+@import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/forms';
 
 .username-modal {
   @extend %modal;
@@ -26,7 +23,7 @@
   padding: 0 $padding $padding;
 
   input[type="text"] {
-    @extend .comment;
+    @extend %generic-input;
     box-sizing: border-box;
     min-width: 100%;
     border: none;

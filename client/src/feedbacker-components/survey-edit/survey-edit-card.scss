@@ -1,11 +1,8 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 
-@import '../../scss/atoms-organisms/button';
-
-@import '../../scss/views/dashboard-view';
-@import '../../scss/atoms-organisms/forms';
+@import '../../scss/atoms/button';
+@import '../../scss/atoms/textarea';
+@import '../../scss/atoms/generic_input';
 
 .survey-edit-card {
   margin-bottom: $spacer;
@@ -75,6 +72,10 @@
 
   .display-area:not(:empty) {
     margin-top: $spacer;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   &.edit-commit {
@@ -105,6 +106,10 @@
 
   h4 {
     display: inline-block;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 }
 
@@ -114,6 +119,10 @@
   margin-right: $spacer-x;
   padding: -$spacer-x; // -- => +
   border-bottom: 1px solid rgba($palette-light, 0.4);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 
   &:last-of-type {
     border-bottom: none;

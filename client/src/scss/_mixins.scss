@@ -18,3 +18,12 @@
 @mixin shadow-outline($y: 0, $fade: 5px) {
   box-shadow: 0 0 0 1px $palette-white, 0 $y $fade $palette-shadow-default;
 }
+
+@mixin media-query($media) {
+  @if $media == mobile {
+    @media only screen and (max-width: $mobile-break-point) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: $mobile-break-point + 1) { @content; }
+  }
+}

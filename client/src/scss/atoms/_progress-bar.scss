@@ -1,0 +1,27 @@
+@import '../compulsory';
+
+.progress-bar {
+  position: relative;
+  height: $baseline;
+  width: 100%;
+  border-radius: $border-radius-default;
+  background: $palette-light;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    height: $baseline;
+    width: 0;
+    background: $palette-accent;
+    border-radius: $border-radius-default;
+    transition: $transition-default-all;
+  }
+}
+
+$start: 1;
+$end: 100;
+
+@for $i from $start through $end {
+  .progress-bar[data-progress-percents="#{$i}"]:before { width: $i * 1% }
+}

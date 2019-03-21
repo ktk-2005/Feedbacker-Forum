@@ -18,6 +18,7 @@ environment variables. You can specify the configuration file to use with the `-
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
 | `github` | | `GitHubConfig` | Subconfig containing GitHub App integration keys. |
 | `siteUrl` | | `String` | The base url where the installation is served **without a trailing slash**. |
+| `slack` | | `Object` | [Slack](#slack) app configuration. |
 
 ### GitHubConfig
 
@@ -31,3 +32,11 @@ These parameters can be found/configured at https://github.com/settings/apps.
 | `privateKey` | `String` | The app's private key for signing JWTs |
 | `clientId` | `String` | The app id for OAuth |
 | `clientSecret` | `String` | The app secret for OAuth |
+
+### Slack
+
+| Property | Env | Type | Description |
+| --- | --- | --- | --- |
+| `clientId` | | `String` | Id for identifying [Slack](#slack) app on Slack. |
+| `clientSecret` | | `String` | Secret for identifying [Slack](#slack) app on Slack together with `clientId`. |
+| `webhookURL` | | `String` | Webhook URL that allows [Slack](#slack) app to post on a specific Slack channel. This channel is specified in Slack api. |

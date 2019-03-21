@@ -90,13 +90,13 @@ class SubmitField extends React.Component {
           <div className={css('anonymous-check')}>
             <input
               type="checkbox"
-              id="hideName"
+              id={`hideName-${this.props.threadId}`}
               name="Anonymous"
               checked={hideName}
               onChange={() => {}}
               onClick={this.toggleHide}
             />
-            <label htmlFor="hideName" className={css('check-text')}>
+            <label htmlFor={`hideName-${this.props.threadId}`} className={css('check-text')}>
               Anonymous
             </label>
           </div>

@@ -5,9 +5,9 @@
 
 @import '../../node_modules/node.normalize.scss/normalize';
 // Import all project partials
-@import './variables';
+@import './compulsory';
 @import './typography';
-@import './mixins';
+@import './atoms/tooltip';
 
 // Set box sizing
 [data-feedback-react-root] {
@@ -20,7 +20,7 @@
 // For hiding on tagging mode active
 .tagging-mode-active {
   &, & * {
-    visibility: hidden; // TODO: smoother and more performant alternative?
+    visibility: hidden;
   }
 }
 
@@ -32,7 +32,10 @@
   left: 0;
 
   &.site-views {
-    height: 100%;
     width: 100%;
+
+    @include media-query(wide-screens) {
+      height: 100%;
+    }
   }
 }

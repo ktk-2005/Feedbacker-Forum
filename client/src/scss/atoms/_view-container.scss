@@ -1,0 +1,33 @@
+@import '../compulsory';
+
+@import '../../scss/atoms/button-container';
+@import '../../scss/atoms/button';
+
+%center-view {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+
+  > * {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+  }
+}
+
+%view-container {
+  max-width: 700px;
+  padding: $spacer * 4;
+  border-radius: $border-radius-default;
+  box-shadow: 0 2px 10px $palette-shadow-default;
+  background-color: $palette-lighter;
+
+  .button-container {
+    @extend %button-container;
+  }
+
+  .dashboard-button {
+    @extend %anchor-button;
+  }
+}

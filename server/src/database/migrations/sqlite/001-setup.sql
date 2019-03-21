@@ -8,7 +8,9 @@ CREATE TABLE users (
     time       VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL, -- Postgres CURRENT_TIMESTAMP is 29 chars long
     name       VARCHAR(255),
     secret     CHAR(30) NOT NULL,
-    blob       TEXT
+    slack_id   VARCHAR(8),
+    blob       TEXT,
+    FOREIGN KEY (slack_id) REFERENCES slack_users(id)
 );
 
 -- Table: containers
@@ -65,8 +67,8 @@ CREATE TABLE reactions (
     emoji      VARCHAR(32) NOT NULL,
     user_id    CHAR(8) NOT NULL,
     comment_id CHAR(8) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (comment_id) REFERENCES comments(id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
 
     UNIQUE (emoji, user_id, comment_id) ON CONFLICT ROLLBACK
 );
@@ -98,6 +100,13 @@ CREATE TABLE instance_runners (
   FOREIGN KEY (user_id) REFERENCES users(id),
 
   UNIQUE (tag, user_id) ON CONFLICT ROLLBACK
+);
+
+-- Table: Slack users
+CREATE TABLE slack_users (
+  id        VARCHAR(8) UNIQUE NOT NULL,
+  username  TEXT,
+  slack_user_id   VARCHAR(32)
 );
 
 -- Table: Authorization

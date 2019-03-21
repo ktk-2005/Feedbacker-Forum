@@ -1,22 +1,10 @@
-@import '../../scss/variables';
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import '../../scss/compulsory';
 @import '../../scss/animations';
-@import '../../scss/atoms-organisms/button';
+
+@import '../../scss/atoms/button';
 
 .open-button {
-  @include button(2px);
-  @include display-and-animate();
-  position: fixed;
-  bottom: 12%;
-  left: 3%;
-  padding: $baseline $spacer;
-  box-shadow: 0 2px 5px $palette-medium;
-  color: $palette-lighter;
-  background: $palette-accent;
-  &.hidden {
-    @include hide-and-animate();
-  }
+  @include open-panel-button(12%);
 }
 
 [data-animation="true"] {
