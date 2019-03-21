@@ -133,8 +133,6 @@ class ContainerCard extends React.Component {
             className={css('timestamp')}
             date={instance.time}
             format="D.MM.YYYY HH.mm"
-            data-tooltip-south
-            data-tooltip-width="100px"
           />
           <span>,&nbsp;</span>{moment(instance.time).fromNow()}
         </p>
