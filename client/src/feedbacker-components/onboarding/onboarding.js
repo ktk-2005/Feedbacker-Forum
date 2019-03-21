@@ -72,8 +72,8 @@ class Onboarding extends React.Component {
         <h3>{header}</h3>
         {
           paragraphs.map(
-            p => (
-              <p key={p.id}>{p}</p>
+            (p, index) => (
+              <p key={index}>{p}</p>
             )
           )
         }
