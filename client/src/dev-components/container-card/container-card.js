@@ -29,6 +29,7 @@ class ContainerCard extends React.Component {
     const { blob } = this.instance
     if (blob.path) {
       this.instance.url += blob.path
+      this.instance.origin += blob.path
     }
 
     this.state = {
@@ -123,9 +124,11 @@ class ContainerCard extends React.Component {
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
-        <p>
-          Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={instance.origin}>{new URL(instance.origin).hostname.split('.').reverse()[1]}</a>
-        </p>
+        {this.instance.origin ? (
+          <p>
+            Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={this.instance.origin}>{new URL(this.instance.origin).hostname.split('.').reverse()[1]}</a>
+          </p>
+        ) : null}
         <p>
           {'Created on:  '}
           <Moment
