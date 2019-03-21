@@ -169,7 +169,7 @@ class Create extends React.Component {
         <div className="github_integration">
           <p>You are logged in to GitHub as {this.state.github.status.login}.</p>
           <label htmlFor="installation">
-          Please select an installation
+            Please select an installation
             <select defaultValue="-1" name="installation" id="installation" form="form" onChange={this.selectedInstallationChanged}>
               <option value="-1" disabled hidden>Select...</option>
               {this.state.github.installations.map(installation => (
@@ -183,7 +183,7 @@ class Create extends React.Component {
             </select>
           </label>
           <label htmlFor="repository">
-          Please select a repository
+            Please select a repository
             <select defaultValue="-1" name="repository" id="repository" form="form">
               <option value="-1" disabled hidden>Select...</option>
               {this.state.githubRepos.map(repo => (
