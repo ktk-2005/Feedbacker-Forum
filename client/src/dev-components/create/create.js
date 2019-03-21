@@ -177,7 +177,7 @@ class Create extends React.Component {
                   key={installation.id}
                   value={installation.id}
                 >
-                  {installation.id}
+                  {installation.account.login}
                 </option>
               ))}
             </select>
