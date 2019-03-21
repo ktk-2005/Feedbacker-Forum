@@ -91,10 +91,18 @@ class Create extends React.Component {
 
     this.setState({ busy: true })
 
+    // check if the a repo has been chosen directly from github
+    let url
+    if (this.state.githubPanel) {
+      url = inputValue('repository')
+    } else {
+      url = inputValue('url')
+    }
+
     try {
       const json = await apiCall('POST', '/instances/new', {
         envs: {
-          GIT_CLONE_URL: inputValue('url'),
+          GIT_CLONE_URL: url,
           GIT_VERSION_HASH: inputValue('version'),
         },
         type: inputValue('application'),
@@ -122,18 +130,9 @@ class Create extends React.Component {
 
     this.setState({ busy: true })
 
-    // check if the a repo has been chosen directly from github
-    const githubUrl = inputValue('repository')
-
-    let url = inputValue('url')
-
-    if (githubUrl && githubUrl.length > 0) {
-      url = githubUrl
-    }
-
     try {
       const json = await apiCall('POST', '/instances/new', {
-        url,
+        url: inputValue('url'),
         name: inputValue('name').toLowerCase(),
         type: 'site',
       })
