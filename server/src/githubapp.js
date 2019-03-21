@@ -42,7 +42,6 @@ function getAccessTokenForUser(userId) {
   if (accessTokenStore.hasOwnProperty(userId)) {
     return accessTokenStore[userId]
   }
-  console.log(accessTokenStore)
   throw new HttpError(400, `${userId} must authenticate with GitHub first.`)
 }
 
@@ -53,19 +52,25 @@ function getOctokitForUser(userId) {
   })
 }
 
-async function getInstallationsWithAccess(userId) {
+export async function getLoginStatus(userId) {
+  const octokit = getOctokitForUser(userId)
+  return (await octokit.users.getAuthenticated({})).data
+}
+
+export async function getInstallationsWithAccess(userId) {
   const octokit = getOctokitForUser(userId)
   const result = await octokit.apps.listInstallationsForAuthenticatedUser()
   return result.data.installations
 }
 
-async function getReposOfInstallation(installationId, userId) {
+export async function getReposOfInstallation(installationId, userId) {
   const octokit = getOctokitForUser(userId)
   const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
     installation_id: installationId,
   })
-  return result
+  return result.data.repositories
 }
+
 
 async function getInstallationIdForOwnerAndRepo(owner, repoName) {
   const jwt = githubApp.getSignedJsonWebToken()

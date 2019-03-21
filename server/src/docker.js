@@ -114,7 +114,7 @@ export async function createNewContainer(envs, type, name, port, userId, hashedP
   // Copy envs so we can modify them
   const envsCopy = envs
 
-  if (type === 'node-runner' && githubapp.isInitialized()) {
+  if (type === 'node-runner' && isGithubAppInitialized()) {
     const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.*?)(\.git)?$/
     const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
 

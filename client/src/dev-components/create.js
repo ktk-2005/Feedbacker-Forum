@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import * as R from 'ramda'
 // Helpers
 import classNames from 'classnames/bind'
 import { shadowDocument } from '../shadowDomHelper'
@@ -21,13 +22,22 @@ class Create extends React.Component {
     this.siteForm = this.siteForm.bind(this)
     this.activateContainerForm = this.activateContainerForm.bind(this)
     this.activateSiteForm = this.activateSiteForm.bind(this)
+    this.activateGithubPanel = this.activateGithubPanel.bind(this)
+    this.deactivateGithubPanel = this.deactivateGithubPanel.bind(this)
+    this.selectedInstallationChanged = this.selectedInstallationChanged.bind(this)
 
     this.state = {
       instanceRunners: [],
       redirectContainer: false,
       containerForm: true,
+      githubPanel: false,
       busy: false,
+      github: null,
+      githubBusy: true,
+      githubRepos: [],
     }
+
+    this.fetchGithubLoginInfo()
   }
 
   componentDidMount() {
@@ -44,12 +54,31 @@ class Create extends React.Component {
     this.setState({ instanceRunners: response })
   }
 
+  async fetchGithubLoginInfo() {
+    try {
+      const status = await apiCall('GET', '/github/status')
+      this.setState({ github: status })
+    } catch (error) {
+      // not logged in to github
+    } finally {
+      this.setState({ githubBusy: false })
+    }
+  }
+
   activateContainerForm() {
     this.setState({ containerForm: true })
   }
 
   activateSiteForm() {
     this.setState({ containerForm: false })
+  }
+
+  activateGithubPanel() {
+    this.setState({ githubPanel: true })
+  }
+
+  deactivateGithubPanel() {
+    this.setState({ githubPanel: false })
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
@@ -93,9 +122,18 @@ class Create extends React.Component {
 
     this.setState({ busy: true })
 
+    // check if the a repo has been chosen directly from github
+    const githubUrl = inputValue('repository')
+
+    let url = inputValue('url')
+
+    if (githubUrl && githubUrl.length > 0) {
+      url = githubUrl
+    }
+
     try {
       const json = await apiCall('POST', '/instances/new', {
-        url: inputValue('url'),
+        url,
         name: inputValue('name').toLowerCase(),
         type: 'site',
       })
@@ -105,6 +143,67 @@ class Create extends React.Component {
     } catch (error) {
       console.error('Failed to create container', error)
       this.setState({ busy: false })
+    }
+  }
+
+  async githubLogin() {
+    const { url } = await apiCall('GET', '/github/oauth2login')
+    window.location.assign(url)
+  }
+
+  async selectedInstallationChanged() {
+    const shadow = shadowDocument()
+    const selectElement = shadow.getElementById('installation')
+    const selectedValue = selectElement.value
+    const { repos } = await apiCall('GET', `/github/repos/${selectedValue}`)
+    this.setState({ githubRepos: repos })
+  }
+
+  githubPanel() {
+    if (this.state.githubBusy) {
+      return (<p>Loading GitHub login information...</p>)
+    }
+
+    if (this.state.github) {
+      return (
+        <div className="github_integration">
+          <p>You are logged in to GitHub as {this.state.github.status.login}.</p>
+          <div className="installation_chooser">
+            <label htmlFor="installation">
+            Please select an installation
+              <select defaultValue="-1" name="installation" id="installation" form="form" onChange={this.selectedInstallationChanged}>
+                <option value="-1" disabled hidden>Select...</option>
+                {this.state.github.installations.map(installation => (
+                  <option
+                    key={installation.id}
+                    value={installation.id}
+                  >
+                    {installation.id}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="repo_chooser">
+            <label htmlFor="repository">
+            Please select a repository
+              <select defaultValue="-1" name="repository" id="repository" form="form">
+                <option value="-1" disabled hidden>Select...</option>
+                {this.state.githubRepos.map(repo => (
+                  <option
+                    key={repo.id}
+                    value={repo.clone_url}
+                  >
+                    {repo.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </div>
+      )
+    } else {
+      return (<p>To access private repositories, <button type="button" onClick={this.githubLogin}>Login with GitHub</button></p>)
     }
   }
 
@@ -135,10 +234,31 @@ class Create extends React.Component {
             </Link>
           </div>
         </label>
-        <label htmlFor="url">
-          Git URL
-          <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
-        </label>
+
+        <div className={css('selection-tabs')}>
+          <button
+            type="button"
+            onClick={this.deactivateGithubPanel}
+            className={css({ 'current': !this.state.githubPanel })}
+          >
+            From a public repository
+          </button>
+          <button
+            type="button"
+            onClick={this.activateGithubPanel}
+            className={css({ 'current': this.state.githubPanel })}
+          >
+            From GitHub
+          </button>
+        </div>
+        {this.state.githubPanel ? this.githubPanel() : (
+          <label htmlFor="url">
+            Git URL
+            <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" onChange={this.checkGitUrl} required />
+          </label>
+        )}
+
+
         <label htmlFor="version">
           Git Hash
           <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" required />

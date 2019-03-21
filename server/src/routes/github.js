@@ -2,7 +2,7 @@ import express from 'express'
 import * as R from 'ramda'
 import { catchErrors } from '../handlers'
 import { reqUser } from './helpers'
-import { getOAuthRedirectUrl, oAuthCallback } from '../githubapp'
+import { getOAuthRedirectUrl, oAuthCallback, getLoginStatus, getInstallationsWithAccess, getReposOfInstallation } from '../githubapp'
 
 const router = express.Router()
 
@@ -21,7 +21,24 @@ router.get('/oauth2callback', catchErrors(async (req, res) => {
   // NOTE: USER NOT VERIFIED
   await oAuthCallback(req.originalUrl, R.keys(users)[0])
 
-  res.redirect('/')
+  res.redirect('/create')
 }))
+
+router.get('/status', catchErrors(async (req, res) => {
+  const { userId } = await reqUser(req)
+  res.json({
+    status: await getLoginStatus(userId),
+    installations: await getInstallationsWithAccess(userId),
+  })
+}))
+
+router.get('/repos/:installationId', catchErrors(async (req, res) => {
+  const { userId } = await reqUser(req)
+  const { installationId } = req.params
+  res.json({
+    repos: await getReposOfInstallation(installationId, userId),
+  })
+}))
+
 
 module.exports = router
