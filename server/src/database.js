@@ -72,8 +72,8 @@ export async function getSlackUser(userId) {
   return db.query('SELECT username, slack_user_id FROM users INNER JOIN slack_users ON users.slack_id = slack_users.id WHERE users.id = ?', [userId])
 }
 
-export async function isLinkedToSlack(username, slackUserId) {
-  return db.query('SELECT * FROM slack_users WHERE slack_user_id=? AND username=?', [slackUserId, username])
+export async function isLinkedToSlack(slackUserId) {
+  return db.query('SELECT * FROM slack_users WHERE slack_user_id=?', [slackUserId])
 }
 
 export async function getQuestionsWithAnswers(container) {
