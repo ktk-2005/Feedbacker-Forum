@@ -48,13 +48,6 @@ const clickElementOpen = (step) => {
     .click()
 }
 
-const makeContent = (header, paragraph) => (
-  <article>
-    <h3>{header}</h3>
-    <p>{paragraph}</p>
-  </article>
-)
-
 class Onboarding extends React.Component {
   constructor(props) {
     super(props)
@@ -70,6 +63,22 @@ class Onboarding extends React.Component {
     this.doStepActions = this.doStepActions.bind(this)
     this.modalClosed = this.modalClosed.bind(this)
     this.keyTraverse = this.keyTraverse.bind(this)
+    this.makeContent = this.makeContent.bind(this)
+  }
+
+  makeContent(header, paragraphs) {
+    return (
+      <>
+        <h3>{header}</h3>
+        {
+          paragraphs.map(
+            p => (
+              <p key={p.id}>{p}</p>
+            )
+          )
+        }
+      </>
+    )
   }
 
   step() {
@@ -78,75 +87,161 @@ class Onboarding extends React.Component {
 
     if (step === 1) {
       return (
-        makeContent(
+        this.makeContent(
           'Welcome!',
-          `
-            Welcome to use the Feedbacker Forum app.
-            This tutorial will guide you through the basic functions of the app.
-          `
+          dev
+            ? [
+              `
+                Welcome to use the Feedbacker Forum app! Our goal is to make giving
+                and receiving feedback effortless and fun.
+              `,
+              `
+                With the support of both surveys and free-form commenting, you will
+                be able to get different kinds of opinions from those testing your
+                live UI.
+              `,
+              `
+                In this tutorial we will guide you through the basic functions
+                of the app.
+              `,
+            ]
+            : [
+              `
+                Welcome to use the Feedbacker Forum app! Our goal is to make giving
+                and receiving feedback effortless and fun.
+              `,
+              `
+                With the support of both surveys and free form commenting, you can
+                express your opinions in a variety of ways.
+              `,
+              `
+                In this tutorial we will guide you through the basic functions of
+                the app.
+              `,
+            ]
         )
       )
     } else if (step === 2) {
       return (
-        makeContent(
+        this.makeContent(
           'Surveys',
-          `
-            This button opens the survey panel.
-          `
+          dev
+            ? [
+              `
+                If you have specific questions you want answers to you can create a
+                survey. This can be done in the survey panel which can be opened by
+                clicking this button.
+              `,
+            ]
+            : [`
+                If the author (the owner of the instance) has created a survey, you
+                can view it in the survey panel which can be opened by
+                clicking this button.
+            `,
+            ]
         )
       )
     } else if (step === 3) {
       return (
-        makeContent(
+        this.makeContent(
           'Surveys',
           dev
-            ? `
-            This is the survey panel where you can create surveys and
-            where the users can answer them.
-            `
-            : `
-            This is the survey panel where you can answer questions.
-            `
+            ? [
+              `
+                This is the survey panel where you can create surveys. You
+                can either add regular questions, binary choice questions or descriptive
+                text to your surveys. The survey questions are reorderable. Here you can
+                also view the answers you've received.
+              `,
+            ]
+            : [
+              `
+                This is the survey panel were you can answer the surveys. Surveys can
+                contain different types of questions the author wants your answer to.
+                You can also edit your answers.
+              `,
+              `
+                Tip: The survey panel is draggable so
+                if it's blocking your view you can also move it around instead of closing it.
+              `,
+            ]
         )
       )
     } else if (step === 4) {
       return (
-        makeContent(
+        this.makeContent(
           'Commenting',
-          `
-            This button opens the comment panel.
-          `
+          dev
+            ? [
+              `
+                Those testing your UI can also leave free-form comments. This can be
+                done in the comment panel which opens by clicking this button.
+              `,
+            ]
+            : [
+              `
+                You can also express your opinions by posting free-form comments.
+                This can be done in the commenting panel which opens by clicking
+                this button.
+              `,
+            ]
         )
       )
     } else if (step === 5) {
       return (
-        makeContent(
+        this.makeContent(
           'Commenting',
           dev
-            ? `
-            Here you can view the comments and participate in the conversation.
-            `
-            : `
-            You can leave free form comments and view other people's comments here.
-            `
+            ? [
+              `
+                Here you can view the comments you've received. You can also participate
+                in the conversation and your comments will have a tag that indicates
+                that you are the owner the instance. You can also react to other
+                people's comments.
+              `,
+            ]
+            : [
+              `
+                This is the comment panel where you can post the free-form comments.
+                You can reply and react to other people's comments and the author can
+                also participate in the conversation.
+              `,
+            ]
         )
       )
     } else if (step === 6) {
       return (
-        makeContent(
+        this.makeContent(
           'Tagging elements',
-          `
-            You can tag and comment on a specific element by clicking this button.
-          `
+          [
+            `
+              To make clear which element you're referring to, you can tag it into
+              the comment. This can be done by clicking this tagging button and
+              then choosing the element you want to tag.
+            `,
+            `
+              Comments with an element tagged to them have a similar icon in the comment.
+              You can view the tagged element by clicking this icon.
+            `,
+          ]
         )
       )
     } else if (step === 7) {
       return (
-        makeContent(
+        this.makeContent(
           'Done',
-          `
-            Now you're ready to start giving feedback!
-          `
+          dev
+            ? [
+              `
+                Now you're ready to start receiving feedback on your beautiful creations!
+                Have fun!
+              `,
+            ]
+            : [
+              `
+                Now you're ready to start giving feedback! Have fun!
+              `,
+            ]
         )
       )
     }

@@ -8,6 +8,10 @@
 
 .intro-modal {
   @extend %modal;
+
+  @include media-query(wide-screens) {
+    width: 400px;
+  }
 }
 
 .modal-header {
