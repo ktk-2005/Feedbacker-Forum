@@ -19,13 +19,26 @@ function AuthorizationView() {
   }
 
   return (
-    <div className={css('auth-container')}>
-      <div className={css('dialog')}>
+    <div className={css('center-center-block')}>
+      <div className={css('login-view')}>
         <h1>Authorization</h1>
-        <p>You are not authorized to access the container <code>{subdomain}</code></p>
+        <p>
+          This instance <code>{subdomain}</code> is protected.
+          You can access it with the passphrase provided by the author of this
+          instance (this is most likely the person who shared the link with you).
+        </p>
         <form className={css('form')}>
-          <input type="password" placeholder="Password" id="password" />
-          <input type="submit" onClick={submitAuthTry} />
+          <input
+            type="password"
+            placeholder="passphrase"
+            id="password"
+            className={css('input')}
+          />
+          <input
+            type="submit"
+            onClick={submitAuthTry}
+            className={css('submit-button')}
+          />
         </form>
       </div>
     </div>

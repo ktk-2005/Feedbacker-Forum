@@ -14,7 +14,7 @@ const View404 = () => (
       <p>
         Looks like there is nothing here, go back to dashboard.
       </p>
-      <Link to="/">
+      <Link to="/" tabIndex="-1">
         <button
           className={css('dashboard-button')}
           type="button"

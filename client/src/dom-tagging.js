@@ -158,8 +158,21 @@ const includeDomTaggingCss = () => {
   const accentColor = '#00c0cb'
   document.head.innerHTML += `
   <style>
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 191, 201, 0.8);
+      }
+      70% {
+        box-shadow: 0 0 7px 10px rgba(0, 191, 201, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 191, 201, 0);
+      }
+    }
+
     .dom-tagging-element-highlighted {
-      box-shadow: 0 0 1px 1px ${ accentColor }, 0 0 2px 3px white;
+      box-shadow: 0 0 0 0 rgba(0, 191, 201, 0.5);
+      animation: pulse 1.75s infinite;
     }
   </style>
   `

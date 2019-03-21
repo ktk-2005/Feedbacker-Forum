@@ -3,6 +3,7 @@
 @import '../../scss/atoms/button';
 @import '../../scss/atoms/textarea';
 @import '../../scss/atoms/generic_input';
+@import '../../scss/organisms/toggle-buttons';
 
 .survey-edit-card {
   margin-bottom: $spacer;
@@ -51,22 +52,20 @@
 
   input {
     @extend %generic-input;
+    text-align: center;
   }
 
   .options-container {
+    @extend %toggle-container;
     display: flex;
     margin-top: -$baseline;
 
     input {
+      @extend %toggle-button;
       display: inline-flex;
       width: 50%;
       margin-top: 0;
-      margin-right: $baseline;
       flex-grow: 1;
-
-      &:last-of-type {
-        margin-right: 0;
-      }
     }
   }
 
