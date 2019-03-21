@@ -128,7 +128,7 @@ class ContainerCard extends React.Component {
           </p>
         ) : null}
         <p>
-          <span>Created on:  </span>
+          <span>Created on: </span>
           <Moment
             className={css('timestamp')}
             date={instance.time}
@@ -136,7 +136,7 @@ class ContainerCard extends React.Component {
             data-tooltip-south
             data-tooltip-width="100px"
           />
-          <span>,&nbsp;&nbsp;</span>{moment(instance.time).fromNow()}
+          <span>,&nbsp;</span>{moment(instance.time).fromNow()}
         </p>
         <div className={css('button-container')}>
           {this.props.slackAuth
