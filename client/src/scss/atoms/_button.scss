@@ -48,7 +48,7 @@
     }
 
     &:focus {
-      @include shadow-outline($fade: $baseline);
+      @include shadow-outline($fade: $spacer);
       outline: none;
       @if $transition {
         transition: $transition-default-all;
@@ -60,6 +60,7 @@
       cursor: not-allowed;
     }
   }
+
 }
 
 @mixin open-panel-button($bottom-padding, $anchor: false) {
@@ -144,10 +145,13 @@
   box-shadow: 0 2px 5px $palette-shadow-default;
   background: $palette-accent;
   color: $palette-lighter;
+
+  &:focus {
+    @include shadow-outline($fade: $spacer);
+  }
 }
 
 %anchor-button-accent {
   @extend %anchor-button;
   @extend %accent;
 }
-
