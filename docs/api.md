@@ -431,11 +431,11 @@ Returns an url for the Oauth2 redirect.
 
 GitHub redirects the user to this url after performing authentication.
 
-### [GET /api/github/status](../server/src/routes/github.js#L31)
+### [GET /api/github/status](../server/src/routes/github.js#L30)
 
 Retrieves the registered GitHub login state of the user.
 
-### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L52)
+### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L51)
 
 Retrieves user-accessable repositories by installation id. A list of
 available ids is container in the /api/github/status response.
