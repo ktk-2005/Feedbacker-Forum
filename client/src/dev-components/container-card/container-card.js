@@ -29,6 +29,7 @@ class ContainerCard extends React.Component {
     const { blob } = this.instance
     if (blob.path) {
       this.instance.url += blob.path
+      this.instance.origin += blob.path
     }
 
     this.state = {
@@ -115,27 +116,25 @@ class ContainerCard extends React.Component {
               type="button"
               disabled={this.isOperationPending()}
               onClick={this.removeContainer}
-              data-tooltip="Remove"
-              data-tooltip-width="100px"
             >
               <InlineSVG src={CloseIcon} />
             </button>
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
+        {this.instance.origin ? (
+          <p>
+            Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={this.instance.origin}>{new URL(this.instance.origin).hostname.split('.').reverse()[1]}</a>
+          </p>
+        ) : null}
         <p>
-          Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={instance.origin}>{new URL(instance.origin).hostname.split('.').reverse()[1]}</a>
-        </p>
-        <p>
-          {'Created on:  '}
+          <span>Created on: </span>
           <Moment
             className={css('timestamp')}
             date={instance.time}
             format="D.MM.YYYY HH.mm"
-            data-tooltip={moment(instance.time).fromNow()}
-            data-tooltip-south
-            data-tooltip-width="100px"
           />
+          <span>,&nbsp;</span>{moment(instance.time).fromNow()}
         </p>
         <div className={css('button-container')}>
           {this.props.slackAuth
