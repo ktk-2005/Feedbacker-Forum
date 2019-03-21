@@ -48,13 +48,35 @@
     & a:only-child {
       margin-left: auto;
     }
+
+    button {
+      @extend %icon-button;
+    }
+
+    a {
+      @extend %anchor-button;
+
+      &.accent {
+        @extend %accent;
+      }
+    }
   }
 
-  a {
-    @extend %anchor-button;
+  .source-link {
+    margin-left: auto;
+  }
 
-    &.accent {
-      @extend %accent;
-    }
+}
+
+.slack-share i {
+  $dimension: 20px;
+  height: $dimension;
+  width: $dimension;
+  margin-right: $spacer;
+
+  // Visually centered vertically
+  &svg {
+    position: relative;
+    top: -1px;
   }
 }

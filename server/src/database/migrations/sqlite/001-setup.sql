@@ -8,16 +8,20 @@ CREATE TABLE users (
     time       VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL, -- Postgres CURRENT_TIMESTAMP is 29 chars long
     name       VARCHAR(255),
     secret     CHAR(30) NOT NULL,
-    blob       TEXT
+    slack_id   VARCHAR(8),
+    blob       TEXT,
+    FOREIGN KEY (slack_id) REFERENCES slack_users(id)
 );
 
 -- Table: containers
 CREATE TABLE containers (
   id            VARCHAR(64) UNIQUE NOT NULL,
+  time          VARCHAR(30) DEFAULT (CURRENT_TIMESTAMP) NOT NULL, -- Postgres CURRENT_TIMESTAMP is 29 chars long
   subdomain     VARCHAR(32) UNIQUE NOT NULL,
   url           VARCHAR(255) NOT NULL,
   user_id       CHAR(8) NOT NULL,
   runner        VARCHAR(128) NOT NULL,
+  origin        TEXT,
   blob          TEXT,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -98,6 +102,13 @@ CREATE TABLE instance_runners (
   FOREIGN KEY (user_id) REFERENCES users(id),
 
   UNIQUE (tag, user_id) ON CONFLICT ROLLBACK
+);
+
+-- Table: Slack users
+CREATE TABLE slack_users (
+  id        VARCHAR(8) UNIQUE NOT NULL,
+  username  TEXT,
+  slack_user_id   VARCHAR(32)
 );
 
 -- Table: Authorization

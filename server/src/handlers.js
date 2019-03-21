@@ -75,9 +75,7 @@ export function prodErr(err, req, res, next) {
   logger.error(err)
   res.status(err.status || 500)
   res.json({
-    errors: {
-      message: err.message,
-      error: { },
-    },
+    message: err.message,
+    status: err.status,
   })
 }

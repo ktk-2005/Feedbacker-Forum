@@ -2,11 +2,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
+import Moment from 'react-moment'
+import moment from 'moment'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
+import { shareSlack } from '../../globals'
 // Styles
 import styles from './container-card.scss'
+import '../../scss/atoms/_toast.scss'
 // Icons
 import DeleteIcon from '../../assets/svg/baseline-delete-24px.svg'
 import StartIcon from '../../assets/svg/baseline-cloud_queue-24px.svg'
@@ -18,12 +22,13 @@ class ContainerCard extends React.Component {
   constructor(props) {
     super(props)
     this.instance = this.props.instance
+    this.instance.url = `//${this.instance.subdomain}.${window.location.host}`
     this.instance.name = this.instance.subdomain
 
-    this.instanceUrl = `//${this.instance.subdomain}.${window.location.host}`
     const { blob } = this.instance
     if (blob.path) {
-      this.instanceUrl += blob.path
+      this.instance.url += blob.path
+      this.instance.origin += blob.path
     }
 
     this.state = {
@@ -31,6 +36,7 @@ class ContainerCard extends React.Component {
       startPending: false,
       stopPending: false,
       removePending: false,
+      disableSlack: false,
     }
 
     this.startContainer = this.startContainer.bind(this)
@@ -109,22 +115,51 @@ class ContainerCard extends React.Component {
               type="button"
               disabled={this.isOperationPending()}
               onClick={this.removeContainer}
-              data-tooltip="Remove"
-              data-tooltip-width="100px"
             >
               <InlineSVG src={DeleteIcon} />
             </button>
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
+        {this.instance.origin ? (
+          <p>
+            Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={this.instance.origin}>{new URL(this.instance.origin).hostname.split('.').reverse()[1]}</a>
+          </p>
+        ) : null}
+        <p>
+          <span>Created on: </span>
+          <Moment
+            className={css('timestamp')}
+            date={instance.time}
+            format="D.MM.YYYY HH.mm"
+          />
+          <span>,&nbsp;</span>{moment(instance.time).fromNow()}
+        </p>
         <div className={css('button-container')}>
+          {this.props.slackAuth
+            ? (
+              <button
+                type="button"
+                className={css('slack-share')}
+                disabled={this.state.disableSlack}
+                onClick={() => shareSlack(
+                  this,
+                  `${this.instance.name}.${window.location.host}`,
+                  apiCall
+                )}
+                data-tooltip="Share in Slack"
+                data-tooltip-width="130px"
+              >
+                {<InlineSVG src={SlackIcon} />}
+              </button>)
+            : null}
           {instance.runner !== 'site' ? (
             <Link to={`/logs/${instance.subdomain}`}>
               Open instance logs
             </Link>
           ) : null}
           <a
-            href={this.instanceUrl}
+            href={this.instance.url}
             target="_blank"
             rel="noreferrer noopener"
             className={css('accent')}

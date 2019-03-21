@@ -149,6 +149,7 @@ export async function createNewContainer(envs, type, name, port, userId, hashedP
     type,
     blob,
     url: `http://localhost:${hostPort}`,
+    origin: envs.GIT_CLONE_URL,
   }
 
   logger.info(`Container created and started. Id: ${containerData.id}`)

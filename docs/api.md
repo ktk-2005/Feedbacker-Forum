@@ -261,7 +261,7 @@ Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L84)
+### [POST /api/instances/new](../server/src/routes/instances.js#L83)
 
 Create a new instance.
 
@@ -386,3 +386,37 @@ Example request:
 
 Returns 200 OK and an empty JSON object if the authorization was succesful.
 Returns 401 if the authorization was not succesful.
+
+## Slackbot
+
+### [GET /api/slack/oauth](../server/src/routes/slackbot.js#L24)
+
+Authentication with Slack sign in.
+This path should only be called by Slack oauth after pressing 'Sign in with Slack'-button.
+
+Returns error if authentication failed or redirects back to dashboard otherwise
+
+### [POST /api/slack/oauth/connect](../server/src/routes/slackbot.js#L49)
+
+For letting our slack authentication know who user clicked 'Sign in with Slack'-button
+
+Returns redirect to Slack's oauth.
+
+### [GET /api/slack/auth](../server/src/routes/slackbot.js#L66)
+
+For checking if user has connected to Slack
+
+Returns json containing boolean indicating whether connected or not.
+Contains slack username and user id if connected as well.
+
+### [POST /api/slack/command/status](../server/src/routes/slackbot.js#L82)
+
+Slack slash status command, should only be called from Slack.
+
+Returns status check if user has connected Slack account to Feedbacker forum.
+
+### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L97)
+
+Used for sending slack notifications by webhook when wanting to share published instance.
+
+Returns json object with 'success' boolean field indicating whether notification was send or not.

@@ -5,20 +5,24 @@ a {
   text-decoration: none;
   color: $palette-accent;
 
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background-color: $palette-accent;
-    transition: $transition-default-all;
-    opacity: 0;
+  &:not([tabindex="-1"]) {
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: $palette-accent;
+      transition: $transition-default-all;
+      opacity: 0;
+    }
+
+    &:hover:after {
+      width: 100%;
+      opacity: 1;
+
+    }
   }
 
-  &:hover:after {
-    width: 100%;
-    opacity: 1;
-  }
 }

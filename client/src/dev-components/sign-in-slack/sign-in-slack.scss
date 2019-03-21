@@ -1,0 +1,17 @@
+@import '../../scss/compulsory';
+
+@import '../../scss/atoms/button';
+
+.slack-sign-button {
+  @include reset-button;
+
+  display: flex;
+  position: relative;
+  top: 1px;
+  margin-right: $spacer;
+
+  img {
+    height: 31px;
+    width: auto;
+  }
+}

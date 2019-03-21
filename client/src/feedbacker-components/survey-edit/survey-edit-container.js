@@ -1,13 +1,19 @@
 import React from 'react'
 import * as R from 'ramda'
 import { SortableContainer, arrayMove } from 'react-sortable-hoc'
-import classNames from 'classnames/bind'
+import InlineSVG from 'svg-inline-react'
 import ReactModal from 'react-modal'
-
-import SurveyEditCard from './survey-edit-card'
+// Helpers
+import classNames from 'classnames/bind'
 import { shadowModalRoot } from '../../shadowDomHelper'
-import styles from './survey-edit-container.scss'
 import apiCall from '../../api-call'
+import { shareSlack } from '../../globals'
+// Components
+import SurveyEditCard from './survey-edit-card'
+// Styles
+import styles from './survey-edit-container.scss'
+// Icons
+import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
 
@@ -110,6 +116,8 @@ export default class SurveyEditContainer extends React.Component {
       openId: null,
       pendingDelete: null,
       edit: { },
+      disableSlack: false,
+      slackAuth: false,
     }
 
     this.interval = null
@@ -117,7 +125,8 @@ export default class SurveyEditContainer extends React.Component {
 
   async componentDidMount() {
     const questions = await apiCall('GET', '/questions')
-    this.setState({ questions })
+    const { slackAuth } = await apiCall('GET', '/slack/auth')
+    this.setState({ questions, slackAuth })
   }
 
   componentDidUpdate() {
@@ -342,6 +351,16 @@ export default class SurveyEditContainer extends React.Component {
               >
                 Add explanation
               </button>
+              {questions.length > 0 && this.state.slackAuth ? (
+                <button
+                  type="button"
+                  className={css('add-button', 'slack-button')}
+                  disabled={this.state.disableSlack}
+                  onClick={() => shareSlack(this, window.location.host, apiCall)}
+                >
+                  {<InlineSVG src={SlackIcon} />} <span>Share in Slack</span>
+                </button>
+              ) : null}
             </div>
           ) : null
         }
