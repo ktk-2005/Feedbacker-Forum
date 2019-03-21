@@ -242,7 +242,7 @@ class Create extends React.Component {
           Name
           <input
             key="name"
-            typ="text"
+            type="text"
             id="name"
             name="name"
             placeholder="new-feature"
