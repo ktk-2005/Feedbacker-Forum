@@ -52,9 +52,11 @@
 | Column | Usage |
 | --- | --- |
 | id | Short random id for the container |
+| time | Timestamp from when container was created |
 | subdomain | User friendly subdomain where the container is found under |
 | url | Internal target URL of the running container instance |
 | user\_id | User that has created or owns the container |
+| origin | Either the source url to external site or the repo from where the code was pulled |
 | blob | Misc blob data |
 
 ### Migrations

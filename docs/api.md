@@ -261,7 +261,7 @@ Retrieve all instances in the database.
 
 Returns 200 OK and a JSON array of all instances or 500 ISE if an error occurred.
 
-### [POST /api/instances/new](../server/src/routes/instances.js#L84)
+### [POST /api/instances/new](../server/src/routes/instances.js#L83)
 
 Create a new instance.
 
@@ -435,7 +435,7 @@ GitHub redirects the user to this url after performing authentication.
 
 Retrieves the registered GitHub login state of the user.
 
-### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L42)
+### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L52)
 
 Retrieves user-accessable repositories by installation id. A list of
 available ids is container in the /api/github/status response.

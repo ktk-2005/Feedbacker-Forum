@@ -40,19 +40,24 @@
     & a:only-child {
       margin-left: auto;
     }
-  }
 
-  button {
-    @extend %icon-button;
-  }
+    button {
+      @extend %icon-button;
+    }
 
-  a {
-    @extend %anchor-button;
+    a {
+      @extend %anchor-button;
 
-    &.accent {
-      @extend %accent;
+      &.accent {
+        @extend %accent;
+      }
     }
   }
+
+  .source-link {
+    margin-left: auto;
+  }
+
 }
 
 .slack-share i {
