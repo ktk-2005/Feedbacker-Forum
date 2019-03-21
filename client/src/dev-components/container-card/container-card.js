@@ -2,6 +2,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import InlineSVG from 'svg-inline-react'
+import Moment from 'react-moment'
+import moment from 'moment'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
@@ -121,6 +123,20 @@ class ContainerCard extends React.Component {
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
+        <p>
+          Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={instance.origin}>{new URL(instance.origin).hostname.split('.').reverse()[1]}</a>
+        </p>
+        <p>
+          {'Created on:  '}
+          <Moment
+            className={css('timestamp')}
+            date={instance.time}
+            format="D.MM.YYYY HH.mm"
+            data-tooltip={moment(instance.time).fromNow()}
+            data-tooltip-south
+            data-tooltip-width="100px"
+          />
+        </p>
         <div className={css('button-container')}>
           {this.props.slackAuth
             ? (
