@@ -16,6 +16,8 @@ router.get('/oauth2login', catchErrors(async (req, res) => {
   res.json({ url })
 }))
 
+// @api GET /api/github/oauth2callback
+// GitHub redirects the user to this url after performing authentication.
 router.get('/oauth2callback', catchErrors(async (req, res) => {
   const { users } = JSON.parse(req.cookies.FeedbackerForum_persist)
   // NOTE: USER NOT VERIFIED
@@ -24,6 +26,8 @@ router.get('/oauth2callback', catchErrors(async (req, res) => {
   res.redirect('/create')
 }))
 
+// @api GET /api/github/status
+// Retrieves the registered GitHub login state of the user.
 router.get('/status', catchErrors(async (req, res) => {
   const { userId } = await reqUser(req)
   res.json({
@@ -32,6 +36,9 @@ router.get('/status', catchErrors(async (req, res) => {
   })
 }))
 
+// @api GET /api/github/repos/:installationId
+// Retrieves user-accessable repositories by installation id. A list of
+// available ids is container in the /api/github/status response.
 router.get('/repos/:installationId', catchErrors(async (req, res) => {
   const { userId } = await reqUser(req)
   const { installationId } = req.params

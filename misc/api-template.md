@@ -96,3 +96,13 @@ Authentication is done using a custom `X-Feedback-Auth` header. The content of t
 @api /api/slack/command/status
 
 @api /api/slack/notify/:url
+
+## GitHub integration
+
+@api /api/github/oauth2login
+
+@api /api/github/oauth2callback
+
+@api /api/github/status
+
+@api /api/github/repos/:installationId
