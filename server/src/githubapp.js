@@ -53,8 +53,13 @@ function getOctokitForUser(userId) {
 }
 
 export async function getLoginStatus(userId) {
-  const octokit = getOctokitForUser(userId)
-  return (await octokit.users.getAuthenticated({})).data
+  try {
+    const octokit = getOctokitForUser(userId)
+    return (await octokit.users.getAuthenticated({})).data
+  } catch (error) {
+    // user is not logged in
+    return null
+  }
 }
 
 export async function getInstallationsWithAccess(userId) {

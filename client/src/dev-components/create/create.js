@@ -164,42 +164,38 @@ class Create extends React.Component {
       return (<p>Loading GitHub login information...</p>)
     }
 
-    if (this.state.github) {
+    if (this.state.github && this.state.github.status) {
       return (
         <div className="github_integration">
           <p>You are logged in to GitHub as {this.state.github.status.login}.</p>
-          <div className="installation_chooser">
-            <label htmlFor="installation">
-            Please select an installation
-              <select defaultValue="-1" name="installation" id="installation" form="form" onChange={this.selectedInstallationChanged}>
-                <option value="-1" disabled hidden>Select...</option>
-                {this.state.github.installations.map(installation => (
-                  <option
-                    key={installation.id}
-                    value={installation.id}
-                  >
-                    {installation.id}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div className="repo_chooser">
-            <label htmlFor="repository">
-            Please select a repository
-              <select defaultValue="-1" name="repository" id="repository" form="form">
-                <option value="-1" disabled hidden>Select...</option>
-                {this.state.githubRepos.map(repo => (
-                  <option
-                    key={repo.id}
-                    value={repo.clone_url}
-                  >
-                    {repo.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          <label htmlFor="installation">
+          Please select an installation
+            <select defaultValue="-1" name="installation" id="installation" form="form" onChange={this.selectedInstallationChanged}>
+              <option value="-1" disabled hidden>Select...</option>
+              {this.state.github.installations.map(installation => (
+                <option
+                  key={installation.id}
+                  value={installation.id}
+                >
+                  {installation.id}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="repository">
+          Please select a repository
+            <select defaultValue="-1" name="repository" id="repository" form="form">
+              <option value="-1" disabled hidden>Select...</option>
+              {this.state.githubRepos.map(repo => (
+                <option
+                  key={repo.id}
+                  value={repo.clone_url}
+                >
+                  {repo.name}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       )
     } else {

@@ -30,6 +30,16 @@ router.get('/oauth2callback', catchErrors(async (req, res) => {
 // Retrieves the registered GitHub login state of the user.
 router.get('/status', catchErrors(async (req, res) => {
   const { userId } = await reqUser(req)
+  const status = await getLoginStatus(userId)
+  if (status) {
+    const installations = await getInstallationsWithAccess(userId)
+    res.json({
+      status,
+      installations,
+    })
+  } else {
+    res.json({ status })
+  }
   res.json({
     status: await getLoginStatus(userId),
     installations: await getInstallationsWithAccess(userId),
