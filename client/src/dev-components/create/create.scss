@@ -52,6 +52,7 @@
 
   input:not([type="submit"]), select {
     @extend %generic-input;
+
   }
 
   select {
@@ -73,6 +74,27 @@
   cursor: wait;
 }
 
+.passphrase-field {
+  align-items: center;
+  display: flex;
+
+  & input {
+    margin: 0;
+  }
+
+  .show-button {
+    @extend %icon-button;
+    margin-top: 7px;
+    padding-bottom: 4px; // pad to make same height as input
+    position: absolute;
+    right: $spacer;
+
+    &.toggled i {
+      fill: $palette-dark;
+    }
+  }
+}
+
 .inline-button {
   display: flex;
   align-items: baseline;
@@ -85,4 +107,8 @@
     flex-shrink: 0;
     flex-grow: 1;
   }
+}
+
+.hidden {
+  display: none;
 }
