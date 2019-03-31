@@ -37,7 +37,7 @@ function queueRetryAuth() {
 }
 
 // API call wrapper, use this to communicate with the API server. This wrapper
-// adds `Authentication` and `X-Feedback-Host` headers to provide context for the server.
+// adds `X-Feedback-Host` header to provide context for the server.
 // By default this function returns a JSON output and throws for HTTP responses 400-599.
 //
 // method: HTTP method such as GET, POST, DELETE etc.
@@ -48,19 +48,17 @@ function queueRetryAuth() {
 //                  automatic error handling
 //   - noUser: If set don't attach user header
 //   - noRetryAuth: Do not attempt to retry authentication
+//   - noToast: Do not display error toast
 //
 // Example usage:
 //   const { id } = await apiCall('POST', '/comments', { text: 'My comment!' })
 export default async function apiCall(method, endpoint, body = null, opts = { }) {
   const url = apiUrl + endpoint
   const users = opts.noUser ? {} : await waitForUsers()
-  const authToken = btoa(JSON.stringify(users))
 
   const args = {
-    headers: {
-      'X-Feedback-Host': window.location.hostname,
-      'X-Feedback-Auth': authToken,
-    },
+    headers: { },
+    credentials: 'include',
     method,
   }
 
@@ -97,7 +95,7 @@ export default async function apiCall(method, endpoint, body = null, opts = { })
   if (response.status >= 400 && response.status <= 599) {
     const message = `API error ${response.status}: ${method} ${endpoint}  ${json.message}`
     console.error(message)
-    toast.error(json.message)
+    if (!opts.noToast) toast.error(json.message)
     if (json.stack) console.error(json.stack)
     throw new Error(message)
   } else {

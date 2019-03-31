@@ -12,7 +12,6 @@ package resolver
 
 import (
 	"errors"
-	"strings"
 	"net/url"
 	"net/http"
 	"time"
@@ -58,10 +57,10 @@ func Initialize(config *Config) error {
 
 	if config.DbDriver == "sqlite3" {
 		dbQueryString = "SELECT subdomain, url, blob FROM containers WHERE subdomain = ?"
-		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = ? AND user_id = ?"
+		dbAuthString = "SELECT token FROM container_auth WHERE token = ?"
 	} else if config.DbDriver == "postgres" {
 		dbQueryString = "SELECT subdomain, url, blob FROM containers WHERE subdomain = $1"
-		dbAuthString = "SELECT subdomain, user_id FROM container_auth WHERE subdomain = $1 AND user_id = $2"
+		dbAuthString = "SELECT token FROM container_auth WHERE token = $1"
 	} else {
 		log.Fatalf("Unsupported database driver '%s'", config.DbDriver)
 	}
@@ -122,8 +121,7 @@ type resolveRequest struct {
 }
 
 type authRequest struct {
-	container *Container // < Container to authenticate to
-	userToAuth string    // < User to authenticate
+	authToken string     // < Authentication token
 	response chan<- bool // < List of authenticated users
 }
 
@@ -163,36 +161,21 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 	}
 
 	// Collect users to authenticate from cookies
-	usersToAuth := make(map[string]bool)
+	authTokens := make(map[string]bool)
 	for _, cookie := range cookies {
-		if !strings.HasPrefix(cookie.Name, "FeedbackerForum_") {
+		if cookie.Name != "FeedbackProxyAuth" {
 			continue
 		}
 
-		jsonString, err := url.QueryUnescape(cookie.Value)
-		if err != nil {
-			continue
-		}
-
-		var blob persistBlob
-		err = json.Unmarshal([]byte(jsonString), &blob)
-		if err != nil {
-			continue
-		}
-
-		for user, _ := range blob.Users {
-			if _, ok := usersToAuth[user]; ok {
-				continue
-			}
-			if len(usersToAuth) < 1000 {
-				usersToAuth[user] = true
-			}
+		token := cookie.Value
+		if len(authTokens) < 1000 {
+			authTokens[token] = true
 		}
 	}
 
 	// Check if the user is in the auth cache
-	for user, _ := range usersToAuth {
-		_, ok := container.authCache.Get(user)
+	for token, _ := range authTokens {
+		_, ok := container.authCache.Get(token)
 		if ok {
 			return nil
 		}
@@ -202,18 +185,17 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 	anyAuth := false
 
 	// Authenticate the user hashes
-	for user, _ := range usersToAuth {
+	for token, _ := range authTokens {
 		databaseAuthRequests <- authRequest{
-			container: container,
-			userToAuth: user,
+			authToken: token,
 			response: response,
 		}
 
 		ok := <-response
 		if ok {
-			log.Printf("Authenticated '%s' to '%s'", user, container.Subdomain)
+			log.Printf("Authenticated '%s' to '%s'", token, container.Subdomain)
 			anyAuth = true
-			container.authCache.Add(user, dummySetValue)
+			container.authCache.Add(token, dummySetValue)
 		}
 	}
 
@@ -285,17 +267,14 @@ func fetchContainerFromDatabase(id string) (*Container, error) {
 	return container, nil
 }
 
-func authenticateUserFromDatabase(subdomain string, user string) error {
-	row := db.QueryRow(dbAuthString, subdomain, user)
-	subdomainString := ""
-	userString := ""
-	err := row.Scan(&subdomainString, &userString)
+func authenticateUserFromDatabase(authToken string) error {
+	row := db.QueryRow(dbAuthString, authToken)
+	tokenString := ""
+	err := row.Scan(&tokenString)
 	if err != nil {
 		return err
-	} else if subdomainString != subdomain {
-		return fmt.Errorf("Database subdomain '%s' not match query '%s'", subdomainString, subdomain)
-	} else if userString != user {
-		return fmt.Errorf("Database user '%s' not match query '%s'", userString, user)
+	} else if tokenString != authToken {
+		return fmt.Errorf("Database token '%s' not match query '%s'", tokenString, authToken)
 	} else {
 		return nil
 	}
@@ -321,7 +300,7 @@ func databaseWorker() {
 			req.response <- container
 
 		case authReq := <-databaseAuthRequests:
-			err := authenticateUserFromDatabase(authReq.container.Subdomain, authReq.userToAuth)
+			err := authenticateUserFromDatabase(authReq.authToken)
 			authReq.response <- (err == nil)
 
 		}

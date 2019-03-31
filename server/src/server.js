@@ -4,16 +4,17 @@ import morgan from 'morgan'
 import fs from 'fs'
 import { promisify } from 'util'
 import childProcess from 'child_process'
-import cors from 'cors'
 import proxy from 'express-http-proxy'
 import path from 'path'
 import delay from 'express-delay'
+import cookieParser from 'cookie-parser'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'
 import apiRoute from './routes/routes'
 import { notFound, devErr, prodErr } from './handlers'
 import listEndpoints from './list-endpoints'
+import cors from './cors'
 
 const writeFile = promisify(fs.writeFile)
 
@@ -54,11 +55,9 @@ export function startServer() {
     app.use(express.static(path.join(__dirname, '../../client/build')))
   }
 
-  app.use(cors({
-    exposedHeaders: [
-      'X-Feedback-Retry-Auth',
-    ],
-  }))
+  app.use(cookieParser(config.cookieSecret))
+
+  app.options('*', cors())
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
