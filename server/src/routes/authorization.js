@@ -24,7 +24,7 @@ router.post('/retry', catchErrors(async (req, res) => {
   const { userId } = await reqUser(req)
   const { subdomain } = req.body
 
-  const authToken = await getAuthorizationToken(userId, subdomain)
+  const authToken = await getAuthorizationToken(subdomain, userId)
   if (!authToken) {
     throw new HttpError(401, 'User is not authenticated')
   }

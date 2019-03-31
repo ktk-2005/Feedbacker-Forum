@@ -261,8 +261,8 @@ export async function authenticateUserForContainerAccess(subdomain, userId, toke
 }
 
 export async function getAuthorizationToken(subdomain, userId) {
-  const rows = db.query('SELECT token FROM container_auth WHERE subdomain=? AND user_id=?', [subdomain, userId])
-  return rows.length > 0 ? rows[0] : null
+  const rows = await db.query('SELECT token FROM container_auth WHERE subdomain=? AND user_id=?', [subdomain, userId])
+  return rows.length > 0 ? rows[0].token : null
 }
 
 // External site
