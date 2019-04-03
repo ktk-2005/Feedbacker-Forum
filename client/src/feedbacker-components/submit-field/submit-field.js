@@ -36,6 +36,7 @@ class SubmitField extends React.Component {
     this.setState(prevState => ({
       hideName: !prevState.hideName,
     }))
+    this.props.toggleHideForCaller()
   }
 
   passSubmit(event) {
