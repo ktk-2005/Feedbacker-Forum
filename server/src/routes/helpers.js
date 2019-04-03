@@ -68,7 +68,12 @@ export async function reqContainer(req) {
 }
 
 export async function reqUser(req) {
-  const token = req.signedCookies.FeedbackAuth
+  let token = req.signedCookies.FeedbackAuth
+
+  if (args.testAuth || args.testApi) {
+    token = req.get('X-Test-Auth')
+  }
+
   if (!token) throw new HttpError(401, 'No authorization cookie')
   const users = JSON.parse(Buffer.from(token, 'base64').toString())
   const verifiedUsers = { }

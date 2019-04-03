@@ -2,6 +2,7 @@ import express from 'express'
 import { addUser, addUsername } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { HttpError } from '../errors'
+import { args } from '../globals'
 
 import { catchErrors } from '../handlers'
 
@@ -48,9 +49,13 @@ router.post('/', catchErrors(async (req, res) => {
       signed: true,
     })
 
+    // Return the secret if running API tests as managing
+    // cookie based authentication is a pain.
+    const returnSecret = args.testApi || args.testAuth
+
     res.json({
       id,
-      secret: 'x',
+      secret: returnSecret ? secret : 'x',
     })
   })
 }))

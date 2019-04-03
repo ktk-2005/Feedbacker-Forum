@@ -37,7 +37,7 @@ function parseArguments() {
 
   parser.addArgument(
     ['--testApi'], {
-      help: 'Run API tests an exit',
+      help: 'Run API tests and exit',
       action: 'storeTrue',
     }
   )
@@ -74,6 +74,13 @@ function parseArguments() {
     ['--delay'], {
       help: 'Milliseconds to delay server responses',
       type: 'int',
+    }
+  )
+
+  parser.addArgument(
+    ['--testAuth'], {
+      help: 'Allow authentication via X-Test-Auth header',
+      action: 'storeTrue',
     }
   )
 
