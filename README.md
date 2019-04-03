@@ -135,7 +135,8 @@ The frontend test suite is done with [jest][jest] and [enzyme][enzyme]. The back
 
 ## Credits
 
-This project was started during the course CS-C2130 Software Project at [Aalto University][aalto] supported by the company [Sievo][sievo].
+This project was started during the course CS-C2130 Software Project at [Aalto University][aalto].
+The project was supported by [Sievo][sievo].
 The project was created by
 - [@bqqbarbhg](https://github.com/bqqbarbhg)
 - [@tobbe-j](https://github.com/tobbe-j)
@@ -151,6 +152,7 @@ The project was created by
 The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for more details.
 
 ## Screenshots
+
 ---
 
 <a name="dashboard-image"/>
@@ -172,6 +174,6 @@ The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for
 [jest]: https://jestjs.io/
 [enzyme]: https://github.com/airbnb/enzyme
 [mocha]: https://mochajs.org/
-[aalto]: https://aalto.fi
+[aalto]: https://www.aalto.fi/department-of-computer-science
 [sievo]: https://sievo.com
 [MIT]: https://opensource.org/licenses/MIT
