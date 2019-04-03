@@ -116,6 +116,11 @@ function overrideConfigFromEnv() {
     config.useTestData = useTestData !== '0'
   }
 
+  const useTestAuth = process.env.USE_TEST_AUTH
+  if (useTestAuth) {
+    args.testAuth = useTestAuth !== '0'
+  }
+
   const databaseUrl = process.env.DATABASE_URL
   if (databaseUrl) {
     config.databaseUrl = databaseUrl
