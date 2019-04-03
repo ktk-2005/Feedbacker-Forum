@@ -55,7 +55,7 @@ jobs:
         - npm --prefix server run lint:ci
 
         # Lint and fmt Go Proxy
-        - find . -name '*.go' | xargs gofmt -l | wc -l | xargs test 0 -eq && echo 'Run go fmt proxy/...' && false
+        - find proxy -name '*.go' | xargs gofmt -l | wc -l | xargs test 0 -eq && echo 'Run go fmt proxy/...' && false
         - golint -set_exit_status proxy/...
 
         # Build client development and production
