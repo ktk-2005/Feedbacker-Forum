@@ -1,6 +1,8 @@
 # Feedbacker-Forum &middot; [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
- // Motivation from product vision //
+Feedbacker-Forum is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return. This link can be shared to peers that the developer craves feedback from.
+The developer can then create surveys and discuss the live UI with peers.
+Feedbacker-Forum also supports creating link for existing external websites.
 
 ## Setting up
 
@@ -81,7 +83,15 @@ npm run test:api
 
 The frontend test suite is done with [jest][jest] and [enzyme][enzyme]. The backend tests are currently only for the api-endpoints and are run with [mocha][mocha].
 
-## Getting started
+## Credits
+
+This project was started during the course CS-C2130 Software Project at [Aalto University][aalto] for the company [Sievo][sievo].
+
+## License
+
+The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for more details.
+
+## Getting started // Needs to be moved/removed
 
 For further documentation see [docs/getting-started.md](docs/getting-started.md).
 
@@ -94,3 +104,6 @@ For further documentation see [docs/getting-started.md](docs/getting-started.md)
 [jest]: https://jestjs.io/
 [enzyme]: https://github.com/airbnb/enzyme
 [mocha]: https://mochajs.org/
+[aalto]: https://aalto.fi
+[sievo]: https://sievo.com
+[MIT]: https://opensource.org/licenses/MIT
