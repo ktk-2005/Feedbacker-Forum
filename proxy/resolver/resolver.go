@@ -16,7 +16,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hashicorp/golang-lru"
-	_ "github.com/lib/pq" // Database driver
+	_ "github.com/lib/pq"           // Database driver
 	_ "github.com/mattn/go-sqlite3" // Database driver
 	"log"
 	"net/http"
