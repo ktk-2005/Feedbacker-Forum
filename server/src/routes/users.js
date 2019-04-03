@@ -44,7 +44,7 @@ router.post('/', catchErrors(async (req, res) => {
     const newToken = Buffer.from(JSON.stringify(users), 'ascii').toString('base64')
 
     res.cookie('FeedbackAuth', newToken, {
-      maxAge: 1000*60*60*24*365*200,
+      maxAge: 1000 * 60 * 60 * 24 * 365 * 200,
       httpOnly: true,
       signed: true,
     })

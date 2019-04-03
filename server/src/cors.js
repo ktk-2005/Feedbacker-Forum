@@ -2,7 +2,7 @@ import cors from 'cors'
 import { config } from './globals'
 
 let corsMiddleware = null
-export default function() {
+export default function () {
   if (!corsMiddleware) {
     corsMiddleware = cors({
       exposedHeaders: [

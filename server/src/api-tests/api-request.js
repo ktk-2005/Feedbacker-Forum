@@ -56,7 +56,7 @@ export default function apiRequest(method, path, body, optsArg) {
     body,
     headers: {
       'X-Test-Auth': `${authToken}`,
-      'Origin': `${container}.localhost`,
+      Origin: `${container}.localhost`,
     },
     ...(opts.request || {}),
   }

@@ -10,7 +10,6 @@ const css = classNames.bind(styles)
 const subdomain = window.location.host.split('.')[0]
 
 class AuthorizationView extends React.Component {
-
   constructor(props) {
     super(props)
     this.submitAuthTry = this.submitAuthTry.bind(this)
@@ -67,7 +66,6 @@ class AuthorizationView extends React.Component {
       </div>
     )
   }
-
 }
 
 export default AuthorizationView

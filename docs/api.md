@@ -187,7 +187,7 @@ Returns empty JSON if deletion was succesful
 
 ## Users
 
-### [POST /api/users](../server/src/routes/users.js#L24)
+### [POST /api/users](../server/src/routes/users.js#L25)
 
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
@@ -208,7 +208,7 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-### [PUT /api/users](../server/src/routes/users.js#L45)
+### [PUT /api/users](../server/src/routes/users.js#L69)
 
 Change username of existing user.
 The user is specified using the X-Feedback-Auth header as with other endpoints
@@ -219,7 +219,7 @@ and the body should contain the new name eg.
 }
 ```
 
-### [GET /api/users/role](../server/src/routes/users.js#L75)
+### [GET /api/users/role](../server/src/routes/users.js#L99)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
@@ -350,7 +350,7 @@ in the `status` field.
 
 ## Authorization
 
-### [POST /api/authorization](../server/src/routes/authorization.js#L18)
+### [POST /api/authorization](../server/src/routes/authorization.js#L49)
 
 Authorize user for accessing the specified container.
 Required fields in the body: [password, subdomain]
@@ -362,8 +362,36 @@ Example request:
 }
 ```
 
-Returns 200 OK and an empty JSON object if the authorization was succesful.
-Returns 401 if the authorization was not succesful.
+Example response body
+```json
+{
+  "authToken": "0123456789abcdef"
+}
+```
+
+Returns 200 OK with auth token if the authorization was succesful.
+Returns 403 if the authorization was not succesful.
+
+### [POST /api/authorization/retry](../server/src/routes/authorization.js#L23)
+
+Retrieve an existing authentication if one exists.
+Required fields in the body: [subdomain]
+Example request:
+```json
+{
+  "subdomain": "hello-world-abcd23"
+}
+```
+
+Example response body
+```json
+{
+  "authToken": "0123456789abcdef"
+}
+```
+
+Returns 200 OK with auth token if the authorization was succesful.
+Returns 401 if the user is not authorized yet.
 
 ## Slackbot
 

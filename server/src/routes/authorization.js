@@ -7,7 +7,7 @@ import { getAuthorizationToken } from '../database'
 
 const router = express.Router()
 
-// @api POST /api/authorization/existing
+// @api POST /api/authorization/retry
 // Retrieve an existing authentication if one exists.
 // Required fields in the body: [subdomain]
 // Example request: @json {

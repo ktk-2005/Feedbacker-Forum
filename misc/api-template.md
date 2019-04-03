@@ -63,6 +63,8 @@
 
 @api /api/authorization
 
+@api /api/authorization/retry
+
 ## Slackbot
 
 @api /api/slack/oauth

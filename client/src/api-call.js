@@ -54,7 +54,9 @@ function queueRetryAuth() {
 //   const { id } = await apiCall('POST', '/comments', { text: 'My comment!' })
 export default async function apiCall(method, endpoint, body = null, opts = { }) {
   const url = apiUrl + endpoint
-  const users = opts.noUser ? {} : await waitForUsers()
+  if (!opts.noUser) {
+    await waitForUsers()
+  }
 
   const args = {
     headers: { },
