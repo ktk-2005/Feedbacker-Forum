@@ -2,9 +2,13 @@
 
 [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Feedbacker-Forum is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return. This link can be shared to peers that the developer craves feedback from.
+Feedbacker-Forum is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return.
+
+ This link can be shared to peers that the developer craves feedback from.
 The developer can then create surveys, recieve answers and discuss the live UI with peers.
 Feedbacker-Forum also supports creating "feedback-able" links for existing external websites.
+
+You can request access to try out Feedbacker-forum from [Feedbacker.site](https://feedbacker.site/about/)
 
 ![Feedbacker example site](docs/images/user-survey-other.png)
 
@@ -20,7 +24,8 @@ Feedbacker-Forum also supports creating "feedback-able" links for existing exter
   * [Running tests](#Running-tests)
 * [Credits](#Credits)
 * [License](#License)
-
+* [Screenshots](#Screenshots)
+  * [Demo](#demo)
 
 
 ## Setting up
@@ -153,6 +158,8 @@ The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for
 
 ## Screenshots
 
+#### Demo
+Demo video [Feedbacker-Forum](https://www.youtube.com/watch?v=bkxmN-j-ae0)
 ---
 
 <a name="dashboard-image"/>
@@ -164,6 +171,10 @@ The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for
 <a name="feedbacker-image"/>
 
 ![Feedbacker view](docs/images/user-survey-mocked.png)
+
+---
+
+[Go to top](#Table-of-contents)
 
 [node]: https://nodejs.org/en/
 [golang]: https://golang.org/
