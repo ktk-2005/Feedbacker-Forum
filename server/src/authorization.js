@@ -19,7 +19,7 @@ export async function authorizeUserForContainer(userId, password, subdomain) {
     /* ***************** */
     const passwordIsCorrect = await bcrypt.compare(password, containerPassword)
     if (passwordIsCorrect) {
-      return await attempt(async () => {
+      return attempt(async () => {
         const authToken = uuid(32)
         await authenticateUserForContainerAccess(subdomain, userId, authToken)
         return authToken
