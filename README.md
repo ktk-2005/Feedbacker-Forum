@@ -143,10 +143,15 @@ The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for
 
 ## Screenshots
 ---
+
 <a name="dashboard-image"/>
+
 ![Dashboard view](docs/images/deployment.png)
+
 ---
+
 <a name="feedbacker-image"/>
+
 ![Feedbacker view](docs/images/user-survey-mocked.png)
 
 [node]: https://nodejs.org/en/
