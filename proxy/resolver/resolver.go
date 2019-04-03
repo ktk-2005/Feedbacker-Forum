@@ -11,25 +11,25 @@ package resolver
 //   container, err := resolver.Resolve(subdomain)
 
 import (
-	"errors"
-	"strings"
-	"net/url"
-	"net/http"
-	"time"
-	"log"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
-	_ "github.com/mattn/go-sqlite3"
-	_ "github.com/lib/pq"
 	"github.com/hashicorp/golang-lru"
+	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
+	"log"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
 )
 
 // -- Public API
 
 // Configuration
 type Config struct {
-	DbDriver string        // < Database engine, eg. sqlite3 or Postgres
+	DbDriver        string // < Database engine, eg. sqlite3 or Postgres
 	DbConnectString string // < Driver specific connection string
 }
 
@@ -43,8 +43,8 @@ type Container struct {
 	Protected bool     // < Does the container reqiure authentication
 
 	// Internal
-	err        error     // < If not `nil`, then the container is not reachable
-	expiry     time.Time // < Cached data is valid until this time
+	err       error      // < If not `nil`, then the container is not reachable
+	expiry    time.Time  // < Cached data is valid until this time
 	authCache *lru.Cache // < Cached authenticated users
 }
 
@@ -88,8 +88,8 @@ func Resolve(subdomain string, cookies []*http.Cookie) (*Container, error) {
 
 	if container == nil {
 		response := make(chan *Container)
-		resolveRequests <- resolveRequest {
-			id: subdomain,
+		resolveRequests <- resolveRequest{
+			id:       subdomain,
 			response: response,
 		}
 		container = <-response
@@ -110,21 +110,22 @@ func Resolve(subdomain string, cookies []*http.Cookie) (*Container, error) {
 // -- Implementation
 
 // Singleton value to use as map value for sets
-type dummySetType struct {}
+type dummySetType struct{}
+
 var dummySetValue = &dummySetType{}
 
 // An in-flight container resolve request. The resolved container is written
 // through response. Sort of like a "promise" of Container. Always returns a
 // pointer to a container, but it may have `err != nil`
 type resolveRequest struct {
-	id string                  // < Request input
+	id       string            // < Request input
 	response chan<- *Container // < Found container
 }
 
 type authRequest struct {
-	container *Container // < Container to authenticate to
-	userToAuth string    // < User to authenticate
-	response chan<- bool // < List of authenticated users
+	container  *Container  // < Container to authenticate to
+	userToAuth string      // < User to authenticate
+	response   chan<- bool // < List of authenticated users
 }
 
 // -- Container cache
@@ -204,9 +205,9 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 	// Authenticate the user hashes
 	for user, _ := range usersToAuth {
 		databaseAuthRequests <- authRequest{
-			container: container,
+			container:  container,
 			userToAuth: user,
-			response: response,
+			response:   response,
 		}
 
 		ok := <-response
@@ -277,8 +278,8 @@ func fetchContainerFromDatabase(id string) (*Container, error) {
 		Subdomain: id,
 		TargetUrl: url,
 		Protected: protected,
-		err: nil,
-		expiry: time.Now().Add(30 * time.Minute),
+		err:       nil,
+		expiry:    time.Now().Add(30 * time.Minute),
 		authCache: cache,
 	}
 
@@ -314,7 +315,7 @@ func databaseWorker() {
 					TargetUrl: nil,
 					Subdomain: req.id,
 
-					err: err,
+					err:    err,
 					expiry: time.Now().Add(time.Minute),
 				}
 			}
@@ -355,9 +356,9 @@ func resolveWorker() {
 					pending[id] = append(reqs, request)
 				} else {
 					log.Printf("Resolving container '%v'", id)
-					pending[id] = []resolveRequest{ request }
+					pending[id] = []resolveRequest{request}
 					databaseRequests <- resolveRequest{
-						id: id,
+						id:       id,
 						response: databaseResponse,
 					}
 				}
@@ -389,4 +390,3 @@ func resolveWorker() {
 		}
 	}
 }
-

@@ -9,27 +9,27 @@ package server
 import (
 	"bytes"
 	"fmt"
+	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
 	"io"
 	"io/ioutil"
 	"log"
-	"strings"
-	"net/url"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"regexp"
-	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
 	"sort"
+	"strings"
 )
 
 // -- Public API
 
 // Configuration
 type Config struct {
-	ProxyPort int       // < Port to bind the proxy to
-	ErrorPort int       // < Internal port to use as error proxy target
+	ProxyPort    int    // < Port to bind the proxy to
+	ErrorPort    int    // < Internal port to use as error proxy target
 	InjectScript string // < Script source to inject to html files
-	ErrorScript string  // < Script to load on error (invalid container)
-	AuthScript string   // < Script to load to authenticate
+	ErrorScript  string // < Script to load on error (invalid container)
+	AuthScript   string // < Script to load to authenticate
 }
 
 // Start serving the proxy
@@ -39,8 +39,8 @@ func StartServing(config *Config) error {
 
 	doctypeInjectString = "<!DOCTYPE html>"
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
-	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
-	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString);
+	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString)
 
 	var err error
 	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/error", errPort))
@@ -56,7 +56,7 @@ func StartServing(config *Config) error {
 	authHtml = fmt.Sprintf(htmlTemplate, config.AuthScript)
 
 	proxy := httputil.ReverseProxy{
-		Director: redirectRequest,
+		Director:       redirectRequest,
 		ModifyResponse: modifyResponse,
 	}
 
@@ -116,7 +116,7 @@ func redirectRequest(req *http.Request) {
 	host := req.Host
 	tokenLen := strings.IndexByte(host, '.')
 
-	if (tokenLen > 0) {
+	if tokenLen > 0 {
 		token := host[0:tokenLen]
 
 		// Try to find and redirect request
@@ -148,7 +148,7 @@ func redirectRequest(req *http.Request) {
 
 type injectFragment struct {
 	Position int
-	Text string
+	Text     string
 }
 
 func modifyResponse(res *http.Response) error {
@@ -196,7 +196,7 @@ func modifyResponse(res *http.Response) error {
 		if match == nil {
 			injectFragments = append(injectFragments, injectFragment{
 				Position: 0,
-				Text: doctypeInjectString,
+				Text:     doctypeInjectString,
 			})
 		}
 
@@ -207,14 +207,14 @@ func modifyResponse(res *http.Response) error {
 			if match != nil {
 				injectFragments = append(injectFragments, injectFragment{
 					Position: match[0],
-					Text: viewportInjectString,
+					Text:     viewportInjectString,
 				})
 			} else {
 				match = viewportAltInjectPositionRegex.FindStringIndex(body)
 				if match != nil {
 					injectFragments = append(injectFragments, injectFragment{
 						Position: match[0],
-						Text: viewportInjectStringWithHead,
+						Text:     viewportInjectStringWithHead,
 					})
 				}
 			}
@@ -225,7 +225,7 @@ func modifyResponse(res *http.Response) error {
 		if match != nil {
 			injectFragments = append(injectFragments, injectFragment{
 				Position: match[0],
-				Text: scriptInjectString,
+				Text:     scriptInjectString,
 			})
 		}
 
@@ -234,7 +234,7 @@ func modifyResponse(res *http.Response) error {
 				return injectFragments[i].Position < injectFragments[j].Position
 			})
 
-			parts := make([]io.Reader, 0, len(injectFragments) * 2 + 1)
+			parts := make([]io.Reader, 0, len(injectFragments)*2+1)
 			prev := 0
 			for _, fragment := range injectFragments {
 				pos := fragment.Position
@@ -265,8 +265,9 @@ func modifyResponse(res *http.Response) error {
 // -- Error Handler
 // HTTP server that failed container requests are redirected to
 
-type ErrorHandler struct { }
-func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
+type ErrorHandler struct{}
+
+func (*ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if r.URL.Path == "/auth" {
 		io.WriteString(w, authHtml)
