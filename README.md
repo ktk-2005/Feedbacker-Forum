@@ -137,14 +137,14 @@ The frontend test suite is done with [jest][jest] and [enzyme][enzyme]. The back
 
 This project was started during the course CS-C2130 Software Project at [Aalto University][aalto] supported by the company [Sievo][sievo].
 The project was created by
-- @bqqbarbhg
-- @tobbe-j
-- @joonalillfors
-- @quvide
-- @sofiatengvall
-- @Kallemakela
-- @HenrikHelenius
-- @shahruzmannan
+- [@bqqbarbhg](https://github.com/bqqbarbhg)
+- [@tobbe-j](https://github.com/tobbe-j)
+- [@joonalillfors](https://github.com/joonalillfors)
+- [@quvide](https://github.com/quvide)
+- [@sofiatengvall](https://github.com/sofiatengvall)
+- [@Kallemakela](https://github.com/Kallemakela)
+- [@HenrikHelenius](https://github.com/HenrikHelenius)
+- [@shahruzmannan](https://github.com/shahruzmannan)
 
 ## License
 
