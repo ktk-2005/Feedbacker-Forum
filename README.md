@@ -135,7 +135,16 @@ The frontend test suite is done with [jest][jest] and [enzyme][enzyme]. The back
 
 ## Credits
 
-This project was started during the course CS-C2130 Software Project at [Aalto University][aalto] for the company [Sievo][sievo].
+This project was started during the course CS-C2130 Software Project at [Aalto University][aalto] supported by the company [Sievo][sievo].
+The project was created by
+- @bqqbarbhg
+- @tobbe-j
+- @joonalillfors
+- @quvide
+- @sofiatengvall
+- @Kallemakela
+- @HenrikHelenius
+- @shahruzmannan
 
 ## License
 
