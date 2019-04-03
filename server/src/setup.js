@@ -131,7 +131,7 @@ function overrideConfigFromEnv() {
     config.dockerUrl = dockerUrl
   }
 
-  const cookieSecret = process.env.COOKIE_SECRET
+  const cookieSecret = process.env.APP_COOKIE_SECRET
   if (cookieSecret) {
     config.cookieSecret = cookieSecret
   }
