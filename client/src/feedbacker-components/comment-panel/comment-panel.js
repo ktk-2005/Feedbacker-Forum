@@ -70,7 +70,9 @@ class CommentPanel extends React.Component {
   }
 
   async fetchComments() {
-    const comments = await apiCall('GET', '/comments')
+    const comments = await apiCall('GET', '/comments', null, {
+      noToast: true,
+    })
     this.props.dispatch(loadComments(comments))
   }
 
