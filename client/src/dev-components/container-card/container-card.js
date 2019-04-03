@@ -116,6 +116,7 @@ class ContainerCard extends React.Component {
               type="button"
               disabled={this.isOperationPending()}
               onClick={this.removeContainer}
+              data-tooltip="Delete"
             >
               <InlineSVG src={DeleteIcon} />
             </button>
