@@ -80,17 +80,13 @@ The project consist of two separate main parts - the dashboard view for the deve
 
 The dashboard view is for developers to add, remove and manage instances.
 After creating an instance the developer recieves a simple link that can be shared, so that people easily can view the instance and give feedback.
+[Screenshot](#dashboard-image)
 
-![Dashboard view](docs/images/deployment.png)
-
----
 #### Feedbacker
 
 The feedbacker view is where the users can use, view and comment on the UI. It consists of two main parts, the survey panel and the comment panel.
+[Screenshot](#feedbacker-image)
 
-![Feedbacker view](docs/images/user-survey-mocked.png)
-
----
 #### Features
 
 A brief list of supported features
@@ -145,6 +141,13 @@ This project was started during the course CS-C2130 Software Project at [Aalto U
 
 The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for more details.
 
+## Screenshots
+---
+<a name="dashboard-image"/>
+![Dashboard view](docs/images/deployment.png)
+---
+<a name="feedbacker-image"/>
+![Feedbacker view](docs/images/user-survey-mocked.png)
 
 [node]: https://nodejs.org/en/
 [golang]: https://golang.org/
