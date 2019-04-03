@@ -76,3 +76,8 @@
 @api /api/slack/command/status
 
 @api /api/slack/notify/:url
+
+## CORS
+
+@api /* OPTIONS
+

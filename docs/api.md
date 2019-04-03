@@ -426,3 +426,10 @@ Returns status check if user has connected Slack account to Feedbacker forum.
 Used for sending slack notifications by webhook when wanting to share published instance.
 
 Returns json object with 'success' boolean field indicating whether notification was send or not.
+
+## CORS
+
+### [OPTIONS /*](../server/src/server.js#L62)
+
+Return CORS headers for all OPTIONS requests
+
