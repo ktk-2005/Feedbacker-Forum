@@ -8,6 +8,21 @@ Feedbacker-Forum also supports creating "feedback-able" links for existing exter
 
 ![Feedbacker example site](docs/images/user-survey-other.png)
 
+# Table of contents
+* [Setting Up](#Setting-Up)
+  * [Prerequisites](#Prerequisites)
+  * [Alternative docker setup](#Alternatively-setting-up-docker-container-for-dev-environment)
+* [Usage](#Usage)
+  * [Dashboard](#Dashboard)
+  * [Feedbacker](#Feedbacker)
+  * [Features](#Features)
+* [Contributing](#Contributing)
+  * [Running tests](#Running-tests)
+* [Credits](#Credits)
+* [License](#License)
+
+
+
 ## Setting up
 
 The project consist of a frontend, backend, proxy and database. The different parts can either be setup manually, or run together using containers.
@@ -42,7 +57,9 @@ cd ../server
 
 npm install
 npm start
+
 ```
+For further documentation see [docs/getting-started.md](docs/getting-started.md).
 
 ### Alternatively setting up docker container for dev environment
 
@@ -57,7 +74,7 @@ Now you can for example open http://localhost:8080/test.html to see the API in a
 
 ## Usage
 
-The project consist of two different parts - the dashboard view for the developers, and the feedbacker view for giving feedback.
+The project consist of two separate main parts - the dashboard view for the developers, and the feedbacker view for giving feedback.
 
 #### Dashboard
 
@@ -84,7 +101,7 @@ A brief list of supported features
 * Comment anonymously on instances where you don't want to share your identity
 * Specify the feedback recieved by creating surveys with normal or multiple choice questions
 * Protect sensitive deployments with a passphrase
-* Link Feedbacker-Forum to slack with a SlackBot
+* Boost productivity by integrating Feedbacker-Forum to slack with a SlackBot
 
 
 ## Contributing
@@ -128,9 +145,6 @@ This project was started during the course CS-C2130 Software Project at [Aalto U
 
 The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for more details.
 
-## Getting started // Needs to be moved/removed
-
-For further documentation see [docs/getting-started.md](docs/getting-started.md).
 
 [node]: https://nodejs.org/en/
 [golang]: https://golang.org/
