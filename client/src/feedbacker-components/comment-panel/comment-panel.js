@@ -39,7 +39,6 @@ class CommentPanel extends React.Component {
       hide: false,
       buttonHidden: true,
       counter: 4,
-      hideName: false,
     }
 
     this.updateCurrentThread = this.updateCurrentThread.bind(this)
@@ -115,7 +114,7 @@ class CommentPanel extends React.Component {
     await this.fetchComments()
     this.scrollToBottom()
 
-    if (!this.props.name && !this.state.hideName) {
+    if (!this.props.name && !hideName) {
       await this.toggleUsernameModal()
     } else {
       await this.fetchComments()
@@ -277,12 +276,9 @@ class CommentPanel extends React.Component {
                 handleSubmit={this.handleSubmit}
                 threadId=""
                 toggleTagElementState={this.props.toggleTagElementState}
-                toggleHideForCaller={() => this.setState(prevState => ({
-                  hideName: !prevState.hideName,
-                }))}
               />
               {
-                !this.props.name && !this.state.hideName ? (
+                !this.props.name ? (
                   <UsernameModal
                     isOpen={this.state.usernameModalIsOpen}
                     toggle={this.toggleUsernameModal}
