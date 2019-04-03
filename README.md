@@ -62,7 +62,7 @@ The project consist of two different parts - the dashboard view for the develope
 #### Dashboard
 
 The dashboard view is for developers to add, remove and manage instances.
-After creating an instance the developer recieves a link that can be shared, so that people easily can view the instance and give feedback.
+After creating an instance the developer recieves a simple link that can be shared, so that people easily can view the instance and give feedback.
 
 ![Dashboard view](docs/images/deployment.png)
 
@@ -71,7 +71,21 @@ After creating an instance the developer recieves a link that can be shared, so 
 
 The feedbacker view is where the users can use, view and comment on the UI. It consists of two main parts, the survey panel and the comment panel.
 
-![Feedbacker view](docs/iamges/feedbacker.gif)
+![Feedbacker view](docs/images/feedbacker.gif)
+
+---
+#### Features
+
+A brief list of supported features
+* Automatically deploy your app from git, boh public repos and private Github repos supported
+* Alternatively use an already live site, simply submit the url
+* Easily discuss and cultivate ideas with theaded discussion, no blocking signup required
+* Tag specific elements to link your comment to a specific part of the UI
+* Comment anonymously on instances where you don't want to share your identity
+* Specify the feedback recieved by creating surveys with normal or multiple choice questions
+* Protect sensitive deployments with a passphrase
+* Link Feedbacker-Forum to slack with a SlackBot
+
 
 ## Contributing
 
