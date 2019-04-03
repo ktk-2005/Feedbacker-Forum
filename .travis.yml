@@ -55,7 +55,7 @@ jobs:
         - npm --prefix server run lint:ci
 
         # Lint Go Proxy
-        - golint proxy/...
+        - golint -set_exit_status proxy/...
 
         # Build client development and production
         - npm --prefix client run build:dev

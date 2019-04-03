@@ -16,8 +16,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hashicorp/golang-lru"
-	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq" // Database driver
+	_ "github.com/mattn/go-sqlite3" // Database driver
 	"log"
 	"net/http"
 	"net/url"
@@ -27,19 +27,20 @@ import (
 
 // -- Public API
 
-// Configuration
+// Config contains database setup properties
 type Config struct {
 	DbDriver        string // < Database engine, eg. sqlite3 or Postgres
 	DbConnectString string // < Driver specific connection string
 }
 
-var UnauthorizedError = errors.New("User is not authorized")
+// ErrUnauthorized is returned if an user is not authorized to a private container
+var ErrUnauthorized = errors.New("User is not authorized")
 
-// Running container instance that can be proxied to.
+// Container instance that can be proxied to.
 // (used internally for invalid containers also)
 type Container struct {
 	Subdomain string   // < Subdomain the container is routed under
-	TargetUrl *url.URL // < URL of the running container instance
+	TargetURL *url.URL // < URL of the running container instance
 	Protected bool     // < Does the container reqiure authentication
 
 	// Internal
@@ -79,7 +80,7 @@ func Initialize(config *Config) error {
 	return nil
 }
 
-// Resolves a container for a given public `subdomain`. May result in a database lookup
+// Resolve a container for a given public `subdomain`. May result in a database lookup
 // and take a while to return. `cookies` is used to authenticate the user if the
 // containe ris protected. Returns `nil` if no matching container instance is
 // found or the user is unauthenticated.
@@ -145,9 +146,8 @@ func getCachedContainer(id string) *Container {
 	container := containerI.(*Container)
 	if time.Now().Before(container.expiry) {
 		return container
-	} else {
-		return nil
 	}
+	return nil
 }
 
 // -- Authentication
@@ -181,7 +181,7 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 			continue
 		}
 
-		for user, _ := range blob.Users {
+		for user := range blob.Users {
 			if _, ok := usersToAuth[user]; ok {
 				continue
 			}
@@ -192,7 +192,7 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 	}
 
 	// Check if the user is in the auth cache
-	for user, _ := range usersToAuth {
+	for user := range usersToAuth {
 		_, ok := container.authCache.Get(user)
 		if ok {
 			return nil
@@ -203,7 +203,7 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 	anyAuth := false
 
 	// Authenticate the user hashes
-	for user, _ := range usersToAuth {
+	for user := range usersToAuth {
 		databaseAuthRequests <- authRequest{
 			container:  container,
 			userToAuth: user,
@@ -220,9 +220,8 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 
 	if anyAuth {
 		return nil
-	} else {
-		return UnauthorizedError
 	}
+	return ErrUnauthorized
 }
 
 // -- Database resolver
@@ -276,7 +275,7 @@ func fetchContainerFromDatabase(id string) (*Container, error) {
 	cache, _ := lru.New(10000)
 	container := &Container{
 		Subdomain: id,
-		TargetUrl: url,
+		TargetURL: url,
 		Protected: protected,
 		err:       nil,
 		expiry:    time.Now().Add(30 * time.Minute),
@@ -312,7 +311,7 @@ func databaseWorker() {
 			if err != nil {
 				// If there was an error create an "error" container
 				container = &Container{
-					TargetUrl: nil,
+					TargetURL: nil,
 					Subdomain: req.id,
 
 					err:    err,
@@ -372,7 +371,7 @@ func resolveWorker() {
 			if container.err != nil {
 				log.Printf("Failed to resolve container '%v': %v", id, container.err)
 			} else {
-				log.Printf("Resolved container '%v' -> %v", id, container.TargetUrl.String())
+				log.Printf("Resolved container '%v' -> %v", id, container.TargetURL.String())
 			}
 
 			containerCache.Add(id, container)
