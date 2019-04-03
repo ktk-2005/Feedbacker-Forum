@@ -116,7 +116,7 @@ class CommentPanel extends React.Component {
     await this.fetchComments()
     this.scrollToBottom()
 
-    if (!this.props.name) {
+    if (!this.props.name && !hideName) {
       await this.toggleUsernameModal()
     } else {
       await this.fetchComments()
