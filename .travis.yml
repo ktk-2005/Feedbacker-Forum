@@ -33,6 +33,7 @@ jobs:
         - tar -C build -xzf build/go.tar.gz
         - export GOROOT=$TRAVIS_BUILD_DIR/build/go
         - export PATH=$GOROOT/bin:$PATH
+        - go get -u golang.org/x/lint/golint
 
         # Install packages
         - cd client && npm install && cd ..
@@ -52,6 +53,11 @@ jobs:
         # Lint server and client
         - npm --prefix client run lint:ci
         - npm --prefix server run lint:ci
+
+        # Lint and fmt Go Proxy
+        - find proxy -name '*.go' | xargs gofmt -l | wc -l | xargs test 0 -eq
+        - if test $? -ne 0; then echo 'Run go fmt proxy/...'; fi
+        - golint -set_exit_status proxy/...
 
         # Build client development and production
         - npm --prefix client run build:dev

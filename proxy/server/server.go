@@ -9,59 +9,59 @@ package server
 import (
 	"bytes"
 	"fmt"
+	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
 	"io"
 	"io/ioutil"
 	"log"
-	"strings"
-	"net/url"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"regexp"
-	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
 	"sort"
+	"strings"
 )
 
 // -- Public API
 
-// Configuration
+// Config struct
 type Config struct {
-	ProxyPort int       // < Port to bind the proxy to
-	ErrorPort int       // < Internal port to use as error proxy target
+	ProxyPort    int    // < Port to bind the proxy to
+	ErrorPort    int    // < Internal port to use as error proxy target
 	InjectScript string // < Script source to inject to html files
-	ErrorScript string  // < Script to load on error (invalid container)
-	AuthScript string   // < Script to load to authenticate
+	ErrorScript  string // < Script to load on error (invalid container)
+	AuthScript   string // < Script to load to authenticate
 }
 
-// Start serving the proxy
+// StartServing sets up the proxy and error servers
 func StartServing(config *Config) error {
 	errPort := config.ErrorPort
 	proxyPort := config.ProxyPort
 
 	doctypeInjectString = "<!DOCTYPE html>"
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
-	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
-	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString);
+	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString)
 
 	var err error
-	errorUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/error", errPort))
+	errorURL, err = url.Parse(fmt.Sprintf("http://localhost:%d/error", errPort))
 	if err != nil {
 		return err
 	}
-	authUrl, err = url.Parse(fmt.Sprintf("http://localhost:%d/auth", errPort))
+	authURL, err = url.Parse(fmt.Sprintf("http://localhost:%d/auth", errPort))
 	if err != nil {
 		return err
 	}
 
-	errorHtml = fmt.Sprintf(htmlTemplate, config.ErrorScript)
-	authHtml = fmt.Sprintf(htmlTemplate, config.AuthScript)
+	errorHTML = fmt.Sprintf(htmlTemplate, config.ErrorScript)
+	authHTML = fmt.Sprintf(htmlTemplate, config.AuthScript)
 
 	proxy := httputil.ReverseProxy{
-		Director: redirectRequest,
+		Director:       redirectRequest,
 		ModifyResponse: modifyResponse,
 	}
 
 	go func() {
-		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", errPort), &ErrorHandler{}))
+		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", errPort), &errorHandler{}))
 	}()
 
 	log.Printf("Serving proxy at %d", proxyPort)
@@ -102,12 +102,12 @@ var doctypeInjectString string
 var scriptInjectString string
 var viewportInjectString string
 var viewportInjectStringWithHead string
-var errorHtml string
-var authHtml string
+var errorHTML string
+var authHTML string
 
 // Server that returns error responses
-var errorUrl *url.URL
-var authUrl *url.URL
+var errorURL *url.URL
+var authURL *url.URL
 
 func redirectRequest(req *http.Request) {
 	var err error
@@ -116,14 +116,14 @@ func redirectRequest(req *http.Request) {
 	host := req.Host
 	tokenLen := strings.IndexByte(host, '.')
 
-	if (tokenLen > 0) {
+	if tokenLen > 0 {
 		token := host[0:tokenLen]
 
 		// Try to find and redirect request
 		var container *resolver.Container
 		container, err = resolver.Resolve(token, req.Cookies())
 		if err == nil {
-			target := container.TargetUrl
+			target := container.TargetURL
 			req.URL.Scheme = target.Scheme
 			req.URL.Host = target.Host
 			req.Host = target.Host
@@ -137,44 +137,44 @@ func redirectRequest(req *http.Request) {
 		}
 	}
 
-	if err == resolver.UnauthorizedError {
-		req.URL = authUrl
-		req.Host = authUrl.Host
+	if err == resolver.ErrUnauthorized {
+		req.URL = authURL
+		req.Host = authURL.Host
 	} else {
-		req.URL = errorUrl
-		req.Host = errorUrl.Host
+		req.URL = errorURL
+		req.Host = errorURL.Host
 	}
 }
 
 type injectFragment struct {
 	Position int
-	Text string
+	Text     string
 }
 
 func modifyResponse(res *http.Response) error {
 
 	// Only modify responses with Content-Type: text/html
-	isHtml := false
+	isHTML := false
 
 	contentType := strings.ToLower(res.Header.Get("Content-Type"))
 	if strings.Contains(contentType, "text/html") {
-		isHtml = true
+		isHTML = true
 	}
 
 	req := res.Request
 	if req != nil {
 		accept := strings.ToLower(req.Header.Get("Accept"))
 		if strings.Contains(accept, "text/html") {
-			isHtml = true
+			isHTML = true
 		}
 	}
 
 	code := res.StatusCode
 	if code >= 300 && code < 400 {
-		isHtml = false
+		isHTML = false
 	}
 
-	if !isHtml {
+	if !isHTML {
 		return nil
 	}
 
@@ -196,7 +196,7 @@ func modifyResponse(res *http.Response) error {
 		if match == nil {
 			injectFragments = append(injectFragments, injectFragment{
 				Position: 0,
-				Text: doctypeInjectString,
+				Text:     doctypeInjectString,
 			})
 		}
 
@@ -207,14 +207,14 @@ func modifyResponse(res *http.Response) error {
 			if match != nil {
 				injectFragments = append(injectFragments, injectFragment{
 					Position: match[0],
-					Text: viewportInjectString,
+					Text:     viewportInjectString,
 				})
 			} else {
 				match = viewportAltInjectPositionRegex.FindStringIndex(body)
 				if match != nil {
 					injectFragments = append(injectFragments, injectFragment{
 						Position: match[0],
-						Text: viewportInjectStringWithHead,
+						Text:     viewportInjectStringWithHead,
 					})
 				}
 			}
@@ -225,7 +225,7 @@ func modifyResponse(res *http.Response) error {
 		if match != nil {
 			injectFragments = append(injectFragments, injectFragment{
 				Position: match[0],
-				Text: scriptInjectString,
+				Text:     scriptInjectString,
 			})
 		}
 
@@ -234,7 +234,7 @@ func modifyResponse(res *http.Response) error {
 				return injectFragments[i].Position < injectFragments[j].Position
 			})
 
-			parts := make([]io.Reader, 0, len(injectFragments) * 2 + 1)
+			parts := make([]io.Reader, 0, len(injectFragments)*2+1)
 			prev := 0
 			for _, fragment := range injectFragments {
 				pos := fragment.Position
@@ -265,12 +265,13 @@ func modifyResponse(res *http.Response) error {
 // -- Error Handler
 // HTTP server that failed container requests are redirected to
 
-type ErrorHandler struct { }
-func (*ErrorHandler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
+type errorHandler struct{}
+
+func (*errorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if r.URL.Path == "/auth" {
-		io.WriteString(w, authHtml)
+		io.WriteString(w, authHTML)
 	} else {
-		io.WriteString(w, errorHtml)
+		io.WriteString(w, errorHTML)
 	}
 }
