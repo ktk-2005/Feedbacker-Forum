@@ -149,8 +149,8 @@ The project was created by
 - [@quvide](https://github.com/quvide)
 - [@sofiatengvall](https://github.com/sofiatengvall)
 - [@Kallemakela](https://github.com/Kallemakela)
-- [@HenrikHelenius](https://github.com/HenrikHelenius)
 - [@shahruzmannan](https://github.com/shahruzmannan)
+- [@HenrikHelenius](https://github.com/HenrikHelenius)
 
 ## License
 
