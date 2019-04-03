@@ -1,14 +1,18 @@
-# Feedbacker-Forum &middot; [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Feedbacker](docs/images/feedbacker-logo.png)
+
+[![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Feedbacker-Forum is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return. This link can be shared to peers that the developer craves feedback from.
-The developer can then create surveys and discuss the live UI with peers.
-Feedbacker-Forum also supports creating link for existing external websites.
+The developer can then create surveys, recieve answers and discuss the live UI with peers.
+Feedbacker-Forum also supports creating "feedback-able" links for existing external websites.
+
+![Feedbacker example site](docs/images/user-survey-other.png)
 
 ## Setting up
 
 The project consist of a frontend, backend, proxy and database. The different parts can either be setup manually, or run together using containers.
 
-## Prerequisites
+### Prerequisites
 
 The project is built using [Node.js][node], currently actively tested with version 10.13.
 The project also requires [go][golang] version 1.11 for running the proxy.
@@ -51,8 +55,27 @@ docker-compose up --build
 
 Now you can for example open http://localhost:8080/test.html to see the API in action.
 
+## Usage
+
+The project consist of two different parts - the dashboard view for the developers, and the feedbacker view for giving feedback.
+
+#### Dashboard
+
+The dashboard view is for developers to add, remove and manage instances.
+After creating an instance the developer recieves a link that can be shared, so that people easily can view the instance and give feedback.
+
+![Dashboard view](docs/images/deployment.png)
+
+---
+#### Feedbacker
+
+The feedbacker view is where the users can use, view and comment on the UI. It consists of two main parts, the survey panel and the comment panel.
+
+![Feedbacker view](docs/iamges/feedbacker.gif)
+
 ## Contributing
 
+The project is still in a quite early development stage and is actively being developed.
 Changes or additions can be proposed by creating issues or pull requests on github. Running a local development version can be setup as seen in [Setting Up](#Setting-up).
 
 ### Running tests
