@@ -130,6 +130,11 @@ function overrideConfigFromEnv() {
   if (dockerUrl) {
     config.dockerUrl = dockerUrl
   }
+
+  const cookieSecret = process.env.COOKIE_SECRET
+  if (cookieSecret) {
+    config.cookieSecret = cookieSecret
+  }
 }
 
 export async function startup() {

@@ -55,6 +55,11 @@ export function startServer() {
     app.use(express.static(path.join(__dirname, '../../client/build')))
   }
 
+  if (!config.cookieSecret) {
+    console.error('You must specify either cookieSecret config or APP_COOKIE_SECRET env variable')
+    return
+  }
+
   app.use(cookieParser(config.cookieSecret))
 
   // @api OPTIONS /*

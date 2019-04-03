@@ -8,6 +8,7 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
       USE_TEST_DATA: ${USE_TEST_DATA}
       USE_TEST_AUTH: ${USE_TEST_AUTH}
+      APP_COOKIE_SECRET: ${APP_COOKIE_SECRET}
     depends_on:
       - postgres
 

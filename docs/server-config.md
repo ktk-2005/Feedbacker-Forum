@@ -17,7 +17,7 @@ environment variables. You can specify the configuration file to use with the `-
 | `runners` | | `List[Object]` | List of objects that describe the system-provided runners. For example `[{"name": "npm run start","tag": "node-runner"}]` |
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
 | `corsOriginRegex` | | `String` | Origin host to allow CORS API requests from |
-| `cookieSecret` | | `String` | Secret token used for signing cookies |
+| `cookieSecret` | `APP_COOKIE_SECRET` | `String` | Secret token used for signing cookies |
 | `slack` | | `Object` | [Slack](#slack) app configuration. |
 
 ### Slack
