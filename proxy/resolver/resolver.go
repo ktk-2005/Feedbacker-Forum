@@ -123,8 +123,8 @@ type resolveRequest struct {
 }
 
 type authRequest struct {
-	authToken string     // < Authentication token
-	response chan<- bool // < List of authenticated users
+	authToken string      // < Authentication token
+	response  chan<- bool // < List of authenticated users
 }
 
 // -- Container cache
@@ -189,7 +189,7 @@ func authenticate(container *Container, cookies []*http.Cookie) error {
 	for token := range authTokens {
 		databaseAuthRequests <- authRequest{
 			authToken: token,
-			response: response,
+			response:  response,
 		}
 
 		ok := <-response

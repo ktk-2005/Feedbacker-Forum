@@ -56,7 +56,7 @@ jobs:
 
         # Lint and fmt Go Proxy
         - find proxy -name '*.go' | xargs gofmt -l | tee /dev/tty | wc -l | xargs test 0 -eq
-        - if test $? -ne 0; then echo 'Run go fmt proxy/...'; fi
+        - if test $? -ne 0; then echo 'Run gofmt -w proxy'; fi
         - golint -set_exit_status proxy/...
 
         # Build client development and production
