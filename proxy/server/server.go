@@ -61,7 +61,7 @@ func StartServing(config *Config) error {
 	}
 
 	go func() {
-		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", errPort), &ErrorHandler{}))
+		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", errPort), &errorHandler{}))
 	}()
 
 	log.Printf("Serving proxy at %d", proxyPort)
