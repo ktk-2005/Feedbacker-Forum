@@ -88,7 +88,7 @@ After creating an instance the developer recieves a simple link that can be shar
 
 The feedbacker view is where the users can use, view and comment on the UI. It consists of two main parts, the survey panel and the comment panel.
 
-![Feedbacker view](docs/images/feedbacker.gif)
+![Feedbacker view](docs/images/user-survey-mocked.png)
 
 ---
 #### Features
