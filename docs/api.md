@@ -429,7 +429,7 @@ Returns json object with 'success' boolean field indicating whether notification
 
 ## CORS
 
-### [OPTIONS /*](../server/src/server.js#L62)
+### [OPTIONS /*](../server/src/cors.js#L6)
 
 Return CORS headers for all OPTIONS requests
 

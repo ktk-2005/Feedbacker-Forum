@@ -62,8 +62,6 @@ export function startServer() {
 
   app.use(cookieParser(config.cookieSecret))
 
-  // @api OPTIONS /*
-  // Return CORS headers for all OPTIONS requests
   app.options('*', cors())
 
   app.use(bodyParser.json()) // support json encoded bodies
