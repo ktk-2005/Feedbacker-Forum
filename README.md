@@ -1,4 +1,4 @@
-![Feedbacker](docs/images/feedbacker-logo.png)
+<img src="docs/images/feedbacker-logo.png" height="50%" width="50%">
 
 [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
