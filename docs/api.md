@@ -423,19 +423,23 @@ Returns json object with 'success' boolean field indicating whether notification
 
 ## GitHub integration
 
-### [GET /api/github/oauth2login](../server/src/routes/github.js#L11)
+### [GET /api/github/oauth2login](../server/src/routes/github.js#L12)
 
 Returns an url for the Oauth2 redirect.
 
-### [GET /api/github/oauth2callback](../server/src/routes/github.js#L21)
+### [GET /api/github/oauth2callback](../server/src/routes/github.js#L22)
 
 GitHub redirects the user to this url after performing authentication.
 
-### [GET /api/github/status](../server/src/routes/github.js#L30)
+### [GET /api/github/status](../server/src/routes/github.js#L31)
 
 Retrieves the registered GitHub login state of the user.
 
-### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L51)
+### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L56)
 
 Retrieves user-accessable repositories by installation id. A list of
 available ids is container in the /api/github/status response.
+
+### [POST /api/github/logout](../server/src/routes/github.js#L47)
+
+Removes the stored access token for github

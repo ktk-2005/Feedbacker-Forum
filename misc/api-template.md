@@ -106,3 +106,5 @@ Authentication is done using a custom `X-Feedback-Auth` header. The content of t
 @api /api/github/status
 
 @api /api/github/repos/:installationId
+
+@api /api/github/logout
