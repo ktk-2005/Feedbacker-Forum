@@ -39,8 +39,6 @@ The application is built using [Node.js][node], currently actively tested with v
 The application also requires [go][golang] version 1.11 for running the proxy.
 Instances are run in containers with [docker][docker].
 
-If the application is run with containers [docker-compose][docker-compose] is also required for orchestrating the containers.
-
 The simple manual setup requires the following steps. Further run configurations can be found in [docs/getting-started.md](docs/getting-started.md).
 
 ```bash
