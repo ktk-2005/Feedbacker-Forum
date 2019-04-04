@@ -36,8 +36,7 @@ function queueRetryAuth() {
   })
 }
 
-// API call wrapper, use this to communicate with the API server. This wrapper
-// adds `X-Feedback-Host` header to provide context for the server.
+// API call wrapper, use this to communicate with the API server.
 // By default this function returns a JSON output and throws for HTTP responses 400-599.
 //
 // method: HTTP method such as GET, POST, DELETE etc.
@@ -46,7 +45,7 @@ function queueRetryAuth() {
 // opts: Extra options for the function
 //   - rawResponse: Return the raw response from `fetch()` with no JSON conversion or
 //                  automatic error handling
-//   - noUser: If set don't attach user header
+//   - noUser: Don't wait for the user to load
 //   - noRetryAuth: Do not attempt to retry authentication
 //   - noToast: Do not display error toast
 //
