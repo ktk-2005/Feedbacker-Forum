@@ -55,8 +55,8 @@ export default function apiRequest(method, path, body, optsArg) {
     method,
     body,
     headers: {
-      'X-Feedback-Auth': authToken,
-      'X-Feedback-Host': `${container}.localhost`,
+      'X-Test-Auth': `${authToken}`,
+      Origin: `${container}.localhost`,
     },
     ...(opts.request || {}),
   }

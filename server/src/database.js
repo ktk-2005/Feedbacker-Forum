@@ -256,10 +256,14 @@ export async function verifyUser(user, secret) {
   }
 }
 
-export async function authenticateUserForContainerAccess(subdomain, userId) {
-  return db.run('INSERT INTO container_auth(subdomain, user_id) VALUES (?, ?)', [subdomain, userId])
+export async function authenticateUserForContainerAccess(subdomain, userId, token) {
+  return db.run('INSERT INTO container_auth(subdomain, user_id, token) VALUES (?, ?, ?)', [subdomain, userId, token])
 }
 
+export async function getAuthorizationToken(subdomain, userId) {
+  const rows = await db.query('SELECT token FROM container_auth WHERE subdomain=? AND user_id=?', [subdomain, userId])
+  return rows.length > 0 ? rows[0].token : null
+}
 
 // External site
 
