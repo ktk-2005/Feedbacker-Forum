@@ -5,25 +5,24 @@ a {
   text-decoration: none;
   color: $palette-accent;
 
-  &:not([tabindex="-1"]) {
+  &:not([tabIndex="-1"]) {
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: $palette-accent;
+      transition: $transition-default-all;
+      opacity: 0;
+    }
 
+    &:hover:after {
+      width: 100%;
+      opacity: 1;
+
+    }
   }
 
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background-color: $palette-accent;
-    transition: $transition-default-all;
-    opacity: 0;
-  }
-
-  &:hover:after {
-    width: 100%;
-    opacity: 1;
-
-  }
 }

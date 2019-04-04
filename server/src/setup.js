@@ -39,7 +39,7 @@ function parseArguments() {
 
   parser.addArgument(
     ['--testApi'], {
-      help: 'Run API tests an exit',
+      help: 'Run API tests and exit',
       action: 'storeTrue',
     }
   )
@@ -79,6 +79,13 @@ function parseArguments() {
     }
   )
 
+  parser.addArgument(
+    ['--testAuth'], {
+      help: 'Allow authentication via X-Test-Auth header',
+      action: 'storeTrue',
+    }
+  )
+
   const argsToSet = parser.parseArgs()
   Object.assign(args, argsToSet)
 }
@@ -111,6 +118,11 @@ function overrideConfigFromEnv() {
     config.useTestData = useTestData !== '0'
   }
 
+  const useTestAuth = process.env.USE_TEST_AUTH
+  if (useTestAuth) {
+    args.testAuth = useTestAuth !== '0'
+  }
+
   const databaseUrl = process.env.DATABASE_URL
   if (databaseUrl) {
     config.databaseUrl = databaseUrl
@@ -119,6 +131,11 @@ function overrideConfigFromEnv() {
   const dockerUrl = process.env.DOCKER_HOST_URL
   if (dockerUrl) {
     config.dockerUrl = dockerUrl
+  }
+
+  const cookieSecret = process.env.APP_COOKIE_SECRET
+  if (cookieSecret) {
+    config.cookieSecret = cookieSecret
   }
 }
 

@@ -8,5 +8,7 @@
       "tag": "node-runner"
     }
   ],
-  "imageMaxSize": 52428800
+  "imageMaxSize": 52428800,
+  "corsOriginRegex": "localhost$",
+  "cookieSecret": "DEV SECRET"
 }

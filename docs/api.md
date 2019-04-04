@@ -4,28 +4,6 @@
 
 # API
 
-## Headers
-
-Some API endpoints require specific headers to be set.
-This allows us to conveniently pass contextual information to the server without having to append it manually to every request.
-
-You don't need to set the headers manually in the client code: They are set automatically when using [`apiCall()`](/client/src/api-call.js).
-
-### Instance
-
-Instance specific endpoints like comments expect the current instance to be passed through the `X-Feedback-Host` header. This header simply contains the hostname of the current page. The API server parses the container subdomain ID from the header.
-
-### Authentication
-
-Authentication is done using a custom `X-Feedback-Auth` header. The content of the custom authorization header is a base-64 encoded **user object**. As the feedback tool may generate multiple user tokens for the same user merging them later users are represented as an object of the form:
-
-```json
-{
-  "public-token-1": "private-token-1",
-  "public-token-2": "private-token-2"
-}
-```
-
 ## Version
 
 ### [GET /api/version](../server/src/routes/version.js#L49)
@@ -209,7 +187,7 @@ Returns empty JSON if deletion was succesful
 
 ## Users
 
-### [POST /api/users](../server/src/routes/users.js#L24)
+### [POST /api/users](../server/src/routes/users.js#L25)
 
 Add user to database.
 Returns JSON that contains generated id and secret of added user.
@@ -230,7 +208,7 @@ Example response
     "secret": "ea2ca2565f484906bfd5096126816a"
 }
 ```
-### [PUT /api/users](../server/src/routes/users.js#L45)
+### [PUT /api/users](../server/src/routes/users.js#L69)
 
 Change username of existing user.
 The user is specified using the X-Feedback-Auth header as with other endpoints
@@ -241,7 +219,7 @@ and the body should contain the new name eg.
 }
 ```
 
-### [GET /api/users/role](../server/src/routes/users.js#L75)
+### [GET /api/users/role](../server/src/routes/users.js#L99)
 
 Retrieve the role of the current user in the container.
 Returns either `"dev"` or `"user"`
@@ -372,7 +350,7 @@ in the `status` field.
 
 ## Authorization
 
-### [POST /api/authorization](../server/src/routes/authorization.js#L18)
+### [POST /api/authorization](../server/src/routes/authorization.js#L49)
 
 Authorize user for accessing the specified container.
 Required fields in the body: [password, subdomain]
@@ -384,8 +362,36 @@ Example request:
 }
 ```
 
-Returns 200 OK and an empty JSON object if the authorization was succesful.
-Returns 401 if the authorization was not succesful.
+Example response body
+```json
+{
+  "authToken": "0123456789abcdef"
+}
+```
+
+Returns 200 OK with auth token if the authorization was succesful.
+Returns 403 if the authorization was not succesful.
+
+### [POST /api/authorization/retry](../server/src/routes/authorization.js#L23)
+
+Retrieve an existing authentication if one exists.
+Required fields in the body: [subdomain]
+Example request:
+```json
+{
+  "subdomain": "hello-world-abcd23"
+}
+```
+
+Example response body
+```json
+{
+  "authToken": "0123456789abcdef"
+}
+```
+
+Returns 200 OK with auth token if the authorization was succesful.
+Returns 401 if the user is not authorized yet.
 
 ## Slackbot
 
@@ -415,7 +421,7 @@ Slack slash status command, should only be called from Slack.
 
 Returns status check if user has connected Slack account to Feedbacker forum.
 
-### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L97)
+### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L96)
 
 Used for sending slack notifications by webhook when wanting to share published instance.
 
@@ -435,7 +441,7 @@ GitHub redirects the user to this url after performing authentication.
 
 Retrieves the registered GitHub login state of the user.
 
-### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L56)
+### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L58)
 
 Retrieves user-accessable repositories by installation id. A list of
 available ids is container in the /api/github/status response.
@@ -443,3 +449,9 @@ available ids is container in the /api/github/status response.
 ### [POST /api/github/logout](../server/src/routes/github.js#L47)
 
 Removes the stored access token for github
+## CORS
+
+### [OPTIONS /*](../server/src/cors.js#L6)
+
+Return CORS headers for all OPTIONS requests
+

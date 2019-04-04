@@ -12,9 +12,9 @@ import { shareSlack } from '../../globals'
 import styles from './container-card.scss'
 import '../../scss/atoms/_toast.scss'
 // Icons
-import CloseIcon from '../../assets/svg/baseline-close-24px.svg'
-import StartIcon from '../../assets/svg/baseline-play_arrow-24px.svg'
-import StopIcon from '../../assets/svg/baseline-stop-24px.svg'
+import DeleteIcon from '../../assets/svg/baseline-delete-24px.svg'
+import StartIcon from '../../assets/svg/baseline-cloud_queue-24px.svg'
+import StopIcon from '../../assets/svg/baseline-cloud_off-24px.svg'
 import SlackIcon from '../../assets/svg/baseline-slack-24px.svg'
 
 const css = classNames.bind(styles)
@@ -29,6 +29,7 @@ class ContainerCard extends React.Component {
     const { blob } = this.instance
     if (blob.path) {
       this.instance.url += blob.path
+      this.instance.origin += blob.path
     }
 
     this.state = {
@@ -93,49 +94,54 @@ class ContainerCard extends React.Component {
           <div className={css('header-button-container')}>
             {instance.runner !== 'site' ? (
               <>
-                <button
-                  type="button"
-                  disabled={this.state.containerRunning || this.isOperationPending()}
-                  onClick={this.startContainer}
-                  data-tooltip="Start"
-                >
-                  {<InlineSVG src={StartIcon} />}
-                </button>
-                <button
-                  type="button"
-                  disabled={!this.state.containerRunning || this.isOperationPending()}
-                  onClick={this.stopContainer}
-                  data-tooltip="Stop"
-                >
-                  <InlineSVG src={StopIcon} />
-                </button>
+                {this.state.containerRunning
+                  ? (
+                    <button
+                      type="button"
+                      disabled={!this.state.containerRunning || this.isOperationPending()}
+                      onClick={this.stopContainer}
+                      data-tooltip="Stop"
+                      className={css('start-or-stop')}
+                    >
+                      <InlineSVG src={StopIcon} />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={this.state.containerRunning || this.isOperationPending()}
+                      onClick={this.startContainer}
+                      data-tooltip="Start"
+                      className={css('start-or-stop')}
+                    >
+                      {<InlineSVG src={StartIcon} />}
+                    </button>
+                  )}
               </>
             ) : null}
             <button
               type="button"
               disabled={this.isOperationPending()}
               onClick={this.removeContainer}
-              data-tooltip="Remove"
-              data-tooltip-width="100px"
+              data-tooltip="Delete"
             >
-              <InlineSVG src={CloseIcon} />
+              <InlineSVG src={DeleteIcon} />
             </button>
           </div>
           <h5>{typeText}: {instance.subdomain}</h5>
         </div>
+        {this.instance.origin ? (
+          <p>
+            Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={this.instance.origin}>{new URL(this.instance.origin).hostname.split('.').reverse()[1]}</a>
+          </p>
+        ) : null}
         <p>
-          Go to source {instance.runner === 'site' ? 'site' : 'repo'}: <a href={instance.origin}>{new URL(instance.origin).hostname.split('.').reverse()[1]}</a>
-        </p>
-        <p>
-          {'Created on:  '}
+          <span>Created on: </span>
           <Moment
             className={css('timestamp')}
             date={instance.time}
             format="D.MM.YYYY HH.mm"
-            data-tooltip={moment(instance.time).fromNow()}
-            data-tooltip-south
-            data-tooltip-width="100px"
           />
+          <span>,&nbsp;</span>{moment(instance.time).fromNow()}
         </p>
         <div className={css('button-container')}>
           {this.props.slackAuth
@@ -156,7 +162,7 @@ class ContainerCard extends React.Component {
               </button>)
             : null}
           {instance.runner !== 'site' ? (
-            <Link to={`/logs/${instance.subdomain}`}>
+            <Link to={`/logs/${instance.subdomain}`} tabIndex="-1">
               Open instance logs
             </Link>
           ) : null}

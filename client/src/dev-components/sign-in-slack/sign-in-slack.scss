@@ -8,11 +8,16 @@
   display: flex;
   position: relative;
   top: 1px;
-  margin-right: $spacer;
+  // For responsive header wrap
+  @include media-query(wide-screens) {
+    margin-right: $spacer;
+  }
+  @include media-query(mobile) {
+    margin-left: 100%;
+  }
 
   img {
     height: 31px;
     width: auto;
-    content: static-url('/slack/sign_in_with_slack.png');
   }
 }

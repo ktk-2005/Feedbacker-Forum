@@ -260,7 +260,7 @@ class Create extends React.Component {
                 <option key={runner.tag} value={runner.tag}>{runner.tag}</option>
               ))}
             </select>
-            <Link to="/create-runner">
+            <Link to="/create-runner" tabIndex="-1">
               <button
                 className={css('new-runner-button')}
                 type="button"
@@ -269,7 +269,6 @@ class Create extends React.Component {
             </Link>
           </div>
         </label>
-
         <div className={css('selection-tabs')}>
           <button
             type="button"
@@ -289,18 +288,16 @@ class Create extends React.Component {
         {this.state.githubPanel ? this.githubPanel() : (
           <label htmlFor="url">
             Git URL
-            <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" onChange={this.checkGitUrl} required />
+            <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
           </label>
         )}
-
-
         <label htmlFor="version">
           Git Hash
           <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
         </label>
         <label htmlFor="name">
           Name
-          <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
+          <input key="name" type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
         </label>
         <label
           htmlFor="port"
@@ -326,13 +323,13 @@ class Create extends React.Component {
               <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase} disabled={this.isGithubPanelActiveAndNotLoggedIn()}>Passphrase protected</button>
             </div>
             <div className={css('passphrase-field', { 'hidden': !this.state.usePassphrase })}>
-              <input type={this.state.passphraseInputType} id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
+              <input type={this.state.passphraseInputType} id="password" name="password" placeholder="passphrase" minLength="5" maxLength="64" />
               <button className={css('show-button', { 'toggled': this.state.passphraseInputType !== 'password' })} type="button" onClick={this.toggleShowPassphrase}><InlineSVG src={eyeIcon} /></button>
             </div>
           </div>
         </label>
         <div className={css('button-container')}>
-          <Link to="/">
+          <Link to="/" tabIndex="-1">
             <button
               className={css('dashboard-button')}
               type="button"
@@ -364,6 +361,7 @@ class Create extends React.Component {
             data-tooltip-width="250px"
           >
             <input
+              key="url"
               type="url"
               name="url"
               id="url"
@@ -375,6 +373,7 @@ class Create extends React.Component {
         <label htmlFor="name">
           Name
           <input
+            key="name"
             type="text"
             id="name"
             name="name"
@@ -386,7 +385,7 @@ class Create extends React.Component {
           />
         </label>
         <div className={css('button-container')}>
-          <Link to="/">
+          <Link to="/" tabIndex="-1">
             <button className={css('dashboard-button')} type="button">
               Back to dashboard
             </button>
@@ -442,6 +441,5 @@ class Create extends React.Component {
     )
   }
 }
-
 
 export default Create

@@ -51,23 +51,35 @@ export async function attempt(fn, maxTries = 20) {
   // Do last try without try-catch
   return fn()
 }
-//
+
 // Find a container subdomain from a hostname
-export function resolveSubdomainFromHost(host) {
-  const parts = host.split('.', 2)
-  if (parts.length <= 1) throw new HttpError(400, 'Failed to extract subdomain from hostname')
-  return parts[0]
+export function resolveSubdomainFromOrigin(origin) {
+  const match = origin.match(/^(https?:\/\/)?([^.]+)\..*$/)
+  if (!match) throw new HttpError(400, 'Failed to extract subdomain from origin')
+  return match[2]
 }
 
 export async function reqContainer(req) {
-  const host = req.get('X-Feedback-Host')
-  if (!host) throw new HttpError(400, 'No X-Feedback-Host header')
-  const subdomain = resolveSubdomainFromHost(host)
+  const origin = req.get('Origin')
+  if (!origin) throw new HttpError(400, 'No Origin header')
+  const subdomain = resolveSubdomainFromOrigin(origin)
   const { id, userId } = await resolveContainer(subdomain)
   return { container: id, owner: userId }
 }
 
-async function verify(users) {
+export async function reqUser(req) {
+  let token = req.signedCookies.FeedbackAuth
+
+  if (args.testAuth || args.testApi) {
+    token = req.get('X-Test-Auth')
+  }
+
+  if (!token) {
+    throw new HttpError(401, 'No authorization cookie', null, {
+      shouldRetryAuth: true,
+    })
+  }
+  const users = JSON.parse(Buffer.from(token, 'base64').toString())
   const verifiedUsers = { }
 
   for (const user in users) {
@@ -94,16 +106,3 @@ async function verify(users) {
   }
 }
 
-export async function reqUser(req) {
-  const token = req.get('X-Feedback-Auth')
-  if (!token) throw new HttpError(401, 'No X-Feedback-Auth header')
-  const users = JSON.parse(Buffer.from(token, 'base64').toString())
-
-  return verify(users)
-}
-
-export async function reqUserFromCookie(req) {
-  const { users } = JSON.parse(req.cookies.FeedbackerForum_persist)
-
-  return verify(users)
-}

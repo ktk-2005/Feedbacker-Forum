@@ -115,6 +115,7 @@ CREATE TABLE slack_users (
 CREATE TABLE container_auth (
   subdomain  VARCHAR(32) NOT NULL,
   user_id    CHAR(8) NOT NULL,
+  token      CHAR(32) NOT NULL UNIQUE,
 
   FOREIGN KEY (subdomain) REFERENCES containers(subdomain),
   FOREIGN KEY (user_id) REFERENCES users(id),

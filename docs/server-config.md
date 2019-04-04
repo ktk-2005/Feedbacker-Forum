@@ -16,9 +16,12 @@ environment variables. You can specify the configuration file to use with the `-
 | `dockerWindows` | | `Boolean` | Set this to true if you're using Docker for Windows (Only Win10 Pro/Education). If you're using Docker Toolbox (other Windows versions), leave this to false. Default is false. |
 | `runners` | | `List[Object]` | List of objects that describe the system-provided runners. For example `[{"name": "npm run start","tag": "node-runner"}]` |
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
+| `corsOriginRegex` | | `String` | Origin host to allow CORS API requests from |
+| `cookieSecret` | `APP_COOKIE_SECRET` | `String` | Secret token used for signing cookies |
 | `github` | | `GitHubConfig` | Subconfig containing GitHub App integration keys. |
 | `siteUrl` | | `String` | The base url where the installation is served **without a trailing slash**. |
 | `slack` | | `Object` | [Slack](#slack) app configuration. |
+
 
 ### GitHubConfig
 
@@ -32,6 +35,7 @@ These parameters can be found/configured at https://github.com/settings/apps.
 | `privateKey` | `String` | The app's private key for signing JWTs |
 | `clientId` | `String` | The app id for OAuth |
 | `clientSecret` | `String` | The app secret for OAuth |
+
 
 ### Slack
 

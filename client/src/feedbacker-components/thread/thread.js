@@ -42,13 +42,13 @@ class Thread extends React.Component {
 
   expandedThread(op) {
     if (this.threadIsExpanded()) { return }
-    const threadComments = this.props.comments.slice(1)
     const sortByTime = R.sortBy(comment => comment.time)
-    const sortedComments = sortByTime(threadComments)
+    const sortedComments = sortByTime(this.props.comments)
+    const threadComments = sortedComments.slice(1)
     return (
       <>
         {
-          sortedComments.map(
+          threadComments.map(
             comment => (
               <Comment
                 key={comment.id}

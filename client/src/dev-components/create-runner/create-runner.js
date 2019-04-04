@@ -120,7 +120,7 @@ class CreateRunner extends React.Component {
               />
             </label>
             <div className={css('button-container')}>
-              <Link to="/create">
+              <Link to="/create" tabIndex="-1">
                 <button className={css('dashboard-button')} type="button">
                   Back
                 </button>
