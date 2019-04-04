@@ -166,17 +166,13 @@ Demo video [![Feedbacker-Forum](https://img.youtube.com/vi/bkxmN-j-ae0/maxresdef
 
 ---
 
-## Screenshots
+## Roadmap
 
 * Better support for runners
 * Capturing device specifications (screen, os, user agent)
 * Integration to project management tools such as Trello, Jira & YouTrack
-
----
-
-## Roadmap
-
-* Example item
+* Simulating events (showing comments on hidden elements)
+* Support for browsers that don't support shadowDOM
 
 ---
 
