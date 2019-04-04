@@ -8,7 +8,6 @@ import childProcess from 'child_process'
 import proxy from 'express-http-proxy'
 import path from 'path'
 import delay from 'express-delay'
-import cookieParser from 'cookie-parser'
 
 import { checkInt, checkBool } from './check'
 import { config, args } from './globals'

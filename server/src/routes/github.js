@@ -1,7 +1,6 @@
 import express from 'express'
-import * as R from 'ramda'
 import { catchErrors } from '../handlers'
-import { reqUser, reqUserFromCookie } from './helpers'
+import { reqUser } from './helpers'
 import { getOAuthRedirectUrl, oAuthCallback, getLoginStatus, getInstallationsWithAccess, getReposOfInstallation } from '../githubapp'
 import { deleteAccessTokenForUserId } from '../database'
 
@@ -20,7 +19,7 @@ router.get('/oauth2login', catchErrors(async (req, res) => {
 // @api GET /api/github/oauth2callback
 // GitHub redirects the user to this url after performing authentication.
 router.get('/oauth2callback', catchErrors(async (req, res) => {
-  const { users } = await reqUserFromCookie(req)
+  const { users } = await reqUser(req)
   await oAuthCallback(req.originalUrl, Object.keys(users))
 
   res.redirect('/create/github')
