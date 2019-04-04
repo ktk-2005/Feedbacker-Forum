@@ -4,11 +4,11 @@
 
 [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Feedbacker-Forum is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return.
+[Feedbacker-Forum](https://feedbacker.site/about/) is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return.
 
 This link can be shared to peers that the developer craves feedback from.
 The developer can then create surveys, receive answers and discuss the live UI with peers.
-Feedbacker-Forum also supports creating "feedback-able" links for existing external websites [/about](https://feedbacker.site/about/).
+Feedbacker-Forum also supports creating "feedback-able" links for existing external websites.
 
 ![Feedbacker example site](docs/images/user-survey-other.png)
 
