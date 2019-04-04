@@ -100,7 +100,7 @@ A brief list of supported features
 * Easily discuss and cultivate ideas with theaded discussion, no blocking signup required
 * Tag specific elements to link your comment to a specific part of the UI
 * Comment anonymously on instances where you don't want to share your identity
-* Specify the feedback received by creating surveys with normal or multiple choice questions
+* Specify the feedback received by creating surveys with free form or multiple choice questions
 * Protect sensitive deployments with a passphrase
 * Boost productivity by integrating Feedbacker-Forum to Slack with a SlackBot
 
