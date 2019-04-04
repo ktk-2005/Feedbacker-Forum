@@ -6,6 +6,7 @@ import Moment from 'react-moment'
 import moment from 'moment'
 // Helpers
 import classNames from 'classnames/bind'
+import ConfirmModal from '../../feedbacker-components/confirm-modal/confirm-modal'
 import apiCall from '../../api-call'
 import { shareSlack } from '../../globals'
 // Styles
@@ -38,6 +39,7 @@ class ContainerCard extends React.Component {
       stopPending: false,
       removePending: false,
       disableSlack: false,
+      deleteModalIsOpen: false,
     }
 
     this.startContainer = this.startContainer.bind(this)
@@ -115,7 +117,7 @@ class ContainerCard extends React.Component {
             <button
               type="button"
               disabled={this.isOperationPending()}
-              onClick={this.removeContainer}
+              onClick={() => this.setState({ deleteModalIsOpen: true })}
             >
               <InlineSVG src={DeleteIcon} />
             </button>
@@ -168,6 +170,12 @@ class ContainerCard extends React.Component {
             Go to feedbackable UI
           </a>
         </div>
+        <ConfirmModal
+          text="Are you sure you want to delete this instance?"
+          action={this.removeContainer}
+          isOpen={this.state.deleteModalIsOpen}
+          toggle={() => this.setState({ deleteModalIsOpen: false })}
+        />
       </div>
     )
   }
