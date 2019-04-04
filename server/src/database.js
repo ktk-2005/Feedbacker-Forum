@@ -303,6 +303,26 @@ export async function setInstanceRunnerStatusFail(dockerTag, userId) {
 }
 
 
+// Token store operations
+
+export async function storeAccessTokenForUserId(userId, accessToken) {
+  return db.run('INSERT INTO github_access_token(user_id, access_token) VALUES (?, ?)', [userId, accessToken])
+}
+
+export async function retrieveAccessTokenForUserId(userId) {
+  const res = await db.query('SELECT access_token FROM github_access_token WHERE user_id=?', [userId])
+  if (res.length > 0) {
+    return res[0].access_token
+  }
+
+  return null
+}
+
+export async function deleteAccessTokenForUserId(userId) {
+  return db.run('DELETE FROM github_access_token WHERE user_id=?', [userId])
+}
+
+
 // Authentication stuff
 
 // This function assumes that the authenticity of claimed userIds are already verified.

@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import { catchErrors } from '../handlers'
 import { reqUser, reqUserFromCookie } from './helpers'
 import { getOAuthRedirectUrl, oAuthCallback, getLoginStatus, getInstallationsWithAccess, getReposOfInstallation } from '../githubapp'
+import { deleteAccessTokenForUserId } from '../database'
 
 const router = express.Router()
 
@@ -22,7 +23,7 @@ router.get('/oauth2callback', catchErrors(async (req, res) => {
   const { users } = await reqUserFromCookie(req)
   await oAuthCallback(req.originalUrl, R.keys(users)[0])
 
-  res.redirect('/create')
+  res.redirect('/create/github')
 }))
 
 // @api GET /api/github/status
@@ -39,10 +40,14 @@ router.get('/status', catchErrors(async (req, res) => {
   } else {
     res.json({ status })
   }
-  res.json({
-    status: await getLoginStatus(userId),
-    installations: await getInstallationsWithAccess(userId),
-  })
+}))
+
+// @api POST /api/github/logout
+// Removes the stored access token for github
+router.post('/logout', catchErrors(async (req, res) => {
+  const { userId } = await reqUser(req)
+  await deleteAccessTokenForUserId(userId)
+  res.json({})
 }))
 
 // @api GET /api/github/repos/:installationId

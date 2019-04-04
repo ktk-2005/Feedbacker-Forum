@@ -6,6 +6,7 @@ import * as R from 'ramda'
 import { NestedError, HttpError } from './errors'
 import { config } from './globals'
 import logger from './logger'
+import { storeAccessTokenForUserId, retrieveAccessTokenForUserId } from './database'
 
 let githubApp = null
 let githubAuth = null
@@ -14,8 +15,8 @@ export function isGithubAppInitialized() {
   return githubApp && githubAuth
 }
 
+// used to store temporary challenges sent to the github api
 const stateStore = {}
-const accessTokenStore = {}
 
 export function initializeGitHubApp() {
   if (!config.github) {
@@ -38,15 +39,17 @@ export function initializeGitHubApp() {
   })
 }
 
-function getAccessTokenForUser(userId) {
-  if (accessTokenStore.hasOwnProperty(userId)) {
-    return accessTokenStore[userId]
+async function getAccessTokenForUser(userId) {
+  const res = await retrieveAccessTokenForUserId(userId)
+  if (res) {
+    return res
   }
+
   throw new HttpError(400, `${userId} must authenticate with GitHub first.`)
 }
 
-function getOctokitForUser(userId) {
-  const { accessToken } = getAccessTokenForUser(userId)
+async function getOctokitForUser(userId) {
+  const accessToken = await getAccessTokenForUser(userId)
   return new Octokit({
     auth: `token ${accessToken}`,
   })
@@ -54,7 +57,7 @@ function getOctokitForUser(userId) {
 
 export async function getLoginStatus(userId) {
   try {
-    const octokit = getOctokitForUser(userId)
+    const octokit = await getOctokitForUser(userId)
     return (await octokit.users.getAuthenticated({})).data
   } catch (error) {
     // user is not logged in
@@ -63,13 +66,13 @@ export async function getLoginStatus(userId) {
 }
 
 export async function getInstallationsWithAccess(userId) {
-  const octokit = getOctokitForUser(userId)
+  const octokit = await getOctokitForUser(userId)
   const result = await octokit.apps.listInstallationsForAuthenticatedUser()
   return result.data.installations
 }
 
 export async function getReposOfInstallation(installationId, userId) {
-  const octokit = getOctokitForUser(userId)
+  const octokit = await getOctokitForUser(userId)
   const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
     installation_id: installationId,
   })
@@ -145,6 +148,6 @@ export async function getOAuthRedirectUrl(userId) {
 export async function oAuthCallback(url, userId) {
   if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
 
-  const accessToken = await githubAuth.code.getToken(url, { state: getStateForUser(userId) })
-  accessTokenStore[userId] = accessToken
+  const { accessToken } = await githubAuth.code.getToken(url, { state: getStateForUser(userId) })
+  await storeAccessTokenForUserId(userId, accessToken)
 }

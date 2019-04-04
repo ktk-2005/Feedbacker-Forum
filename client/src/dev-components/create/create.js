@@ -30,6 +30,7 @@ class Create extends React.Component {
     this.selectedInstallationChanged = this.selectedInstallationChanged.bind(this)
     this.togglePassphrase = this.togglePassphrase.bind(this)
     this.toggleShowPassphrase = this.toggleShowPassphrase.bind(this)
+    this.githubLogout = this.githubLogout.bind(this)
 
     this.state = {
       instanceRunners: [],
@@ -47,8 +48,15 @@ class Create extends React.Component {
     this.fetchGithubLoginInfo()
   }
 
+
   componentDidMount() {
     this.userSub = subscribeUsers(this.getInstanceRunnersFromServer)
+
+    const { segment } = this.props.match.params
+    if (segment === 'github') {
+      this.setState({ githubPanel: true })
+      window.history.pushState(null, null, '/create')
+    }
   }
 
   componentWillUnmount() {
@@ -166,6 +174,18 @@ class Create extends React.Component {
     this.setState({ githubRepos: repos })
   }
 
+  async githubLogout() {
+    await apiCall('POST', '/github/logout')
+    this.setState({
+      github: null,
+      githubRepos: [],
+    })
+  }
+
+  isGithubPanelActiveAndNotLoggedIn() {
+    return this.state.githubPanel && !R.path(['github', 'status'], this.state)
+  }
+
   githubPanel() {
     if (this.state.githubBusy) {
       return (<p>Loading GitHub login information...</p>)
@@ -174,7 +194,7 @@ class Create extends React.Component {
     if (this.state.github && this.state.github.status) {
       return (
         <div className="github_integration">
-          <p>You are logged in to GitHub as {this.state.github.status.login}.</p>
+          <p><button type="button" onClick={this.githubLogout} className={css('logout-button')}>Logout</button> You are logged in to GitHub as {this.state.github.status.login}.</p>
           <label htmlFor="installation">
             Please select an installation
             <select defaultValue="-1" name="installation" id="installation" form="form" onChange={this.selectedInstallationChanged}>
@@ -191,7 +211,7 @@ class Create extends React.Component {
           </label>
           <label htmlFor="repository">
             Please select a repository
-            <select defaultValue="-1" name="repository" id="repository" form="form">
+            <select defaultValue="-1" name="repository" id="repository" disabled={this.state.githubRepos.length === 0} form="form">
               <option value="-1" disabled hidden>Select...</option>
               {this.state.githubRepos.map(repo => (
                 <option
@@ -206,7 +226,7 @@ class Create extends React.Component {
         </div>
       )
     } else {
-      return (<p>To access private repositories, <button type="button" onClick={this.githubLogin}>Login with GitHub</button></p>)
+      return (<button className={css('login-with-github-button')} type="button" onClick={this.githubLogin}><img src="/github/GitHub-Mark-120px-plus.png" className={css('github-logo')} alt="GitHub logo" /> Connect to GitHub</button>)
     }
   }
 
@@ -256,14 +276,14 @@ class Create extends React.Component {
             onClick={this.deactivateGithubPanel}
             className={css({ 'current': !this.state.githubPanel })}
           >
-            From a public repository
+            Public Git repository
           </button>
           <button
             type="button"
             onClick={this.activateGithubPanel}
             className={css({ 'current': this.state.githubPanel })}
           >
-            From GitHub
+            Private GitHub
           </button>
         </div>
         {this.state.githubPanel ? this.githubPanel() : (
@@ -276,11 +296,11 @@ class Create extends React.Component {
 
         <label htmlFor="version">
           Git Hash
-          <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" required />
+          <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
         </label>
         <label htmlFor="name">
           Name
-          <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
+          <input type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
         </label>
         <label
           htmlFor="port"
@@ -290,7 +310,7 @@ class Create extends React.Component {
             data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
             data-tooltip-width="250px"
           >
-            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
           </div>
         </label>
         <label
@@ -302,8 +322,8 @@ class Create extends React.Component {
             data-tooltip-width="250px"
           >
             <div className={css('selection-tabs')}>
-              <button className={css({ 'current': !this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Link access (default)</button>
-              <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Passphrase protected</button>
+              <button className={css({ 'current': !this.state.usePassphrase })} type="button" onClick={this.togglePassphrase} disabled={this.isGithubPanelActiveAndNotLoggedIn()}>Link access (default)</button>
+              <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase} disabled={this.isGithubPanelActiveAndNotLoggedIn()}>Passphrase protected</button>
             </div>
             <div className={css('passphrase-field', { 'hidden': !this.state.usePassphrase })}>
               <input type={this.state.passphraseInputType} id="password" name="password" placeholder="correct horse battery staple" minLength="5" maxLength="64" />
