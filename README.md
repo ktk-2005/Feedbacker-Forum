@@ -26,6 +26,7 @@ Feedbacker-Forum also supports creating "feedback-able" links for existing exter
 * [License](#License)
 * [Screenshots](#Screenshots)
   * [Demo](#demo)
+* [Future development roadmap](#Roadmap)  
 
 
 ## Setting up
@@ -162,6 +163,14 @@ Demo video [![Feedbacker-Forum](https://img.youtube.com/vi/bkxmN-j-ae0/maxresdef
 <a name="feedbacker-image"/>
 
 ![Feedbacker view](docs/images/user-survey-mocked.png)
+
+---
+
+## Screenshots
+
+* Better support for runners
+* Capturing device specifications (screen, os, user agent)
+* Integration to project management tools such as Trello, Jira & YouTrack
 
 ---
 
