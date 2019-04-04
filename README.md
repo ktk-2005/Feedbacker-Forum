@@ -96,11 +96,11 @@ The feedbacker view is where the users can use, view and comment on the UI. It c
 #### Features
 
 A brief list of supported features
-* Automatically deploy your app from git, boh public repos and private Github repos supported
+* Automatically deploy your app from git: both public repos and private GitHub repos supported
 * Alternatively use an already live site, simply submit the url
-* Easily discuss and cultivate ideas with theaded discussion, no blocking signup required
+* Easily discuss and cultivate ideas with threaded discussion, no blocking signup required
 * Tag specific elements to link your comment to a specific part of the UI
-* Comment anonymously on instances where you don't want to share your identity
+* Comment anonymously on instances if you don't want to share your identity
 * Specify the feedback received by creating surveys with free form or multiple choice questions
 * Protect sensitive deployments with a passphrase
 * Boost productivity by integrating Feedbacker-Forum to Slack with a SlackBot
@@ -109,7 +109,7 @@ A brief list of supported features
 ## Contributing
 
 The application is still in a quite early development stage and is actively being developed.
-Changes or additions can be proposed by creating issues or pull requests on github. Running a local development version can be setup as shown in [Setting Up](#Setting-up).
+Changes or additions can be proposed by creating issues or pull requests on GitHub. Running a local development version can be set up as shown in [Setting Up](#Setting-up).
 
 ### Running tests
 
@@ -125,7 +125,7 @@ cd ../server/
 npm run lint
 ```
 
-Tests are run separately for frontend and backend. Both sets of tests can be automatically run with npm
+Tests are run separately for frontend and backend. Both sets of tests can be automatically run with npm.
 
 ```bash
 # Run tests for frontend
