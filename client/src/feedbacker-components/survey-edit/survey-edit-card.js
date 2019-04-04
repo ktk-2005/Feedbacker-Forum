@@ -65,12 +65,9 @@ function OptionEdit({ question, onEditChange, onKeyPress, commit }) {
 const Handle = SortableHandle(() => <div className={css('reorder-handle')} />)
 
 function Answer({ answer }) {
-  // TODO: name unnecessary?
-  const { blob, name, time } = answer
+  const { blob, time } = answer
   const { text } = blob
 
-  // TODO: name away?
-  // <h3>{name || 'Anonymous user'}</h3>
   return (
     <div className={css('answer')}>
       <div className={css('answer-meta')}>

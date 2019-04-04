@@ -148,7 +148,9 @@ export default class SurveyEditContainer extends React.Component {
   }
 
   async refetch() {
-    const fetchedQuestions = await apiCall('GET', '/questions')
+    const fetchedQuestions = await apiCall('GET', '/questions', null, {
+      noToast: true,
+    })
     const pending = this.state.questions.filter(q => q.id === PENDING_ID)
     const questions = [...fetchedQuestions, ...pending]
     this.setState({ questions })
