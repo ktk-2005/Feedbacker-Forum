@@ -10,7 +10,11 @@ export async function initializeDatabase() {
   if (config.databaseUrl === undefined) {
     const filename = args.useMemoryDatabase ? ':memory:' : config.sqliteFilename
     db = new SQLiteDatabase(filename)
-    await db.initialize(config.useTestData)
+    if (args.testApi && args.useMemoryDatabase) {
+      await db.initialize(true)
+    } else {
+      await db.initialize(config.useTestData)
+    }
   } else {
     db = await new PostgresDatabase(config.databaseUrl)
     await db.initialize(config.useTestData)
