@@ -42,10 +42,25 @@
 
       input[type="checkbox"] {
         @extend %checkbox;
+        & + label {
+          &:before {
+            background-color: $palette-white;
+            border-color: $palette-dark;
+            border: 1px solid;
+            // For correct center align
+            top: -1px;
+          }
+        }
+
+        &:checked + label {
+          &:before {
+            border-color: $palette-accent;
+          }
+        }
       }
 
       label {
-        color: $palette-medium;
+        color: $palette-dark;
       }
     }
 
