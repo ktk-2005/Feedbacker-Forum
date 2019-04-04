@@ -175,6 +175,7 @@ class ContainerCard extends React.Component {
           action={this.removeContainer}
           isOpen={this.state.deleteModalIsOpen}
           toggle={() => this.setState({ deleteModalIsOpen: false })}
+          className={css('deleteModal')}
         />
       </div>
     )
