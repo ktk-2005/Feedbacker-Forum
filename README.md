@@ -1,16 +1,13 @@
 <div align="center" ><img src="docs/images/feedbacker-logo.png" height="50%" width="50%"></div>
 
-
-
-
-
+---
 
 [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Feedbacker-Forum is a modern, open-source automated deployment pipeline solution for developers to help gather feedback easily. In other words the developer can trigger a deployment process that ships a version of the current code for the product and gets a simple “feedback-able“ link in return.
 
- This link can be shared to peers that the developer craves feedback from.
-The developer can then create surveys, recieve answers and discuss the live UI with peers.
+This link can be shared to peers that the developer craves feedback from.
+The developer can then create surveys, receive answers and discuss the live UI with peers.
 Feedbacker-Forum also supports creating "feedback-able" links for existing external websites [/about](https://feedbacker.site/about/).
 
 ![Feedbacker example site](docs/images/user-survey-other.png)
@@ -33,15 +30,15 @@ Feedbacker-Forum also supports creating "feedback-able" links for existing exter
 
 ## Setting up
 
-The project consist of a frontend, backend, proxy and database. The different parts can either be setup manually, or run together using containers.
+The application consist of a frontend, backend, proxy and database. The different parts can either be setup manually, or run together using containers.
 
 ### Prerequisites
 
-The project is built using [Node.js][node], currently actively tested with version 10.13.
-The project also requires [go][golang] version 1.11 for running the proxy.
+The application is built using [Node.js][node], currently actively tested with version 10.13.
+The application also requires [go][golang] version 1.11 for running the proxy.
 Instances are run in containers with [docker][docker].
 
-If the project is run with containers [docker-compose][docker-compose] is also required for orchestrating the containers.
+If the application is run with containers [docker-compose][docker-compose] is also required for orchestrating the containers.
 
 The simple manual setup requires the following steps. Further run configurations can be found in [docs/getting-started.md](docs/getting-started.md).
 
@@ -82,12 +79,12 @@ Now you can for example open http://localhost:8080/test.html to see the API in a
 
 ## Usage
 
-The project consist of two separate main parts - the dashboard view for the developers, and the feedbacker view for giving feedback.
+The application consist of two separate main parts - the dashboard view for the developers, and the feedbacker view for giving feedback.
 
 #### Dashboard
 
-The dashboard view is for developers to add, remove and manage instances.
-After creating an instance the developer recieves a simple link that can be shared, so that people easily can view the instance and give feedback.
+The dashboard view is for developers to create, remove and manage instances.
+After creating an instance the developer receives a simple link that can be shared, so that people easily can view the instance and give feedback.
 [Screenshot](#dashboard-image)
 
 #### Feedbacker
@@ -103,19 +100,19 @@ A brief list of supported features
 * Easily discuss and cultivate ideas with theaded discussion, no blocking signup required
 * Tag specific elements to link your comment to a specific part of the UI
 * Comment anonymously on instances where you don't want to share your identity
-* Specify the feedback recieved by creating surveys with normal or multiple choice questions
+* Specify the feedback received by creating surveys with normal or multiple choice questions
 * Protect sensitive deployments with a passphrase
-* Boost productivity by integrating Feedbacker-Forum to slack with a SlackBot
+* Boost productivity by integrating Feedbacker-Forum to Slack with a SlackBot
 
 
 ## Contributing
 
-The project is still in a quite early development stage and is actively being developed.
-Changes or additions can be proposed by creating issues or pull requests on github. Running a local development version can be setup as seen in [Setting Up](#Setting-up).
+The application is still in a quite early development stage and is actively being developed.
+Changes or additions can be proposed by creating issues or pull requests on github. Running a local development version can be setup as shown in [Setting Up](#Setting-up).
 
 ### Running tests
 
-The project contains has style checking using [eslint][eslint] with a slightly modified [airbnb-config][airbnb-config].
+The application has style checking using [eslint][eslint] with a slightly modified [airbnb-config][airbnb-config].
 
 ```bash
 # Run style checking for the frontend
@@ -143,12 +140,12 @@ The frontend test suite is done with [jest][jest] and [enzyme][enzyme]. The back
 
 ## Credits
 
-This project was started during the course CS-C2130 Software Project at [Aalto University][aalto].
-The project was supported by [Sievo][sievo].
+This application was started during the course CS-C2130 Software Project at [Aalto University][aalto].
+The application was supported by [Sievo][sievo].
 
 ## License
 
-The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for more details.
+The application is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for more details.
 
 ## Screenshots
 
