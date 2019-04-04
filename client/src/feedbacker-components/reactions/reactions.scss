@@ -22,22 +22,17 @@ $symbol-height: 1em;
   background-position: center center;
 }
 
-.counter {
-  display: inline-block;
-  margin-left: 0;
-  line-height: $symbol-height;
-  transition: $transition-default-all;
-}
-
 .toggled {
   @extend %toggled
 }
 
 .counter {
-  width: auto;
+  display: inline-block;
   margin-left: 1ch;
-  opacity: 1;
+  line-height: $symbol-height;
   transition: $transition-default-all;
+  width: auto;
+  opacity: 1;
   &[data-count='0'] {
     width: 0;
     margin-left: 0;

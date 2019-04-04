@@ -26,6 +26,7 @@ NPM scripts for development for server and client:
 | Command | Description |
 | --- | --- |
 | `lint` | Verify code style, use `npm run lint -- --fix` to fix mistakes automatically |
+|  `lint:sass` | Verify code style of sass files (*.scss), can also use npm run lint -- --fix |
 
 Rarely manually needed NPM scripts for server and client:
 
