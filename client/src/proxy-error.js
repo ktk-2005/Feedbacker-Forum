@@ -1,18 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const subdomain = window.location.host.split('.')[0]
-
-function InvalidContainer() {
-  return (
-    <h2>Feedback instance doesn&apos;t exist: {subdomain}</h2>
-  )
-}
+import InvalidInstance from './dev-components/invalid-instance/invalid-instance' // './dev-components/invalid-instance/invalid-instance.js'
 
 const root = document.getElementById('root')
 
 ReactDOM.render(
-  <InvalidContainer />,
+  <InvalidInstance />,
   root
 )
-

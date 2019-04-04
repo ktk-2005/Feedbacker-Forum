@@ -1,0 +1,26 @@
+@import '../../scss/compulsory';
+@import '../../scss/animations';
+
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/_button';
+
+.center-center-block {
+  @extend %center-view;
+  background-color: darksalmon;
+}
+
+.instance-view {
+  @extend %view-container;
+  align-items: center;
+
+  h2 {
+    margin-bottom: $spacer;
+    font-size: $spacer * 10;
+    line-height: 100%;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: $spacer * 2;
+  }
+}
