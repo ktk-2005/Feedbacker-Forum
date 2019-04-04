@@ -47,7 +47,8 @@ router.get('/status', catchErrors(async (req, res) => {
 router.post('/logout', catchErrors(async (req, res) => {
   const { users } = await reqUser(req)
   for (const userId of users) {
-  await deleteAccessTokenForUserId(userId)
+    await deleteAccessTokenForUserId(userId)
+  }
   res.json({})
 }))
 
