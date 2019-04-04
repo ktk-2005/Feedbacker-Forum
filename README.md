@@ -1,4 +1,9 @@
-<img src="docs/images/feedbacker-logo.png" height="50%" width="50%">
+<div align="center" ><img src="docs/images/feedbacker-logo.png" height="50%" width="50%"></div>
+
+
+
+
+
 
 [![Build Status](https://travis-ci.org/ktk-2005/Feedbacker-Forum.svg?branch=develop)](https://travis-ci.org/ktk-2005/Feedbacker-Forum) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -6,9 +11,7 @@ Feedbacker-Forum is a modern, open-source automated deployment pipeline solution
 
  This link can be shared to peers that the developer craves feedback from.
 The developer can then create surveys, recieve answers and discuss the live UI with peers.
-Feedbacker-Forum also supports creating "feedback-able" links for existing external websites.
-
-You can request access to try out Feedbacker-forum from [Feedbacker.site](https://feedbacker.site/about/)
+Feedbacker-Forum also supports creating "feedback-able" links for existing external websites [/about](https://feedbacker.site/about/).
 
 ![Feedbacker example site](docs/images/user-survey-other.png)
 
@@ -142,15 +145,6 @@ The frontend test suite is done with [jest][jest] and [enzyme][enzyme]. The back
 
 This project was started during the course CS-C2130 Software Project at [Aalto University][aalto].
 The project was supported by [Sievo][sievo].
-The project was created by
-- [@bqqbarbhg](https://github.com/bqqbarbhg)
-- [@tobbe-j](https://github.com/tobbe-j)
-- [@joonalillfors](https://github.com/joonalillfors)
-- [@quvide](https://github.com/quvide)
-- [@sofiatengvall](https://github.com/sofiatengvall)
-- [@Kallemakela](https://github.com/Kallemakela)
-- [@shahruzmannan](https://github.com/shahruzmannan)
-- [@HenrikHelenius](https://github.com/HenrikHelenius)
 
 ## License
 
