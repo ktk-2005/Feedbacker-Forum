@@ -8,7 +8,7 @@ import { initializeDatabase } from './database'
 import { initializeDocker } from './docker'
 import { startServer } from './server'
 import { args, config } from './globals'
-import { initializeGitHubApp, getCloneUrlForOwnerAndRepo } from './githubapp'
+import { initializeGitHubApp } from './githubapp'
 import logger from './logger'
 
 const readFile = promisify(fs.readFile)

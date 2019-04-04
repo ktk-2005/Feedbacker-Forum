@@ -59,7 +59,7 @@ export async function getLoginStatus(users) {
   for (const userId of users) {
     try {
       const octokit = await getOctokitForUser(userId)
-      const data = (await octokit.users.getAuthenticated({})).data
+      const { data } = await octokit.users.getAuthenticated({})
       if (data) return data
     } catch (error) { /* Nop */ }
   }
