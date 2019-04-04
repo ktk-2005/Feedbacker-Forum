@@ -55,28 +55,46 @@ async function getOctokitForUser(userId) {
   })
 }
 
-export async function getLoginStatus(userId) {
-  try {
-    const octokit = await getOctokitForUser(userId)
-    return (await octokit.users.getAuthenticated({})).data
-  } catch (error) {
-    // user is not logged in
-    return null
+export async function getLoginStatus(users) {
+  for (const userId of users) {
+    try {
+      const octokit = await getOctokitForUser(userId)
+      const data = (await octokit.users.getAuthenticated({})).data
+      if (data) return data
+    } catch (error) { /* Nop */ }
   }
+
+  return null
 }
 
-export async function getInstallationsWithAccess(userId) {
-  const octokit = await getOctokitForUser(userId)
-  const result = await octokit.apps.listInstallationsForAuthenticatedUser()
-  return result.data.installations
+export async function getInstallationsWithAccess(users) {
+  for (const userId of users) {
+    try {
+      const octokit = await getOctokitForUser(userId)
+      const result = await octokit.apps.listInstallationsForAuthenticatedUser()
+      return result.data.installations
+    } catch (error) { /* Nop */ }
+  }
+
+  return null
 }
 
-export async function getReposOfInstallation(installationId, userId) {
-  const octokit = await getOctokitForUser(userId)
-  const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
-    installation_id: installationId,
-  })
-  return result.data.repositories
+export async function getReposOfInstallation(installationId, users) {
+  let error = new HttpError(401, 'User is not authenticated to GitHub')
+
+  for (const userId of users) {
+    try {
+      const octokit = await getOctokitForUser(userId)
+      const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
+        installation_id: installationId,
+      })
+      return result.data.repositories
+    } catch (userError) {
+      error = userError
+    }
+  }
+
+  return error
 }
 
 
@@ -122,9 +140,11 @@ export async function getCloneUrlForOwnerAndRepo(owner, repoName, userId) {
   return `https://x-access-token:${accessToken}@github.com/${owner}/${repoName}.git`
 }
 
-async function generateNewState(userId) {
+async function generateNewState(users) {
   const state = await crypto.randomBytes(32).toString('base64')
-  stateStore[userId] = state
+  for (const userId of users) {
+    stateStore[userId] = state
+  }
   return state
 }
 
@@ -132,22 +152,23 @@ function getStateForUser(userId) {
   if (stateStore.hasOwnProperty(userId)) {
     const value = stateStore[userId]
     delete stateStore[userId]
-
     return value
   }
 
   return null
 }
 
-export async function getOAuthRedirectUrl(userId) {
+export async function getOAuthRedirectUrl(users) {
   if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
 
-  return githubAuth.code.getUri({ state: await generateNewState(userId) })
+  return githubAuth.code.getUri({ state: await generateNewState(users) })
 }
 
-export async function oAuthCallback(url, userId) {
+export async function oAuthCallback(url, users) {
   if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
 
-  const { accessToken } = await githubAuth.code.getToken(url, { state: getStateForUser(userId) })
-  await storeAccessTokenForUserId(userId, accessToken)
+  for (const userId of users) {
+    const { accessToken } = await githubAuth.code.getToken(url, { state: getStateForUser(userId) })
+    await storeAccessTokenForUserId(userId, accessToken)
+  }
 }
