@@ -10,6 +10,7 @@ services:
       - ${APP_SERVER_PORT}
     environment:
       APP_SERVER_PORT: ${APP_SERVER_PORT}
+      USE_TEST_AUTH: ${USE_TEST_AUTH}
     ports:
       - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
   dockerhost:
