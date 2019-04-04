@@ -159,7 +159,7 @@ The project is licensed under the [MIT][MIT] license, see [LICENSE](LICENSE) for
 ## Screenshots
 
 #### Demo
-Demo video [Feedbacker-Forum](https://www.youtube.com/watch?v=bkxmN-j-ae0)
+Demo video [![Feedbacker-Forum](https://img.youtube.com/vi/bkxmN-j-ae0/maxresdefault.jpg)](https://www.youtube.com/watch?v=bkxmN-j-ae0)
 ---
 
 <a name="dashboard-image"/>
