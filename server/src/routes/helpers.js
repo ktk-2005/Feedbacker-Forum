@@ -74,7 +74,11 @@ export async function reqUser(req) {
     token = req.get('X-Test-Auth')
   }
 
-  if (!token) throw new HttpError(401, 'No authorization cookie')
+  if (!token) {
+    throw new HttpError(401, 'No authorization cookie', null, {
+      shouldRetryAuth: true,
+    })
+  }
   const users = JSON.parse(Buffer.from(token, 'base64').toString())
   const verifiedUsers = { }
 
