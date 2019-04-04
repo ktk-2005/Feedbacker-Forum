@@ -46,7 +46,7 @@ router.get('/status', catchErrors(async (req, res) => {
 // Removes the stored access token for github
 router.post('/logout', catchErrors(async (req, res) => {
   const { users } = await reqUser(req)
-  for (const userId of users) {
+  for (const userId of Object.keys(users)) {
     await deleteAccessTokenForUserId(userId)
   }
   res.json({})
