@@ -14,12 +14,22 @@
   .top-section-buttons {
     display: flex;
     align-items: center;
+
+    // For responsive header wrap
+    @include media-query(mobile) {
+      flex-wrap: wrap-reverse;
+      justify-content: flex-end;
+    }
   }
 }
 
 .create-button {
   @extend %anchor-button-accent;
   align-self: flex-end;
+  // For responsive header wrap
+  @include media-query(mobile) {
+    margin-bottom: $baseline;
+  }
 }
 
 .instances-container {

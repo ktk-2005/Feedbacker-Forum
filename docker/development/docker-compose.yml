@@ -4,6 +4,8 @@ services:
     build:
       context: ../../
       dockerfile: docker/development/Dockerfile
+    environment:
+      USE_TEST_AUTH: ${USE_TEST_AUTH}
     expose:
       - ${APP_SERVER_PORT}
     environment:

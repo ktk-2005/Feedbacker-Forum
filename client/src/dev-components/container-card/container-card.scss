@@ -31,6 +31,10 @@
     display: flex;
     justify-content: space-between;
 
+    .start-or-stop {
+      top: 1px;
+    }
+
     button {
       @extend %icon-button;
       margin-left: $spacer;

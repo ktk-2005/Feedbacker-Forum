@@ -1,12 +1,12 @@
 package main
 
 import (
-	"os"
-	"log"
-	"strconv"
-	"path/filepath"
-	"github.com/ktk-2005/Feedbacker-Forum/proxy/server"
 	"github.com/ktk-2005/Feedbacker-Forum/proxy/resolver"
+	"github.com/ktk-2005/Feedbacker-Forum/proxy/server"
+	"log"
+	"os"
+	"path/filepath"
+	"strconv"
 )
 
 func getEnv(name, defaultValue string) string {
@@ -50,4 +50,3 @@ func main() {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
-

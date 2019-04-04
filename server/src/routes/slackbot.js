@@ -80,9 +80,8 @@ router.get('/auth', catchErrors(async (req, res) => {
 //
 // Returns status check if user has connected Slack account to Feedbacker forum.
 router.post('/command/status', catchErrors(async (req, res) => {
-  const username = req.body.user_name
   const userId = req.body.user_id
-  const slackUser = await isLinkedToSlack(username, userId)
+  const slackUser = await isLinkedToSlack(userId)
   if (slackUser.length > 0) {
     res.send('Slack user linked to Feedbacker Forum!')
   } else {

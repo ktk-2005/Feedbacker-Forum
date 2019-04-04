@@ -415,7 +415,7 @@ Slack slash status command, should only be called from Slack.
 
 Returns status check if user has connected Slack account to Feedbacker forum.
 
-### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L97)
+### [GET /api/slack/notify/:url](../server/src/routes/slackbot.js#L96)
 
 Used for sending slack notifications by webhook when wanting to share published instance.
 
