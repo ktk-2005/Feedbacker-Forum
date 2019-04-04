@@ -12,12 +12,6 @@
   @extend %view-container;
   align-items: center;
 
-  h1 {
-    margin-bottom: $spacer;
-    font-size: $spacer * 10;
-    line-height: 100%;
-  }
-
   p {
     margin-top: 0;
     margin-bottom: $spacer * 2;
@@ -27,6 +21,9 @@
 
   h1 {
     position: relative;
+    margin-bottom: $spacer;
+    font-size: $spacer * 10;
+    line-height: 100%;
 
     &:before, &:after {
       content: attr(data-text);

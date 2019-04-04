@@ -49,9 +49,6 @@
 
   .button-container {
     @extend %button-container;
-    & a:only-child {
-      margin-left: auto;
-    }
 
     button {
       @extend %icon-button;
@@ -64,6 +61,10 @@
         @extend %accent;
       }
     }
+    & a:only-child {
+      margin-left: auto;
+    }
+
   }
 
   .source-link {
