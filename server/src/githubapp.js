@@ -85,16 +85,41 @@ export async function getReposOfInstallation(installationId, users) {
   for (const userId of users) {
     try {
       const octokit = await getOctokitForUser(userId)
-      const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
-        installation_id: installationId,
-      })
-      return result.data.repositories
+
+      const resultsPerPage = 100
+
+      let error = null
+      let repositories = []
+      let resultRepos = []
+
+      let page = 0
+      do {
+        try {
+          const result = await octokit.apps.listInstallationReposForAuthenticatedUser({
+            installation_id: installationId,
+            per_page: resultsPerPage,
+            page,
+          })
+
+          resultRepos = result.data.repositories
+          repositories = repositories.concat(resultRepos)
+        } catch (err) {
+          error = err
+        }
+        page += 1
+      } while (resultRepos.length >= resultsPerPage)
+
+      if (repositories.length === 0 && error) {
+        throw error
+      }
+
+      return repositories
     } catch (userError) {
       error = userError
     }
   }
 
-  return error
+  throw error
 }
 
 
