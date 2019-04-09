@@ -66,7 +66,6 @@ export function startServer() {
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
-  app.use(cookieParser())
 
   if (!args.testApi) {
     app.use(morgan('dev'))
