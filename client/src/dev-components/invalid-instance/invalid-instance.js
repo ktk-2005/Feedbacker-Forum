@@ -12,7 +12,7 @@ const InvalidInstance = () => (
   <div className={css('center-center-block')}>
     <div className={css('instance-view')}>
       <h1>Feedback instance doesn&apos;t exist: {subdomain}</h1>
-      <p>You should contact Erkka Mutanen</p>
+      <p>You should contact the host of of the instance</p>
     </div>
   </div>
 )
