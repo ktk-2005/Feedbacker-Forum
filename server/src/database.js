@@ -10,7 +10,11 @@ export async function initializeDatabase() {
   if (config.databaseUrl === undefined) {
     const filename = args.useMemoryDatabase ? ':memory:' : config.sqliteFilename
     db = new SQLiteDatabase(filename)
-    await db.initialize(config.useTestData)
+    if (args.testApi && args.useMemoryDatabase) {
+      await db.initialize(true)
+    } else {
+      await db.initialize(config.useTestData)
+    }
   } else {
     db = await new PostgresDatabase(config.databaseUrl)
     await db.initialize(config.useTestData)
@@ -256,10 +260,14 @@ export async function verifyUser(user, secret) {
   }
 }
 
-export async function authenticateUserForContainerAccess(subdomain, userId) {
-  return db.run('INSERT INTO container_auth(subdomain, user_id) VALUES (?, ?)', [subdomain, userId])
+export async function authenticateUserForContainerAccess(subdomain, userId, token) {
+  return db.run('INSERT INTO container_auth(subdomain, user_id, token) VALUES (?, ?, ?)', [subdomain, userId, token])
 }
 
+export async function getAuthorizationToken(subdomain, userId) {
+  const rows = await db.query('SELECT token FROM container_auth WHERE subdomain=? AND user_id=?', [subdomain, userId])
+  return rows.length > 0 ? rows[0].token : null
+}
 
 // External site
 

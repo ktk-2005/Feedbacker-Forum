@@ -31,6 +31,10 @@
     display: flex;
     justify-content: space-between;
 
+    .start-or-stop {
+      top: 1px;
+    }
+
     button {
       @extend %icon-button;
       margin-left: $spacer;
@@ -45,9 +49,6 @@
 
   .button-container {
     @extend %button-container;
-    & a:only-child {
-      margin-left: auto;
-    }
 
     button {
       @extend %icon-button;
@@ -60,6 +61,10 @@
         @extend %accent;
       }
     }
+    & a:only-child {
+      margin-left: auto;
+    }
+
   }
 
   .source-link {

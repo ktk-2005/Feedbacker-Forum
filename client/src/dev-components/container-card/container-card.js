@@ -96,28 +96,35 @@ class ContainerCard extends React.Component {
           <div className={css('header-button-container')}>
             {instance.runner !== 'site' ? (
               <>
-                <button
-                  type="button"
-                  disabled={this.state.containerRunning || this.isOperationPending()}
-                  onClick={this.startContainer}
-                  data-tooltip="Start"
-                >
-                  {<InlineSVG src={StartIcon} />}
-                </button>
-                <button
-                  type="button"
-                  disabled={!this.state.containerRunning || this.isOperationPending()}
-                  onClick={this.stopContainer}
-                  data-tooltip="Stop"
-                >
-                  <InlineSVG src={StopIcon} />
-                </button>
+                {this.state.containerRunning
+                  ? (
+                    <button
+                      type="button"
+                      disabled={!this.state.containerRunning || this.isOperationPending()}
+                      onClick={this.stopContainer}
+                      data-tooltip="Stop"
+                      className={css('start-or-stop')}
+                    >
+                      <InlineSVG src={StopIcon} />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={this.state.containerRunning || this.isOperationPending()}
+                      onClick={this.startContainer}
+                      data-tooltip="Start"
+                      className={css('start-or-stop')}
+                    >
+                      {<InlineSVG src={StartIcon} />}
+                    </button>
+                  )}
               </>
             ) : null}
             <button
               type="button"
               disabled={this.isOperationPending()}
               onClick={() => this.setState({ deleteModalIsOpen: true })}
+              data-tooltip="Delete"
             >
               <InlineSVG src={DeleteIcon} />
             </button>
