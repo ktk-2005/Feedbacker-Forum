@@ -15,4 +15,3 @@ ReactDOM.render(
   <InvalidContainer />,
   root
 )
-
