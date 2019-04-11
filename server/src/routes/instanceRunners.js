@@ -29,7 +29,12 @@ router.get('/', catchErrors(async (req, res) => {
 
   // join the user's custom runners with the system-provided ones
   instanceRunners.push(...config.runners)
-  res.send(instanceRunners)
+
+  // HACK: Trim runner status as database has padded status fields
+  res.send(instanceRunners.map(runner => {
+    ...runner,
+    status: runner.status.trim(),
+  }))
 }))
 
 // @api POST /api/instanceRunners/new
