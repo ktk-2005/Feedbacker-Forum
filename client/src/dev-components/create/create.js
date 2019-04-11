@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import * as R from 'ramda'
 // Helpers
 import InlineSVG from 'svg-inline-react'
 import classNames from 'classnames/bind'
@@ -24,21 +25,38 @@ class Create extends React.Component {
     this.siteForm = this.siteForm.bind(this)
     this.activateContainerForm = this.activateContainerForm.bind(this)
     this.activateSiteForm = this.activateSiteForm.bind(this)
+    this.activateGithubPanel = this.activateGithubPanel.bind(this)
+    this.deactivateGithubPanel = this.deactivateGithubPanel.bind(this)
+    this.selectedInstallationChanged = this.selectedInstallationChanged.bind(this)
     this.togglePassphrase = this.togglePassphrase.bind(this)
     this.toggleShowPassphrase = this.toggleShowPassphrase.bind(this)
+    this.githubLogout = this.githubLogout.bind(this)
 
     this.state = {
       instanceRunners: [],
       redirectContainer: false,
       containerForm: true,
+      githubPanel: false,
       busy: false,
+      github: null,
+      githubBusy: true,
+      githubRepos: [],
       usePassphrase: false,
       passphraseInputType: 'password',
     }
+
+    this.fetchGithubLoginInfo()
   }
+
 
   componentDidMount() {
     this.userSub = subscribeUsers(this.getInstanceRunnersFromServer)
+
+    const { segment } = this.props.match.params
+    if (segment === 'github') {
+      this.setState({ githubPanel: true })
+      window.history.pushState(null, null, '/create')
+    }
   }
 
   componentWillUnmount() {
@@ -51,12 +69,31 @@ class Create extends React.Component {
     this.setState({ instanceRunners: response })
   }
 
+  async fetchGithubLoginInfo() {
+    try {
+      const status = await apiCall('GET', '/github/status')
+      this.setState({ github: status })
+    } catch (error) {
+      // not logged in to github
+    } finally {
+      this.setState({ githubBusy: false })
+    }
+  }
+
   activateContainerForm() {
     this.setState({ containerForm: true })
   }
 
   activateSiteForm() {
     this.setState({ containerForm: false })
+  }
+
+  activateGithubPanel() {
+    this.setState({ githubPanel: true })
+  }
+
+  deactivateGithubPanel() {
+    this.setState({ githubPanel: false })
   }
 
   // TODO: d.querySelector, better ids? is this the right way or some passing instead?
@@ -70,10 +107,18 @@ class Create extends React.Component {
 
     this.setState({ busy: true })
 
+    // check if the a repo has been chosen directly from github
+    let url
+    if (this.state.githubPanel) {
+      url = inputValue('repository')
+    } else {
+      url = inputValue('url')
+    }
+
     try {
       const json = await apiCall('POST', '/instances/new', {
         envs: {
-          GIT_CLONE_URL: inputValue('url'),
+          GIT_CLONE_URL: url,
           GIT_VERSION_HASH: inputValue('version'),
         },
         type: inputValue('application'),
@@ -116,6 +161,75 @@ class Create extends React.Component {
     }
   }
 
+  async githubLogin() {
+    const { url } = await apiCall('GET', '/github/oauth2login')
+    window.location.assign(url)
+  }
+
+  async selectedInstallationChanged() {
+    const shadow = shadowDocument()
+    const selectElement = shadow.getElementById('installation')
+    const selectedValue = selectElement.value
+    const { repos } = await apiCall('GET', `/github/repos/${selectedValue}`)
+    this.setState({ githubRepos: repos })
+  }
+
+  async githubLogout() {
+    await apiCall('POST', '/github/logout')
+    this.setState({
+      github: null,
+      githubRepos: [],
+    })
+  }
+
+  isGithubPanelActiveAndNotLoggedIn() {
+    return this.state.githubPanel && !R.path(['github', 'status'], this.state)
+  }
+
+  githubPanel() {
+    if (this.state.githubBusy) {
+      return (<p>Loading GitHub login information...</p>)
+    }
+
+    if (this.state.github && this.state.github.status) {
+      return (
+        <div className="github_integration">
+          <p><button type="button" onClick={this.githubLogout} className={css('logout-button')}>Logout</button> You are logged in to GitHub as {this.state.github.status.login}.</p>
+          <label htmlFor="installation">
+            Please select an installation
+            <select defaultValue="-1" name="installation" id="installation" form="form" onChange={this.selectedInstallationChanged}>
+              <option value="-1" disabled hidden>Select...</option>
+              {this.state.github.installations.map(installation => (
+                <option
+                  key={installation.id}
+                  value={installation.id}
+                >
+                  {installation.account.login}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="repository">
+            Please select a repository
+            <select defaultValue="-1" name="repository" id="repository" disabled={this.state.githubRepos.length === 0} form="form">
+              <option value="-1" disabled hidden>Select...</option>
+              {this.state.githubRepos.map(repo => (
+                <option
+                  key={repo.id}
+                  value={repo.clone_url}
+                >
+                  {repo.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )
+    } else {
+      return (<button className={css('login-with-github-button')} type="button" onClick={this.githubLogin}><img src="/github/GitHub-Mark-120px-plus.png" className={css('github-logo')} alt="GitHub logo" /> Connect to GitHub</button>)
+    }
+  }
+
   togglePassphrase() {
     this.setState(prevState => (
       { usePassphrase: !prevState.usePassphrase }
@@ -155,17 +269,35 @@ class Create extends React.Component {
             </Link>
           </div>
         </label>
-        <label htmlFor="url">
-          Git URL
-          <input key="url" type="url" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
-        </label>
+        <div className={css('selection-tabs')}>
+          <button
+            type="button"
+            onClick={this.deactivateGithubPanel}
+            className={css({ 'current': !this.state.githubPanel })}
+          >
+            Public Git repository
+          </button>
+          <button
+            type="button"
+            onClick={this.activateGithubPanel}
+            className={css({ 'current': this.state.githubPanel })}
+          >
+            Private GitHub
+          </button>
+        </div>
+        {this.state.githubPanel ? this.githubPanel() : (
+          <label htmlFor="url">
+            Git URL
+            <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
+          </label>
+        )}
         <label htmlFor="version">
           Git Hash
-          <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" required />
+          <input type="text" id="version" name="version" placeholder="master or commit hash" defaultValue="master" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
         </label>
         <label htmlFor="name">
           Name
-          <input key="name" type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" required />
+          <input key="name" type="text" id="name" name="name" placeholder="new-feature" pattern="[a-zA-Z0-9](-?[a-zA-Z0-9])*" minLength="3" maxLength="20" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
         </label>
         <label
           htmlFor="port"
@@ -175,7 +307,7 @@ class Create extends React.Component {
             data-tooltip="Port number depends on the application type eg. node.js runs on 3000."
             data-tooltip-width="250px"
           >
-            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" required />
+            <input type="number" id="port" min="1" max="65535" name="port" defaultValue="3000" disabled={this.isGithubPanelActiveAndNotLoggedIn()} required />
           </div>
         </label>
         <label
@@ -187,8 +319,8 @@ class Create extends React.Component {
             data-tooltip-width="250px"
           >
             <div className={css('selection-tabs')}>
-              <button className={css({ 'current': !this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Link access (default)</button>
-              <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase}>Passphrase protected</button>
+              <button className={css({ 'current': !this.state.usePassphrase })} type="button" onClick={this.togglePassphrase} disabled={this.isGithubPanelActiveAndNotLoggedIn()}>Link access (default)</button>
+              <button className={css({ 'current': this.state.usePassphrase })} type="button" onClick={this.togglePassphrase} disabled={this.isGithubPanelActiveAndNotLoggedIn()}>Passphrase protected</button>
             </div>
             <div className={css('passphrase-field', { 'hidden': !this.state.usePassphrase })}>
               <input type={this.state.passphraseInputType} id="password" name="password" placeholder="passphrase" minLength="5" maxLength="64" />

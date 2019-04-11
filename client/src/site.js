@@ -113,7 +113,7 @@ const initialize = () => {
           <div className={css('feedback-app-container', 'site-views')}>
             <Switch>
               <Route exact path="/" component={Dashboard} />
-              <Route exact path="/create" component={Create} />
+              <Route exact path="/create/:segment?" component={Create} />
               <Route exact path="/create-runner" component={CreateRunner} />
               <Route exact path="/logs/:name" component={Build} />
               <Route exact path="*" component={View404} />
