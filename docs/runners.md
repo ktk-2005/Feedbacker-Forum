@@ -32,6 +32,6 @@ It's also possible for users to upload their image to Docker Hub and pull images
 
 See the source code of `node-runner` in the `:/docker/node-runner/` directory for guidance on how to write other runners.
 
-It doesn't matter if the application is included in the image, pre-installed, or if it's pulled when the container starts. There is, however, a size limit on the size of images which users can pull. (The size limit is currently not configurable but could be in the future.)
+It doesn't matter if the application is included in the image, pre-installed, or if it's pulled when the container starts. There is, however, a size limit on the size of images which users can pull.
 
 The `node-runner` runner is obviously written using the latter method because it needs to handle arbitrary applications. If an app is complex/slow to build, it might be better to prebuild the app and include it in the image.
