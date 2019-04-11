@@ -48,6 +48,7 @@ class TagElementButton extends React.Component {
           DomTagging.setToggleTagElementStateCallback(() => toggleTagElementState())
           DomTagging.toggleMarkingMode()
         }}
+        data-disable-tagging-hide="true"
         data-tooltip="Tag element button"
         data-tooltip-width="150px"
         data-introduction-step="6"

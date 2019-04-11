@@ -1,0 +1,24 @@
+@import '../../scss/compulsory';
+@import '../../scss/animations';
+
+@import '../../scss/atoms/view-container';
+@import '../../scss/atoms/button';
+
+.center-center-block {
+  @extend %center-view;
+}
+
+.instance-view {
+  @extend %view-container;
+  align-items: center;
+
+  h1 {
+    margin-bottom: $spacer;
+  }
+
+  @include media-query(mobile) {
+   padding: $spacer * 2;
+   box-shadow: none;
+   background: inherit;
+  }
+}

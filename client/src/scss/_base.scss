@@ -20,8 +20,8 @@
 
 // For hiding on tagging mode active
 .tagging-mode-active {
-  &, & * {
-    visibility: hidden;
+  &, & *:not([data-disable-tagging-hide]) {
+    visibility: hidden !important;
   }
 }
 
