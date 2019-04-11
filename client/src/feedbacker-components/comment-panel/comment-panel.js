@@ -117,7 +117,11 @@ class CommentPanel extends React.Component {
     if (threadId === '') this.scrollToBottom()
 
     if (!this.props.name && !hideName) {
+<<<<<<< HEAD
       await this.toggleUsernameModal(threadId)
+=======
+      await this.toggleUsernameModal()
+>>>>>>> 101354ce472002051c45a9263a079e5fd25de1a8
     } else {
       await this.fetchComments()
       if (threadId === '') this.scrollToBottom()
