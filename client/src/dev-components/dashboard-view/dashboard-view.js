@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 // Helpers
 import classNames from 'classnames/bind'
 import apiCall from '../../api-call'
@@ -18,6 +19,7 @@ class Dashboard extends React.Component {
     super(props)
 
     this.refreshInstances = this.refreshInstances.bind(this)
+    this.getUrlParameter = this.getUrlParameter.bind(this)
 
     this.state = {
       instances: [],
@@ -29,10 +31,26 @@ class Dashboard extends React.Component {
     this.userSub = subscribeUsers(this.refreshInstances)
     const { slackAuth } = await apiCall('GET', '/slack/auth')
     this.setState({ slackAuth })
+    if (this.getUrlParameter('slackError').length !== 0) {
+      toast('Slack authentication failed.', {
+        autoClose: 2000,
+      })
+    } else if (this.getUrlParameter('slackOk').length !== 0) {
+      toast('Signed in with Slack.', {
+        autoClose: 2000,
+      })
+    }
   }
 
   componentWillUnmount() {
     unsubscribeUsers(this.userSub)
+  }
+
+  getUrlParameter(key) {
+    const newKey = key.replace(/[[]/, '\\[').replace(/[\]]/, '\\]')
+    const regex = new RegExp(`[\\?&]${newKey}=([^&#]*)`)
+    const res = regex.exec(window.location.search)
+    return res === null ? '' : decodeURIComponent(res[1].replace(/\+/g, ' '))
   }
 
   async refreshInstances() {
