@@ -150,7 +150,7 @@ class Onboarding extends React.Component {
               `
                 This is the survey panel where you can create surveys. You
                 can either add regular questions or choice questions where you can
-                give two options for the testers to choose from (e.g. yes or no questions)
+                give two options for the testers to choose from (e.g. yes or no questions).
                 You can also add descriptive text to your surveys and change the
                 order of the questions.
                 Here you can also view the answers you've received.
