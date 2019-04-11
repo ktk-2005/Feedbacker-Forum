@@ -176,7 +176,7 @@ class Onboarding extends React.Component {
           dev
             ? [
               `
-                Those testing your UI can also leave free-form comments. This can be
+                The testers can also leave free-form comments. This can be
                 done in the comment panel which opens by clicking this button.
               `,
             ]
