@@ -23,7 +23,11 @@ const router = express.Router()
 // Returns error if authentication failed or redirects back to dashboard otherwise
 router.get('/oauth', catchErrors(async (req, res) => {
   const { clientId, clientSecret } = config.slack || {}
-  const { state } = req.query
+  const { state, error } = req.query
+  if (error) {
+    res.redirect(`/?slackError=${error}`)
+    return
+  }
   const options = {
     uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${clientId}+'&client_secret=${clientSecret}`,
     method: 'GET',
@@ -31,13 +35,11 @@ router.get('/oauth', catchErrors(async (req, res) => {
   await request(options, async (error, response, body) => {
     const parsedBody = JSON.parse(body)
     if (!parsedBody.ok) {
-      res.send(`Error encountered: \n${JSON.stringify(parsedBody)}`)
-        .status(200)
-        .end()
+      res.redirect(`/?slackError=${parsedBody.error}`)
     } else {
       const { name, id } = parsedBody.user
       await setSlackUser(state, name, id)
-      res.redirect('/?ok=true')
+      res.redirect('/?slackOk=true')
     }
   })
 }))
@@ -56,7 +58,7 @@ router.post('/oauth/connect', catchErrors(async (req, res) => {
     await linkSlackToUser(id, userId)
   }
   const slackURL = `https://slack.com/oauth/authorize?scope=identity.basic&client_id=${clientId}`
-  res.json({ url: `${slackURL}&state=${id}&redirect_uri=${encodeURIComponent(redirectURI)}` })
+  res.json({ url: `${slackURL}&state=${id}&redirect_uri=${encodeURIComponent(`${redirectURI}/api/slack/oauth`)}` })
 }))
 
 // @api GET /api/slack/auth

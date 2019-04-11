@@ -31,11 +31,11 @@ class Dashboard extends React.Component {
     this.userSub = subscribeUsers(this.refreshInstances)
     const { slackAuth } = await apiCall('GET', '/slack/auth')
     this.setState({ slackAuth })
-    if (this.getUrlParameter('error').length !== 0) {
+    if (this.getUrlParameter('slackError').length !== 0) {
       toast('Slack authentication failed.', {
         autoClose: 2000,
       })
-    } else if (this.getUrlParameter('ok').length !== 0) {
+    } else if (this.getUrlParameter('slackOk').length !== 0) {
       toast('Signed in with Slack.', {
         autoClose: 2000,
       })
