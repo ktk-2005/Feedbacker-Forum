@@ -56,27 +56,27 @@ async function getOctokitForUser(userId) {
 }
 
 export async function getLoginStatus(users) {
+  let error = new HttpError(401, 'User is not authenticated to GitHub')
   for (const userId of users) {
     try {
       const octokit = await getOctokitForUser(userId)
       const { data } = await octokit.users.getAuthenticated({})
       if (data) return data
-    } catch (error) { /* Nop */ }
+    } catch (err) { error = err }
   }
-
-  return null
+  throw error
 }
 
 export async function getInstallationsWithAccess(users) {
+  let error = new HttpError(401, 'User is not authenticated to GitHub')
   for (const userId of users) {
     try {
       const octokit = await getOctokitForUser(userId)
       const result = await octokit.apps.listInstallationsForAuthenticatedUser()
       return result.data.installations
-    } catch (error) { /* Nop */ }
+    } catch (err) { error = err }
   }
-
-  return null
+  throw error
 }
 
 export async function getReposOfInstallation(installationId, users) {
@@ -134,7 +134,7 @@ async function getInstallationIdForOwnerAndRepo(owner, repoName) {
   return installationId
 }
 
-async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId) {
+async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, users) {
   // Resolve our installation id from the clone url, this will throw if the app
   // isn't installed for the repo or it doesn't exist.
   let installationId
@@ -145,9 +145,10 @@ async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId
   }
 
   // The user is authorized to access these installations.
-  const authorizedInstallationsForVerifiedUser = await getInstallationsWithAccess(userId)
-  const authorizedInstallationIds = R.map(installation => installation.id,
-    authorizedInstallationsForVerifiedUser)
+  const authorizedInstallationsForVerifiedUser = await getInstallationsWithAccess(users)
+  const authorizedInstallationIds = authorizedInstallationsForVerifiedUser.map(
+    installation => installation.id
+  )
 
   // Check if the installation id is contained in the authorized installs.
   if (R.contains(installationId, authorizedInstallationIds)) {
@@ -155,13 +156,13 @@ async function getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId
     return accessToken
   }
 
-  throw new NestedError("Installation found but user doesn't have access to it.", null, { userId, owner, repoName })
+  throw new NestedError("Installation found but user doesn't have access to it.", null, { users, owner, repoName })
 }
 
-export async function getCloneUrlForOwnerAndRepo(owner, repoName, userId) {
+export async function getCloneUrlForOwnerAndRepo(owner, repoName, users) {
   if (!isGithubAppInitialized()) throw new Error('GitHub integration is not initialized.')
 
-  const accessToken = await getInstallationAccessTokenForOwnerAndRepo(owner, repoName, userId)
+  const accessToken = await getInstallationAccessTokenForOwnerAndRepo(owner, repoName, users)
   return `https://x-access-token:${accessToken}@github.com/${owner}/${repoName}.git`
 }
 

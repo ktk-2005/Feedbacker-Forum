@@ -85,7 +85,7 @@ router.post('/new', catchErrors(async (req, res) => {
     url, envs, type, name, port, password,
   } = req.body
 
-  const { userId } = await reqUser(req)
+  const { userId, users } = await reqUser(req)
 
   if (name.length < 3 || name.length > 20) {
     throw new HttpError(400, `Name too short or long: ${name}`)
@@ -135,7 +135,7 @@ router.post('/new', catchErrors(async (req, res) => {
     await attempt(async () => {
       const suffixedName = `${name}-${uuid(5)}`
       const containerInfo = await createNewContainer(
-        envs, type, suffixedName, port, userId, hashedPassword
+        envs, type, suffixedName, port, userId, Object.keys(users), hashedPassword
       )
       res.json({ containerInfo })
     })
