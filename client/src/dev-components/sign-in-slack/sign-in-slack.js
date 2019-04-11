@@ -18,6 +18,7 @@ const SlackSignButton = () => (
   >
     <img
       src="/slack/sign_in_with_slack.png"
+      srcSet="/slack/sign_in_with_slack.png 1x, /slack/sign_in_with_slack@2x.png 2x"
       alt="Sign in with Slack"
     />
   </button>

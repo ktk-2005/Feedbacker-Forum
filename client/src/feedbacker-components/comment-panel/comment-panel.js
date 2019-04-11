@@ -70,7 +70,9 @@ class CommentPanel extends React.Component {
   }
 
   async fetchComments() {
-    const comments = await apiCall('GET', '/comments')
+    const comments = await apiCall('GET', '/comments', null, {
+      noToast: true,
+    })
     this.props.dispatch(loadComments(comments))
   }
 
@@ -114,7 +116,7 @@ class CommentPanel extends React.Component {
     await this.fetchComments()
     if (threadId === '') this.scrollToBottom()
 
-    if (!this.props.name) {
+    if (!this.props.name && !hideName) {
       await this.toggleUsernameModal(threadId)
     } else {
       await this.fetchComments()

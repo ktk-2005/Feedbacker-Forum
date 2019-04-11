@@ -2,6 +2,7 @@ import express from 'express'
 import { addUser, addUsername } from '../database'
 import { uuid, attempt, reqUser, reqContainer } from './helpers'
 import { HttpError } from '../errors'
+import { args } from '../globals'
 
 import { catchErrors } from '../handlers'
 
@@ -29,9 +30,32 @@ router.post('/', catchErrors(async (req, res) => {
     const secret = uuid(30)
 
     await addUser({ id, secret, name: name || null })
+
+    const token = req.signedCookies.FeedbackAuth
+    let users = { }
+    try {
+      if (token) {
+        users = JSON.parse(Buffer.from(token, 'base64').toString())
+      }
+    } catch (error) { /* Nop */ }
+
+    users[id] = secret
+
+    const newToken = Buffer.from(JSON.stringify(users), 'ascii').toString('base64')
+
+    res.cookie('FeedbackAuth', newToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 365 * 200,
+      httpOnly: true,
+      signed: true,
+    })
+
+    // Return the secret if running API tests as managing
+    // cookie based authentication is a pain.
+    const returnSecret = args.testApi || args.testAuth
+
     res.json({
       id,
-      secret,
+      secret: returnSecret ? secret : 'x',
     })
   })
 }))
