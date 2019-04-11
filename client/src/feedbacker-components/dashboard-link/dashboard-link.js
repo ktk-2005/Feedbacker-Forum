@@ -20,7 +20,7 @@ class DashboardLink extends React.Component {
 
   render() {
     return (
-      <a href={this.baseDomain()} className={css('dashboard-button')}>
+      <a href={this.baseDomain()} className={css('dashboard-button')} tabIndex="-1">
         Back to dashboard
       </a>
     )

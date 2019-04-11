@@ -114,20 +114,20 @@ class CommentPanel extends React.Component {
     unhighlightTaggedElement()
     this.props.unsetTaggedElement()
     await this.fetchComments()
-    this.scrollToBottom()
+    if (threadId === '') this.scrollToBottom()
 
     if (!this.props.name && !hideName) {
-      await this.toggleUsernameModal()
+      await this.toggleUsernameModal(threadId)
     } else {
       await this.fetchComments()
-      this.scrollToBottom()
+      if (threadId === '') this.scrollToBottom()
     }
   }
 
-  async toggleUsernameModal() {
+  async toggleUsernameModal(threadId) {
     if (this.state.usernameModalIsOpen) {
       await this.fetchComments()
-      this.scrollToBottom()
+      if (threadId === '') this.scrollToBottom()
     }
     this.setState(prevState => ({ usernameModalIsOpen: !prevState.usernameModalIsOpen }))
   }
