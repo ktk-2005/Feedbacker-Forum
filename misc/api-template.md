@@ -77,6 +77,17 @@
 
 @api /api/slack/notify/:url
 
+## GitHub integration
+
+@api /api/github/oauth2login
+
+@api /api/github/oauth2callback
+
+@api /api/github/status
+
+@api /api/github/repos/:installationId
+
+@api /api/github/logout
 ## CORS
 
 @api /* OPTIONS
