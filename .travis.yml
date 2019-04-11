@@ -57,13 +57,11 @@ jobs:
 
         # Lint and fmt Go Proxy
         - find proxy -name '*.go' | xargs gofmt -l | tee /dev/tty | wc -l | xargs test 0 -eq
-        - if test $? -ne 0; then echo 'Run gofmt -w proxy'; fi
         - golint -set_exit_status proxy/...
 
         # Check that Postgres migrations are unique
         - ls -1 server/src/database/migrations/postgres | cut -d - -f1 | sort | uniq -d > build/migration-conflicts
         - diff build/migration-conflicts /dev/null
-        - if test $? -ne 0; then echo 'Conflicting Postgres migration numbers, see above'; fi
 
         # Build client development and production
         - npm --prefix client run build:dev
