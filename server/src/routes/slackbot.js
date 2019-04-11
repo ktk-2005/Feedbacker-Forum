@@ -49,13 +49,14 @@ router.get('/oauth', catchErrors(async (req, res) => {
 router.post('/oauth/connect', catchErrors(async (req, res) => {
   const { clientId } = config.slack || {}
   const { users } = await reqUser(req)
+  const { redirectURI } = req.body
   const id = uuid(8)
   await addSlackUser(id)
   for (const userId of Object.keys(users)) {
     await linkSlackToUser(id, userId)
   }
   const slackURL = `https://slack.com/oauth/authorize?scope=identity.basic&client_id=${clientId}`
-  res.json({ url: `${slackURL}&state=${id}` })
+  res.json({ url: `${slackURL}&state=${id}&redirect_uri=${encodeURIComponent(redirectURI)}` })
 }))
 
 // @api GET /api/slack/auth
