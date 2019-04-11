@@ -33,7 +33,7 @@ router.get('/', catchErrors(async (req, res) => {
   // HACK: Trim runner status as database has padded status fields
   res.send(instanceRunners.map(runner => ({
     ...runner,
-    status: runner.status.trim(),
+    status: runner.status ? runner.status.trim() : '',
   })))
 }))
 
