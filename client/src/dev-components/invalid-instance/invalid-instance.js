@@ -11,8 +11,10 @@ const subdomain = window.location.host.split('.')[0]
 const InvalidInstance = () => (
   <div className={css('center-center-block')}>
     <div className={css('instance-view')}>
-      <h1>Feedback instance doesn&apos;t exist: {subdomain}</h1>
-      <p>You should contact the host of of the instance</p>
+      <h1>Instance inaccessible: {subdomain}</h1>
+      <p>The instance youre trying to acces does not exist or is still building.
+        Try again later or contact the person who sent you the link.
+      </p>
     </div>
   </div>
 )
