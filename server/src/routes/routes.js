@@ -12,6 +12,7 @@ router.use('/instances', require('./instances'))
 router.use('/answers', cors(), require('./answers'))
 router.use('/instanceRunners', require('./instanceRunners'))
 router.use('/slack', require('./slackbot'))
+router.use('/github', require('./github'))
 router.use('/authorization', cors(), require('./authorization'))
 
 module.exports = router

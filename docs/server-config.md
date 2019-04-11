@@ -18,7 +18,24 @@ environment variables. You can specify the configuration file to use with the `-
 | `imageMaxSize` | | `Integer` | Maximum size of images in bytes. |
 | `corsOriginRegex` | | `String` | Origin host to allow CORS API requests from |
 | `cookieSecret` | `APP_COOKIE_SECRET` | `String` | Secret token used for signing cookies |
+| `github` | | `GitHubConfig` | Subconfig containing GitHub App integration keys. |
+| `siteUrl` | | `String` | The base url where the installation is served **without a trailing slash**. |
 | `slack` | | `Object` | [Slack](#slack) app configuration. |
+
+
+### GitHubConfig
+
+For configuring the GitHub Apps integration. If the `github` key is present on the parent config object, all of these properties must be present in the object.
+
+These parameters can be found/configured at https://github.com/settings/apps.
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `id` | `String` | The app id |
+| `privateKey` | `String` | The app's private key for signing JWTs |
+| `clientId` | `String` | The app id for OAuth |
+| `clientSecret` | `String` | The app secret for OAuth |
+
 
 ### Slack
 

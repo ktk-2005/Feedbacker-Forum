@@ -18,6 +18,7 @@ import {
 import { config } from './globals'
 import logger from './logger'
 import { NestedError, HttpError } from './errors'
+import { getCloneUrlForOwnerAndRepo, isGithubAppInitialized } from './githubapp'
 
 // Docker socket handle, set in `initializeDocker` when server is started.
 let docker = null
@@ -110,8 +111,29 @@ export async function createNewContainer(envs, type, name, port, userId, hashedP
   // don't support connecting directly to different container IPs.
   const hostPort = Math.floor(20000 + Math.random() * 9999) || 0
 
+  // Copy envs so we can modify them
+  const envsCopy = envs
+
+  if (isGithubAppInitialized()) {
+    const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.+?)(\.git)$/
+    const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
+
+    try {
+      const cloneUrl = await getCloneUrlForOwnerAndRepo(owner, repoName, userId)
+      envsCopy.GIT_CLONE_URL = cloneUrl
+      logger.info('Changed Git URL in-place to include access token.')
+    } catch (error) {
+      // We don't have access to the repo via the app, too bad.
+      // Don't forward any information to the user about trying private access.
+      logger.error(new NestedError("Couldn't get private clone url for repo", error, { userId, owner, repoName }))
+    }
+
+    // TODO: Check if the repo exists, and if it doesn't, abort!
+    // TODO: Extend private GitHub support for other than private repositories
+  }
+
   // Parse the env var dictionary to the list format used by the Docker API.
-  const envsList = R.keys(envs).map(key => `${key}=${envs[key]}`)
+  const envsList = R.keys(envsCopy).map(key => `${key}=${envs[key]}`)
 
   // Caveat: this binds the port on *all* interfaces. This is a security risk, because
   // you can get access to all containers by just bruteforcing the port on the host.

@@ -31,6 +31,7 @@
 
 .selection-tabs {
   @extend %toggle-container;
+  margin-top: unset;
   button {
     @extend %toggle-button;
     margin-top: $baseline;
@@ -48,6 +49,7 @@
 
   label {
     margin-bottom: $spacer;
+    display: block;
   }
 
   input:not([type="submit"]), select {
@@ -111,4 +113,28 @@
 
 .hidden {
   display: none;
+}
+
+%inline-button {
+  @extend %anchor-button;
+  margin-right: $baseline;
+}
+
+.login-with-github-button {
+  @extend %inline-button;
+  display: flex;
+  width: 100%;
+  margin-bottom: $spacer;
+  padding: $spacer $baseline;
+  justify-content: center;
+  background-color: $palette-white;
+}
+
+.logout-button {
+  @extend %inline-button;
+}
+
+.github-logo {
+  height: $baseline * 3;
+  padding-right: $baseline;
 }

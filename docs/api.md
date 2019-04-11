@@ -427,6 +427,28 @@ Used for sending slack notifications by webhook when wanting to share published 
 
 Returns json object with 'success' boolean field indicating whether notification was send or not.
 
+## GitHub integration
+
+### [GET /api/github/oauth2login](../server/src/routes/github.js#L11)
+
+Returns an url for the Oauth2 redirect.
+
+### [GET /api/github/oauth2callback](../server/src/routes/github.js#L21)
+
+GitHub redirects the user to this url after performing authentication.
+
+### [GET /api/github/status](../server/src/routes/github.js#L30)
+
+Retrieves the registered GitHub login state of the user.
+
+### [GET /api/github/repos/:installationId](../server/src/routes/github.js#L57)
+
+Retrieves user-accessable repositories by installation id. A list of
+available ids is container in the /api/github/status response.
+
+### [POST /api/github/logout](../server/src/routes/github.js#L46)
+
+Removes the stored access token for github
 ## CORS
 
 ### [OPTIONS /*](../server/src/cors.js#L6)
