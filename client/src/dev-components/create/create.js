@@ -287,7 +287,7 @@ class Create extends React.Component {
         </div>
         {this.state.githubPanel ? this.githubPanel() : (
           <label htmlFor="url">
-            Git URL
+            Git Repository URL
             <input type="text" name="url" id="url" placeholder="https://github.com/ui-router/sample-app-react" required />
           </label>
         )}
