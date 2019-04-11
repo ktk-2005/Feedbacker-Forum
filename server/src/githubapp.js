@@ -56,27 +56,27 @@ async function getOctokitForUser(userId) {
 }
 
 export async function getLoginStatus(users) {
+  let error = new HttpError(401, 'User is not authenticated to GitHub')
   for (const userId of users) {
     try {
       const octokit = await getOctokitForUser(userId)
       const { data } = await octokit.users.getAuthenticated({})
       if (data) return data
-    } catch (error) { /* Nop */ }
+    } catch (err) { error = err }
   }
-
-  return null
+  throw error
 }
 
 export async function getInstallationsWithAccess(users) {
+  let error = new HttpError(401, 'User is not authenticated to GitHub')
   for (const userId of users) {
     try {
       const octokit = await getOctokitForUser(userId)
       const result = await octokit.apps.listInstallationsForAuthenticatedUser()
       return result.data.installations
-    } catch (error) { /* Nop */ }
+    } catch (err) { error = err }
   }
-
-  return null
+  throw error
 }
 
 export async function getReposOfInstallation(installationId, users) {
