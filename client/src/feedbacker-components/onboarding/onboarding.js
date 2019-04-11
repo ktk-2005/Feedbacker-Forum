@@ -20,8 +20,8 @@ const final = 7
 const mapStateToProps = (state) => {
   const persist = state.persist || {}
   return ({
-    onboarding: !R.isEmpty(persist.users) && !persist.introCompleted,
-    dev: !R.isEmpty(persist.users) && state.role === 'dev',
+    onboarding: persist.users && !R.isEmpty(persist.users) && !persist.introCompleted,
+    dev: persist.users && !R.isEmpty(persist.users) && state.role === 'dev',
     acceptCookies: persist.acceptCookies,
   })
 }
