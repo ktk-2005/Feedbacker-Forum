@@ -4,7 +4,7 @@
 @import '../../scss/organisms/panel';
 @import '../../scss/organisms/forms';
 
-$panel-min-width: 300px;
+$panel-min-width: 350px;
 
 .panel-container {
   @include display-and-animate;
