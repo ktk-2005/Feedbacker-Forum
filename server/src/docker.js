@@ -93,7 +93,7 @@ export async function getContainerLogs(id) {
 
 /* Operational methods */
 
-export async function createNewContainer(envs, type, name, port, userId, hashedPassword) {
+export async function createNewContainer(envs, type, name, port, userId, users, hashedPassword) {
   // Check if the specified instance runner exists AND if it's a custom runner, that
   // the user has created it themselves.
 
@@ -119,7 +119,7 @@ export async function createNewContainer(envs, type, name, port, userId, hashedP
     const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
 
     try {
-      const cloneUrl = await getCloneUrlForOwnerAndRepo(owner, repoName, userId)
+      const cloneUrl = await getCloneUrlForOwnerAndRepo(owner, repoName, users)
       envsCopy.GIT_CLONE_URL = cloneUrl
       logger.info('Changed Git URL in-place to include access token.')
     } catch (error) {
