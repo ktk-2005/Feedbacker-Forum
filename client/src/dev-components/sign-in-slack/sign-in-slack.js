@@ -6,7 +6,9 @@ import styles from './sign-in-slack.scss'
 const css = classNames.bind(styles)
 
 const startOauth = async () => {
-  const { url } = await apiCall('POST', '/slack/oauth/connect')
+  const { url } = await apiCall('POST', '/slack/oauth/connect', {
+    redirectURI: window.location.origin,
+  })
   window.location.replace(url)
 }
 
