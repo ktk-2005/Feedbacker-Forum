@@ -97,6 +97,7 @@
       content: '\2807';
       position: relative;
       left: -$size-x; // Character has some spacing
+      font-family: initial; // Duplicate handle issue
       font-size: $size-y;
       color: $palette-dark;
       user-select: none;
