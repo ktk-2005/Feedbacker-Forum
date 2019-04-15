@@ -2,6 +2,8 @@
 
 It's possible to extend the basic functionality of Feedbacker to give it access to private GitHub repositories. This is possible by registering a [GitHub App](https://developer.github.com/apps/), which the developer users can install to their repository or organization.
 
+## Installing the public Github App
+The Feedbacker GitHub App can be found [here](https://github.com/apps/feedbacker-forum).
 
 ## Developer guide
 Step-by-step tutorial for creating a new GitHub App, installing it for testing and configuring Feedbacker to use it.
