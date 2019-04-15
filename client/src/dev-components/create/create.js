@@ -71,7 +71,7 @@ class Create extends React.Component {
 
   async fetchGithubLoginInfo() {
     try {
-      const status = await apiCall('GET', '/github/status')
+      const status = await apiCall('GET', '/github/status', null, { noToast: true })
       this.setState({ github: status })
     } catch (error) {
       // not logged in to github
