@@ -116,9 +116,9 @@ export async function createNewContainer(envs, type, name, port, userId, users, 
 
   if (isGithubAppInitialized()) {
     const githubUrlMatcher = /^https:\/\/github\.com\/(.*)\/(.+?)(\.git)$/
-    const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
 
     try {
+      const [, owner, repoName] = githubUrlMatcher.exec(envs.GIT_CLONE_URL)
       const cloneUrl = await getCloneUrlForOwnerAndRepo(owner, repoName, users)
       envsCopy.GIT_CLONE_URL = cloneUrl
       logger.info('Changed Git URL in-place to include access token.')
@@ -127,9 +127,6 @@ export async function createNewContainer(envs, type, name, port, userId, users, 
       // Don't forward any information to the user about trying private access.
       logger.error(new NestedError("Couldn't get private clone url for repo", error, { userId, owner, repoName }))
     }
-
-    // TODO: Check if the repo exists, and if it doesn't, abort!
-    // TODO: Extend private GitHub support for other than private repositories
   }
 
   // Parse the env var dictionary to the list format used by the Docker API.
