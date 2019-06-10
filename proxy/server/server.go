@@ -39,6 +39,15 @@ func StartServing(config *Config) error {
 
 	doctypeInjectString = "<!DOCTYPE html>"
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
+	analyticsInjectString = `<!-- Global site tag (gtag.js) - Google Analytics, Feedbacker all container hits -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-141697537-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-141697537-1');
+		</script>
+	`
 	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
 	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString)
 
@@ -100,6 +109,7 @@ var viewportInjectPositionRegex = regexp.MustCompile("(?i)</head>")
 var viewportAltInjectPositionRegex = regexp.MustCompile("(?i)<body>")
 var doctypeInjectString string
 var scriptInjectString string
+var analyticsInjectString string
 var viewportInjectString string
 var viewportInjectStringWithHead string
 var errorHTML string
@@ -228,6 +238,15 @@ func modifyResponse(res *http.Response) error {
 				Text:     scriptInjectString,
 			})
 		}
+
+		// Insert analytics block before </body>
+      match = injectPositionRegex.FindStringIndex(body)
+      if match != nil {
+         injectFragments = append(injectFragments, injectFragment{
+            Position: match[0],
+            Text:     analyticsInjectString,
+         })
+      }
 
 		if len(injectFragments) > 0 {
 			sort.SliceStable(injectFragments, func(i, j int) bool {
