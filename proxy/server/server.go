@@ -39,16 +39,7 @@ func StartServing(config *Config) error {
 
 	doctypeInjectString = "<!DOCTYPE html>"
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
-	analyticsInjectString = `
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-141697537-1"></script>
-		<script>
-			// Global site tag (gtag.js) - Google Analytics, Feedbacker all container hits
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'UA-141697537-1');
-		</script>
-	`
+	analyticsInjectString = `<script async src="https://www.googletagmanager.com/gtag/js?id=UA-141697537-1"></script> <script>/* Global site tag (gtag.js) - Google Analytics, Feedbacker all container hits */ window.dataLayer=window.dataLayer || []; function gtag(){dataLayer.push(arguments);}gtag("js", new Date()); gtag("config", "UA-141697537-1"); </script>`
 	viewportInjectString = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
 	viewportInjectStringWithHead = fmt.Sprintf("<head>%s</head>", viewportInjectString)
 
