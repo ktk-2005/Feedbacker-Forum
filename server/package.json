@@ -32,7 +32,8 @@
     "express-delay": "^0.2.0",
     "express-http-proxy": "^1.5.0",
     "light-api-doc": "^0.2.5",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sqlite3": "^4.0.8"
   },
   "dependencies": {
     "@babel/core": "^7.1.5",
@@ -53,7 +54,6 @@
     "pg-promise": "^8.5.4",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
-    "sqlite3": "^4.0.8",
     "winston": "^3.1.0"
   }
 }
