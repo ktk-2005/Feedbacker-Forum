@@ -55,8 +55,7 @@ jobs:
         - npm --prefix server run lint:ci
         - npm --prefix client run lint:sass
 
-        # Lint and fmt Go Proxy
-        - find proxy -name '*.go' | xargs gofmt -l | tee /dev/tty | wc -l | xargs test 0 -eq
+        # Lint Go Proxy
         - golint -set_exit_status proxy/...
 
         # Check that Postgres migrations are unique
