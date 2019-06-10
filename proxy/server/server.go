@@ -39,9 +39,10 @@ func StartServing(config *Config) error {
 
 	doctypeInjectString = "<!DOCTYPE html>"
 	scriptInjectString = fmt.Sprintf("<script src=\"%s\"></script>", config.InjectScript)
-	analyticsInjectString = `<!-- Global site tag (gtag.js) - Google Analytics, Feedbacker all container hits -->
+	analyticsInjectString = `
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-141697537-1"></script>
 		<script>
+			// Global site tag (gtag.js) - Google Analytics, Feedbacker all container hits
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
