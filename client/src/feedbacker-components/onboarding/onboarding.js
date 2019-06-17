@@ -130,13 +130,13 @@ class Onboarding extends React.Component {
               `
                 If you have specific questions you want answers to you can create a
                 survey. This can be done in the survey panel which can be opened by
-                clicking this button.
+                clicking the button in the lower left corner.
               `,
             ]
             : [`
                 If the author (the owner of the instance) has created a survey, you
                 can view it in the survey panel which can be opened by
-                clicking this button.
+                clicking the button in the lower left button.
             `,
             ]
         )
@@ -158,7 +158,7 @@ class Onboarding extends React.Component {
             ]
             : [
               `
-                This is the survey panel were you can answer the surveys. Surveys can
+                This is the survey panel where you can answer the surveys. Surveys can
                 contain different types of questions the author wants your answer to.
                 You can also edit your answers.
               `,
@@ -177,14 +177,14 @@ class Onboarding extends React.Component {
             ? [
               `
                 The testers can also leave free-form comments. This can be
-                done in the comment panel which opens by clicking this button.
+                done in the comment panel which opens by clicking the button in the lower left corner.
               `,
             ]
             : [
               `
                 You can also express your opinions by posting free-form comments.
                 This can be done in the commenting panel which opens by clicking
-                this button.
+                the button in the lower left corner.
               `,
             ]
         )
