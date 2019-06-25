@@ -93,7 +93,7 @@ class Onboarding extends React.Component {
             ? [
               `
                 Welcome to use the Feedbacker Forum app! Our goal is to make giving
-                and receiving feedback effortless and fun.
+                and receiving feedback as easy and painless as possible.
               `,
               `
                 With the support of both surveys and free-form commenting, you will
@@ -108,7 +108,7 @@ class Onboarding extends React.Component {
             : [
               `
                 Welcome to use the Feedbacker Forum app! Our goal is to make giving
-                and receiving feedback effortless and fun.
+                and receiving feedback as easy and painless as possible.
               `,
               `
                 With the support of both surveys and free form commenting, you can
