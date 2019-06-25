@@ -1,6 +1,6 @@
-@import '../../scss/compulsory';
+@import "../../scss/compulsory";
 
-@import '../../scss/atoms/button';
+@import "../../scss/atoms/button";
 
 .developer-label {
   position: absolute;
@@ -13,12 +13,13 @@
 $rotation: 30;
 
 .badge-container {
+  display: flex;
+  position: absolute;
+
   $dimension: $baseline * 3;
 
-  position: absolute;
   top: $baseline * 1.5;
   left: $baseline * 1.5;
-  display: flex;
   margin-right: $spacer;
   z-index: 1;
 
@@ -27,6 +28,6 @@ $rotation: 30;
     height: $dimension;
     background: $palette-badge-background;
     border-radius: 1px;
-    transform: rotate(#{ $rotation }deg);
+    transform: rotate(#{$rotation}deg);
   }
 }
