@@ -41,7 +41,7 @@
     "@babel/preset-env": "^7.1.5",
     "@octokit/app": "^2.2.1",
     "@octokit/rest": "^16.17.0",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^5.0.0",
     "btoa": "^1.2.1",
     "client-oauth2": "^4.2.3",
     "cookie-parser": "^1.4.4",
