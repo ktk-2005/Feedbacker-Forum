@@ -45,7 +45,7 @@
     "jest": "^24.1.0",
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "node.normalize.scss": "^3.0.3",
     "postcss-loader": "^3.0.0",
     "ramda": "^0.26.1",
