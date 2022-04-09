@@ -43,7 +43,7 @@
     "file-loader": "^3.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.1.0",
-    "moment": "^2.23.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.23",
     "node-sass": "^4.11.0",
     "node.normalize.scss": "^3.0.3",
